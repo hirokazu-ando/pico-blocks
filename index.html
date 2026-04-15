@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PicoBlocks — Raspberry Pi Pico ブロックプログラミング</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+</head>
+<body>
+  <header>
+    <div class="status-dot"></div>
+    <div class="title-block">
+      <h1>PicoBlocks</h1>
+      <span class="title-sub">Raspberry Pi Pico / MicroPython</span>
+    </div>
+    <span class="version-tag">v2.0 · UME</span>
+    <span class="demo-badge" id="demo-badge" style="display:none">DEMO MODE</span>
+    <div class="toolbar">
+      <span class="toolbar-label">ブロック</span>
+      <button id="btn-save-xml">保存 .xml</button>
+      <button id="btn-load-xml">読込 .xml</button>
+      <input type="file" id="xml-input" accept=".xml" style="display:none">
+      <div class="toolbar-sep"></div>
+      <span class="toolbar-label">コード</span>
+      <button id="btn-download">保存 .py</button>
+      <button id="btn-load">読込 .py</button>
+      <input type="file" id="file-input" accept=".py" style="display:none">
+      <div class="toolbar-sep"></div>
+      <button id="btn-toggle-comments">コメント ON</button>
+      <button id="btn-coding-mode">コーディングモード</button>
+      <div class="toolbar-sep" id="serial-sep"></div>
+      <button id="btn-connect">接続</button>
+      <button id="btn-run" disabled>▶ 実行</button>
+      <button id="btn-stop" disabled>⏹ 停止</button>
+      <button id="btn-write" disabled>書き込み</button>
+    </div>
+  </header>
+
+  <div class="main">
+    <div id="blockly-div"></div>
+    <div class="divider"></div>
+    <div class="code-panel">
+      <div class="code-header">
+        MicroPython Output
+        <span id="serial-status"></span>
+      </div>
+      <div id="code-editor"></div>
+      <div class="monitor-resize-handle" id="monitor-resize-handle"></div>
+      <div class="monitor-header">
+        <span>シリアルモニタ</span>
+        <div class="monitor-controls">
+          <button id="btn-monitor-clear">クリア</button>
+        </div>
+      </div>
+      <pre id="monitor-output"></pre>
+    </div>
+  </div>
+
+  <xml id="toolbox" style="display:none">
+    <category name="PoliviaBot" colour="#E53935">
+      <block type="pvb_forward" gap="8">
+        <value name="SPEED">
+          <shadow type="val_number"><field name="NUM">50</field></shadow>
+        </value>
+      </block>
+      <block type="pvb_backward" gap="8">
+        <value name="SPEED">
+          <shadow type="val_number"><field name="NUM">50</field></shadow>
+        </value>
+      </block>
+      <block type="pvb_turn_right" gap="8">
+        <value name="SPEED">
+          <shadow type="val_number"><field name="NUM">50</field></shadow>
+        </value>
+      </block>
+      <block type="pvb_turn_left" gap="8">
+        <value name="SPEED">
+          <shadow type="val_number"><field name="NUM">50</field></shadow>
+        </value>
+      </block>
+      <block type="pvb_stop" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="pvb_led_on" gap="8"></block>
+      <block type="pvb_led_off" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="pvb_if_switch" gap="8"></block>
+      <block type="pvb_switch_val" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="pvb_sonar" gap="8"></block>
+      <block type="pvb_sonar_val" gap="8"></block>
+      <block type="pvb_if_obstacle" gap="8">
+        <value name="DIST">
+          <shadow type="val_number"><field name="NUM">20</field></shadow>
+        </value>
+      </block>
+      <sep gap="20"></sep>
+      <block type="pvb_line_read" gap="8"></block>
+      <block type="pvb_line_val" gap="8"></block>
+      <block type="pvb_if_line" gap="8"></block>
+    </category>
+    <category name="繰り返し" colour="#E65100">
+      <block type="pico_forever" gap="8"></block>
+      <block type="pico_repeat" gap="8">
+        <value name="TIMES">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+      </block>
+      <block type="pico_for_range" gap="8">
+        <value name="N">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+      </block>
+      <block type="pico_for_from_to" gap="8">
+        <value name="START">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+        <value name="STOP">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+        <value name="STEP">
+          <shadow type="val_number"><field name="NUM">1</field></shadow>
+        </value>
+      </block>
+    </category>
+    <category name="分岐" colour="#6A1B9A">
+      <block type="pico_if" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="cond_compare" gap="8">
+        <value name="LEFT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+        <value name="RIGHT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="cond_and" gap="8"></block>
+      <block type="cond_or" gap="8"></block>
+      <block type="cond_not" gap="8"></block>
+    </category>
+    <category name="時間" colour="#00695C">
+      <block type="pico_wait" gap="8">
+        <value name="SEC">
+          <shadow type="val_number"><field name="NUM">1</field></shadow>
+        </value>
+      </block>
+    </category>
+    <category name="出力" colour="#388E3C">
+      <block type="pico_led_on" gap="8"></block>
+      <block type="pico_led_off" gap="8"></block>
+      <block type="pico_digital_write" gap="8"></block>
+    </category>
+    <category name="入力" colour="#00838F">
+      <block type="pico_digital_read" gap="8"></block>
+      <block type="pico_analog_read" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="pico_digital_read_val" gap="8"></block>
+      <block type="pico_analog_read_val" gap="8"></block>
+    </category>
+    <category name="変数" colour="#2196F3">
+      <block type="var_set" gap="8">
+        <value name="VALUE">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="var_change" gap="8">
+        <value name="AMOUNT">
+          <shadow type="val_number"><field name="NUM">1</field></shadow>
+        </value>
+      </block>
+      <sep gap="20"></sep>
+      <block type="var_if_greater" gap="8">
+        <value name="THRESHOLD">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+      </block>
+      <block type="var_if_less" gap="8">
+        <value name="THRESHOLD">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+      </block>
+    </category>
+    <category name="値" colour="#5C81A6">
+      <block type="val_var" gap="8"></block>
+      <block type="val_number" gap="8"></block>
+    </category>
+    <category name="表示" colour="#607D8B">
+      <block type="print_text" gap="8"></block>
+      <block type="print_var_label" gap="8"></block>
+      <block type="print_separator" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="pvb_print" gap="8"></block>
+    </category>
+  </xml>
+
+  <script src="js/serial.js"></script>
+  <script src="js/blocks/gpio.js"></script>
+  <script src="js/blocks/control.js"></script>
+  <script src="js/blocks/polyviabot.js"></script>
+  <script src="js/blocks/sensors.js"></script>
+  <script src="js/blocks/values.js"></script>
+  <script src="js/blocks/variables.js"></script>
+  <script src="js/blocks/display.js"></script>
+  <script src="js/generators/micropython.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
