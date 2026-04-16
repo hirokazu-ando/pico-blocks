@@ -669,13 +669,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if (Tutorial) Tutorial.check(blockTypes);
   }
 
-  // A案: 選択中ブロックのSVGにグローフィルターを適用（generateCode後に毎回再適用）
+  // A案: 選択中ブロックのSVGにグローフィルターを適用
+  // requestAnimationFrame でBlocklyの再描画サイクル完了後に適用する
   function applyBlockGlow() {
     if (!_glowBlockId) return;
-    const block = workspace.getBlockById(_glowBlockId);
-    if (block && block.getSvgRoot) {
-      block.getSvgRoot().style.filter = 'drop-shadow(0 0 10px rgba(255, 220, 50, 0.9))';
-    }
+    const id = _glowBlockId;  // rAF実行時点で変わっていても元のIDで適用
+    requestAnimationFrame(function() {
+      if (_glowBlockId !== id) return;  // その間に選択が変わっていたらスキップ
+      const block = workspace.getBlockById(id);
+      if (block && block.getSvgRoot) {
+        block.getSvgRoot().style.filter = 'drop-shadow(0 0 10px rgba(255, 220, 50, 0.9))';
+      }
+    });
   }
 
   function updateColorGutter() {
