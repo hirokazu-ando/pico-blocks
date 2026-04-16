@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', function() {
   let Tutorial;   // 後で代入（generateCode から参照するため先に宣言）
   let blockLineMap = new Map();   // blockId → { from, to, color }
   let _highlightMarker = null;    // A案: 現在のコードハイライトマーカー
-  let _highlightedBlock = null;   // A案: 現在ハイライト中のブロック
 
   // ブロックの日本語ラベルを返す
   function blockLabel(block) {
@@ -719,14 +718,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // A案: ブロッククリック → コードハイライト ＋ ブロック自体をハイライト
   workspace.addChangeListener(function(e) {
     if (e.type !== Blockly.Events.SELECTED) return;
-    // 前のブロックハイライトを解除
-    if (_highlightedBlock) { _highlightedBlock.setHighlighted(false); _highlightedBlock = null; }
     if (_highlightMarker) { _highlightMarker.clear(); _highlightMarker = null; }
     const blockId = e.newElementId;
     if (!blockId) return;
-    // ブロック自体をハイライト
-    const block = workspace.getBlockById(blockId);
-    if (block) { block.setHighlighted(true); _highlightedBlock = block; }
     // コード行をハイライト
     const info = blockLineMap.get(blockId);
     if (!info) return;

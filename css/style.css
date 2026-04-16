@@ -1053,6 +1053,13 @@ h1 {
   width: 6px;
 }
 
+/* ===== A案: 選択ブロックのグローハイライト（CSS制御） ===== */
+/* Blocklyが選択時に自動付与する .blocklySelected を利用 */
+.blocklySelected > .blocklyPath {
+  filter: drop-shadow(0 0 8px rgba(255, 220, 50, 0.9));
+  transition: filter 0.15s ease;
+}
+
 /* ===== C案: ブロック配置フラッシュ ===== */
 .block-flash {
   animation: blockFlash 0.7s ease-out forwards;
