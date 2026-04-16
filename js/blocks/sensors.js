@@ -31,7 +31,7 @@ Blockly.Blocks['pvb_sonar'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('超音波センサーで距離を測り  変数')
-      .appendField(new Blockly.FieldTextInput('dist'), 'VAR')
+      .appendField(new Blockly.FieldVariable('dist'), 'VAR')
       .appendField('に入れる');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -61,7 +61,7 @@ Blockly.Blocks['pvb_line_read'] = {
       .appendField('ラインセンサー')
       .appendField(new Blockly.FieldDropdown([['左','26'],['中','27'],['右','28']]), 'SENSOR')
       .appendField('を読み  変数')
-      .appendField(new Blockly.FieldTextInput('line'), 'VAR')
+      .appendField(new Blockly.FieldVariable('line'), 'VAR')
       .appendField('に入れる');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -91,7 +91,7 @@ Blockly.Blocks['pvb_print'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('変数')
-      .appendField(new Blockly.FieldTextInput('dist'), 'VAR')
+      .appendField(new Blockly.FieldVariable('dist'), 'VAR')
       .appendField('を表示する');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

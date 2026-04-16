@@ -210,7 +210,7 @@ Blockly.Blocks['pico_for_range'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('変数')
-      .appendField(new Blockly.FieldTextInput('i'), 'VAR')
+      .appendField(new Blockly.FieldVariable('i'), 'VAR')
       .appendField('を');
     this.appendValueInput('N').setCheck('Number');
     this.appendDummyInput().appendField('回繰り返す');
@@ -228,7 +228,7 @@ Blockly.Blocks['pico_for_from_to'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('変数')
-      .appendField(new Blockly.FieldTextInput('i'), 'VAR')
+      .appendField(new Blockly.FieldVariable('i'), 'VAR')
       .appendField('を');
     this.appendValueInput('START').setCheck('Number');
     this.appendDummyInput().appendField('から');

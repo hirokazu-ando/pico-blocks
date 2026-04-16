@@ -11,6 +11,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
   <link rel="stylesheet" href="css/style.css">
   <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
 </head>
@@ -19,9 +21,13 @@
     <div class="status-dot"></div>
     <div class="title-block">
       <h1>PicoBlocks</h1>
-      <span class="title-sub">Raspberry Pi Pico / MicroPython</span>
+      <span class="title-sub" id="title-sub">Python 入門</span>
     </div>
-    <span class="version-tag">v2.0 · UME</span>
+    <div class="mode-toggle">
+      <button class="mode-btn" id="btn-mode-python">Python入門</button>
+      <button class="mode-btn" id="btn-mode-micropython">MicroPython</button>
+    </div>
+    <span class="version-tag">v2.1 · UME</span>
     <span class="demo-badge" id="demo-badge" style="display:none">DEMO MODE</span>
     <div class="toolbar">
       <span class="toolbar-label">ブロック</span>
@@ -41,6 +47,10 @@
       <button id="btn-run" disabled>▶ 実行</button>
       <button id="btn-stop" disabled>⏹ 停止</button>
       <button id="btn-write" disabled>書き込み</button>
+      <div class="toolbar-sep" id="run-py-sep" style="display:none"></div>
+      <button id="btn-run-python" style="display:none">▶ 実行</button>
+      <div class="toolbar-sep"></div>
+      <button id="btn-tutorial">📘 ガイド</button>
     </div>
   </header>
 
@@ -49,22 +59,45 @@
     <div class="divider"></div>
     <div class="code-panel">
       <div class="code-header">
-        MicroPython Output
+        <span id="code-header-title">Python Output</span>
         <span id="serial-status"></span>
       </div>
       <div id="code-editor"></div>
       <div class="monitor-resize-handle" id="monitor-resize-handle"></div>
       <div class="monitor-header">
-        <span>シリアルモニタ</span>
+        <span id="monitor-header-title">シリアルモニタ</span>
         <div class="monitor-controls">
           <button id="btn-monitor-clear">クリア</button>
         </div>
       </div>
       <pre id="monitor-output"></pre>
     </div>
+
+    <!-- チュートリアルパネル -->
+    <div class="tutorial-panel" id="tutorial-panel">
+      <div class="tut-hdr">
+        <span class="tut-mode-label" id="tut-mode-label">Python入門</span>
+        <button class="tut-close" id="tut-close" title="閉じる">✕</button>
+      </div>
+      <div class="tut-pbar-wrap">
+        <div class="tut-pbar-fill" id="tut-pbar-fill"></div>
+      </div>
+      <div class="tut-progress" id="tut-progress">1 / 5</div>
+      <div class="tut-title" id="tut-title">チュートリアル</div>
+      <div class="tut-body" id="tut-body"></div>
+      <div class="tut-hint-section">
+        <button class="tut-hint-toggle" id="tut-hint-toggle">💡 ヒントを見る</button>
+        <div class="tut-hint" id="tut-hint"></div>
+      </div>
+      <div class="tut-nav">
+        <button class="tut-nav-btn" id="tut-prev">◀ 前へ</button>
+        <span class="tut-check" id="tut-check">○ 待機中</span>
+        <button class="tut-nav-btn tut-nav-btn--next" id="tut-next" disabled>次へ ▶</button>
+      </div>
+    </div>
   </div>
 
-  <xml id="toolbox" style="display:none">
+  <xml id="toolbox-micropython" style="display:none">
     <category name="PoliviaBot" colour="#E53935">
       <block type="pvb_forward" gap="8">
         <value name="SPEED">
@@ -200,6 +233,95 @@
     </category>
   </xml>
 
+  <!-- Python入門モード用ツールボックス -->
+  <xml id="toolbox-python" style="display:none">
+    <category name="繰り返し" colour="#E65100">
+      <block type="pico_repeat" gap="8">
+        <value name="TIMES">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+      </block>
+      <block type="pico_for_range" gap="8">
+        <value name="N">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+      </block>
+      <block type="pico_for_from_to" gap="8">
+        <value name="START">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+        <value name="STOP">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+        <value name="STEP">
+          <shadow type="val_number"><field name="NUM">1</field></shadow>
+        </value>
+      </block>
+      <block type="py_while" gap="8"></block>
+    </category>
+    <category name="分岐" colour="#6A1B9A">
+      <block type="pico_if" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="cond_compare" gap="8">
+        <value name="LEFT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+        <value name="RIGHT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="cond_and" gap="8"></block>
+      <block type="cond_or" gap="8"></block>
+      <block type="cond_not" gap="8"></block>
+    </category>
+    <category name="時間" colour="#00695C">
+      <block type="pico_wait" gap="8">
+        <value name="SEC">
+          <shadow type="val_number"><field name="NUM">1</field></shadow>
+        </value>
+      </block>
+    </category>
+    <category name="変数" colour="#2196F3">
+      <block type="var_set" gap="8">
+        <value name="VALUE">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="var_change" gap="8">
+        <value name="AMOUNT">
+          <shadow type="val_number"><field name="NUM">1</field></shadow>
+        </value>
+      </block>
+    </category>
+    <category name="値" colour="#5C81A6">
+      <block type="val_var" gap="8"></block>
+      <block type="val_number" gap="8"></block>
+      <block type="val_str" gap="8"></block>
+      <block type="val_bool" gap="8"></block>
+    </category>
+    <category name="計算" colour="#B71C1C">
+      <block type="py_math_op" gap="8">
+        <value name="LEFT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+        <value name="RIGHT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="py_str_concat" gap="8"></block>
+    </category>
+    <category name="入力" colour="#00838F">
+      <block type="py_input" gap="8"></block>
+    </category>
+    <category name="表示" colour="#607D8B">
+      <block type="py_print" gap="8"></block>
+      <block type="print_text" gap="8"></block>
+      <block type="print_var_label" gap="8"></block>
+      <block type="print_separator" gap="8"></block>
+    </category>
+  </xml>
+
+  <script src="js/tutorials.js"></script>
   <script src="js/serial.js"></script>
   <script src="js/blocks/gpio.js"></script>
   <script src="js/blocks/control.js"></script>
@@ -209,6 +331,7 @@
   <script src="js/blocks/variables.js"></script>
   <script src="js/blocks/display.js"></script>
   <script src="js/generators/micropython.js"></script>
+  <script src="js/blocks/python_intro.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

@@ -20,6 +20,14 @@ document.addEventListener('DOMContentLoaded', function() {
     EXPAND_ALL:          'すべて展開する',
     INLINE_INPUTS:       '入力をインライン表示',
     EXTERNAL_INPUTS:     '入力を別行に表示',
+    NEW_VARIABLE:        '新しい変数を作る',
+    NEW_VARIABLE_TITLE:  '新しい変数の名前:',
+    RENAME_VARIABLE:     '変数の名前を変える',
+    RENAME_VARIABLE_TITLE:'変数「%1」の新しい名前:',
+    DELETE_VARIABLE:     '変数「%1」を削除する',
+    DELETE_VARIABLE_CONFIRMATION:'変数「%1」は %2 か所で使われています。削除しますか？',
+    VARIABLE_CATEGORY_NAME:'変数',
+    VARIABLE_ALREADY_EXISTS:'変数「%1」はすでに存在します。',
   });
 
   const pcbTheme = Blockly.Theme.defineTheme('pcbTerminal', {
@@ -40,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   const workspace = Blockly.inject('blockly-div', {
-    toolbox: document.getElementById('toolbox'),
+    toolbox: document.getElementById('toolbox-python'),
     theme: pcbTheme,
     renderer: 'zelos',
     scrollbars: true,
@@ -58,6 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
     indentWithTabs: false,
   });
   let codingMode = false;
+  let currentMode = 'micropython'; // 初期値は後で applyMode('python') で上書き
+  let Tutorial;   // 後で代入（generateCode から参照するため先に宣言）
 
   // ブロックの日本語ラベルを返す
   function blockLabel(block) {
@@ -97,26 +107,26 @@ document.addEventListener('DOMContentLoaded', function() {
         const n = block.getFieldValue('SW') === '13' ? '1' : '2';
         return `スイッチ${n} の値`;
       }
-      case 'pvb_sonar':        return `超音波センサーで距離を測る → 変数「${block.getFieldValue('VAR')}」に格納`;
+      case 'pvb_sonar':        return `超音波センサーで距離を測る → 変数「${getVarName(block, 'VAR')}」に格納`;
       case 'pvb_if_obstacle':  return `障害物が近かったら`;
       case 'pvb_line_read': {
         const l = block.getFieldValue('SENSOR') === '26' ? '左' : block.getFieldValue('SENSOR') === '27' ? '中' : '右';
-        return `ラインセンサー（${l}）を読む → 変数「${block.getFieldValue('VAR')}」に格納`;
+        return `ラインセンサー（${l}）を読む → 変数「${getVarName(block, 'VAR')}」に格納`;
       }
       case 'pvb_if_line': {
         const l = block.getFieldValue('SENSOR') === '26' ? '左' : block.getFieldValue('SENSOR') === '27' ? '中' : '右';
         const c = block.getFieldValue('COLOR') === 'black' ? '黒' : '白';
         return `ラインセンサー（${l}）が${c}だったら`;
       }
-      case 'pvb_print':        return `変数「${block.getFieldValue('VAR')}」を表示する`;
-      case 'var_set':          return `変数「${block.getFieldValue('VAR')}」に値をセットする`;
-      case 'var_change':       return `変数「${block.getFieldValue('VAR')}」を増減する`;
-      case 'var_if_greater':   return `変数「${block.getFieldValue('VAR')}」が大きかったら`;
-      case 'var_if_less':      return `変数「${block.getFieldValue('VAR')}」が小さかったら`;
+      case 'pvb_print':        return `変数「${getVarName(block, 'VAR')}」を表示する`;
+      case 'var_set':          return `変数「${getVarName(block, 'VAR')}」に値をセットする`;
+      case 'var_change':       return `変数「${getVarName(block, 'VAR')}」を増減する`;
+      case 'var_if_greater':   return `変数「${getVarName(block, 'VAR')}」が大きかったら`;
+      case 'var_if_less':      return `変数「${getVarName(block, 'VAR')}」が小さかったら`;
       case 'print_text':       return `「${block.getFieldValue('TEXT')}」を表示する`;
-      case 'print_var_label':  return `「${block.getFieldValue('LABEL')}」+ 変数「${block.getFieldValue('VAR')}」を表示する`;
+      case 'print_var_label':  return `「${block.getFieldValue('LABEL')}」+ 変数「${getVarName(block, 'VAR')}」を表示する`;
       case 'print_separator':  return `区切り線を表示する`;
-      case 'val_var':         return `変数「${block.getFieldValue('VAR')}」`;
+      case 'val_var':         return `変数「${getVarName(block, 'VAR')}」`;
       case 'val_number':      return `数値 ${block.getFieldValue('NUM')}`;
       case 'cond_compare':    return `比較（${block.getFieldValue('OP')}）`;
       case 'cond_and':        return `かつ（AND）`;
@@ -130,12 +140,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (ec  > 0) label += ' + else';
         return label + '）';
       }
-      case 'pico_digital_read':     return `ピン${block.getFieldValue('PIN')} デジタル入力 → 変数「${block.getFieldValue('VAR')}」`;
-      case 'pico_analog_read':      return `ADCピン${block.getFieldValue('PIN')} アナログ入力 → 変数「${block.getFieldValue('VAR')}」`;
+      case 'pico_digital_read':     return `ピン${block.getFieldValue('PIN')} デジタル入力 → 変数「${getVarName(block, 'VAR')}」`;
+      case 'pico_analog_read':      return `ADCピン${block.getFieldValue('PIN')} アナログ入力 → 変数「${getVarName(block, 'VAR')}」`;
       case 'pico_digital_read_val': return `ピン${block.getFieldValue('PIN')} の入力値`;
       case 'pico_analog_read_val':  return `ADCピン${block.getFieldValue('PIN')} のアナログ値`;
-      case 'pico_for_range':  return `${block.getFieldValue('VAR')} を N 回繰り返す`;
-      case 'pico_for_from_to': return `${block.getFieldValue('VAR')} を範囲指定で繰り返す`;
+      case 'pico_for_range':  return `${getVarName(block, 'VAR')} を N 回繰り返す`;
+      case 'pico_for_from_to': return `${getVarName(block, 'VAR')} を範囲指定で繰り返す`;
+      case 'val_str':        return `文字列「${block.getFieldValue('TEXT')}」`;
+      case 'val_bool':       return block.getFieldValue('BOOL') === 'True' ? 'True（真）' : 'False（偽）';
+      case 'py_math_op':     return `算術演算（${block.getFieldValue('OP')}）`;
+      case 'py_str_concat':  return '文字列連結';
+      case 'py_while':       return 'while ループ';
+      case 'py_print':       return '値を表示する';
+      case 'py_input': {
+        const typeLabel = { str: 'テキスト', int: '数値（整数）', float: '数値（小数）' }[block.getFieldValue('TYPE')] || 'テキスト';
+        return `キーボード入力（${typeLabel}）→ 変数「${getVarName(block, 'VAR')}」`;
+      }
       default:                 return block.type;
     }
   }
@@ -154,6 +174,18 @@ document.addEventListener('DOMContentLoaded', function() {
   let showComments = true;
   let fileMode = false;
 
+  // FieldVariable の表示名を安全に取得するヘルパー
+  // FieldVariable は getFieldValue() が内部 ID を返すため、
+  // getVariable().name で表示名を取得する
+  function getVarName(block, fieldName) {
+    const field = block.getField(fieldName || 'VAR');
+    if (field && typeof field.getVariable === 'function') {
+      const v = field.getVariable();
+      if (v && v.name) return v.name;
+    }
+    return block.getFieldValue(fieldName || 'VAR') || fieldName || 'x';
+  }
+
   function valueToCode(block, inputName, defaultVal) {
     if (defaultVal === undefined) defaultVal = '0';
     const input = block.getInput(inputName);
@@ -167,9 +199,26 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!block) return '0';
     switch (block.type) {
       case 'val_var':
-        return block.getFieldValue('VAR') || 'x';
+        return getVarName(block, 'VAR') || 'x';
       case 'val_number':
         return String(block.getFieldValue('NUM') !== null ? block.getFieldValue('NUM') : '0');
+      case 'val_str': {
+        const text = block.getFieldValue('TEXT') || '';
+        return JSON.stringify(text);
+      }
+      case 'val_bool':
+        return block.getFieldValue('BOOL') === 'True' ? 'True' : 'False';
+      case 'py_math_op': {
+        const left  = valueToCode(block, 'LEFT', '0');
+        const right = valueToCode(block, 'RIGHT', '0');
+        const op    = block.getFieldValue('OP');
+        return `(${left} ${op} ${right})`;
+      }
+      case 'py_str_concat': {
+        const a = valueToCode(block, 'A', '""');
+        const b = valueToCode(block, 'B', '""');
+        return `(str(${a}) + str(${b}))`;
+      }
       case 'cond_compare': {
         const left  = valueToCode(block, 'LEFT', '0');
         const right = valueToCode(block, 'RIGHT', '0');
@@ -242,7 +291,9 @@ document.addEventListener('DOMContentLoaded', function() {
       // ===== 制御 =====
       case 'pico_wait': {
         const sec = valueToCode(block, 'SEC', '1');
-        code += indent + `utime.sleep(${sec})\n`;
+        code += currentMode === 'python'
+          ? indent + `time.sleep(${sec})\n`
+          : indent + `utime.sleep(${sec})\n`;
         break;
       }
       case 'pico_repeat': {
@@ -313,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // ===== センサー =====
       case 'pvb_sonar': {
-        const varName = block.getFieldValue('VAR');
+        const varName = getVarName(block, 'VAR');
         code += indent + `_trig = Pin(7, Pin.OUT); _echo = Pin(6, Pin.IN)\n`;
         code += indent + `_trig.value(0); utime.sleep_us(2)\n`;
         code += indent + `_trig.value(1); utime.sleep_us(10); _trig.value(0)\n`;
@@ -339,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'pvb_line_read': {
         const sensor = block.getFieldValue('SENSOR');
-        const varName = block.getFieldValue('VAR');
+        const varName = getVarName(block, 'VAR');
         code += indent + `${varName} = ADC(${sensor}).read_u16()\n`;
         break;
       }
@@ -353,7 +404,7 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
       case 'pvb_print': {
-        const varName = block.getFieldValue('VAR');
+        const varName = getVarName(block, 'VAR');
         code += indent + `print(${varName})\n`;
         break;
       }
@@ -376,31 +427,35 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
       case 'var_set': {
-        const v   = block.getFieldValue('VAR');
+        const v   = getVarName(block, 'VAR');
         const val = valueToCode(block, 'VALUE', '0');
         code += indent + `${v} = ${val}\n`;
         break;
       }
       case 'var_change': {
-        const v   = block.getFieldValue('VAR');
+        const v   = getVarName(block, 'VAR');
         const amt = valueToCode(block, 'AMOUNT', '1');
         code += indent + `${v} += ${amt}\n`;
         break;
       }
       case 'pico_digital_read': {
         const pin = block.getFieldValue('PIN');
-        const varName = block.getFieldValue('VAR');
+        const varName = getVarName(block, 'VAR');
         code += indent + `${varName} = Pin(${pin}, Pin.IN).value()\n`;
         break;
       }
       case 'pico_analog_read': {
         const pin = block.getFieldValue('PIN');
-        const varName = block.getFieldValue('VAR');
+        const varName = getVarName(block, 'VAR');
         code += indent + `${varName} = ADC(${pin}).read_u16()\n`;
         break;
       }
       case 'val_var':
       case 'val_number':
+      case 'val_str':
+      case 'val_bool':
+      case 'py_math_op':
+      case 'py_str_concat':
       case 'cond_compare':
       case 'cond_and':
       case 'cond_or':
@@ -414,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'pvb_sonar_val':
         break;
       case 'pico_for_range': {
-        const v      = block.getFieldValue('VAR');
+        const v      = getVarName(block, 'VAR');
         const n      = valueToCode(block, 'N', '10');
         const doCode = statementToCode(block, 'DO', indent + '    ');
         code += indent + `for ${v} in range(${n}):\n`;
@@ -422,7 +477,7 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
       case 'pico_for_from_to': {
-        const v      = block.getFieldValue('VAR');
+        const v      = getVarName(block, 'VAR');
         const start  = valueToCode(block, 'START', '0');
         const stop   = valueToCode(block, 'STOP', '10');
         const step   = valueToCode(block, 'STEP', '1');
@@ -432,7 +487,7 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
       case 'var_if_greater': {
-        const v     = block.getFieldValue('VAR');
+        const v     = getVarName(block, 'VAR');
         const thr   = valueToCode(block, 'THRESHOLD', '0');
         const inner = statementToCode(block, 'DO', indent + '    ');
         code += indent + `if ${v} > ${thr}:\n`;
@@ -440,7 +495,7 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
       case 'var_if_less': {
-        const v     = block.getFieldValue('VAR');
+        const v     = getVarName(block, 'VAR');
         const thr   = valueToCode(block, 'THRESHOLD', '0');
         const inner = statementToCode(block, 'DO', indent + '    ');
         code += indent + `if ${v} < ${thr}:\n`;
@@ -454,12 +509,38 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'print_var_label': {
         const label = JSON.stringify(block.getFieldValue('LABEL'));
-        const varName = block.getFieldValue('VAR');
+        const varName = getVarName(block, 'VAR');
         code += indent + `print(${label} + str(${varName}))\n`;
         break;
       }
       case 'print_separator': {
         code += indent + `print('----------------')\n`;
+        break;
+      }
+
+      // ===== Python入門専用 =====
+      case 'py_input': {
+        const varName = getVarName(block, 'VAR');
+        const prompt  = JSON.stringify(block.getFieldValue('PROMPT'));
+        const type    = block.getFieldValue('TYPE');
+        if (type === 'int') {
+          code += indent + `${varName} = int(input(${prompt}))\n`;
+        } else if (type === 'float') {
+          code += indent + `${varName} = float(input(${prompt}))\n`;
+        } else {
+          code += indent + `${varName} = input(${prompt})\n`;
+        }
+        break;
+      }
+      case 'py_while': {
+        const cond  = valueToCode(block, 'COND', 'True');
+        const inner = statementToCode(block, 'DO', indent + '    ');
+        code += indent + `while ${cond}:\n` + (inner || indent + '    pass\n');
+        break;
+      }
+      case 'py_print': {
+        const val = valueToCode(block, 'VALUE', '""');
+        code += indent + `print(${val})\n`;
         break;
       }
 
@@ -492,32 +573,38 @@ document.addEventListener('DOMContentLoaded', function() {
     const allBlocks = workspace.getAllBlocks(false);
     const blockTypes = new Set(allBlocks.map(b => b.type));
 
-    // モーター制御ブロックが含まれているか確認
-    const motorTypes = ['pvb_forward','pvb_backward','pvb_turn_right','pvb_turn_left','pvb_stop'];
-    const hasMotor = motorTypes.some(t => blockTypes.has(t));
+    let header;
 
-    // 超音波センサー値ブロックが含まれているか確認
-    const hasSonarVal = blockTypes.has('pvb_sonar_val');
+    if (currentMode === 'python') {
+      // ─── Python入門モード：標準Pythonヘッダー ───
+      header = 'import time\n\n';
+    } else {
+      // ─── MicroPythonモード：既存ロジック ───
+      const motorTypes = ['pvb_forward','pvb_backward','pvb_turn_right','pvb_turn_left','pvb_stop'];
+      const hasMotor   = motorTypes.some(t => blockTypes.has(t));
+      const hasSonarVal = blockTypes.has('pvb_sonar_val');
 
-    const baseHeader = 'from machine import Pin, PWM, ADC\nimport utime\n\n';
-    const motorInit =
-      '_lp = PWM(Pin(0)); _lp.freq(1000)\n' +
-      '_lm = PWM(Pin(1)); _lm.freq(1000)\n' +
-      '_rp = PWM(Pin(2)); _rp.freq(1000)\n' +
-      '_rm = PWM(Pin(3)); _rm.freq(1000)\n\n';
-    const sonarHelper =
-      'def _pvb_sonar_cm():\n' +
-      '    _trig = Pin(7, Pin.OUT); _echo = Pin(6, Pin.IN)\n' +
-      '    _trig.value(0); utime.sleep_us(2)\n' +
-      '    _trig.value(1); utime.sleep_us(10); _trig.value(0)\n' +
-      '    while _echo.value() == 0: pass\n' +
-      '    _t0 = utime.ticks_us()\n' +
-      '    while _echo.value() == 1: pass\n' +
-      '    return utime.ticks_diff(utime.ticks_us(), _t0) / 58\n\n';
+      const baseHeader = 'from machine import Pin, PWM, ADC\nimport utime\n\n';
+      const motorInit =
+        '_lp = PWM(Pin(0)); _lp.freq(1000)\n' +
+        '_lm = PWM(Pin(1)); _lm.freq(1000)\n' +
+        '_rp = PWM(Pin(2)); _rp.freq(1000)\n' +
+        '_rm = PWM(Pin(3)); _rm.freq(1000)\n\n';
+      const sonarHelper =
+        'def _pvb_sonar_cm():\n' +
+        '    _trig = Pin(7, Pin.OUT); _echo = Pin(6, Pin.IN)\n' +
+        '    _trig.value(0); utime.sleep_us(2)\n' +
+        '    _trig.value(1); utime.sleep_us(10); _trig.value(0)\n' +
+        '    while _echo.value() == 0: pass\n' +
+        '    _t0 = utime.ticks_us()\n' +
+        '    while _echo.value() == 1: pass\n' +
+        '    return utime.ticks_diff(utime.ticks_us(), _t0) / 58\n\n';
 
-    let header = baseHeader;
-    if (hasMotor) header += motorInit;
-    if (hasSonarVal) header += sonarHelper;
+      header = baseHeader;
+      if (hasMotor)    header += motorInit;
+      if (hasSonarVal) header += sonarHelper;
+    }
+
     let code = '';
     const topBlocks = workspace.getTopBlocks(true);
     for (const block of topBlocks) {
@@ -526,6 +613,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!codingMode) {
       editor.setValue(header + (code || '# ブロックを追加してください'));
     }
+
+    // チュートリアル自動チェック（Tutorial代入済みの場合のみ）
+    if (Tutorial) Tutorial.check(blockTypes);
   }
 
   // ===== ツールボックスエリアへのドラッグで削除 =====
@@ -644,15 +734,8 @@ document.addEventListener('DOMContentLoaded', function() {
     e.target.value = '';
   });
 
-  // ===== デモモード（Web Serial 非対応環境：iPad Safari 等） =====
+  // ===== Web Serial 対応チェック =====
   const hasSerial = 'serial' in navigator;
-  if (!hasSerial) {
-    document.getElementById('demo-badge').style.display = '';
-    ['serial-sep', 'btn-connect', 'btn-run', 'btn-stop', 'btn-write'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.style.display = 'none';
-    });
-  }
 
   // ===== Web Serial：接続 / 書き込み =====
   const btnConnect = document.getElementById('btn-connect');
@@ -754,6 +837,267 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  // ===== モード切替 =====
+
+  // モードを切り替える（clearWorkspace=trueのときワークスペースをクリア）
+  function applyMode(mode, clearWorkspace) {
+    currentMode = mode;
+    if (clearWorkspace) workspace.clear();
+
+    // モードボタン
+    document.getElementById('btn-mode-python').classList.toggle('mode-btn--active', mode === 'python');
+    document.getElementById('btn-mode-micropython').classList.toggle('mode-btn--active', mode === 'micropython');
+
+    // ツールボックス切り替え
+    workspace.updateToolbox(document.getElementById('toolbox-' + mode));
+
+    // ラベル更新
+    document.getElementById('title-sub').textContent =
+      mode === 'python' ? 'Python 入門' : 'Raspberry Pi Pico / MicroPython';
+    document.getElementById('code-header-title').textContent =
+      mode === 'python' ? 'Python Output' : 'MicroPython Output';
+    const tutLabel = document.getElementById('tut-mode-label');
+    if (tutLabel) tutLabel.textContent = mode === 'python' ? 'Python入門' : 'MicroPython';
+
+    // シリアル関連ボタン（MicroPython && Web Serial対応のみ表示）
+    const showSerial = mode === 'micropython' && hasSerial;
+    ['serial-sep', 'btn-connect', 'btn-run', 'btn-stop', 'btn-write'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = showSerial ? '' : 'none';
+    });
+
+    // DEMOバッジ（MicroPythonモードでWeb Serial非対応のみ表示）
+    const demoBadge = document.getElementById('demo-badge');
+    if (demoBadge) demoBadge.style.display = (mode === 'micropython' && !hasSerial) ? '' : 'none';
+
+    // Python シェル UI の切り替え
+    const btnRunPy  = document.getElementById('btn-run-python');
+    const runPySep  = document.getElementById('run-py-sep');
+    const monTitle  = document.getElementById('monitor-header-title');
+    const monOut    = document.getElementById('monitor-output');
+    if (mode === 'python') {
+      if (btnRunPy) btnRunPy.style.display = '';
+      if (runPySep) runPySep.style.display = '';
+      if (monTitle) monTitle.textContent = 'Python シェル';
+      if (monOut)   { monOut.innerHTML = ''; monOut.classList.add('python-shell'); }
+    } else {
+      if (btnRunPy) btnRunPy.style.display = 'none';
+      if (runPySep) runPySep.style.display = 'none';
+      if (monTitle) monTitle.textContent = 'シリアルモニタ';
+      if (monOut)   { monOut.innerHTML = ''; monOut.classList.remove('python-shell'); }
+    }
+
+    // チュートリアルリセット
+    Tutorial.resetForMode();
+
+    // コード再生成
+    generateCode();
+  }
+
+  // モードボタンのイベント
+  document.getElementById('btn-mode-python').addEventListener('click', function() {
+    if (currentMode === 'python') return;
+    const hasBlocks = workspace.getAllBlocks(false).length > 0;
+    if (hasBlocks && !confirm('Python入門モードに切り替えます。\nワークスペースのブロックがクリアされます。よろしいですか？')) return;
+    applyMode('python', true);
+  });
+
+  document.getElementById('btn-mode-micropython').addEventListener('click', function() {
+    if (currentMode === 'micropython') return;
+    const hasBlocks = workspace.getAllBlocks(false).length > 0;
+    if (hasBlocks && !confirm('MicroPythonモードに切り替えます。\nワークスペースのブロックがクリアされます。よろしいですか？')) return;
+    applyMode('micropython', true);
+  });
+
+  // ===== Python シェル実行（Skulpt） =====
+
+  function skulptRead(x) {
+    if (Sk.builtinFiles === undefined || Sk.builtinFiles['files'][x] === undefined) {
+      throw "File not found: '" + x + "'";
+    }
+    return Sk.builtinFiles['files'][x];
+  }
+
+  function runPython() {
+    if (typeof Sk === 'undefined') {
+      appendShellText('[エラー] Skulptが読み込まれていません。ネットワーク接続を確認してください。\n', true);
+      return;
+    }
+
+    const code    = editor.getValue();
+    const monOut  = document.getElementById('monitor-output');
+    const btnRunPy = document.getElementById('btn-run-python');
+
+    // 出力エリアをクリアして実行マーカーを表示
+    monOut.innerHTML = '';
+    appendShellText('>>> 実行開始\n', false, 'py-prompt');
+
+    btnRunPy.disabled    = true;
+    btnRunPy.textContent = '実行中…';
+
+    Sk.configure({
+      output: function(text) {
+        appendShellText(text);
+        monOut.scrollTop = monOut.scrollHeight;
+      },
+      read: skulptRead,
+      inputfun: function(prompt) {
+        const answer = window.prompt(prompt || '');
+        appendShellText((prompt || '') + (answer !== null ? answer : '') + '\n', false, 'py-prompt');
+        return answer !== null ? answer : '';
+      },
+      inputfunTakesPrompt: true,
+      execLimit: 100000,  // 無限ループ防止（約10万ステップで強制終了）
+      __future__: Sk.python3,
+    });
+
+    Sk.misceval.asyncToPromise(function() {
+      return Sk.importMainWithBody('<stdin>', false, code, true);
+    }).then(function() {
+      appendShellText('>>> 完了\n', false, 'py-prompt');
+    }).catch(function(err) {
+      let msg = err.toString ? err.toString() : String(err);
+      // 実行ステップ超過 → 分かりやすいメッセージに変換
+      if (msg.includes('execLimit') || msg.includes('Execution exceeded')) {
+        msg = 'TimeLimitError: ループが多すぎます（実行ステップ上限を超えました）';
+      }
+      appendShellText('\n' + msg + '\n', true);
+    }).finally(function() {
+      btnRunPy.disabled    = false;
+      btnRunPy.textContent = '▶ 実行';
+      monOut.scrollTop = monOut.scrollHeight;
+    });
+  }
+
+  function appendShellText(text, isError, cls) {
+    const monOut = document.getElementById('monitor-output');
+    const span   = document.createElement('span');
+    if (isError) {
+      span.className = 'py-error';
+    } else if (cls) {
+      span.className = cls;
+    }
+    span.textContent = text;
+    monOut.appendChild(span);
+  }
+
+  document.getElementById('btn-run-python').addEventListener('click', runPython);
+
+  // ===== チュートリアルマネージャー =====
+  Tutorial = {
+    currentStep: 0,
+    isOpen: false,
+
+    init() {
+      document.getElementById('btn-tutorial').addEventListener('click', () => {
+        if (this.isOpen) this.close(); else this.open();
+      });
+      document.getElementById('tut-close').addEventListener('click', () => this.close());
+      document.getElementById('tut-hint-toggle').addEventListener('click', () => {
+        const hint = document.getElementById('tut-hint');
+        const btn  = document.getElementById('tut-hint-toggle');
+        const shown = hint.style.display !== 'none';
+        hint.style.display = shown ? 'none' : 'block';
+        btn.textContent    = shown ? '💡 ヒントを見る' : '💡 ヒントを隠す';
+      });
+      document.getElementById('tut-prev').addEventListener('click', () => this.prev());
+      document.getElementById('tut-next').addEventListener('click', () => this.next());
+    },
+
+    open() {
+      this.isOpen = true;
+      document.getElementById('tutorial-panel').classList.add('tutorial-panel--open');
+      document.getElementById('btn-tutorial').classList.add('tutorial-active');
+      this.render();
+      // Blocklyのリサイズを通知
+      setTimeout(() => Blockly.svgResize(workspace), 310);
+    },
+
+    close() {
+      this.isOpen = false;
+      document.getElementById('tutorial-panel').classList.remove('tutorial-panel--open');
+      document.getElementById('btn-tutorial').classList.remove('tutorial-active');
+      setTimeout(() => Blockly.svgResize(workspace), 310);
+    },
+
+    steps() {
+      return (typeof TUTORIALS !== 'undefined' && TUTORIALS[currentMode]) || [];
+    },
+
+    resetForMode() {
+      this.currentStep = 0;
+      if (this.isOpen) this.render();
+    },
+
+    render() {
+      const steps = this.steps();
+      if (!steps.length) return;
+      const idx   = Math.min(this.currentStep, steps.length - 1);
+      const step  = steps[idx];
+      const total = steps.length;
+
+      document.getElementById('tut-title').textContent    = step.title;
+      document.getElementById('tut-body').innerHTML       = step.body;
+      document.getElementById('tut-hint').innerHTML       = step.hint;
+      document.getElementById('tut-hint').style.display  = 'none';
+      document.getElementById('tut-hint-toggle').textContent = '💡 ヒントを見る';
+      document.getElementById('tut-progress').textContent = `${idx + 1} / ${total}`;
+      document.getElementById('tut-pbar-fill').style.width = `${(idx + 1) / total * 100}%`;
+
+      document.getElementById('tut-prev').disabled = (idx === 0);
+      const nextBtn = document.getElementById('tut-next');
+      nextBtn.disabled    = true;
+      nextBtn.textContent = (idx === total - 1) ? '完了 ✓' : '次へ ▶';
+
+      const checkEl = document.getElementById('tut-check');
+      checkEl.textContent = '○ 待機中';
+      checkEl.className   = 'tut-check';
+
+      // 現在のワークスペース状態で即時チェック
+      const blockTypes = new Set(workspace.getAllBlocks(false).map(b => b.type));
+      this._applyCheck(step, blockTypes);
+    },
+
+    check(blockTypes) {
+      if (!this.isOpen) return;
+      const steps = this.steps();
+      if (!steps.length) return;
+      this._applyCheck(steps[this.currentStep], blockTypes);
+    },
+
+    _applyCheck(step, blockTypes) {
+      const passed  = step.check(blockTypes);
+      const checkEl = document.getElementById('tut-check');
+      const nextBtn = document.getElementById('tut-next');
+      if (passed) {
+        checkEl.textContent = '✓ クリア！';
+        checkEl.className   = 'tut-check tut-check--done';
+        nextBtn.disabled    = false;
+      } else {
+        checkEl.textContent = '○ 待機中';
+        checkEl.className   = 'tut-check';
+        nextBtn.disabled    = true;
+      }
+    },
+
+    next() {
+      const steps = this.steps();
+      if (this.currentStep < steps.length - 1) {
+        this.currentStep++;
+        this.render();
+      } else {
+        this.close();
+      }
+    },
+
+    prev() {
+      if (this.currentStep > 0) {
+        this.currentStep--;
+        this.render();
+      }
+    },
+  };
+
   // ===== リサイズ機能 =====
 
   // 左右リサイズ（ブロックエリア ↔ コードパネル）
@@ -830,4 +1174,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('mouseup', () => { document.body.style.cursor = ''; endDrag(); });
     document.addEventListener('touchend', endDrag);
   })();
+
+  // ===== 初期化 =====
+  Tutorial.init();
+  applyMode('python', false); // Python入門モードで開始
 });

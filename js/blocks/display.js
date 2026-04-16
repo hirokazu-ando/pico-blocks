@@ -16,7 +16,7 @@ Blockly.Blocks['print_var_label'] = {
       .appendField('「')
       .appendField(new Blockly.FieldTextInput('dist='), 'LABEL')
       .appendField('」+ 変数')
-      .appendField(new Blockly.FieldTextInput('dist'), 'VAR')
+      .appendField(new Blockly.FieldVariable('x'), 'VAR')
       .appendField('を表示する');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

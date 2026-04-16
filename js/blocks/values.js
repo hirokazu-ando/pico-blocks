@@ -3,8 +3,8 @@
 Blockly.Blocks['val_var'] = {
   init: function() {
     this.appendDummyInput()
-      .appendField(new Blockly.FieldTextInput('x'), 'VAR');
-    this.setOutput(true, 'Number');
+      .appendField(new Blockly.FieldVariable('x'), 'VAR');
+    this.setOutput(true, null);
     this.setColour('#5C81A6');
     this.setTooltip('変数の値を表します');
   }
@@ -22,12 +22,12 @@ Blockly.Blocks['val_number'] = {
 
 Blockly.Blocks['cond_compare'] = {
   init: function() {
-    this.appendValueInput('LEFT').setCheck('Number');
+    this.appendValueInput('LEFT');
     this.appendDummyInput()
       .appendField(new Blockly.FieldDropdown([
         ['>','>'], ['>=','>='], ['<','<'], ['<=','<='], ['==','=='], ['!=','!=']
       ]), 'OP');
-    this.appendValueInput('RIGHT').setCheck('Number');
+    this.appendValueInput('RIGHT');
     this.setInputsInline(true);
     this.setOutput(true, 'Boolean');
     this.setColour('#6A1B9A');
