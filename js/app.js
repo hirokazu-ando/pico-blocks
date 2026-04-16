@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let Tutorial;   // 後で代入（generateCode から参照するため先に宣言）
   let blockLineMap = new Map();   // blockId → { from, to, color }
   let _highlightMarker = null;    // A案: 現在のコードハイライトマーカー
+  let _glowBlockId    = null;     // A案: ブロックグロー対象のID
 
   // ブロックの日本語ラベルを返す
   function blockLabel(block) {
@@ -661,8 +662,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // B案: ガター更新
     updateColorGutter();
 
+    // A案: ブロックグロー再適用（generateCode後にBlocklyが再描画してもグローを維持）
+    applyBlockGlow();
+
     // チュートリアル自動チェック（Tutorial代入済みの場合のみ）
     if (Tutorial) Tutorial.check(blockTypes);
+  }
+
+  // A案: 選択中ブロックのSVGにグローフィルターを適用（generateCode後に毎回再適用）
+  function applyBlockGlow() {
+    if (!_glowBlockId) return;
+    const block = workspace.getBlockById(_glowBlockId);
+    if (block && block.getSvgRoot) {
+      block.getSvgRoot().style.filter = 'drop-shadow(0 0 10px rgba(255, 220, 50, 0.9))';
+    }
   }
 
   function updateColorGutter() {
@@ -715,12 +728,25 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   generateCode();
 
-  // A案: ブロッククリック → コードハイライト ＋ ブロック自体をハイライト
+  // A案: ブロッククリック → コードハイライト ＋ ブロックグロー
   workspace.addChangeListener(function(e) {
     if (e.type !== Blockly.Events.SELECTED) return;
+
+    // 前のグローを解除
+    if (_glowBlockId) {
+      const old = workspace.getBlockById(_glowBlockId);
+      if (old && old.getSvgRoot) old.getSvgRoot().style.filter = '';
+      _glowBlockId = null;
+    }
     if (_highlightMarker) { _highlightMarker.clear(); _highlightMarker = null; }
+
     const blockId = e.newElementId;
     if (!blockId) return;
+
+    // ブロックグローを適用（generateCode後も applyBlockGlow() で維持される）
+    _glowBlockId = blockId;
+    applyBlockGlow();
+
     // コード行をハイライト
     const info = blockLineMap.get(blockId);
     if (!info) return;
