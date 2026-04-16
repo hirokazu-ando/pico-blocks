@@ -64,10 +64,13 @@ document.addEventListener('DOMContentLoaded', function() {
     lineWrapping: false,
     tabSize: 4,
     indentWithTabs: false,
+    gutters: ['CodeMirror-linenumbers', 'block-color-gutter'],
   });
   let codingMode = false;
   let currentMode = 'micropython'; // 初期値は後で applyMode('python') で上書き
   let Tutorial;   // 後で代入（generateCode から参照するため先に宣言）
+  let blockLineMap = new Map();   // blockId → { from, to, color }
+  let _highlightMarker = null;    // A案: 現在のハイライトマーカー
 
   // ブロックの日本語ラベルを返す
   function blockLabel(block) {
@@ -184,6 +187,38 @@ document.addEventListener('DOMContentLoaded', function() {
       if (v && v.name) return v.name;
     }
     return block.getFieldValue(fieldName || 'VAR') || fieldName || 'x';
+  }
+
+  function getBlockColor(type) {
+    const colorMap = {
+      pico_repeat: '#E65100', pico_forever: '#E65100',
+      pico_for_range: '#E65100', pico_for_from_to: '#E65100', py_while: '#E65100',
+      pico_if: '#6A1B9A', cond_compare: '#6A1B9A',
+      cond_and: '#6A1B9A', cond_or: '#6A1B9A', cond_not: '#6A1B9A',
+      pico_wait: '#00695C',
+      var_set: '#2196F3', var_change: '#2196F3',
+      var_if_greater: '#2196F3', var_if_less: '#2196F3',
+      val_var: '#5C81A6', val_number: '#5C81A6',
+      val_str: '#5C81A6', val_bool: '#5C81A6',
+      py_math_op: '#B71C1C', py_str_concat: '#B71C1C',
+      py_input: '#00838F',
+      pico_digital_read: '#00838F', pico_analog_read: '#00838F',
+      print_text: '#607D8B', print_var_label: '#607D8B',
+      print_separator: '#607D8B', py_print: '#607D8B', pvb_print: '#607D8B',
+      pico_led_on: '#388E3C', pico_led_off: '#388E3C', pico_digital_write: '#388E3C',
+      pvb_forward: '#E53935', pvb_backward: '#E53935',
+      pvb_turn_right: '#E53935', pvb_turn_left: '#E53935', pvb_stop: '#E53935',
+      pvb_led_on: '#E53935', pvb_led_off: '#E53935',
+      pvb_if_switch: '#E53935', pvb_sonar: '#E53935', pvb_if_obstacle: '#E53935',
+      pvb_line_read: '#E53935', pvb_if_line: '#E53935',
+    };
+    return colorMap[type] || '#607D8B';
+  }
+
+  function registerBlockRange(block, from, to, color) {
+    if (!block) return;
+    blockLineMap.set(block.id, { from, to, color });
+    block.getChildren(false).forEach(child => registerBlockRange(child, from, to, color));
   }
 
   function valueToCode(block, inputName, defaultVal) {
@@ -605,17 +640,43 @@ document.addEventListener('DOMContentLoaded', function() {
       if (hasSonarVal) header += sonarHelper;
     }
 
+    blockLineMap.clear();
     let code = '';
+    let currentLine = (header.match(/\n/g) || []).length;
     const topBlocks = workspace.getTopBlocks(true);
     for (const block of topBlocks) {
-      code += blockToCode(block, '');
+      const from = currentLine;
+      const blockCode = blockToCode(block, '');
+      const lineCount = (blockCode.match(/\n/g) || []).length;
+      const to = from + lineCount - 1;
+      const color = getBlockColor(block.type);
+      registerBlockRange(block, from, to, color);
+      code += blockCode;
+      currentLine += lineCount;
     }
     if (!codingMode) {
       editor.setValue(header + (code || '# ブロックを追加してください'));
     }
 
+    // B案: ガター更新
+    updateColorGutter();
+
     // チュートリアル自動チェック（Tutorial代入済みの場合のみ）
     if (Tutorial) Tutorial.check(blockTypes);
+  }
+
+  function updateColorGutter() {
+    editor.clearGutter('block-color-gutter');
+    blockLineMap.forEach(function(info) {
+      for (let line = info.from; line <= info.to; line++) {
+        const marker = document.createElement('div');
+        marker.style.width = '4px';
+        marker.style.height = '100%';
+        marker.style.backgroundColor = info.color;
+        marker.style.borderRadius = '2px';
+        editor.setGutterMarker(line, 'block-color-gutter', marker);
+      }
+    });
   }
 
   // ===== ツールボックスエリアへのドラッグで削除 =====
@@ -653,6 +714,37 @@ document.addEventListener('DOMContentLoaded', function() {
     generateCode();
   });
   generateCode();
+
+  // A案: ブロッククリック → コードハイライト
+  workspace.addChangeListener(function(e) {
+    if (e.type !== Blockly.Events.SELECTED) return;
+    if (_highlightMarker) { _highlightMarker.clear(); _highlightMarker = null; }
+    const blockId = e.newElementId;
+    if (!blockId) return;
+    const info = blockLineMap.get(blockId);
+    if (!info) return;
+    _highlightMarker = editor.markText(
+      { line: info.from, ch: 0 },
+      { line: info.to + 1, ch: 0 },
+      { className: 'block-highlight' }
+    );
+    editor.scrollIntoView({ line: info.from, ch: 0 }, 80);
+  });
+
+  // C案: ブロック配置・移動時にコードをフラッシュ
+  workspace.addChangeListener(function(e) {
+    if (e.type !== Blockly.Events.BLOCK_MOVE && e.type !== Blockly.Events.BLOCK_CREATE) return;
+    const blockId = e.blockId;
+    if (!blockId) return;
+    const info = blockLineMap.get(blockId);
+    if (!info) return;
+    const flashMarker = editor.markText(
+      { line: info.from, ch: 0 },
+      { line: info.to + 1, ch: 0 },
+      { className: 'block-flash' }
+    );
+    setTimeout(() => flashMarker.clear(), 700);
+  });
 
   const btnComments = document.getElementById('btn-toggle-comments');
   btnComments.addEventListener('click', function() {

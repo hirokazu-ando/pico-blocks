@@ -1035,3 +1035,31 @@ h1 {
 .py-prompt {
   color: var(--text-dim);
 }
+
+/* ===== A案: ブロック選択ハイライト ===== */
+.block-highlight {
+  background: rgba(255, 220, 50, 0.18);
+  border-left: 3px solid rgba(255, 220, 50, 0.7);
+  display: inline-block;
+  width: 100%;
+}
+
+/* ===== B案: カテゴリカラーガター ===== */
+.block-color-gutter {
+  width: 6px !important;
+  background: transparent;
+}
+.CodeMirror-gutter-wrapper .block-color-gutter {
+  width: 6px;
+}
+
+/* ===== C案: ブロック配置フラッシュ ===== */
+.block-flash {
+  animation: blockFlash 0.7s ease-out forwards;
+  display: inline-block;
+  width: 100%;
+}
+@keyframes blockFlash {
+  0%   { background: rgba(0, 255, 65, 0.35); }
+  100% { background: transparent; }
+}
