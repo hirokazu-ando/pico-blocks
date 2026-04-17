@@ -1036,7 +1036,7 @@ h1 {
   color: var(--text-dim);
 }
 
-/* ===== A案: ブロック選択ハイライト ===== */
+/* ===== A案: ブロック選択ハイライト（コードエリア） ===== */
 .block-highlight {
   background: rgba(255, 220, 50, 0.18);
   border-left: 3px solid rgba(255, 220, 50, 0.7);

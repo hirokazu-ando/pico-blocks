@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let Tutorial;   // 後で代入（generateCode から参照するため先に宣言）
   let blockLineMap = new Map();   // blockId → { from, to, color }
   let _highlightMarker = null;    // A案: 現在のコードハイライトマーカー
-  let _glowBlockId    = null;     // A案: ブロックグロー対象のID
+  let _glowBlockId    = null;     // A案: グロー対象ブロックID
 
   // ブロックの日本語ラベルを返す
   function blockLabel(block) {
@@ -662,25 +662,33 @@ document.addEventListener('DOMContentLoaded', function() {
     // B案: ガター更新
     updateColorGutter();
 
-    // A案: ブロックグロー再適用（generateCode後にBlocklyが再描画してもグローを維持）
-    applyBlockGlow();
-
     // チュートリアル自動チェック（Tutorial代入済みの場合のみ）
     if (Tutorial) Tutorial.check(blockTypes);
   }
 
-  // A案: 選択中ブロックのSVGにグローフィルターを適用
-  // requestAnimationFrame でBlocklyの再描画サイクル完了後に適用する
+  // A案: ブロックグロー（Blockly SVGを一切触らないdivオーバーレイ方式）
+  // Blocklyはclass/style/filterを管理するため、SVG外部のdivで追従する
+  (function() {
+    const overlay = document.createElement('div');
+    overlay.id = 'block-glow-overlay';
+    overlay.style.cssText = 'position:fixed;pointer-events:none;border-radius:6px;' +
+      'box-shadow:0 0 0 2px rgba(255,220,50,0.9),0 0 14px 5px rgba(255,220,50,0.6);' +
+      'display:none;z-index:9999;transition:none;';
+    document.body.appendChild(overlay);
+  })();
+
   function applyBlockGlow() {
-    if (!_glowBlockId) return;
-    const id = _glowBlockId;  // rAF実行時点で変わっていても元のIDで適用
-    requestAnimationFrame(function() {
-      if (_glowBlockId !== id) return;  // その間に選択が変わっていたらスキップ
-      const block = workspace.getBlockById(id);
-      if (block && block.getSvgRoot) {
-        block.getSvgRoot().style.filter = 'drop-shadow(0 0 10px rgba(255, 220, 50, 0.9))';
-      }
-    });
+    const overlay = document.getElementById('block-glow-overlay');
+    if (!_glowBlockId) { overlay.style.display = 'none'; return; }
+    const block = workspace.getBlockById(_glowBlockId);
+    if (!block || !block.getSvgRoot) { overlay.style.display = 'none'; return; }
+    const r = block.getSvgRoot().getBoundingClientRect();
+    if (r.width === 0) { overlay.style.display = 'none'; return; }
+    overlay.style.left   = (r.left - 4) + 'px';
+    overlay.style.top    = (r.top  - 4) + 'px';
+    overlay.style.width  = (r.width  + 8) + 'px';
+    overlay.style.height = (r.height + 8) + 'px';
+    overlay.style.display = 'block';
   }
 
   function updateColorGutter() {
@@ -729,39 +737,42 @@ document.addEventListener('DOMContentLoaded', function() {
     if (fileMode && e.type !== Blockly.Events.VIEWPORT_CHANGE && e.type !== Blockly.Events.SELECTED) {
       fileMode = false;
     }
+    // VIEWPORT_CHANGE / BLOCK_DRAG開始はコード変化なしのためスキップ
+    if (e.type === Blockly.Events.VIEWPORT_CHANGE) return;
+    if (e.type === Blockly.Events.BLOCK_DRAG && e.isStart) return;
     generateCode();
   });
   generateCode();
 
-  // A案: ブロッククリック → コードハイライト ＋ ブロックグロー
-  workspace.addChangeListener(function(e) {
-    if (e.type !== Blockly.Events.SELECTED) return;
+  // A案: ブロックグロー + コードハイライト
+  // イベントシステムに依存せず workspace.getSelectedBlock() をrAFでポーリング
+  // これによりBlockly内部の処理順序に関わらず確実に動作する
+  (function glowLoop() {
+    const sel = (workspace.getSelectedBlock && workspace.getSelectedBlock()) || null;
+    const selId = sel ? sel.id : null;
 
-    // 前のグローを解除
-    if (_glowBlockId) {
-      const old = workspace.getBlockById(_glowBlockId);
-      if (old && old.getSvgRoot) old.getSvgRoot().style.filter = '';
-      _glowBlockId = null;
+    if (selId !== _glowBlockId) {
+      _glowBlockId = selId;
+
+      // コードハイライト更新
+      if (_highlightMarker) { _highlightMarker.clear(); _highlightMarker = null; }
+      if (selId) {
+        const info = blockLineMap.get(selId);
+        if (info) {
+          _highlightMarker = editor.markText(
+            { line: info.from, ch: 0 },
+            { line: info.to + 1, ch: 0 },
+            { className: 'block-highlight' }
+          );
+          editor.scrollIntoView({ line: info.from, ch: 0 }, 80);
+        }
+      }
     }
-    if (_highlightMarker) { _highlightMarker.clear(); _highlightMarker = null; }
 
-    const blockId = e.newElementId;
-    if (!blockId) return;
-
-    // ブロックグローを適用（generateCode後も applyBlockGlow() で維持される）
-    _glowBlockId = blockId;
+    // グロー位置を毎フレーム更新（ドラッグ・スクロール・ズームに追従）
     applyBlockGlow();
-
-    // コード行をハイライト
-    const info = blockLineMap.get(blockId);
-    if (!info) return;
-    _highlightMarker = editor.markText(
-      { line: info.from, ch: 0 },
-      { line: info.to + 1, ch: 0 },
-      { className: 'block-highlight' }
-    );
-    editor.scrollIntoView({ line: info.from, ch: 0 }, 80);
-  });
+    requestAnimationFrame(glowLoop);
+  })();
 
   // C案: ブロック配置・移動時にコードをフラッシュ
   workspace.addChangeListener(function(e) {
