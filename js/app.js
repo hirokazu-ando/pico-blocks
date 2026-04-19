@@ -64,14 +64,65 @@ document.addEventListener('DOMContentLoaded', function() {
     lineWrapping: false,
     tabSize: 4,
     indentWithTabs: false,
-    gutters: ['CodeMirror-linenumbers', 'block-color-gutter'],
   });
   let codingMode = false;
   let currentMode = 'micropython'; // 初期値は後で applyMode('python') で上書き
   let Tutorial;   // 後で代入（generateCode から参照するため先に宣言）
-  let blockLineMap = new Map();   // blockId → { from, to, color }
-  let _highlightMarker = null;    // A案: 現在のコードハイライトマーカー
-  let _glowBlockId    = null;     // A案: グロー対象ブロックID
+  let blockLineMap = new Map(); // blockId → { from, to }（CodeMirror の 0 始まり行番号）
+  const BLOCK_SEL_BG_CLASS = 'block-selection-highlight';
+  let _emitCtx = { line: 0 };
+  function _nl(s) {
+    return (s.match(/\n/g) || []).length;
+  }
+  function appendLocal(code, frag) {
+    if (frag) _emitCtx.line += _nl(frag);
+    return code + frag;
+  }
+  /** 子の blockToCode 戻りは子側で行数加算済み。空のときは pass 行だけ加算 */
+  function appendChildBody(code, childText, passLine) {
+    if (childText) return code + childText;
+    return appendLocal(code, passLine);
+  }
+
+  /**
+   * 式用（VALUE）入力だけ追跡する。statement 入力（DO など）は別行なのでここでは辿らない。
+   * 接続方向で判定（圧縮 Blockly でもクラス名に依存しにくい）。
+   */
+  function isBlocklyValueInput(inp) {
+    if (!inp || !inp.connection) return false;
+    const tb = inp.connection.targetBlock();
+    if (!tb) return false;
+    if (tb.outputConnection && tb.outputConnection.targetConnection === inp.connection) return true;
+    if (tb.previousConnection && tb.previousConnection.targetConnection === inp.connection) return false;
+    const ctor = inp.constructor && inp.constructor.name;
+    if (ctor === 'StatementInput' || ctor === 'DummyInput') return false;
+    if (ctor === 'ValueInput') return true;
+    const t = inp.type;
+    if (typeof Blockly !== 'undefined') {
+      if (Blockly.INPUT_VALUE !== undefined && t === Blockly.INPUT_VALUE) return true;
+      if (Blockly.inputs && Blockly.inputs.inputTypes && t === Blockly.inputs.inputTypes.VALUE) return true;
+    }
+    return t === 1 || t === 'input_value';
+  }
+
+  /** 式ブロックとその子（演算・比較など）を、与えられた行に紐付けて blockLineMap に登録する */
+  function registerExprBlocksAtLine(block, lineNo) {
+    if (!block) return;
+    blockLineMap.set(block.id, { from: lineNo, to: lineNo });
+    const inputs = block.inputList;
+    for (let i = 0; i < inputs.length; i++) {
+      const inp = inputs[i];
+      if (!isBlocklyValueInput(inp)) continue;
+      const tb = inp.connection && inp.connection.targetBlock();
+      if (tb) registerExprBlocksAtLine(tb, lineNo);
+    }
+  }
+
+  function registerExprBlocksAtLineFromInput(parentBlock, inputName, lineNo) {
+    const input = parentBlock.getInput(inputName);
+    if (!input || !input.connection || !input.connection.targetBlock()) return;
+    registerExprBlocksAtLine(input.connection.targetBlock(), lineNo);
+  }
 
   // ブロックの日本語ラベルを返す
   function blockLabel(block) {
@@ -190,36 +241,57 @@ document.addEventListener('DOMContentLoaded', function() {
     return block.getFieldValue(fieldName || 'VAR') || fieldName || 'x';
   }
 
-  function getBlockColor(type) {
-    const colorMap = {
-      pico_repeat: '#E65100', pico_forever: '#E65100',
-      pico_for_range: '#E65100', pico_for_from_to: '#E65100', py_while: '#E65100',
-      pico_if: '#6A1B9A', cond_compare: '#6A1B9A',
-      cond_and: '#6A1B9A', cond_or: '#6A1B9A', cond_not: '#6A1B9A',
-      pico_wait: '#00695C',
-      var_set: '#2196F3', var_change: '#2196F3',
-      var_if_greater: '#2196F3', var_if_less: '#2196F3',
-      val_var: '#5C81A6', val_number: '#5C81A6',
-      val_str: '#5C81A6', val_bool: '#5C81A6',
-      py_math_op: '#B71C1C', py_str_concat: '#B71C1C',
-      py_input: '#00838F',
-      pico_digital_read: '#00838F', pico_analog_read: '#00838F',
-      print_text: '#607D8B', print_var_label: '#607D8B',
-      print_separator: '#607D8B', py_print: '#607D8B', pvb_print: '#607D8B',
-      pico_led_on: '#388E3C', pico_led_off: '#388E3C', pico_digital_write: '#388E3C',
-      pvb_forward: '#E53935', pvb_backward: '#E53935',
-      pvb_turn_right: '#E53935', pvb_turn_left: '#E53935', pvb_stop: '#E53935',
-      pvb_led_on: '#E53935', pvb_led_off: '#E53935',
-      pvb_if_switch: '#E53935', pvb_sonar: '#E53935', pvb_if_obstacle: '#E53935',
-      pvb_line_read: '#E53935', pvb_if_line: '#E53935',
-    };
-    return colorMap[type] || '#607D8B';
+  function getSelectedBlockId() {
+    try {
+      if (typeof Blockly !== 'undefined' && Blockly.common && typeof Blockly.common.getSelected === 'function') {
+        const sel = Blockly.common.getSelected();
+        if (sel && sel.id != null) return sel.id;
+      }
+    } catch (e) { /* */ }
+    try {
+      if (typeof workspace.getSelected === 'function') {
+        const b = workspace.getSelected();
+        if (b && b.id != null) return b.id;
+      }
+      if (typeof workspace.getSelectedBlock === 'function') {
+        const b = workspace.getSelectedBlock();
+        if (b && b.id != null) return b.id;
+      }
+    } catch (e) { /* */ }
+    return null;
   }
 
-  function registerBlockRange(block, from, to, color) {
-    if (!block) return;
-    blockLineMap.set(block.id, { from, to, color });
-    block.getChildren(false).forEach(child => registerBlockRange(child, from, to, color));
+  /** markText + インラインブロック幅指定は CM5 の行描画を壊すことがあるため、行背景クラスのみ使う */
+  function clearBlockSelectionHighlight() {
+    try {
+      const n = editor.lineCount();
+      for (let i = 0; i < n; i++) {
+        editor.removeLineClass(i, 'background', BLOCK_SEL_BG_CLASS);
+      }
+    } catch (e) { /* */ }
+  }
+
+  function paintBlockSelectionHighlight(blockId) {
+    clearBlockSelectionHighlight();
+    if (blockId == null || blockId === '') return;
+    const info = blockLineMap.get(blockId);
+    if (!info) return;
+    const lc = editor.lineCount();
+    if (info.from < 0 || info.from >= lc) return;
+    const last = Math.min(info.to, lc - 1);
+    if (last < info.from) return;
+    try {
+      for (let line = info.from; line <= last; line++) {
+        editor.addLineClass(line, 'background', BLOCK_SEL_BG_CLASS);
+      }
+      editor.scrollIntoView({ line: info.from, ch: 0 }, 80);
+    } catch (err) {
+      console.warn('paintBlockSelectionHighlight', err);
+    }
+  }
+
+  function refreshBlockSelectionHighlight() {
+    paintBlockSelectionHighlight(getSelectedBlockId());
   }
 
   function valueToCode(block, inputName, defaultVal) {
@@ -302,188 +374,216 @@ document.addEventListener('DOMContentLoaded', function() {
   function blockToCode(block, indent) {
     if (!block) return '';
     indent = indent || '';
-    let code = showComments ? commentLine(block, indent) : '';
+    const blockOwnFrom = _emitCtx.line;
+    let code = '';
+    if (showComments) {
+      code = appendLocal(code, commentLine(block, indent));
+    }
 
     switch (block.type) {
 
       // ===== 基本GPIO =====
       case 'pico_led_on': {
         const pin = block.getFieldValue('PIN');
-        code += indent + `Pin(${pin}, Pin.OUT).value(1)\n`;
+        code = appendLocal(code, indent + `Pin(${pin}, Pin.OUT).value(1)\n`);
         break;
       }
       case 'pico_led_off': {
         const pin = block.getFieldValue('PIN');
-        code += indent + `Pin(${pin}, Pin.OUT).value(0)\n`;
+        code = appendLocal(code, indent + `Pin(${pin}, Pin.OUT).value(0)\n`);
         break;
       }
       case 'pico_digital_write': {
         const pin = block.getFieldValue('PIN');
         const val = block.getFieldValue('VAL');
-        code += indent + `Pin(${pin}, Pin.OUT).value(${val})\n`;
+        code = appendLocal(code, indent + `Pin(${pin}, Pin.OUT).value(${val})\n`);
         break;
       }
 
       // ===== 制御 =====
       case 'pico_wait': {
+        const lnWait = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'SEC', lnWait);
         const sec = valueToCode(block, 'SEC', '1');
-        code += currentMode === 'python'
+        code = appendLocal(code, currentMode === 'python'
           ? indent + `time.sleep(${sec})\n`
-          : indent + `utime.sleep(${sec})\n`;
+          : indent + `utime.sleep(${sec})\n`);
         break;
       }
       case 'pico_repeat': {
+        const lnRep = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'TIMES', lnRep);
         const times = valueToCode(block, 'TIMES', '10');
+        code = appendLocal(code, indent + `for _ in range(${times}):\n`);
         const inner = statementToCode(block, 'DO', indent + '    ');
-        code += indent + `for _ in range(${times}):\n` + (inner || indent + '    pass\n');
+        code = appendChildBody(code, inner, indent + '    pass\n');
         break;
       }
       case 'pico_forever': {
+        code = appendLocal(code, indent + `while True:\n`);
         const inner = statementToCode(block, 'DO', indent + '    ');
-        code += indent + `while True:\n` + (inner || indent + '    pass\n');
+        code = appendChildBody(code, inner, indent + '    pass\n');
         break;
       }
 
       // ===== PoliviaBot UME モーター =====
       case 'pvb_forward': {
+        const lnFwd = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'SPEED', lnFwd);
         const spd = valueToCode(block, 'SPEED', '50');
-        code += indent + `_d = ${spd} * 65535 // 100\n`;
-        code += indent + `_lm.duty_u16(0); _rm.duty_u16(0)\n`;
-        code += indent + `_lp.duty_u16(_d); _rp.duty_u16(_d)\n`;
+        code = appendLocal(code, indent + `_d = ${spd} * 65535 // 100\n`);
+        code = appendLocal(code, indent + `_lm.duty_u16(0); _rm.duty_u16(0)\n`);
+        code = appendLocal(code, indent + `_lp.duty_u16(_d); _rp.duty_u16(_d)\n`);
         break;
       }
       case 'pvb_backward': {
+        const lnBwd = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'SPEED', lnBwd);
         const spd = valueToCode(block, 'SPEED', '50');
-        code += indent + `_d = ${spd} * 65535 // 100\n`;
-        code += indent + `_lp.duty_u16(0); _rp.duty_u16(0)\n`;
-        code += indent + `_lm.duty_u16(_d); _rm.duty_u16(_d)\n`;
+        code = appendLocal(code, indent + `_d = ${spd} * 65535 // 100\n`);
+        code = appendLocal(code, indent + `_lp.duty_u16(0); _rp.duty_u16(0)\n`);
+        code = appendLocal(code, indent + `_lm.duty_u16(_d); _rm.duty_u16(_d)\n`);
         break;
       }
       case 'pvb_turn_right': {
+        const lnTR = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'SPEED', lnTR);
         const spd = valueToCode(block, 'SPEED', '50');
-        code += indent + `_d = ${spd} * 65535 // 100\n`;
-        code += indent + `_lm.duty_u16(0); _rm.duty_u16(_d)\n`;
-        code += indent + `_lp.duty_u16(_d); _rp.duty_u16(0)\n`;
+        code = appendLocal(code, indent + `_d = ${spd} * 65535 // 100\n`);
+        code = appendLocal(code, indent + `_lm.duty_u16(0); _rm.duty_u16(_d)\n`);
+        code = appendLocal(code, indent + `_lp.duty_u16(_d); _rp.duty_u16(0)\n`);
         break;
       }
       case 'pvb_turn_left': {
+        const lnTL = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'SPEED', lnTL);
         const spd = valueToCode(block, 'SPEED', '50');
-        code += indent + `_d = ${spd} * 65535 // 100\n`;
-        code += indent + `_lm.duty_u16(_d); _rm.duty_u16(0)\n`;
-        code += indent + `_lp.duty_u16(0); _rp.duty_u16(_d)\n`;
+        code = appendLocal(code, indent + `_d = ${spd} * 65535 // 100\n`);
+        code = appendLocal(code, indent + `_lm.duty_u16(_d); _rm.duty_u16(0)\n`);
+        code = appendLocal(code, indent + `_lp.duty_u16(0); _rp.duty_u16(_d)\n`);
         break;
       }
       case 'pvb_stop': {
-        code += indent + `_lp.duty_u16(0); _rp.duty_u16(0)\n`;
-        code += indent + `_lm.duty_u16(0); _rm.duty_u16(0)\n`;
+        code = appendLocal(code, indent + `_lp.duty_u16(0); _rp.duty_u16(0)\n`);
+        code = appendLocal(code, indent + `_lm.duty_u16(0); _rm.duty_u16(0)\n`);
         break;
       }
 
       // ===== PoliviaBot LED / スイッチ =====
       case 'pvb_led_on': {
         const led = block.getFieldValue('LED');
-        code += indent + `Pin(${led}, Pin.OUT).value(1)\n`;
+        code = appendLocal(code, indent + `Pin(${led}, Pin.OUT).value(1)\n`);
         break;
       }
       case 'pvb_led_off': {
         const led = block.getFieldValue('LED');
-        code += indent + `Pin(${led}, Pin.OUT).value(0)\n`;
+        code = appendLocal(code, indent + `Pin(${led}, Pin.OUT).value(0)\n`);
         break;
       }
       case 'pvb_if_switch': {
         const sw = block.getFieldValue('SW');
+        code = appendLocal(code, indent + `if Pin(${sw}, Pin.IN, Pin.PULL_UP).value() == 0:\n`);
         const inner = statementToCode(block, 'DO', indent + '    ');
-        code += indent + `if Pin(${sw}, Pin.IN, Pin.PULL_UP).value() == 0:\n`;
-        code += inner || indent + '    pass\n';
+        code = appendChildBody(code, inner, indent + '    pass\n');
         break;
       }
 
       // ===== センサー =====
       case 'pvb_sonar': {
         const varName = getVarName(block, 'VAR');
-        code += indent + `_trig = Pin(7, Pin.OUT); _echo = Pin(6, Pin.IN)\n`;
-        code += indent + `_trig.value(0); utime.sleep_us(2)\n`;
-        code += indent + `_trig.value(1); utime.sleep_us(10); _trig.value(0)\n`;
-        code += indent + `while _echo.value() == 0: pass\n`;
-        code += indent + `_t0 = utime.ticks_us()\n`;
-        code += indent + `while _echo.value() == 1: pass\n`;
-        code += indent + `${varName} = utime.ticks_diff(utime.ticks_us(), _t0) / 58\n`;
+        code = appendLocal(code, indent + `_trig = Pin(7, Pin.OUT); _echo = Pin(6, Pin.IN)\n`);
+        code = appendLocal(code, indent + `_trig.value(0); utime.sleep_us(2)\n`);
+        code = appendLocal(code, indent + `_trig.value(1); utime.sleep_us(10); _trig.value(0)\n`);
+        code = appendLocal(code, indent + `while _echo.value() == 0: pass\n`);
+        code = appendLocal(code, indent + `_t0 = utime.ticks_us()\n`);
+        code = appendLocal(code, indent + `while _echo.value() == 1: pass\n`);
+        code = appendLocal(code, indent + `${varName} = utime.ticks_diff(utime.ticks_us(), _t0) / 58\n`);
         break;
       }
       case 'pvb_if_obstacle': {
+        code = appendLocal(code, indent + `_trig = Pin(7, Pin.OUT); _echo = Pin(6, Pin.IN)\n`);
+        code = appendLocal(code, indent + `_trig.value(0); utime.sleep_us(2)\n`);
+        code = appendLocal(code, indent + `_trig.value(1); utime.sleep_us(10); _trig.value(0)\n`);
+        code = appendLocal(code, indent + `while _echo.value() == 0: pass\n`);
+        code = appendLocal(code, indent + `_t0 = utime.ticks_us()\n`);
+        code = appendLocal(code, indent + `while _echo.value() == 1: pass\n`);
+        code = appendLocal(code, indent + `_dist_cm = utime.ticks_diff(utime.ticks_us(), _t0) / 58\n`);
+        const lnObs = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'DIST', lnObs);
         const dist  = valueToCode(block, 'DIST', '20');
+        code = appendLocal(code, indent + `if _dist_cm < ${dist}:\n`);
         const inner = statementToCode(block, 'DO', indent + '    ');
-        code += indent + `_trig = Pin(7, Pin.OUT); _echo = Pin(6, Pin.IN)\n`;
-        code += indent + `_trig.value(0); utime.sleep_us(2)\n`;
-        code += indent + `_trig.value(1); utime.sleep_us(10); _trig.value(0)\n`;
-        code += indent + `while _echo.value() == 0: pass\n`;
-        code += indent + `_t0 = utime.ticks_us()\n`;
-        code += indent + `while _echo.value() == 1: pass\n`;
-        code += indent + `_dist_cm = utime.ticks_diff(utime.ticks_us(), _t0) / 58\n`;
-        code += indent + `if _dist_cm < ${dist}:\n`;
-        code += inner || indent + '    pass\n';
+        code = appendChildBody(code, inner, indent + '    pass\n');
         break;
       }
       case 'pvb_line_read': {
         const sensor = block.getFieldValue('SENSOR');
         const varName = getVarName(block, 'VAR');
-        code += indent + `${varName} = ADC(${sensor}).read_u16()\n`;
+        code = appendLocal(code, indent + `${varName} = ADC(${sensor}).read_u16()\n`);
         break;
       }
       case 'pvb_if_line': {
         const sensor = block.getFieldValue('SENSOR');
         const color = block.getFieldValue('COLOR');
-        const inner = statementToCode(block, 'DO', indent + '    ');
         const op = color === 'black' ? '>' : '<';
-        code += indent + `if ADC(${sensor}).read_u16() ${op} 32767:\n`;
-        code += inner || indent + '    pass\n';
+        code = appendLocal(code, indent + `if ADC(${sensor}).read_u16() ${op} 32767:\n`);
+        const inner = statementToCode(block, 'DO', indent + '    ');
+        code = appendChildBody(code, inner, indent + '    pass\n');
         break;
       }
       case 'pvb_print': {
         const varName = getVarName(block, 'VAR');
-        code += indent + `print(${varName})\n`;
+        code = appendLocal(code, indent + `print(${varName})\n`);
         break;
       }
       case 'pico_if': {
+        const lnIf0 = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'IF0', lnIf0);
         const cond0 = valueToCode(block, 'IF0', 'True');
+        code = appendLocal(code, indent + `if ${cond0}:\n`);
         const do0   = statementToCode(block, 'DO0', indent + '    ');
-        code += indent + `if ${cond0}:\n`;
-        code += do0 || indent + '    pass\n';
+        code = appendChildBody(code, do0, indent + '    pass\n');
         for (let i = 1; block.getInput('IF' + i); i++) {
+          const lnElif = _emitCtx.line;
+          registerExprBlocksAtLineFromInput(block, 'IF' + i, lnElif);
           const condI = valueToCode(block, 'IF' + i, 'True');
+          code = appendLocal(code, indent + `elif ${condI}:\n`);
           const doI   = statementToCode(block, 'DO' + i, indent + '    ');
-          code += indent + `elif ${condI}:\n`;
-          code += doI || indent + '    pass\n';
+          code = appendChildBody(code, doI, indent + '    pass\n');
         }
         if (block.getInput('ELSE')) {
+          code = appendLocal(code, indent + `else:\n`);
           const doElse = statementToCode(block, 'ELSE', indent + '    ');
-          code += indent + `else:\n`;
-          code += doElse || indent + '    pass\n';
+          code = appendChildBody(code, doElse, indent + '    pass\n');
         }
         break;
       }
       case 'var_set': {
         const v   = getVarName(block, 'VAR');
+        const lnSet = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'VALUE', lnSet);
         const val = valueToCode(block, 'VALUE', '0');
-        code += indent + `${v} = ${val}\n`;
+        code = appendLocal(code, indent + `${v} = ${val}\n`);
         break;
       }
       case 'var_change': {
         const v   = getVarName(block, 'VAR');
+        const lnChg = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'AMOUNT', lnChg);
         const amt = valueToCode(block, 'AMOUNT', '1');
-        code += indent + `${v} += ${amt}\n`;
+        code = appendLocal(code, indent + `${v} += ${amt}\n`);
         break;
       }
       case 'pico_digital_read': {
         const pin = block.getFieldValue('PIN');
         const varName = getVarName(block, 'VAR');
-        code += indent + `${varName} = Pin(${pin}, Pin.IN).value()\n`;
+        code = appendLocal(code, indent + `${varName} = Pin(${pin}, Pin.IN).value()\n`);
         break;
       }
       case 'pico_analog_read': {
         const pin = block.getFieldValue('PIN');
         const varName = getVarName(block, 'VAR');
-        code += indent + `${varName} = ADC(${pin}).read_u16()\n`;
+        code = appendLocal(code, indent + `${varName} = ADC(${pin}).read_u16()\n`);
         break;
       }
       case 'val_var':
@@ -506,51 +606,63 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       case 'pico_for_range': {
         const v      = getVarName(block, 'VAR');
+        const lnForN = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'N', lnForN);
         const n      = valueToCode(block, 'N', '10');
+        code = appendLocal(code, indent + `for ${v} in range(${n}):\n`);
         const doCode = statementToCode(block, 'DO', indent + '    ');
-        code += indent + `for ${v} in range(${n}):\n`;
-        code += doCode || indent + '    pass\n';
+        code = appendChildBody(code, doCode, indent + '    pass\n');
         break;
       }
       case 'pico_for_from_to': {
         const v      = getVarName(block, 'VAR');
+        const lnRange = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'START', lnRange);
+        registerExprBlocksAtLineFromInput(block, 'STOP', lnRange);
+        registerExprBlocksAtLineFromInput(block, 'STEP', lnRange);
         const start  = valueToCode(block, 'START', '0');
         const stop   = valueToCode(block, 'STOP', '10');
         const step   = valueToCode(block, 'STEP', '1');
+        code = appendLocal(code, indent + `for ${v} in range(${start}, ${stop}, ${step}):\n`);
         const doCode = statementToCode(block, 'DO', indent + '    ');
-        code += indent + `for ${v} in range(${start}, ${stop}, ${step}):\n`;
-        code += doCode || indent + '    pass\n';
+        code = appendChildBody(code, doCode, indent + '    pass\n');
         break;
       }
       case 'var_if_greater': {
         const v     = getVarName(block, 'VAR');
+        const lnGt = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'THRESHOLD', lnGt);
         const thr   = valueToCode(block, 'THRESHOLD', '0');
+        code = appendLocal(code, indent + `if ${v} > ${thr}:\n`);
         const inner = statementToCode(block, 'DO', indent + '    ');
-        code += indent + `if ${v} > ${thr}:\n`;
-        code += inner || indent + '    pass\n';
+        code = appendChildBody(code, inner, indent + '    pass\n');
         break;
       }
       case 'var_if_less': {
         const v     = getVarName(block, 'VAR');
+        const lnLt = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'THRESHOLD', lnLt);
         const thr   = valueToCode(block, 'THRESHOLD', '0');
+        code = appendLocal(code, indent + `if ${v} < ${thr}:\n`);
         const inner = statementToCode(block, 'DO', indent + '    ');
-        code += indent + `if ${v} < ${thr}:\n`;
-        code += inner || indent + '    pass\n';
+        code = appendChildBody(code, inner, indent + '    pass\n');
         break;
       }
       case 'print_text': {
         const text = JSON.stringify(block.getFieldValue('TEXT'));
-        code += indent + `print(${text})\n`;
+        code = appendLocal(code, indent + `print(${text})\n`);
         break;
       }
       case 'print_var_label': {
         const label = JSON.stringify(block.getFieldValue('LABEL'));
         const varName = getVarName(block, 'VAR');
-        code += indent + `print(${label} + str(${varName}))\n`;
+        const lnPvl = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'VAR', lnPvl);
+        code = appendLocal(code, indent + `print(${label} + str(${varName}))\n`);
         break;
       }
       case 'print_separator': {
-        code += indent + `print('----------------')\n`;
+        code = appendLocal(code, indent + `print('----------------')\n`);
         break;
       }
 
@@ -560,36 +672,48 @@ document.addEventListener('DOMContentLoaded', function() {
         const prompt  = JSON.stringify(block.getFieldValue('PROMPT'));
         const type    = block.getFieldValue('TYPE');
         if (type === 'int') {
-          code += indent + `${varName} = int(input(${prompt}))\n`;
+          code = appendLocal(code, indent + `${varName} = int(input(${prompt}))\n`);
         } else if (type === 'float') {
-          code += indent + `${varName} = float(input(${prompt}))\n`;
+          code = appendLocal(code, indent + `${varName} = float(input(${prompt}))\n`);
         } else {
-          code += indent + `${varName} = input(${prompt})\n`;
+          code = appendLocal(code, indent + `${varName} = input(${prompt})\n`);
         }
         break;
       }
       case 'py_while': {
+        const lnWhile = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'COND', lnWhile);
         const cond  = valueToCode(block, 'COND', 'True');
+        code = appendLocal(code, indent + `while ${cond}:\n`);
         const inner = statementToCode(block, 'DO', indent + '    ');
-        code += indent + `while ${cond}:\n` + (inner || indent + '    pass\n');
+        code = appendChildBody(code, inner, indent + '    pass\n');
         break;
       }
       case 'py_print': {
+        const lnPrint = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'VALUE', lnPrint);
         const val = valueToCode(block, 'VALUE', '""');
-        code += indent + `print(${val})\n`;
+        code = appendLocal(code, indent + `print(${val})\n`);
         break;
       }
 
       default:
-        code += indent + `pass  # 未対応ブロック: ${block.type}\n`;
+        code = appendLocal(code, indent + `pass  # 未対応ブロック: ${block.type}\n`);
     }
 
-    // トップレベルはブロック間に空行を入れる
-    if (indent === '') code += '\n';
+    if (indent === '') {
+      code = appendLocal(code, '\n');
+    }
 
-    // 次のブロックへ
+    blockLineMap.set(block.id, {
+      from: blockOwnFrom,
+      to: Math.max(blockOwnFrom, _emitCtx.line - 1)
+    });
+
     const next = block.getNextBlock ? block.getNextBlock() : null;
-    if (next) code += blockToCode(next, indent);
+    if (next) {
+      code += blockToCode(next, indent);
+    }
 
     return code;
   }
@@ -642,67 +766,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     blockLineMap.clear();
+    _emitCtx.line = (header.match(/\n/g) || []).length;
     let code = '';
-    let currentLine = (header.match(/\n/g) || []).length;
     const topBlocks = workspace.getTopBlocks(true);
     for (const block of topBlocks) {
-      const from = currentLine;
-      const blockCode = blockToCode(block, '');
-      const lineCount = (blockCode.match(/\n/g) || []).length;
-      const to = from + lineCount - 1;
-      const color = getBlockColor(block.type);
-      registerBlockRange(block, from, to, color);
-      code += blockCode;
-      currentLine += lineCount;
+      code += blockToCode(block, '');
     }
     if (!codingMode) {
       editor.setValue(header + (code || '# ブロックを追加してください'));
     }
 
-    // B案: ガター更新
-    updateColorGutter();
+    // コーディングモードではエディタとブロック由来の行が一致しないため選択ハイライトしない
+    if (!codingMode) {
+      refreshBlockSelectionHighlight();
+    } else {
+      clearBlockSelectionHighlight();
+    }
 
     // チュートリアル自動チェック（Tutorial代入済みの場合のみ）
     if (Tutorial) Tutorial.check(blockTypes);
-  }
-
-  // A案: ブロックグロー（Blockly SVGを一切触らないdivオーバーレイ方式）
-  // Blocklyはclass/style/filterを管理するため、SVG外部のdivで追従する
-  (function() {
-    const overlay = document.createElement('div');
-    overlay.id = 'block-glow-overlay';
-    overlay.style.cssText = 'position:fixed;pointer-events:none;border-radius:6px;' +
-      'box-shadow:0 0 0 2px rgba(255,220,50,0.9),0 0 14px 5px rgba(255,220,50,0.6);' +
-      'display:none;z-index:9999;transition:none;';
-    document.body.appendChild(overlay);
-  })();
-
-  function applyBlockGlow() {
-    const overlay = document.getElementById('block-glow-overlay');
-    if (!_glowBlockId) { overlay.style.display = 'none'; return; }
-    const block = workspace.getBlockById(_glowBlockId);
-    if (!block || !block.getSvgRoot) { overlay.style.display = 'none'; return; }
-    const r = block.getSvgRoot().getBoundingClientRect();
-    if (r.width === 0) { overlay.style.display = 'none'; return; }
-    overlay.style.left   = (r.left - 4) + 'px';
-    overlay.style.top    = (r.top  - 4) + 'px';
-    overlay.style.width  = (r.width  + 8) + 'px';
-    overlay.style.height = (r.height + 8) + 'px';
-    overlay.style.display = 'block';
-  }
-
-  function updateColorGutter() {
-    editor.clearGutter('block-color-gutter');
-    blockLineMap.forEach(function(info) {
-      for (let line = info.from; line <= info.to; line++) {
-        const marker = document.createElement('div');
-        marker.style.width = '4px';
-        marker.style.height = '100%';
-        marker.style.backgroundColor = info.color;
-        marker.style.borderRadius = '2px';
-        editor.setGutterMarker(line, 'block-color-gutter', marker);
-      }
-    });
   }
 
   // ===== ツールボックスエリアへのドラッグで削除 =====
@@ -740,54 +822,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // VIEWPORT_CHANGE / BLOCK_DRAG開始はコード変化なしのためスキップ
     if (e.type === Blockly.Events.VIEWPORT_CHANGE) return;
     if (e.type === Blockly.Events.BLOCK_DRAG && e.isStart) return;
+    // 選択のみが変わったときはコード内容は変わらないので再生成しない
+    if (e.type === Blockly.Events.SELECTED) return;
     generateCode();
   });
-  generateCode();
 
-  // A案: ブロックグロー + コードハイライト
-  // イベントシステムに依存せず workspace.getSelectedBlock() をrAFでポーリング
-  // これによりBlockly内部の処理順序に関わらず確実に動作する
-  (function glowLoop() {
-    const sel = (workspace.getSelectedBlock && workspace.getSelectedBlock()) || null;
-    const selId = sel ? sel.id : null;
-
-    if (selId !== _glowBlockId) {
-      _glowBlockId = selId;
-
-      // コードハイライト更新
-      if (_highlightMarker) { _highlightMarker.clear(); _highlightMarker = null; }
-      if (selId) {
-        const info = blockLineMap.get(selId);
-        if (info) {
-          _highlightMarker = editor.markText(
-            { line: info.from, ch: 0 },
-            { line: info.to + 1, ch: 0 },
-            { className: 'block-highlight' }
-          );
-          editor.scrollIntoView({ line: info.from, ch: 0 }, 80);
-        }
-      }
-    }
-
-    // グロー位置を毎フレーム更新（ドラッグ・スクロール・ズームに追従）
-    applyBlockGlow();
-    requestAnimationFrame(glowLoop);
-  })();
-
-  // C案: ブロック配置・移動時にコードをフラッシュ
   workspace.addChangeListener(function(e) {
-    if (e.type !== Blockly.Events.BLOCK_MOVE && e.type !== Blockly.Events.BLOCK_CREATE) return;
-    const blockId = e.blockId;
-    if (!blockId) return;
-    const info = blockLineMap.get(blockId);
-    if (!info) return;
-    const flashMarker = editor.markText(
-      { line: info.from, ch: 0 },
-      { line: info.to + 1, ch: 0 },
-      { className: 'block-flash' }
-    );
-    setTimeout(() => flashMarker.clear(), 700);
+    if (e.type !== Blockly.Events.SELECTED) return;
+    if (codingMode) {
+      clearBlockSelectionHighlight();
+      return;
+    }
+    let id = (e.newElementId != null && e.newElementId !== '') ? e.newElementId : null;
+    if (!id) id = getSelectedBlockId();
+    paintBlockSelectionHighlight(id);
   });
+
+  generateCode();
 
   const btnComments = document.getElementById('btn-toggle-comments');
   btnComments.addEventListener('click', function() {

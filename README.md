@@ -7,6 +7,13 @@
 
 **デモ → https://hirokazu-ando.github.io/pico-blocks/**
 
+**タスク・セッション引き継ぎ** → [`docs/PROJECT-TASKS.md`](docs/PROJECT-TASKS.md)（ワークスペース [`CLAUDE.md`](../../CLAUDE.md) のセッション手順 step 5 と連携／[`AGENTS.md`](AGENTS.md) が最短入口）  
+**文脈メモ（2026-04）** → [`docs/MEMO-pico-blocks-sakigake-policy-2026-04.md`](docs/MEMO-pico-blocks-sakigake-policy-2026-04.md)
+
+魁高専（[sakigake-robo.com](https://sakigake-robo.com/)）向けの公開計画 → [`docs/python-learning-site-plan.md`](docs/python-learning-site-plan.md)  
+**カリキュラム詳細（単元表・進行案）** → [`docs/curriculum-detail.md`](docs/curriculum-detail.md)  
+**魁高専記事 URL の追跡（TSV）** → [`docs/curriculum-sakigake-urls.tsv`](docs/curriculum-sakigake-urls.tsv)
+
 ![PCBターミナル風のダークUI](https://img.shields.io/badge/UI-PCB%20Terminal-00ff41?style=flat-square&labelColor=060b06)
 ![MicroPython](https://img.shields.io/badge/MicroPython-v1.23-2196F3?style=flat-square)
 ![Blockly](https://img.shields.io/badge/Blockly-Zelos-E53935?style=flat-square)
