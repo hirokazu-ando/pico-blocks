@@ -55,6 +55,24 @@ document.addEventListener('DOMContentLoaded', function() {
     trashcan: true,
     zoom: { controls: true, wheel: true, startScale: 1.0, maxScale: 3, minScale: 0.3 }
   });
+
+  const lightTheme = Blockly.Theme.defineTheme('pycoLight', {
+    base: Blockly.Themes.Classic,
+    componentStyles: {
+      workspaceBackgroundColour: '#f8fff8',
+      toolboxBackgroundColour:   '#f0f6f0',
+      toolboxForegroundColour:   '#1a2a1a',
+      flyoutBackgroundColour:    '#eef6ee',
+      flyoutForegroundColour:    '#1a2a1a',
+      flyoutOpacity:             1,
+      scrollbarColour:           '#b0ccb0',
+      scrollbarOpacity:          0.8,
+      insertionMarkerColour:     '#1e7a1e',
+      insertionMarkerOpacity:    0.4,
+      cursorColour:              '#1e7a1e',
+    }
+  });
+
   const editor = CodeMirror(document.getElementById('code-editor'), {
     value: '# ブロックを追加してください',
     mode: 'python',
@@ -969,28 +987,52 @@ document.addEventListener('DOMContentLoaded', function() {
 
   generateCode();
 
-  // ===== テーマ切替 =====
+  // ===== テーマ切替（黒/白） =====
   const THEMES = [
-    { id: 'green',  label: '緑' },
-    { id: 'cyan',   label: '青' },
-    { id: 'amber',  label: '橙' },
+    { id: 'dark',  label: '黒',  cmTheme: 'dracula', blocklyTheme: pcbTheme   },
+    { id: 'light', label: '白',  cmTheme: 'default', blocklyTheme: lightTheme },
   ];
-  let currentTheme = localStorage.getItem('pyco-theme') || 'green';
+  let currentTheme = localStorage.getItem('pyco-theme') || 'dark';
 
   function applyTheme(themeId) {
     currentTheme = themeId;
     const t = THEMES.find(function(t) { return t.id === themeId; }) || THEMES[0];
-    document.documentElement.setAttribute('data-theme', themeId === 'green' ? '' : themeId);
+    document.documentElement.setAttribute('data-theme', themeId === 'dark' ? '' : themeId);
     document.getElementById('btn-theme').textContent = t.label;
+    editor.setOption('theme', t.cmTheme);
+    workspace.setTheme(t.blocklyTheme);
     localStorage.setItem('pyco-theme', themeId);
   }
 
   document.getElementById('btn-theme').addEventListener('click', function() {
-    const idx = THEMES.findIndex(function(t) { return t.id === currentTheme; });
-    applyTheme(THEMES[(idx + 1) % THEMES.length].id);
+    applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+  });
+
+  // ===== コードエリア フォントサイズ =====
+  const FONT_SIZES = [10, 11, 12, 13, 14, 16, 18, 20, 24];
+  const FONT_DEFAULT = 13;
+  let currentFontSize = parseInt(localStorage.getItem('pyco-font-size'), 10) || FONT_DEFAULT;
+
+  function applyFontSize(size) {
+    currentFontSize = size;
+    editor.getWrapperElement().style.fontSize = size + 'px';
+    editor.refresh();
+    document.getElementById('monitor-output').style.fontSize = size + 'px';
+    localStorage.setItem('pyco-font-size', size);
+  }
+
+  document.getElementById('btn-font-inc').addEventListener('click', function() {
+    const idx = FONT_SIZES.indexOf(currentFontSize);
+    if (idx < FONT_SIZES.length - 1) applyFontSize(FONT_SIZES[idx + 1]);
+  });
+
+  document.getElementById('btn-font-dec').addEventListener('click', function() {
+    const idx = FONT_SIZES.indexOf(currentFontSize);
+    if (idx > 0) applyFontSize(FONT_SIZES[idx - 1]);
   });
 
   applyTheme(currentTheme);
+  applyFontSize(currentFontSize);
 
   const btnComments = document.getElementById('btn-toggle-comments');
   btnComments.addEventListener('click', function() {
@@ -1149,15 +1191,42 @@ document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('syntax-content');
     document.getElementById('syntax-mode-label').textContent =
       mode === 'micropython' ? 'MicroPython' : 'Python入門';
-    container.innerHTML = data.map(function(cat) {
-      const items = cat.items.map(function(item) {
-        const encoded = item.code.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
-        return '<div class="syn-item" data-code="' + encoded + '" title="クリックで挿入">' +
-               '<span class="syn-label">' + item.label + '</span>' +
-               '<code>' + item.code.replace(/</g, '&lt;').replace(/\n/g, '<br>') + '</code></div>';
-      }).join('');
-      return '<div class="syn-cat"><div class="syn-cat-title">' + cat.cat + '</div>' + items + '</div>';
-    }).join('');
+    if (!container) return;
+    container.replaceChildren();
+
+    data.forEach(function(cat) {
+      const catEl = document.createElement('div');
+      catEl.className = 'syn-cat';
+
+      const titleEl = document.createElement('div');
+      titleEl.className = 'syn-cat-title';
+      titleEl.textContent = cat.cat;
+      catEl.appendChild(titleEl);
+
+      cat.items.forEach(function(item) {
+        const itemEl = document.createElement('div');
+        itemEl.className = 'syn-item';
+        itemEl.dataset.code = item.code;
+        itemEl.title = 'クリックで挿入';
+
+        const labelEl = document.createElement('span');
+        labelEl.className = 'syn-label';
+        labelEl.textContent = item.label;
+        itemEl.appendChild(labelEl);
+
+        const codeEl = document.createElement('code');
+        const lines = String(item.code || '').split('\n');
+        lines.forEach(function(line, i) {
+          if (i > 0) codeEl.appendChild(document.createElement('br'));
+          codeEl.appendChild(document.createTextNode(line));
+        });
+        itemEl.appendChild(codeEl);
+
+        catEl.appendChild(itemEl);
+      });
+
+      container.appendChild(catEl);
+    });
   }
 
   // 構文パネルのクリックでエディタに挿入
@@ -1413,6 +1482,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (codingMode) {
       buildSyntaxPanel(mode);
     }
+
   }
 
   // モードボタンのイベント
@@ -1524,6 +1594,52 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // ===== チュートリアルマネージャー =====
+  function setSafeRichText(targetEl, html) {
+    if (!targetEl) return;
+    const raw = (html == null) ? '' : String(html);
+    if (!raw) {
+      targetEl.replaceChildren();
+      return;
+    }
+
+    // Tiny sanitizer: allow basic formatting only, strip all attributes.
+    const allowed = new Set(['P', 'BR', 'B', 'STRONG', 'I', 'EM', 'CODE', 'PRE', 'UL', 'OL', 'LI', 'SPAN']);
+    const parser = new DOMParser();
+    const doc = parser.parseFromString('<div>' + raw + '</div>', 'text/html');
+    const root = doc.body && doc.body.firstElementChild;
+    if (!root) {
+      targetEl.textContent = raw;
+      return;
+    }
+
+    function cloneNodeSafe(node) {
+      if (node.nodeType === Node.TEXT_NODE) {
+        return document.createTextNode(node.textContent || '');
+      }
+      if (node.nodeType !== Node.ELEMENT_NODE) return null;
+
+      const tag = node.tagName;
+      if (!allowed.has(tag)) {
+        // Keep text content of disallowed elements (e.g., script/style/a/img).
+        return document.createTextNode(node.textContent || '');
+      }
+
+      const el = document.createElement(tag.toLowerCase());
+      for (const child of Array.from(node.childNodes)) {
+        const safeChild = cloneNodeSafe(child);
+        if (safeChild) el.appendChild(safeChild);
+      }
+      return el;
+    }
+
+    const frag = document.createDocumentFragment();
+    for (const child of Array.from(root.childNodes)) {
+      const safe = cloneNodeSafe(child);
+      if (safe) frag.appendChild(safe);
+    }
+    targetEl.replaceChildren(frag);
+  }
+
   Tutorial = {
     currentStep: 0,
     isOpen: false,
@@ -1577,8 +1693,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const total = steps.length;
 
       document.getElementById('tut-title').textContent    = step.title;
-      document.getElementById('tut-body').innerHTML       = step.body;
-      document.getElementById('tut-hint').innerHTML       = step.hint;
+      setSafeRichText(document.getElementById('tut-body'), step.body);
+      setSafeRichText(document.getElementById('tut-hint'), step.hint);
       document.getElementById('tut-hint').style.display  = 'none';
       document.getElementById('tut-hint-toggle').textContent = '💡 ヒントを見る';
       document.getElementById('tut-progress').textContent = `${idx + 1} / ${total}`;

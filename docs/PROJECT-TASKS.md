@@ -60,6 +60,18 @@ Ship Sakigake MVP (few lessons + PycoBlocks entry) and stabilize curriculum / UR
 
 ## Handoff log (append NEW blocks at the TOP)
 
+### 2026-04-20 (light theme)
+
+- **Done:** ライトモード（白テーマ）追加。`css/style.css` に `[data-theme="light"]` を追加（背景・ヘッダー・CodeMirror・Blocklyツールボックスの色を白系に上書き）。`js/app.js` の `THEMES` 配列に `{id:'light', label:'白', cmTheme:'default'}` を追加し、`applyTheme` で CodeMirror テーマも切替（dracula↔default）。ボタンは既存の「緑→青→橙→白→緑」サイクルに統合。`localStorage` で記憶済み。
+- **Next:** Chrome で index.html を開き、ボタンを「白」に切替して動作確認。
+- **Notes:** Blockly ブロック本体の色はライト化対象外（Blockly の SVG/theme API で別途対応が必要）。
+
+### 2026-04-20 (security)
+
+- **Done:** セキュリティ調査 + 修正。SRI integrity 属性を全外部CDN（Blockly/Skulpt/CodeMirror 計5ファイル）に追加。Blockly バージョンを `@12.5.1` にピン留め。`.gitignore` を新規作成（.env・node_modules・__pycache__ 等を登録）。APIキー流出・個人情報露出・eval使用なし確認済み。
+- **Next:** ブラウザ実機動作確認（index.html を Chrome で開き SRI エラーが出ないか確認）。その後 Sakigake MVP 定義。
+- **Notes:** Google Fonts は動的レスポンスのため SRI 適用不可（仕様上の制限）。
+
 ### 2026-04-20
 
 - **Done:** Python入門モードにカリキュラム第0部対応ブロックを追加。リスト（6ブロック）・関数（5ブロック）・計算追加（4ブロック: 型変換/絶対値/round/乱数）・ループ制御（break/continue）・リストfor-each。計17ブロック追加。MicroPython toolboxからvar_if_greater/less除外（pico_if+cond_compareで代替）。全JS構文チェック・ユニットテスト8/8 pass。

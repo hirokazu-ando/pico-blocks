@@ -1369,6 +1369,155 @@ h1 {
   text-shadow: 0 0 8px rgba(255,183,0,0.8), 0 0 20px rgba(255,183,0,0.4);
 }
 
+/* ----- Light（白系） ----- */
+[data-theme="light"] {
+  --bg-base:      #f4f7f4;
+  --bg-surface:   #ffffff;
+  --bg-panel:     #f0f4f0;
+  --border-dim:   #c8d8c8;
+  --border-glow:  #2a8a2a;
+  --accent-green: #1e7a1e;
+  --accent-cyan:  #0066aa;
+  --accent-amber: #9a6800;
+  --text-primary: #1a2a1a;
+  --text-dim:     #6a8a6a;
+  --text-code:    #1e7a1e;
+}
+[data-theme="light"] body {
+  background-image:
+    linear-gradient(rgba(0,100,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,100,0,0.04) 1px, transparent 1px),
+    linear-gradient(rgba(0,100,0,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,100,0,0.02) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+}
+[data-theme="light"] h1 {
+  text-shadow: none;
+}
+[data-theme="light"] header {
+  background: linear-gradient(90deg, #e8f0e8 0%, #f2f8f2 50%, #e8f0e8 100%);
+  box-shadow: 0 1px 0 rgba(0,100,0,0.1), 0 2px 8px rgba(0,0,0,0.08);
+}
+[data-theme="light"] header::before {
+  background: linear-gradient(180deg, transparent, #1e7a1e, transparent);
+}
+[data-theme="light"] .status-dot {
+  background: #1e7a1e;
+  box-shadow: 0 0 6px #1e7a1e;
+}
+[data-theme="light"] .code-header {
+  background: #e8f0e8;
+}
+[data-theme="light"] .code-header::before {
+  color: #c8d8c8;
+}
+[data-theme="light"] .monitor-header {
+  background: #e4f0f4;
+  color: var(--accent-cyan);
+}
+[data-theme="light"] .monitor-header::before {
+  color: var(--accent-cyan);
+}
+[data-theme="light"] #monitor-output {
+  background: #f8fff8;
+  color: #1e7a1e;
+  text-shadow: none;
+}
+[data-theme="light"] #monitor-output.python-shell {
+  background: #f8fff8;
+  color: #1e7a1e;
+  text-shadow: none;
+}
+[data-theme="light"] .tut-hdr,
+[data-theme="light"] .tut-nav {
+  background: #e8f0e8;
+}
+[data-theme="light"] .syntax-header {
+  background: #e8f0e8;
+}
+/* CodeMirror ライト上書き（dracula テーマを無効化） */
+[data-theme="light"] .CodeMirror {
+  background: #ffffff !important;
+  color: #1a2a1a !important;
+}
+[data-theme="light"] .CodeMirror-gutters {
+  background: #f0f4f0 !important;
+  border-right: 1px solid #c8d8c8 !important;
+}
+[data-theme="light"] .CodeMirror-linenumber {
+  color: #8aaa8a !important;
+}
+[data-theme="light"] .CodeMirror-cursor {
+  border-left-color: #1e7a1e !important;
+}
+[data-theme="light"] .CodeMirror-selected {
+  background: rgba(0,100,0,0.12) !important;
+}
+/* Blockly toolbox ライト上書き */
+[data-theme="light"] .blocklyToolboxDiv {
+  background: #f0f6f0 !important;
+  border-right: 1px solid #c8d8c8 !important;
+}
+[data-theme="light"] .blocklyTreeRow:hover {
+  background: rgba(0,100,0,0.07) !important;
+  border-left-color: rgba(0,100,0,0.3) !important;
+}
+[data-theme="light"] .blocklyTreeSelected {
+  background: rgba(0,100,0,0.12) !important;
+  border-left-color: #1e7a1e !important;
+}
+[data-theme="light"] .blocklyTreeSelected .blocklyTreeLabel {
+  color: #1e7a1e !important;
+  text-shadow: none !important;
+}
+[data-theme="light"] .blocklyTreeLabel {
+  color: #4a6a4a !important;
+}
+[data-theme="light"] .blocklyMainBackground {
+  fill: #f8fff8 !important;
+}
+[data-theme="light"] .blocklyFlyoutBackground {
+  fill: #eef6ee !important;
+}
+[data-theme="light"] .blocklyScrollbarHandle {
+  fill: #c0d8c0 !important;
+}
+[data-theme="light"] .blocklyScrollbarHandle:hover {
+  fill: #1e7a1e !important;
+}
+[data-theme="light"] .divider {
+  background: linear-gradient(180deg,
+    transparent 0%,
+    #1e7a1e 20%,
+    rgba(30,122,30,0.3) 50%,
+    #1e7a1e 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 6px rgba(30,122,30,0.2);
+}
+[data-theme="light"] .code-panel::after {
+  background: none;
+}
+[data-theme="light"] .tutorial-panel::after {
+  background: none;
+}
+
+/* フォントサイズボタン */
+#btn-font-inc,
+#btn-font-dec {
+  color: var(--text-dim);
+  border-color: var(--border-dim);
+  font-size: 0.7rem;
+  padding: 7px 10px;
+  letter-spacing: 0.02em;
+}
+#btn-font-inc:hover,
+#btn-font-dec:hover {
+  color: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  background: transparent;
+}
+
 /* テーマボタン */
 #btn-theme {
   color: var(--text-dim);
