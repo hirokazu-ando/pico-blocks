@@ -38,8 +38,7 @@ build/
 # Codex CLI
 .codex
 
-# 記事生成・カリキュラムデータ（PycoBlocks動作に不要）
+# 動作に不要なドキュメント・管理ファイル
+AGENTS.md
 tools/
-docs/data/
-docs/README-curriculum-data.md
-docs/pycoblocks-python-intro-toolbox.md
+docs/
