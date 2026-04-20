@@ -29,3 +29,17 @@ venv/
 # Build / dist (if introduced later)
 dist/
 build/
+
+# OneDrive 競合コピー（自動生成）
+*-DESKTOP-*.gitignore
+*-DESKTOP-*.js
+*-DESKTOP-*.md
+
+# Codex CLI
+.codex
+
+# 記事生成・カリキュラムデータ（PycoBlocks動作に不要）
+tools/
+docs/data/
+docs/README-curriculum-data.md
+docs/pycoblocks-python-intro-toolbox.md
