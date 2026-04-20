@@ -1,4 +1,4 @@
-# PicoBlocks
+# PycoBlocks
 
 **Python 入門からロボット制御まで対応するブロックプログラミング環境**
 

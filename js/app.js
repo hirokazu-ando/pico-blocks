@@ -211,6 +211,23 @@ document.addEventListener('DOMContentLoaded', function() {
         const typeLabel = { str: 'テキスト', int: '数値（整数）', float: '数値（小数）' }[block.getFieldValue('TYPE')] || 'テキスト';
         return `キーボード入力（${typeLabel}）→ 変数「${getVarName(block, 'VAR')}」`;
       }
+      case 'py_list_empty':    return '空のリスト []';
+      case 'py_list_append':   return `リスト「${getVarName(block, 'LIST')}」に追加する`;
+      case 'py_list_get':      return `リスト「${getVarName(block, 'LIST')}」の要素取得`;
+      case 'py_list_set':      return `リスト「${getVarName(block, 'LIST')}」の要素変更`;
+      case 'py_list_len':      return `リスト「${getVarName(block, 'LIST')}」の長さ`;
+      case 'py_for_list':      return `リスト「${getVarName(block, 'LIST')}」を順に繰り返す`;
+      case 'py_break':         return 'ループを抜ける（break）';
+      case 'py_continue':      return '次のループへ（continue）';
+      case 'py_def_noarg':     return `関数「${block.getFieldValue('NAME')}」を定義する`;
+      case 'py_def':           return `関数「${block.getFieldValue('NAME')}」（引数: ${getVarName(block, 'PARAM')}）を定義する`;
+      case 'py_return':        return '戻り値を返す（return）';
+      case 'py_call_stmt':     return `関数「${block.getFieldValue('NAME')}」を呼び出す`;
+      case 'py_call_val':      return `関数「${block.getFieldValue('NAME')}」の結果`;
+      case 'py_random_int':    return 'ランダムな整数';
+      case 'py_type_cast':     return `型変換（${block.getFieldValue('TYPE')}）`;
+      case 'py_abs':           return '絶対値（abs）';
+      case 'py_round':         return '四捨五入（round）';
       default:                 return block.type;
     }
   }
@@ -365,6 +382,41 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'pvb_sonar_val':
         return '_pvb_sonar_cm()';
+      case 'py_list_empty':
+        return '[]';
+      case 'py_list_get': {
+        const listName = getVarName(block, 'LIST');
+        const idx = valueToCode(block, 'INDEX', '0');
+        return `${listName}[${idx}]`;
+      }
+      case 'py_list_len': {
+        const listName = getVarName(block, 'LIST');
+        return `len(${listName})`;
+      }
+      case 'py_random_int': {
+        const from = valueToCode(block, 'FROM', '1');
+        const to   = valueToCode(block, 'TO', '10');
+        return `random.randint(${from}, ${to})`;
+      }
+      case 'py_type_cast': {
+        const val  = valueToCode(block, 'VALUE', '0');
+        const type = block.getFieldValue('TYPE');
+        return `${type}(${val})`;
+      }
+      case 'py_abs': {
+        const val = valueToCode(block, 'VALUE', '0');
+        return `abs(${val})`;
+      }
+      case 'py_round': {
+        const val    = valueToCode(block, 'VALUE', '0');
+        const digits = valueToCode(block, 'DIGITS', '2');
+        return `round(${val}, ${digits})`;
+      }
+      case 'py_call_val': {
+        const name = block.getFieldValue('NAME');
+        const arg  = valueToCode(block, 'ARG', '');
+        return `${name}(${arg})`;
+      }
       default:
         return '0';
     }
@@ -603,6 +655,14 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'pvb_switch_val':
       case 'pvb_line_val':
       case 'pvb_sonar_val':
+      case 'py_list_empty':
+      case 'py_list_get':
+      case 'py_list_len':
+      case 'py_random_int':
+      case 'py_type_cast':
+      case 'py_abs':
+      case 'py_round':
+      case 'py_call_val':
         break;
       case 'pico_for_range': {
         const v      = getVarName(block, 'VAR');
@@ -697,6 +757,74 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
 
+      // ===== リスト =====
+      case 'py_list_append': {
+        const listName = getVarName(block, 'LIST');
+        const lnApp = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'VALUE', lnApp);
+        const val = valueToCode(block, 'VALUE', 'None');
+        code = appendLocal(code, indent + `${listName}.append(${val})\n`);
+        break;
+      }
+      case 'py_list_set': {
+        const listName = getVarName(block, 'LIST');
+        const lnIdx = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'INDEX', lnIdx);
+        registerExprBlocksAtLineFromInput(block, 'VALUE', lnIdx);
+        const idx = valueToCode(block, 'INDEX', '0');
+        const val = valueToCode(block, 'VALUE', 'None');
+        code = appendLocal(code, indent + `${listName}[${idx}] = ${val}\n`);
+        break;
+      }
+      case 'py_for_list': {
+        const itemVar  = getVarName(block, 'VAR');
+        const listName = getVarName(block, 'LIST');
+        code = appendLocal(code, indent + `for ${itemVar} in ${listName}:\n`);
+        const inner = statementToCode(block, 'DO', indent + '    ');
+        code = appendChildBody(code, inner, indent + '    pass\n');
+        break;
+      }
+
+      // ===== ループ制御 =====
+      case 'py_break':
+        code = appendLocal(code, indent + `break\n`);
+        break;
+      case 'py_continue':
+        code = appendLocal(code, indent + `continue\n`);
+        break;
+
+      // ===== 関数 =====
+      case 'py_def_noarg': {
+        const name = block.getFieldValue('NAME');
+        code = appendLocal(code, indent + `def ${name}():\n`);
+        const body = statementToCode(block, 'BODY', indent + '    ');
+        code = appendChildBody(code, body, indent + '    pass\n');
+        break;
+      }
+      case 'py_def': {
+        const name  = block.getFieldValue('NAME');
+        const param = getVarName(block, 'PARAM');
+        code = appendLocal(code, indent + `def ${name}(${param}):\n`);
+        const body = statementToCode(block, 'BODY', indent + '    ');
+        code = appendChildBody(code, body, indent + '    pass\n');
+        break;
+      }
+      case 'py_return': {
+        const lnRet = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'VALUE', lnRet);
+        const retVal = valueToCode(block, 'VALUE', 'None');
+        code = appendLocal(code, indent + `return ${retVal}\n`);
+        break;
+      }
+      case 'py_call_stmt': {
+        const name = block.getFieldValue('NAME');
+        const lnCall = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'ARG', lnCall);
+        const arg = valueToCode(block, 'ARG', '');
+        code = appendLocal(code, indent + `${name}(${arg})\n`);
+        break;
+      }
+
       default:
         code = appendLocal(code, indent + `pass  # 未対応ブロック: ${block.type}\n`);
     }
@@ -737,7 +865,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (currentMode === 'python') {
       // ─── Python入門モード：標準Pythonヘッダー ───
-      header = 'import time\n\n';
+      const needsRandom = blockTypes.has('py_random_int');
+      header = 'import time\n' + (needsRandom ? 'import random\n' : '') + '\n';
     } else {
       // ─── MicroPythonモード：既存ロジック ───
       const motorTypes = ['pvb_forward','pvb_backward','pvb_turn_right','pvb_turn_left','pvb_stop'];
@@ -840,22 +969,223 @@ document.addEventListener('DOMContentLoaded', function() {
 
   generateCode();
 
+  // ===== テーマ切替 =====
+  const THEMES = [
+    { id: 'green',  label: '緑' },
+    { id: 'cyan',   label: '青' },
+    { id: 'amber',  label: '橙' },
+  ];
+  let currentTheme = localStorage.getItem('pyco-theme') || 'green';
+
+  function applyTheme(themeId) {
+    currentTheme = themeId;
+    const t = THEMES.find(function(t) { return t.id === themeId; }) || THEMES[0];
+    document.documentElement.setAttribute('data-theme', themeId === 'green' ? '' : themeId);
+    document.getElementById('btn-theme').textContent = t.label;
+    localStorage.setItem('pyco-theme', themeId);
+  }
+
+  document.getElementById('btn-theme').addEventListener('click', function() {
+    const idx = THEMES.findIndex(function(t) { return t.id === currentTheme; });
+    applyTheme(THEMES[(idx + 1) % THEMES.length].id);
+  });
+
+  applyTheme(currentTheme);
+
   const btnComments = document.getElementById('btn-toggle-comments');
   btnComments.addEventListener('click', function() {
     showComments = !showComments;
-    btnComments.textContent = showComments ? 'コメント ON' : 'コメント OFF';
+    btnComments.textContent = showComments ? '# ON' : '# OFF';
     btnComments.classList.toggle('comments-off', !showComments);
     generateCode();
+  });
+
+  // ===== 構文リファレンス データ =====
+  const SYNTAX_REF = {
+    python: [
+      {
+        cat: '変数',
+        items: [
+          { label: '代入',      code: 'x = 10' },
+          { label: '文字列',    code: 'x = "hello"' },
+          { label: '演算代入',  code: 'x += 1' },
+        ]
+      },
+      {
+        cat: '表示',
+        items: [
+          { label: 'print',     code: 'print(x)' },
+          { label: '文字列+変数', code: 'print("x=", x)' },
+        ]
+      },
+      {
+        cat: '入力',
+        items: [
+          { label: 'input',     code: 'x = input("名前: ")' },
+          { label: 'int変換',   code: 'n = int(input())' },
+        ]
+      },
+      {
+        cat: '繰り返し',
+        items: [
+          { label: 'for range',    code: 'for i in range(10):\n    ...' },
+          { label: 'for start→stop', code: 'for i in range(1,11):\n    ...' },
+          { label: 'for リスト',   code: 'for x in my_list:\n    ...' },
+          { label: 'while',        code: 'while 条件:\n    ...' },
+          { label: 'break',        code: 'break' },
+          { label: 'continue',     code: 'continue' },
+        ]
+      },
+      {
+        cat: '分岐',
+        items: [
+          { label: 'if',        code: 'if 条件:\n    ...' },
+          { label: 'if/else',   code: 'if 条件:\n    ...\nelse:\n    ...' },
+          { label: 'elif',      code: 'elif 条件:\n    ...' },
+        ]
+      },
+      {
+        cat: '比較・論理',
+        items: [
+          { label: '比較',      code: 'x == y  x != y\nx > y   x <= y' },
+          { label: 'and/or',   code: 'x > 0 and x < 10\nx == 1 or x == 2' },
+          { label: 'not',       code: 'not 条件' },
+        ]
+      },
+      {
+        cat: '計算',
+        items: [
+          { label: '四則',      code: 'x + y  x - y\nx * y  x / y' },
+          { label: '整数除算',  code: 'x // y' },
+          { label: '余り',      code: 'x % y' },
+          { label: '型変換',    code: 'int(x)  float(x)  str(x)' },
+          { label: '絶対値',    code: 'abs(x)' },
+          { label: '四捨五入',  code: 'round(x, 2)' },
+          { label: '乱数',      code: 'import random\nrandom.randint(1, 10)' },
+        ]
+      },
+      {
+        cat: 'リスト',
+        items: [
+          { label: '作成',      code: 'my_list = []' },
+          { label: '追加',      code: 'my_list.append(x)' },
+          { label: '取得',      code: 'x = my_list[0]' },
+          { label: '変更',      code: 'my_list[0] = x' },
+          { label: '長さ',      code: 'len(my_list)' },
+          { label: '初期値あり', code: 'my_list = [1, 2, 3]' },
+        ]
+      },
+      {
+        cat: '関数',
+        items: [
+          { label: '定義（引数なし）', code: 'def my_func():\n    ...' },
+          { label: '定義（引数あり）', code: 'def my_func(x):\n    ...' },
+          { label: 'return',           code: 'return 値' },
+          { label: '呼び出し',         code: 'my_func()\nmy_func(引数)' },
+          { label: '戻り値を使う',     code: 'result = my_func(x)' },
+        ]
+      },
+    ],
+    micropython: [
+      {
+        cat: 'セットアップ',
+        items: [
+          { label: 'import',    code: 'from machine import Pin\nimport utime' },
+          { label: 'LED出力',   code: 'led = Pin(25, Pin.OUT)' },
+          { label: 'ピン入力',  code: 'btn = Pin(14, Pin.IN,\n         Pin.PULL_UP)' },
+        ]
+      },
+      {
+        cat: '出力',
+        items: [
+          { label: 'HIGH',      code: 'led.value(1)' },
+          { label: 'LOW',       code: 'led.value(0)' },
+          { label: 'トグル',   code: 'led.toggle()' },
+        ]
+      },
+      {
+        cat: '入力',
+        items: [
+          { label: 'デジタル読み', code: 'v = btn.value()' },
+          { label: 'アナログ読み', code: 'from machine import ADC\nadc = ADC(26)\nv = adc.read_u16()' },
+        ]
+      },
+      {
+        cat: '時間',
+        items: [
+          { label: '待機(秒)',  code: 'utime.sleep(1)' },
+          { label: '待機(ms)', code: 'utime.sleep_ms(500)' },
+        ]
+      },
+      {
+        cat: '繰り返し',
+        items: [
+          { label: '無限ループ', code: 'while True:\n    ...' },
+          { label: 'for',       code: 'for i in range(10):\n    ...' },
+        ]
+      },
+      {
+        cat: '分岐',
+        items: [
+          { label: 'if',        code: 'if 条件:\n    ...' },
+          { label: 'if/else',   code: 'if 条件:\n    ...\nelse:\n    ...' },
+        ]
+      },
+      {
+        cat: 'PoliviaBot',
+        items: [
+          { label: '前進',      code: 'forward(speed)' },
+          { label: '後退',      code: 'backward(speed)' },
+          { label: '右折/左折', code: 'turn_right(s)\nturn_left(s)' },
+          { label: '停止',      code: 'stop()' },
+          { label: '超音波',    code: 'dist = sonar()' },
+        ]
+      },
+    ]
+  };
+
+  function buildSyntaxPanel(mode) {
+    const data = SYNTAX_REF[mode] || SYNTAX_REF.python;
+    const container = document.getElementById('syntax-content');
+    document.getElementById('syntax-mode-label').textContent =
+      mode === 'micropython' ? 'MicroPython' : 'Python入門';
+    container.innerHTML = data.map(function(cat) {
+      const items = cat.items.map(function(item) {
+        const encoded = item.code.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+        return '<div class="syn-item" data-code="' + encoded + '" title="クリックで挿入">' +
+               '<span class="syn-label">' + item.label + '</span>' +
+               '<code>' + item.code.replace(/</g, '&lt;').replace(/\n/g, '<br>') + '</code></div>';
+      }).join('');
+      return '<div class="syn-cat"><div class="syn-cat-title">' + cat.cat + '</div>' + items + '</div>';
+    }).join('');
+  }
+
+  // 構文パネルのクリックでエディタに挿入
+  document.getElementById('syntax-content').addEventListener('click', function(e) {
+    const item = e.target.closest('.syn-item');
+    if (!item) return;
+    const code = item.dataset.code;
+    if (!code) return;
+    editor.replaceSelection(code);
+    editor.focus();
+    // 挿入フラッシュ演出
+    item.classList.add('syn-item--inserted');
+    setTimeout(function() { item.classList.remove('syn-item--inserted'); }, 400);
   });
 
   const btnCodingMode = document.getElementById('btn-coding-mode');
   btnCodingMode.addEventListener('click', function() {
     codingMode = !codingMode;
     editor.setOption('readOnly', codingMode ? false : true);
-    btnCodingMode.textContent = codingMode ? 'ブロックモード' : 'コーディングモード';
+    btnCodingMode.textContent = codingMode ? 'ブロック' : 'コード編集';
     btnCodingMode.classList.toggle('coding-active', codingMode);
-    if (!codingMode) {
+    document.querySelector('.main').classList.toggle('coding-mode', codingMode);
+    if (codingMode) {
+      buildSyntaxPanel(currentMode);
+      setTimeout(function() { editor.refresh(); }, 30);
+    } else {
       generateCode();
+      setTimeout(function() { Blockly.svgResize(workspace); }, 50);
     }
   });
 
@@ -1078,6 +1408,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // コード再生成
     generateCode();
+
+    // コーディングモード中はモード変更時に構文パネルも更新
+    if (codingMode) {
+      buildSyntaxPanel(mode);
+    }
   }
 
   // モードボタンのイベント
@@ -1097,11 +1432,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // ===== Python シェル実行（Skulpt） =====
 
+  let _pyStopRequested = false;
+
   function skulptRead(x) {
     if (Sk.builtinFiles === undefined || Sk.builtinFiles['files'][x] === undefined) {
       throw "File not found: '" + x + "'";
     }
     return Sk.builtinFiles['files'][x];
+  }
+
+  function setPythonRunning(running) {
+    const btnRun  = document.getElementById('btn-run-python');
+    const btnStop = document.getElementById('btn-stop-python');
+    btnRun.disabled    = running;
+    btnRun.textContent = running ? '実行中…' : '▶ 実行';
+    btnStop.style.display = running ? '' : 'none';
   }
 
   function runPython() {
@@ -1110,16 +1455,14 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    const code    = editor.getValue();
-    const monOut  = document.getElementById('monitor-output');
-    const btnRunPy = document.getElementById('btn-run-python');
+    const code   = editor.getValue();
+    const monOut = document.getElementById('monitor-output');
 
-    // 出力エリアをクリアして実行マーカーを表示
     monOut.innerHTML = '';
     appendShellText('>>> 実行開始\n', false, 'py-prompt');
 
-    btnRunPy.disabled    = true;
-    btnRunPy.textContent = '実行中…';
+    _pyStopRequested = false;
+    setPythonRunning(true);
 
     Sk.configure({
       output: function(text) {
@@ -1133,24 +1476,32 @@ document.addEventListener('DOMContentLoaded', function() {
         return answer !== null ? answer : '';
       },
       inputfunTakesPrompt: true,
-      execLimit: 100000,  // 無限ループ防止（約10万ステップで強制終了）
+      yieldLimit: 200,   // 200ステップごとにブラウザへ制御を返す（停止ボタン応答に必要）
       __future__: Sk.python3,
     });
 
     Sk.misceval.asyncToPromise(function() {
       return Sk.importMainWithBody('<stdin>', false, code, true);
+    }, {
+      '*': function() {
+        if (_pyStopRequested) {
+          throw new Sk.builtin.SystemExit('停止');
+        }
+      }
     }).then(function() {
       appendShellText('>>> 完了\n', false, 'py-prompt');
     }).catch(function(err) {
+      if (_pyStopRequested) {
+        appendShellText('>>> 停止しました\n', false, 'py-prompt');
+        return;
+      }
       let msg = err.toString ? err.toString() : String(err);
-      // 実行ステップ超過 → 分かりやすいメッセージに変換
       if (msg.includes('execLimit') || msg.includes('Execution exceeded')) {
         msg = 'TimeLimitError: ループが多すぎます（実行ステップ上限を超えました）';
       }
       appendShellText('\n' + msg + '\n', true);
     }).finally(function() {
-      btnRunPy.disabled    = false;
-      btnRunPy.textContent = '▶ 実行';
+      setPythonRunning(false);
       monOut.scrollTop = monOut.scrollHeight;
     });
   }
@@ -1168,6 +1519,9 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   document.getElementById('btn-run-python').addEventListener('click', runPython);
+  document.getElementById('btn-stop-python').addEventListener('click', function() {
+    _pyStopRequested = true;
+  });
 
   // ===== チュートリアルマネージャー =====
   Tutorial = {
@@ -1286,44 +1640,69 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // ===== リサイズ機能 =====
 
-  // 左右リサイズ（ブロックエリア ↔ コードパネル）
+  // 左右 / 上下リサイズ（ブロックエリア ↔ コードパネル）
+  // ≤900px の縦積みレイアウト時は clientY で高さリサイズに自動切替
   (function() {
     const divider    = document.querySelector('.divider');
     const blocklyDiv = document.getElementById('blockly-div');
     const codePanel  = document.querySelector('.code-panel');
     const mainEl     = document.querySelector('.main');
-    let dragging = false, startX = 0, startW = 0;
+    let dragging = false;
+    let startX = 0, startY = 0, startW = 0, startH = 0;
 
-    function startDrag(clientX) {
+    function isColumnMode() {
+      return window.innerWidth <= 900;
+    }
+
+    function startDrag(clientX, clientY) {
       dragging = true;
-      startX = clientX;
-      startW = blocklyDiv.getBoundingClientRect().width;
       divider.classList.add('dragging');
       document.body.style.userSelect = 'none';
+      if (isColumnMode()) {
+        startY = clientY;
+        startH = blocklyDiv.getBoundingClientRect().height;
+        document.body.style.cursor = 'row-resize';
+      } else {
+        startX = clientX;
+        startW = blocklyDiv.getBoundingClientRect().width;
+        document.body.style.cursor = 'col-resize';
+      }
     }
-    function onMove(clientX) {
+
+    function onMove(clientX, clientY) {
       if (!dragging) return;
-      const mainW = mainEl.getBoundingClientRect().width;
-      const divW  = divider.getBoundingClientRect().width;
-      const newW  = Math.max(200, Math.min(mainW - divW - 200, startW + (clientX - startX)));
-      blocklyDiv.style.width = newW + 'px';
-      blocklyDiv.style.flex  = 'none';
-      codePanel.style.flex   = '1';
+      if (isColumnMode()) {
+        const mainH = mainEl.getBoundingClientRect().height;
+        const divH  = divider.getBoundingClientRect().height;
+        const newH  = Math.max(100, Math.min(mainH - divH - 100, startH + (clientY - startY)));
+        blocklyDiv.style.height = newH + 'px';
+        blocklyDiv.style.flex   = 'none';
+        codePanel.style.flex    = '1';
+      } else {
+        const mainW = mainEl.getBoundingClientRect().width;
+        const divW  = divider.getBoundingClientRect().width;
+        const newW  = Math.max(200, Math.min(mainW - divW - 200, startW + (clientX - startX)));
+        blocklyDiv.style.width = newW + 'px';
+        blocklyDiv.style.flex  = 'none';
+        codePanel.style.flex   = '1';
+      }
       Blockly.svgResize(workspace);
     }
+
     function endDrag() {
       if (!dragging) return;
       dragging = false;
       divider.classList.remove('dragging');
       document.body.style.userSelect = '';
+      document.body.style.cursor = '';
     }
 
-    divider.addEventListener('mousedown', e => { document.body.style.cursor = 'col-resize'; startDrag(e.clientX); });
-    divider.addEventListener('touchstart', e => { e.preventDefault(); startDrag(e.touches[0].clientX); }, { passive: false });
-    document.addEventListener('mousemove', e => onMove(e.clientX));
-    document.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); onMove(e.touches[0].clientX); } }, { passive: false });
-    document.addEventListener('mouseup', () => { document.body.style.cursor = ''; endDrag(); });
-    document.addEventListener('touchend', endDrag);
+    divider.addEventListener('mousedown',  e => startDrag(e.clientX, e.clientY));
+    divider.addEventListener('touchstart', e => { e.preventDefault(); startDrag(e.touches[0].clientX, e.touches[0].clientY); }, { passive: false });
+    document.addEventListener('mousemove', e => onMove(e.clientX, e.clientY));
+    document.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); onMove(e.touches[0].clientX, e.touches[0].clientY); } }, { passive: false });
+    document.addEventListener('mouseup',   () => endDrag());
+    document.addEventListener('touchend',  () => endDrag());
   })();
 
   // 上下リサイズ（コード表示 ↔ シリアルモニタ）

@@ -1,5 +1,5 @@
 /* ================================================
-   PicoBlocks — PCB TERMINAL Design
+   PycoBlocks — PCB TERMINAL Design
    フォント: Orbitron (タイトル) + Share Tech Mono (UI/コード)
    カラー: ダーク基板 × 電気グリーン × サイアン
    ================================================ */
@@ -127,6 +127,7 @@ h1 {
   display: flex;
   gap: 10px;
   align-items: center;
+  flex-wrap: nowrap;
 }
 
 /* バージョン表示 */
@@ -169,6 +170,8 @@ h1 {
   transition: all 0.2s ease;
   text-transform: uppercase;
   background: transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
   /* コーナーカット */
   clip-path: polygon(6px 0%, 100% 0%, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0% 100%, 0% 6px);
 }
@@ -492,6 +495,15 @@ h1 {
   flex-shrink: 0;
   box-shadow: 0 0 8px rgba(0,255,65,0.3);
   user-select: none;
+  position: relative; /* 擬似要素の基準 */
+}
+
+/* 見た目は2pxのまま、当たり判定を左右12px（計24px）に拡大 */
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: -12px; right: -12px;
 }
 
 .divider:hover,
@@ -783,6 +795,17 @@ h1 {
   cursor: not-allowed;
   opacity: 0.5;
 }
+#btn-stop-python {
+  color: #ff6060;
+  border-color: #ff6060;
+  text-shadow: 0 0 6px rgba(255,96,96,0.6);
+  box-shadow: inset 0 0 12px rgba(255,96,96,0.05);
+}
+#btn-stop-python:hover {
+  background: rgba(255,96,96,0.12);
+  box-shadow: 0 0 14px rgba(255,96,96,0.4), inset 0 0 12px rgba(255,96,96,0.08);
+  color: #fff;
+}
 
 /* ガイドボタン */
 #btn-tutorial {
@@ -1036,8 +1059,326 @@ h1 {
   color: var(--text-dim);
 }
 
+/* ============================================================
+   構文リファレンスパネル（コーディングモード時に表示）
+   ============================================================ */
+
+#syntax-panel {
+  display: none;              /* 通常は非表示 */
+  flex-direction: column;
+  width: 230px;
+  min-width: 100px;
+  flex-shrink: 0;
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border-dim);
+  overflow: hidden;
+}
+
+/* コーディングモード ON で表示 */
+.coding-mode #syntax-panel  { display: flex; }
+.coding-mode #blockly-div   { display: none; }
+.coding-mode .divider       { display: none; }
+
+/* パネルヘッダー */
+.syntax-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #0a120a;
+  border-bottom: 1px solid var(--border-dim);
+  flex-shrink: 0;
+}
+.syntax-header-title {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent-green);
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 6px rgba(0,255,65,0.5);
+}
+.syntax-header-sub {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  margin-left: auto;
+}
+
+/* スクロール可能なコンテンツ領域 */
+#syntax-content {
+  overflow-y: auto;
+  flex: 1;
+  padding: 8px 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-dim) transparent;
+}
+#syntax-content::-webkit-scrollbar { width: 4px; }
+#syntax-content::-webkit-scrollbar-thumb { background: var(--border-dim); }
+
+/* カテゴリブロック */
+.syn-cat {
+  margin-bottom: 4px;
+}
+.syn-cat-title {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--accent-cyan);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 12px 3px;
+  border-left: 2px solid var(--accent-cyan);
+  margin-left: 8px;
+  margin-bottom: 2px;
+}
+.syn-item {
+  padding: 1px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.syn-item code {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-code);
+  display: block;
+  line-height: 1.5;
+  white-space: pre;
+}
+.syn-item:hover {
+  background: rgba(100, 220, 180, 0.10);
+}
+.syn-item--inserted {
+  background: rgba(100, 220, 180, 0.30) !important;
+}
+.syn-item .syn-label {
+  color: var(--text-dim);
+  font-size: 0.65rem;
+  display: block;
+  margin-top: 4px;
+}
+.syn-item .syn-comment {
+  color: var(--text-dim);
+  font-size: 0.65rem;
+}
+
+/* モバイル：横幅を狭く */
+@media (max-width: 900px) {
+  #syntax-panel { width: 180px; font-size: 0.68rem; }
+  .coding-mode .divider { display: none; }
+
+  /* コーディングモード：縦積みではなく横並びを維持（.main.coding-mode で詳細度を高めて column を上書き） */
+  .main.coding-mode { flex-direction: row; }
+  .coding-mode .code-panel {
+    flex: 1;
+    width: auto;
+    min-height: 0;
+  }
+}
+
 /* 選択中ブロックに対応するコード行（CodeMirror の background レイヤー） */
 .CodeMirror-linebackground.block-selection-highlight {
   background: rgba(100, 180, 255, 0.14);
   box-shadow: inset 3px 0 0 rgba(100, 180, 255, 0.65);
+}
+
+/* ============================================================
+   レスポンシブ対応
+   ≤900px : ヘッダー折り返し・メイン縦積み（タブレット縦）
+   ≤600px : ボタン縮小・補助要素を非表示（スマートフォン）
+   ============================================================ */
+
+@media (max-width: 900px) {
+  /* ヘッダー：高さ固定を解除して折り返し可能に */
+  header {
+    height: auto;
+    min-height: var(--header-h);
+    flex-wrap: wrap;
+    padding: 6px 12px;
+    gap: 6px;
+  }
+
+  /* タイトルブロックを左端に固定 */
+  .title-block { flex-shrink: 0; }
+
+  /* モード切替は右端へ */
+  .mode-toggle { margin-left: auto; }
+
+  /* ツールバーは2行折り返し */
+  .toolbar {
+    margin-left: 0;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 6px;
+    overflow-x: visible;
+  }
+
+  /* version-tag は折り返しライン確保のため非表示 */
+  .version-tag { display: none; }
+
+  /* ===== メインエリアを縦積みに ===== */
+  .main { flex-direction: column; }
+
+  /* Blocklyワークスペース：幅100%・高さ固定 */
+  #blockly-div {
+    flex: none;
+    width: 100%;
+    height: 52vh;
+  }
+
+  /* 区切り線：縦→横（上下12pxの当たり判定を擬似要素で確保） */
+  .divider {
+    width: 100%;
+    height: 3px;
+    cursor: row-resize;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      var(--accent-green) 20%,
+      rgba(0,255,65,0.3) 50%,
+      var(--accent-green) 80%,
+      transparent 100%
+    );
+  }
+  .divider::before {
+    left: 0; right: 0;
+    top: -12px; bottom: -12px;
+  }
+
+  /* コードパネル：残りの高さを埋める */
+  .code-panel {
+    flex: 1;
+    width: 100%;
+  }
+
+  /* チュートリアルパネル：下からスライドアップするドロワーに変更 */
+  .tutorial-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100% !important;       /* width: 0 / 280px の上書き */
+    height: 0;
+    max-height: 58vh;
+    overflow: hidden;
+    border-left: none;
+    border-top: 1px solid var(--border-dim);
+    transition: height 0.3s ease; /* width トランジションを高さに置換 */
+    z-index: 200;
+  }
+  .tutorial-panel--open {
+    width: 100% !important;
+    height: 58vh;                 /* width: 280px の代わり */
+  }
+}
+
+@media (max-width: 600px) {
+  /* タイトル縮小 */
+  h1 { font-size: 0.95rem; }
+  .title-sub { display: none; }
+
+  /* ツールバーのラベルと区切りを非表示 */
+  .toolbar-label,
+  .toolbar-sep { display: none; }
+
+  /* ボタン全体を小さく */
+  .toolbar button {
+    font-size: 0.7rem;
+    padding: 5px 10px;
+  }
+
+  /* モードボタン縮小 */
+  .mode-btn {
+    font-size: 0.65rem;
+    padding: 5px 10px;
+  }
+
+  /* demo-badge 縮小 */
+  .demo-badge {
+    font-size: 0.58rem;
+    padding: 2px 6px;
+  }
+
+  /* Blocklyを少し大きく、コードは小さめ */
+  #blockly-div { height: 58vh; }
+
+  /* CodeMirror フォント縮小 */
+  .CodeMirror,
+  #code-editor { font-size: 0.75rem; }
+
+  /* コーディングモード：極狭画面でもsyntax-panelを縮める */
+  .coding-mode #syntax-panel {
+    width: 120px;
+    font-size: 0.6rem;
+  }
+  .coding-mode .syn-code {
+    font-size: 0.58rem;
+  }
+}
+
+/* ============================================================
+   テーマ定義
+   ============================================================ */
+
+/* ----- Cyan（青系） ----- */
+[data-theme="cyan"] {
+  --bg-base:      #030d14;
+  --bg-surface:   #060f1a;
+  --bg-panel:     #040c12;
+  --border-dim:   #0a2a3a;
+  --border-glow:  #00d4ff;
+  --accent-green: #00d4ff;
+  --accent-cyan:  #7b61ff;
+  --accent-amber: #00ff99;
+  --text-primary: #b0d8e6;
+  --text-dim:     #3a6a7a;
+  --text-code:    #00d4ff;
+}
+[data-theme="cyan"] body {
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(rgba(0,212,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.015) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+}
+[data-theme="cyan"] h1 {
+  text-shadow: 0 0 8px rgba(0,212,255,0.8), 0 0 20px rgba(0,212,255,0.4);
+}
+
+/* ----- Amber（橙系） ----- */
+[data-theme="amber"] {
+  --bg-base:      #0d0800;
+  --bg-surface:   #160d00;
+  --bg-panel:     #100900;
+  --border-dim:   #2a1800;
+  --border-glow:  #ffb700;
+  --accent-green: #ffb700;
+  --accent-cyan:  #ff6b35;
+  --accent-amber: #ffe066;
+  --text-primary: #e6d0a0;
+  --text-dim:     #7a5a20;
+  --text-code:    #ffb700;
+}
+[data-theme="amber"] body {
+  background-image:
+    linear-gradient(rgba(255,183,0,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,183,0,0.03) 1px, transparent 1px),
+    linear-gradient(rgba(255,183,0,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,183,0,0.015) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px, 8px 8px, 8px 8px;
+}
+[data-theme="amber"] h1 {
+  text-shadow: 0 0 8px rgba(255,183,0,0.8), 0 0 20px rgba(255,183,0,0.4);
+}
+
+/* テーマボタン */
+#btn-theme {
+  color: var(--text-dim);
+  border-color: var(--border-dim);
+  font-size: 0.7rem;
+  padding: 7px 12px;
+  letter-spacing: 0.04em;
+}
+#btn-theme:hover {
+  color: var(--accent-green);
+  border-color: var(--accent-green);
+  background: transparent;
 }

@@ -1,4 +1,4 @@
-// PicoBlocks — Web Serial (MicroPython Raw REPL)
+// PycoBlocks — Web Serial (MicroPython Raw REPL)
 const PicoSerial = (() => {
   let port   = null;
   let writer = null;

@@ -1,4 +1,4 @@
-# PicoBlocks -- Agent instructions
+# PycoBlocks -- Agent instructions
 
 Works with the workspace root **`CLAUDE.md`** session flow (revision_log, ????).  
 Claude Code / Claude Desktop / Cursor: **same checklist**.
@@ -12,7 +12,7 @@ Claude Code / Claude Desktop / Cursor: **same checklist**.
 ## End of session
 
 1. Update checkboxes in `docs/PROJECT-TASKS.md` and **append Handoff log** (new entry at **top**).  
-2. If the user uses the OneDrive workspace journal: suggest one line for **`????.md`** (root) ù PicoBlocks ?????????.  
+2. If the user uses the OneDrive workspace journal: suggest one line for **`????.md`** (root) ù PycoBlocks ?????????.  
 3. If a mistake should become a lab-wide rule: mention **`revision_log.md`** (root).
 
 ## Workspace paths (from this repo folder `pico-blocks/`)
