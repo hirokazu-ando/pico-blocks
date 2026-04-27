@@ -1,3 +1,6 @@
+(() => {
+const P = window.PycoPalette;
+
 Blockly.Blocks['print_text'] = {
   init: function() {
     this.appendDummyInput()
@@ -6,7 +9,7 @@ Blockly.Blocks['print_text'] = {
       .appendField('」を表示する');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#607D8B');
+    this.setColour(P.display);
   }
 };
 
@@ -20,7 +23,7 @@ Blockly.Blocks['print_var_label'] = {
       .appendField('を表示する');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#607D8B');
+    this.setColour(P.display);
   }
 };
 
@@ -30,6 +33,8 @@ Blockly.Blocks['print_separator'] = {
       .appendField('区切り線を表示する');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#607D8B');
+    this.setColour(P.display);
   }
 };
+
+})();

@@ -2,6 +2,9 @@
 // Python入門モード専用ブロック定義
 // =====================================================
 
+(() => {
+const P = window.PycoPalette;
+
 // キーボード入力ブロック
 // テキスト:    var = input("prompt")
 // 数値(整数):  var = int(input("prompt"))
@@ -23,7 +26,7 @@ Blockly.Blocks['py_input'] = {
       .appendField(new Blockly.FieldTextInput('入力してください'), 'PROMPT');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#00838F');
+    this.setColour(P.ioKeyboard);
     this.setTooltip('input() でキーボードから値を受け取ります。\n数値を受け取る場合は int() や float() で変換されます。');
     this.setHelpUrl('');
   }
@@ -37,7 +40,7 @@ Blockly.Blocks['val_str'] = {
       .appendField(new Blockly.FieldTextInput('Hello'), 'TEXT')
       .appendField('"');
     this.setOutput(true, null);
-    this.setColour('#5C81A6');
+    this.setColour(P.literals);
     this.setTooltip('文字列の値を表します');
     this.setHelpUrl('');
   }
@@ -52,7 +55,7 @@ Blockly.Blocks['val_bool'] = {
         ['False（偽）', 'False'],
       ]), 'BOOL');
     this.setOutput(true, 'Boolean');
-    this.setColour('#5C81A6');
+    this.setColour(P.literals);
     this.setTooltip('True（真）またはFalse（偽）の値を表します');
     this.setHelpUrl('');
   }
@@ -75,7 +78,7 @@ Blockly.Blocks['py_math_op'] = {
     this.appendValueInput('RIGHT').setCheck(null);
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour('#B71C1C');
+    this.setColour(P.math);
     this.setTooltip('算術演算を行います');
     this.setHelpUrl('');
   }
@@ -90,7 +93,7 @@ Blockly.Blocks['py_str_concat'] = {
     this.appendDummyInput().appendField('をつなげる');
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour('#B71C1C');
+    this.setColour(P.math);
     this.setTooltip('str() で文字列に変換してから連結します');
     this.setHelpUrl('');
   }
@@ -107,7 +110,7 @@ Blockly.Blocks['py_while'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E65100');
+    this.setColour(P.loops);
     this.setTooltip('条件が True の間、中の処理を繰り返します');
     this.setHelpUrl('');
   }
@@ -121,7 +124,7 @@ Blockly.Blocks['py_print'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#607D8B');
+    this.setColour(P.display);
     this.setTooltip('変数・数値・文字列など何でも表示できます');
     this.setHelpUrl('');
   }
@@ -135,7 +138,7 @@ Blockly.Blocks['py_list_empty'] = {
   init: function() {
     this.appendDummyInput().appendField('空のリスト [ ]');
     this.setOutput(true, null);
-    this.setColour('#00897B');
+    this.setColour(P.lists);
     this.setTooltip('空のリスト [] を返します');
     this.setHelpUrl('');
   }
@@ -152,7 +155,7 @@ Blockly.Blocks['py_list_append'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#00897B');
+    this.setColour(P.lists);
     this.setTooltip('リストの末尾に値を追加します（append）');
     this.setHelpUrl('');
   }
@@ -168,7 +171,7 @@ Blockly.Blocks['py_list_get'] = {
     this.appendDummyInput().appendField('番目');
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour('#00897B');
+    this.setColour(P.lists);
     this.setTooltip('リストのi番目の要素を取得します（0始まり）');
     this.setHelpUrl('');
   }
@@ -187,7 +190,7 @@ Blockly.Blocks['py_list_set'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#00897B');
+    this.setColour(P.lists);
     this.setTooltip('リストのi番目の要素を変更します');
     this.setHelpUrl('');
   }
@@ -201,7 +204,7 @@ Blockly.Blocks['py_list_len'] = {
     this.appendDummyInput().appendField('の長さ');
     this.setInputsInline(true);
     this.setOutput(true, 'Number');
-    this.setColour('#00897B');
+    this.setColour(P.lists);
     this.setTooltip('リストの要素数を返します（len）');
     this.setHelpUrl('');
   }
@@ -220,7 +223,7 @@ Blockly.Blocks['py_for_list'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E65100');
+    this.setColour(P.loops);
     this.setTooltip('リストの要素を1つずつ取り出して繰り返します（for item in list）');
     this.setHelpUrl('');
   }
@@ -235,7 +238,7 @@ Blockly.Blocks['py_break'] = {
     this.appendDummyInput().appendField('ループを抜ける（break）');
     this.setPreviousStatement(true, null);
     this.setNextStatement(false, null);
-    this.setColour('#E65100');
+    this.setColour(P.loops);
     this.setTooltip('ループを即座に終了します（break）');
     this.setHelpUrl('');
   }
@@ -246,7 +249,7 @@ Blockly.Blocks['py_continue'] = {
     this.appendDummyInput().appendField('次のループへ（continue）');
     this.setPreviousStatement(true, null);
     this.setNextStatement(false, null);
-    this.setColour('#E65100');
+    this.setColour(P.loops);
     this.setTooltip('残りの処理を飛ばして次の繰り返しへ進みます（continue）');
     this.setHelpUrl('');
   }
@@ -265,7 +268,7 @@ Blockly.Blocks['py_def_noarg'] = {
     this.appendStatementInput('BODY').setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#F57F17');
+    this.setColour(P.functions);
     this.setTooltip('引数なしの関数を定義します（def name():）');
     this.setHelpUrl('');
   }
@@ -282,7 +285,7 @@ Blockly.Blocks['py_def'] = {
     this.appendStatementInput('BODY').setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#F57F17');
+    this.setColour(P.functions);
     this.setTooltip('引数1つの関数を定義します（def name(param):）');
     this.setHelpUrl('');
   }
@@ -301,7 +304,7 @@ Blockly.Blocks['py_def_args2'] = {
     this.appendStatementInput('BODY').setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#F57F17');
+    this.setColour(P.functions);
     this.setTooltip('引数2つの関数を定義します（def name(a, b):）');
     this.setHelpUrl('');
   }
@@ -322,7 +325,7 @@ Blockly.Blocks['py_def_args3'] = {
     this.appendStatementInput('BODY').setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#F57F17');
+    this.setColour(P.functions);
     this.setTooltip('引数3つの関数を定義します（def name(a, b, c):）');
     this.setHelpUrl('');
   }
@@ -335,7 +338,7 @@ Blockly.Blocks['py_return'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(false, null);
-    this.setColour('#F57F17');
+    this.setColour(P.functions);
     this.setTooltip('値を返して関数を終了します（return）');
     this.setHelpUrl('');
   }
@@ -352,7 +355,7 @@ Blockly.Blocks['py_call_stmt'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#F57F17');
+    this.setColour(P.functions);
     this.setTooltip('関数を呼び出します。引数不要なら何もつなげないでください');
     this.setHelpUrl('');
   }
@@ -368,7 +371,7 @@ Blockly.Blocks['py_call_val'] = {
     this.appendDummyInput().appendField('）の結果');
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour('#F57F17');
+    this.setColour(P.functions);
     this.setTooltip('関数の戻り値を取得します');
     this.setHelpUrl('');
   }
@@ -400,7 +403,7 @@ Blockly.Blocks['py_module_call_stmt'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E65100');
+    this.setColour(P.modules);
     this.setTooltip('モジュールを選んでから関数をプルダウンで選択してください。');
     this.setHelpUrl('');
   }
@@ -419,7 +422,7 @@ Blockly.Blocks['py_module_call_val'] = {
     this.appendDummyInput().appendField('）の結果');
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour('#E65100');
+    this.setColour(P.modules);
     this.setTooltip('モジュールを選んでから関数をプルダウンで選択してください。');
     this.setHelpUrl('');
   }
@@ -437,7 +440,7 @@ Blockly.Blocks['py_random_int'] = {
     this.appendDummyInput().appendField('以下のランダムな整数');
     this.setInputsInline(true);
     this.setOutput(true, 'Number');
-    this.setColour('#B71C1C');
+    this.setColour(P.math);
     this.setTooltip('ランダムな整数を返します（random.randint(a, b)）');
     this.setHelpUrl('');
   }
@@ -456,7 +459,7 @@ Blockly.Blocks['py_type_cast'] = {
       .appendField('に変換');
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour('#B71C1C');
+    this.setColour(P.math);
     this.setTooltip('値を指定した型に変換します（int/float/str）');
     this.setHelpUrl('');
   }
@@ -468,7 +471,7 @@ Blockly.Blocks['py_abs'] = {
     this.appendDummyInput().appendField('の絶対値');
     this.setInputsInline(true);
     this.setOutput(true, 'Number');
-    this.setColour('#B71C1C');
+    this.setColour(P.math);
     this.setTooltip('絶対値を返します（abs）');
     this.setHelpUrl('');
   }
@@ -482,7 +485,7 @@ Blockly.Blocks['py_round'] = {
     this.appendDummyInput().appendField('桁に丸める');
     this.setInputsInline(true);
     this.setOutput(true, 'Number');
-    this.setColour('#B71C1C');
+    this.setColour(P.math);
     this.setTooltip('指定した桁数で四捨五入します（round）');
     this.setHelpUrl('');
   }
@@ -505,7 +508,7 @@ Blockly.Blocks['py_fstring'] = {
       .appendField('"');
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour('#5C81A6');
+    this.setColour(P.literals);
     this.setTooltip('f文字列：変数を埋め込んだ文字列を作ります（例: f"こんにちは、{name}さん"）');
     this.setHelpUrl('');
   }
@@ -519,7 +522,7 @@ Blockly.Blocks['py_dict_new'] = {
   init: function() {
     this.appendDummyInput().appendField('空の辞書 { }');
     this.setOutput(true, null);
-    this.setColour('#4527A0');
+    this.setColour(P.dict);
     this.setTooltip('空の辞書 {} を返します。var_set ブロックと組み合わせて変数に入れてください。');
     this.setHelpUrl('');
   }
@@ -538,7 +541,7 @@ Blockly.Blocks['py_dict_set'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#4527A0');
+    this.setColour(P.dict);
     this.setTooltip('辞書のキーに値をセットします（dict[key] = value）');
     this.setHelpUrl('');
   }
@@ -554,7 +557,7 @@ Blockly.Blocks['py_dict_get'] = {
     this.appendDummyInput().appendField('の値');
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour('#4527A0');
+    this.setColour(P.dict);
     this.setTooltip('辞書からキーに対応する値を取得します（dict[key]）');
     this.setHelpUrl('');
   }
@@ -567,8 +570,10 @@ Blockly.Blocks['py_dict_keys'] = {
       .appendField(new Blockly.FieldVariable('my_dict'), 'DICT')
       .appendField('のキー一覧');
     this.setOutput(true, null);
-    this.setColour('#4527A0');
+    this.setColour(P.dict);
     this.setTooltip('辞書のキーをリストとして返します（list(dict.keys())）');
     this.setHelpUrl('');
   }
 };
+
+})();

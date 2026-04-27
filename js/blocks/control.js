@@ -1,3 +1,6 @@
+(() => {
+const P = window.PycoPalette;
+
 Blockly.Blocks['pico_wait'] = {
   init: function() {
     this.appendValueInput('SEC').setCheck('Number');
@@ -5,7 +8,7 @@ Blockly.Blocks['pico_wait'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#00695C');
+    this.setColour(P.timing);
   }
 };
 Blockly.Blocks['pico_repeat'] = {
@@ -16,7 +19,7 @@ Blockly.Blocks['pico_repeat'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E65100');
+    this.setColour(P.loops);
   }
 };
 Blockly.Blocks['pico_forever'] = {
@@ -24,7 +27,7 @@ Blockly.Blocks['pico_forever'] = {
     this.appendDummyInput().appendField('ずっと繰り返す');
     this.appendStatementInput('DO').setCheck(null);
     this.setPreviousStatement(true, null);
-    this.setColour('#E65100');
+    this.setColour(P.loops);
   }
 };
 
@@ -35,7 +38,7 @@ Blockly.Blocks['pico_if_elseif'] = {
     this.appendDummyInput().appendField('elif');
     this.setPreviousStatement(true);
     this.setNextStatement(true);
-    this.setColour('#6A1B9A');
+    this.setColour(P.logic);
     this.setTooltip('elif ブランチ');
   }
 };
@@ -44,7 +47,7 @@ Blockly.Blocks['pico_if_else'] = {
   init: function() {
     this.appendDummyInput().appendField('else');
     this.setPreviousStatement(true);
-    this.setColour('#6A1B9A');
+    this.setColour(P.logic);
     this.setTooltip('else ブランチ');
   }
 };
@@ -67,7 +70,7 @@ Blockly.Blocks['pico_if'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#6A1B9A');
+    this.setColour(P.logic);
     this.setTooltip('条件に応じて処理を分岐します。+ボタンで elif/else を追加できます');
   },
 
@@ -218,7 +221,7 @@ Blockly.Blocks['pico_for_range'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E65100');
+    this.setColour(P.loops);
     this.setTooltip('指定した回数だけ繰り返します。変数に現在の回数(0始まり)が入ります');
   }
 };
@@ -240,7 +243,9 @@ Blockly.Blocks['pico_for_from_to'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E65100');
+    this.setColour(P.loops);
     this.setTooltip('START から STOP まで STEP ずつ増やしながら繰り返します');
   }
 };
+
+})();

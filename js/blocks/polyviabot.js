@@ -2,6 +2,9 @@
 // ピン配置: Motor_L+(GP0) Motor_L-(GP1) Motor_R+(GP2) Motor_R-(GP3)
 //           LED1(GP11) LED2(GP12) SW1(GP13) SW2(GP14)
 
+(() => {
+const P = window.PycoPalette;
+
 // 前進する
 Blockly.Blocks['pvb_forward'] = {
   init: function() {
@@ -11,7 +14,7 @@ Blockly.Blocks['pvb_forward'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E53935');
+    this.setColour(P.polyvia);
     this.setTooltip('PoliviaBotを前進させます');
   }
 };
@@ -25,7 +28,7 @@ Blockly.Blocks['pvb_backward'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E53935');
+    this.setColour(P.polyvia);
   }
 };
 
@@ -38,7 +41,7 @@ Blockly.Blocks['pvb_turn_right'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E53935');
+    this.setColour(P.polyvia);
   }
 };
 
@@ -51,7 +54,7 @@ Blockly.Blocks['pvb_turn_left'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E53935');
+    this.setColour(P.polyvia);
   }
 };
 
@@ -61,7 +64,7 @@ Blockly.Blocks['pvb_stop'] = {
     this.appendDummyInput().appendField('止まる');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E53935');
+    this.setColour(P.polyvia);
   }
 };
 
@@ -74,7 +77,7 @@ Blockly.Blocks['pvb_led_on'] = {
       .appendField('を点灯する');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E53935');
+    this.setColour(P.polyvia);
   }
 };
 
@@ -87,7 +90,7 @@ Blockly.Blocks['pvb_led_off'] = {
       .appendField('を消灯する');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E53935');
+    this.setColour(P.polyvia);
   }
 };
 
@@ -99,7 +102,7 @@ Blockly.Blocks['pvb_switch_val'] = {
       .appendField(new Blockly.FieldDropdown([['1','13'],['2','14']]), 'SW')
       .appendField('の値');
     this.setOutput(true, 'Boolean');
-    this.setColour('#E53935');
+    this.setColour(P.polyvia);
     this.setTooltip('スイッチが押されているとき True を返します（GP13/GP14）');
   }
 };
@@ -114,6 +117,8 @@ Blockly.Blocks['pvb_if_switch'] = {
     this.appendStatementInput('DO').setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#E53935');
+    this.setColour(P.polyvia);
   }
 };
+
+})();

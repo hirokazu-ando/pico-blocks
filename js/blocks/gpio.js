@@ -1,5 +1,8 @@
 // ===== デジタル出力 =====
 
+(() => {
+const P = window.PycoPalette;
+
 Blockly.Blocks['pico_led_on'] = {
   init: function() {
     this.appendDummyInput()
@@ -7,7 +10,7 @@ Blockly.Blocks['pico_led_on'] = {
       .appendField(new Blockly.FieldNumber(25, 0, 28), 'PIN');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#388E3C');
+    this.setColour(P.gpioOutput);
     this.setTooltip('指定したピンのLEDを点灯します');
   }
 };
@@ -18,7 +21,7 @@ Blockly.Blocks['pico_led_off'] = {
       .appendField(new Blockly.FieldNumber(25, 0, 28), 'PIN');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#388E3C');
+    this.setColour(P.gpioOutput);
     this.setTooltip('指定したピンのLEDを消灯します');
   }
 };
@@ -32,7 +35,7 @@ Blockly.Blocks['pico_digital_write'] = {
       .appendField('にする');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#388E3C');
+    this.setColour(P.gpioOutput);
   }
 };
 
@@ -48,7 +51,7 @@ Blockly.Blocks['pico_digital_read'] = {
       .appendField('に入れる');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#00838F');
+    this.setColour(P.gpioInput);
     this.setTooltip('デジタルピンの値（0 or 1）を変数に入れます');
   }
 };
@@ -65,7 +68,7 @@ Blockly.Blocks['pico_analog_read'] = {
       .appendField('に入れる');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#00838F');
+    this.setColour(P.gpioInput);
     this.setTooltip('アナログ値（0〜65535）を変数に入れます。GP26/27/28のみ使用可能');
   }
 };
@@ -79,7 +82,7 @@ Blockly.Blocks['pico_digital_read_val'] = {
       .appendField(new Blockly.FieldNumber(0, 0, 28), 'PIN')
       .appendField('の入力値');
     this.setOutput(true, 'Boolean');
-    this.setColour('#00838F');
+    this.setColour(P.gpioInput);
     this.setTooltip('デジタルピンの値（True/False）を返します。条件ブロックにはめ込めます');
   }
 };
@@ -91,7 +94,9 @@ Blockly.Blocks['pico_analog_read_val'] = {
       .appendField(new Blockly.FieldDropdown([['GP26','26'],['GP27','27'],['GP28','28']]), 'PIN')
       .appendField('のアナログ値');
     this.setOutput(true, 'Number');
-    this.setColour('#00838F');
+    this.setColour(P.gpioInput);
     this.setTooltip('アナログ入力値（0〜65535）を返します。比較ブロックにはめ込めます');
   }
 };
+
+})();

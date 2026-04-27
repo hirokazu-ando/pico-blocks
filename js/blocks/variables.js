@@ -1,3 +1,6 @@
+(() => {
+const P = window.PycoPalette;
+
 Blockly.Blocks['var_set'] = {
   init: function() {
     this.appendDummyInput()
@@ -9,7 +12,7 @@ Blockly.Blocks['var_set'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#2196F3');
+    this.setColour(P.variables);
     this.setTooltip('変数に値をセットします');
   }
 };
@@ -25,7 +28,7 @@ Blockly.Blocks['var_change'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#2196F3');
+    this.setColour(P.variables);
     this.setTooltip('変数の値を増減します');
   }
 };
@@ -43,9 +46,11 @@ Blockly.Blocks['var_if_greater'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#2196F3');
+    this.setColour(P.variables);
   }
 };
+
+})();
 
 Blockly.Blocks['var_if_less'] = {
   init: function() {
@@ -60,6 +65,6 @@ Blockly.Blocks['var_if_less'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#2196F3');
+    this.setColour(P.variables);
   }
 };

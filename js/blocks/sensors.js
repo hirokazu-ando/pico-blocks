@@ -2,13 +2,16 @@
 // 超音波: Trig=GP7, Echo=GP6
 // ラインセンサー: L=GP26(ADC0), C=GP27(ADC1), R=GP28(ADC2)
 
+(() => {
+const P = window.PycoPalette;
+
 // 超音波センサーの距離（Number 値ブロック）
 Blockly.Blocks['pvb_sonar_val'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('超音波センサーの距離（cm）');
     this.setOutput(true, 'Number');
-    this.setColour('#E53935');
+    this.setColour(P.sensorValue);
     this.setTooltip('超音波センサーで測った距離（cm）を返します。Trig=GP7, Echo=GP6');
   }
 };
@@ -21,7 +24,7 @@ Blockly.Blocks['pvb_line_val'] = {
       .appendField(new Blockly.FieldDropdown([['左','26'],['中','27'],['右','28']]), 'SENSOR')
       .appendField('の値');
     this.setOutput(true, 'Number');
-    this.setColour('#E53935');
+    this.setColour(P.sensorValue);
     this.setTooltip('ラインセンサーの値（0〜65535）を返します。黒ライン上で値が大きくなります');
   }
 };
@@ -35,7 +38,7 @@ Blockly.Blocks['pvb_sonar'] = {
       .appendField('に入れる');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#9C27B0');
+    this.setColour(P.sensorStatement);
     this.setTooltip('距離(cm)を変数に入れます。Trig=GP7, Echo=GP6');
   }
 };
@@ -50,7 +53,7 @@ Blockly.Blocks['pvb_if_obstacle'] = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#9C27B0');
+    this.setColour(P.sensorStatement);
   }
 };
 
@@ -65,7 +68,7 @@ Blockly.Blocks['pvb_line_read'] = {
       .appendField('に入れる');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#9C27B0');
+    this.setColour(P.sensorStatement);
     this.setTooltip('0〜65535の値。黒ライン上で値が大きくなります');
   }
 };
@@ -82,7 +85,7 @@ Blockly.Blocks['pvb_if_line'] = {
     this.appendStatementInput('DO').setCheck(null);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#9C27B0');
+    this.setColour(P.sensorStatement);
   }
 };
 
@@ -95,7 +98,9 @@ Blockly.Blocks['pvb_print'] = {
       .appendField('を表示する');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour('#607D8B');
+    this.setColour(P.display);
     this.setTooltip('シリアル通信でPCに値を送ります（デバッグ用）');
   }
 };
+
+})();
