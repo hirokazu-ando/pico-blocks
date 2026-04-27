@@ -101,6 +101,21 @@ document.addEventListener('DOMContentLoaded', function() {
     return mods.length > 0 ? mods : [['（モジュールなし）', '__none__']];
   };
 
+  // 指定モジュール内の関数名一覧（ブロック定義の関数ドロップダウンから参照）
+  window.getPyModuleFunctions = function(modName) {
+    if (!modName || modName === '__none__') return [['（モジュールを選択）', '__none__']];
+    const file = pyFiles.find(function(f) { return f.name === modName + '.py'; });
+    if (!file) return [['（モジュールなし）', '__none__']];
+    const content = file.content || '';
+    const funcs = [];
+    const re = /^def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\(/gm;
+    let m;
+    while ((m = re.exec(content)) !== null) {
+      funcs.push([m[1], m[1]]);
+    }
+    return funcs.length > 0 ? funcs : [['（関数なし）', '__none__']];
+  };
+
   function saveCurrentFile() {
     pyFiles[activeFileIdx].content = editor.getValue();
   }

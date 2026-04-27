@@ -375,18 +375,25 @@ Blockly.Blocks['py_call_val'] = {
 };
 
 // ===== 自作モジュール呼び出しブロック（文） =====
+function _moduleOptions() {
+  if (typeof window.getPyModuleOptions === 'function') return window.getPyModuleOptions();
+  return [['（読込中）', '__none__']];
+}
+
+function _funcOptions() {
+  const block = this.getSourceBlock ? this.getSourceBlock() : this.sourceBlock_;
+  const mod = block ? block.getFieldValue('MODULE') : '__none__';
+  if (typeof window.getPyModuleFunctions === 'function') return window.getPyModuleFunctions(mod);
+  return [['（読込中）', '__none__']];
+}
+
 Blockly.Blocks['py_module_call_stmt'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('モジュール')
-      .appendField(new Blockly.FieldDropdown(function() {
-        if (typeof window.getPyModuleOptions === 'function') {
-          return window.getPyModuleOptions();
-        }
-        return [['（読込中）', '__none__']];
-      }), 'MODULE')
+      .appendField(new Blockly.FieldDropdown(_moduleOptions), 'MODULE')
       .appendField('の関数')
-      .appendField(new Blockly.FieldTextInput('my_func'), 'FUNC')
+      .appendField(new Blockly.FieldDropdown(_funcOptions), 'FUNC')
       .appendField('を呼び出す（引数:');
     this.appendValueInput('ARG').setCheck(null);
     this.appendDummyInput().appendField('）');
@@ -394,7 +401,7 @@ Blockly.Blocks['py_module_call_stmt'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour('#E65100');
-    this.setTooltip('自作モジュールの関数を呼び出します。タブで作ったモジュールをプルダウンで選んでください。');
+    this.setTooltip('モジュールを選んでから関数をプルダウンで選択してください。');
     this.setHelpUrl('');
   }
 };
@@ -404,21 +411,16 @@ Blockly.Blocks['py_module_call_val'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('モジュール')
-      .appendField(new Blockly.FieldDropdown(function() {
-        if (typeof window.getPyModuleOptions === 'function') {
-          return window.getPyModuleOptions();
-        }
-        return [['（読込中）', '__none__']];
-      }), 'MODULE')
+      .appendField(new Blockly.FieldDropdown(_moduleOptions), 'MODULE')
       .appendField('の関数')
-      .appendField(new Blockly.FieldTextInput('my_func'), 'FUNC')
+      .appendField(new Blockly.FieldDropdown(_funcOptions), 'FUNC')
       .appendField('（引数:');
     this.appendValueInput('ARG').setCheck(null);
     this.appendDummyInput().appendField('）の結果');
     this.setInputsInline(true);
     this.setOutput(true, null);
     this.setColour('#E65100');
-    this.setTooltip('自作モジュールの関数の戻り値を取得します。');
+    this.setTooltip('モジュールを選んでから関数をプルダウンで選択してください。');
     this.setHelpUrl('');
   }
 };
