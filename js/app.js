@@ -1851,13 +1851,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const block = blockId ? workspace.getBlockById(blockId) : null;
     if (block) {
       block.getSvgRoot().classList.add('block-error-highlight');
-      // エラーブロックが見えるようにスクロール
       block.select();
     }
     const panel = document.getElementById('error-hint');
     if (!panel) return;
     document.getElementById('error-hint-title').textContent = title;
     document.getElementById('error-hint-body').textContent = detail;
+    // Blocklyエリアの横幅にパネルを合わせる
+    const blocklyDiv = document.getElementById('blockly-div');
+    if (blocklyDiv) {
+      const rect = blocklyDiv.getBoundingClientRect();
+      panel.style.left  = rect.left + 'px';
+      panel.style.width = rect.width + 'px';
+    }
     panel.style.display = 'block';
   }
 

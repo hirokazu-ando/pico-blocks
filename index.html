@@ -73,13 +73,7 @@
       </div>
       <div id="syntax-content"></div>
     </div>
-    <div id="blockly-div">
-      <div id="error-hint">
-        <span class="error-hint-close" id="error-hint-close">✕</span>
-        <div class="error-hint-title" id="error-hint-title"></div>
-        <div id="error-hint-body"></div>
-      </div>
-    </div>
+    <div id="blockly-div"></div>
     <div class="divider"></div>
     <div class="code-panel">
       <div class="code-header">
@@ -553,5 +547,12 @@
   <script src="js/generators/micropython.js"></script>
   <script src="js/blocks/python_intro.js"></script>
   <script src="js/app.js"></script>
+
+  <!-- エラー解説パネル（body末尾・fixed配置） -->
+  <div id="error-hint">
+    <span class="error-hint-close" id="error-hint-close">✕</span>
+    <div class="error-hint-title" id="error-hint-title"></div>
+    <div id="error-hint-body"></div>
+  </div>
 </body>
 </html>
