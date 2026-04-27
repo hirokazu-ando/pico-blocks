@@ -11,7 +11,8 @@
         integrity="sha384-zaeBlB/vwYsDRSlFajnDd7OydJ0cWk+c2OWybl3eSUf6hW2EbhlCsQPqKr3gkznT" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css"
         integrity="sha384-ccdJwIIg/K0Ab6aXF4MPACh7ckk61tvQFTrfkhXZEALgAETURNZIAuQLcS/aPbrM" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="assets/game-icons/star.svg">
+  <link rel="stylesheet" href="css/style.css?v=20260427r">
   <script src="https://unpkg.com/blockly@12.5.1/blockly.min.js"
           integrity="sha384-SxxR8fpocVLJMl6kYyBm33uuy9U1yy0gMrMavfyCd3lQRer3qaBMlcVb0VSAfzop" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"
@@ -32,6 +33,7 @@
     </div>
     <div class="mode-toggle">
       <button class="mode-btn" id="btn-mode-python">Python</button>
+      <button class="mode-btn" id="btn-mode-game">ゲーム</button>
       <button class="mode-btn" id="btn-mode-micropython">μPython</button>
     </div>
     <span class="version-tag">v2.1 · UME</span>
@@ -65,6 +67,7 @@
   </header>
 
   <div class="main">
+    <div id="syntax-home-anchor" style="display:none"></div>
     <!-- コーディングモード時に表示される構文リファレンスパネル -->
     <div id="syntax-panel">
       <div class="syntax-header">
@@ -73,8 +76,11 @@
       </div>
       <div id="syntax-content"></div>
     </div>
+    <button id="btn-syntax-toggle" type="button" title="構文リファレンスを表示/非表示">◀ リファレンス</button>
+    <div id="blockly-home-anchor" style="display:none"></div>
     <div id="blockly-div"></div>
     <div class="divider"></div>
+    <div id="code-home-anchor" style="display:none"></div>
     <div class="code-panel">
       <div class="code-header">
         <span id="code-header-title">Python Output</span>
@@ -82,15 +88,40 @@
       </div>
       <div id="file-tabs" style="display:none"></div>
       <div id="code-editor"></div>
-      <div class="monitor-resize-handle" id="monitor-resize-handle"></div>
-      <div class="monitor-header">
-        <span id="monitor-header-title">シリアルモニタ</span>
-        <div class="monitor-controls">
-          <button id="btn-monitor-clear">クリア</button>
-        </div>
+      <div id="game-panel-anchor"></div>
+      <div class="game-resize-handle" id="game-resize-handle" style="display:none"></div>
+      <!-- ゲームCanvasエリア（game モード時のみ表示） -->
+      <div id="game-canvas-area" style="display:none;">
+        <div class="game-area-resize-handle" id="game-area-resize-handle"></div>
+        <div id="game-title-bar"></div>
+        <!-- pygame.display.set_mode() がここに canvas を生成 -->
       </div>
-      <pre id="monitor-output"></pre>
+      <div id="monitor-panel-anchor"></div>
+      <div id="monitor-panel">
+        <div class="monitor-resize-handle" id="monitor-resize-handle"></div>
+        <div class="monitor-header">
+          <span id="monitor-header-title">シリアルモニタ</span>
+          <div class="monitor-controls">
+            <button id="btn-monitor-clear">クリア</button>
+          </div>
+        </div>
+        <pre id="monitor-output"></pre>
+      </div>
     </div>
+    <div id="game-main-anchor" style="display:none"></div>
+    <div id="monitor-main-anchor" style="display:none"></div>
+    <div id="game-left-column" class="game-column" style="display:none">
+      <div id="game-left-top-anchor"></div>
+      <div class="game-column-split-handle" id="game-left-split-handle"></div>
+      <div id="game-left-bottom-anchor"></div>
+    </div>
+    <div id="game-grid-v-handle"></div>
+    <div id="game-right-column" class="game-column" style="display:none">
+      <div id="game-right-top-anchor"></div>
+      <div class="game-column-split-handle" id="game-right-split-handle"></div>
+      <div id="game-right-bottom-anchor"></div>
+    </div>
+    <div id="game-grid-h-handle"></div>
 
     <!-- チュートリアルパネル -->
     <div class="tutorial-panel" id="tutorial-panel">
@@ -115,9 +146,11 @@
       </div>
     </div>
   </div>
+  <div id="game-dock-resize-handle" style="display:none"></div>
+  <div id="game-shell-dock" style="display:none"></div>
 
   <xml id="toolbox-micropython" style="display:none">
-    <category name="PoliviaBot" colour="#E53935">
+    <category name="PoliviaBot" colour="#EF5350">
       <block type="pvb_forward" gap="8">
         <value name="SPEED">
           <shadow type="val_number"><field name="NUM">50</field></shadow>
@@ -158,7 +191,7 @@
       <block type="pvb_line_val" gap="8"></block>
       <block type="pvb_if_line" gap="8"></block>
     </category>
-    <category name="繰り返し" colour="#E65100">
+    <category name="繰り返し" colour="#F9A825">
       <block type="pico_forever" gap="8"></block>
       <block type="pico_repeat" gap="8">
         <value name="TIMES">
@@ -182,7 +215,7 @@
         </value>
       </block>
     </category>
-    <category name="分岐" colour="#6A1B9A">
+    <category name="分岐" colour="#5E35B1">
       <block type="pico_if" gap="8"></block>
       <sep gap="20"></sep>
       <block type="cond_compare" gap="8">
@@ -197,26 +230,26 @@
       <block type="cond_or" gap="8"></block>
       <block type="cond_not" gap="8"></block>
     </category>
-    <category name="時間" colour="#00695C">
+    <category name="時間" colour="#2E7D32">
       <block type="pico_wait" gap="8">
         <value name="SEC">
           <shadow type="val_number"><field name="NUM">1</field></shadow>
         </value>
       </block>
     </category>
-    <category name="出力" colour="#388E3C">
+    <category name="出力" colour="#EF5350">
       <block type="pico_led_on" gap="8"></block>
       <block type="pico_led_off" gap="8"></block>
       <block type="pico_digital_write" gap="8"></block>
     </category>
-    <category name="入力" colour="#00838F">
+    <category name="入力" colour="#00897B">
       <block type="pico_digital_read" gap="8"></block>
       <block type="pico_analog_read" gap="8"></block>
       <sep gap="20"></sep>
       <block type="pico_digital_read_val" gap="8"></block>
       <block type="pico_analog_read_val" gap="8"></block>
     </category>
-    <category name="変数" colour="#2196F3">
+    <category name="変数" colour="#558B2F">
       <block type="var_set" gap="8">
         <value name="VALUE">
           <shadow type="val_number"><field name="NUM">0</field></shadow>
@@ -228,11 +261,11 @@
         </value>
       </block>
     </category>
-    <category name="値" colour="#5C81A6">
+    <category name="値" colour="#8E24AA">
       <block type="val_var" gap="8"></block>
       <block type="val_number" gap="8"></block>
     </category>
-    <category name="表示" colour="#607D8B">
+    <category name="表示" colour="#00ACC1">
       <block type="print_text" gap="8"></block>
       <block type="print_var_label" gap="8"></block>
       <block type="print_separator" gap="8"></block>
@@ -244,14 +277,14 @@
   <!-- Python入門モード用ツールボックス（カリキュラム Part 0 順） -->
   <xml id="toolbox-python" style="display:none">
     <!-- 0-0/0-1: print文 -->
-    <category name="表示" colour="#607D8B">
+    <category name="表示" colour="#00ACC1">
       <block type="py_print" gap="8"></block>
       <block type="print_text" gap="8"></block>
       <block type="print_var_label" gap="8"></block>
       <block type="print_separator" gap="8"></block>
     </category>
     <!-- 0-2: 変数・代入 -->
-    <category name="変数" colour="#2196F3">
+    <category name="変数" colour="#558B2F">
       <block type="var_set" gap="8">
         <value name="VALUE">
           <shadow type="val_number"><field name="NUM">0</field></shadow>
@@ -264,7 +297,7 @@
       </block>
     </category>
     <!-- 0-3/0-4: 四則演算・文字列操作・型変換・数学関数 -->
-    <category name="計算" colour="#B71C1C">
+    <category name="計算" colour="#FB8C00">
       <block type="py_math_op" gap="8">
         <value name="LEFT">
           <shadow type="val_number"><field name="NUM">0</field></shadow>
@@ -304,7 +337,7 @@
       </block>
     </category>
     <!-- 0-1/0-4: リテラル値・f文字列 -->
-    <category name="値" colour="#5C81A6">
+    <category name="値" colour="#8E24AA">
       <block type="val_var" gap="8"></block>
       <block type="val_number" gap="8"></block>
       <block type="val_str" gap="8"></block>
@@ -313,11 +346,11 @@
       <block type="py_fstring" gap="8"></block>
     </category>
     <!-- 0-5: input -->
-    <category name="入力" colour="#00838F">
+    <category name="入力" colour="#00897B">
       <block type="py_input" gap="8"></block>
     </category>
     <!-- 0-6/0-7/0-8: 条件分岐・比較・論理演算 -->
-    <category name="分岐" colour="#6A1B9A">
+    <category name="分岐" colour="#5E35B1">
       <block type="pico_if" gap="8"></block>
       <sep gap="20"></sep>
       <block type="cond_compare" gap="8">
@@ -333,7 +366,7 @@
       <block type="cond_not" gap="8"></block>
     </category>
     <!-- 0-9/0-10/0-11: for・while・ループ制御 -->
-    <category name="繰り返し" colour="#E65100">
+    <category name="繰り返し" colour="#F9A825">
       <block type="pico_repeat" gap="8">
         <value name="TIMES">
           <shadow type="val_number"><field name="NUM">10</field></shadow>
@@ -362,7 +395,7 @@
       <block type="py_continue" gap="8"></block>
     </category>
     <!-- 0-12: リスト -->
-    <category name="リスト" colour="#00897B">
+    <category name="リスト" colour="#689F38">
       <block type="py_list_empty" gap="8"></block>
       <block type="py_list_append" gap="8">
         <value name="VALUE">
@@ -385,7 +418,7 @@
       <block type="py_list_len" gap="8"></block>
     </category>
     <!-- 0-13: 辞書 -->
-    <category name="辞書" colour="#4527A0">
+    <category name="辞書" colour="#6D4C41">
       <block type="py_dict_new" gap="8"></block>
       <sep gap="20"></sep>
       <block type="py_dict_set" gap="8">
@@ -404,7 +437,7 @@
       <block type="py_dict_keys" gap="8"></block>
     </category>
     <!-- 0-14: 関数定義・呼び出し -->
-    <category name="関数" colour="#F57F17">
+    <category name="関数" colour="#FF7043">
       <block type="py_def_noarg" gap="8"></block>
       <block type="py_def" gap="8"></block>
       <block type="py_def_args2" gap="8"></block>
@@ -415,12 +448,12 @@
       <block type="py_call_val" gap="8"></block>
     </category>
     <!-- 0-15: モジュール呼び出し -->
-    <category name="モジュール" colour="#FF6F00">
+    <category name="モジュール" colour="#546E7A">
       <block type="py_module_call_stmt" gap="8"></block>
       <block type="py_module_call_val" gap="8"></block>
     </category>
     <!-- 時間（Part 1以降で使用） -->
-    <category name="時間" colour="#00695C">
+    <category name="時間" colour="#2E7D32">
       <block type="pico_wait" gap="8">
         <value name="SEC">
           <shadow type="val_number"><field name="NUM">1</field></shadow>
@@ -431,7 +464,7 @@
 
   <!-- モジュールタブ専用ツールボックス -->
   <xml id="toolbox-module" style="display:none">
-    <category name="関数定義" colour="#F57F17">
+    <category name="関数定義" colour="#FF7043">
       <block type="py_def_noarg" gap="8"></block>
       <block type="py_def" gap="8"></block>
       <block type="py_def_args2" gap="8"></block>
@@ -439,7 +472,7 @@
       <sep gap="20"></sep>
       <block type="py_return" gap="8"></block>
     </category>
-    <category name="繰り返し" colour="#E65100">
+    <category name="繰り返し" colour="#F9A825">
       <block type="pico_repeat" gap="8">
         <value name="TIMES">
           <shadow type="val_number"><field name="NUM">10</field></shadow>
@@ -467,7 +500,7 @@
       <block type="py_break" gap="8"></block>
       <block type="py_continue" gap="8"></block>
     </category>
-    <category name="分岐" colour="#6A1B9A">
+    <category name="分岐" colour="#5E35B1">
       <block type="pico_if" gap="8"></block>
       <sep gap="20"></sep>
       <block type="cond_compare" gap="8">
@@ -482,7 +515,7 @@
       <block type="cond_or" gap="8"></block>
       <block type="cond_not" gap="8"></block>
     </category>
-    <category name="変数" colour="#2196F3">
+    <category name="変数" colour="#558B2F">
       <block type="var_set" gap="8">
         <value name="VALUE">
           <shadow type="val_number"><field name="NUM">0</field></shadow>
@@ -494,7 +527,7 @@
         </value>
       </block>
     </category>
-    <category name="リスト" colour="#00897B">
+    <category name="リスト" colour="#689F38">
       <block type="py_list_empty" gap="8"></block>
       <block type="py_list_append" gap="8">
         <value name="VALUE">
@@ -516,7 +549,7 @@
       </block>
       <block type="py_list_len" gap="8"></block>
     </category>
-    <category name="辞書" colour="#4527A0">
+    <category name="辞書" colour="#6D4C41">
       <block type="py_dict_new" gap="8"></block>
       <sep gap="20"></sep>
       <block type="py_dict_set" gap="8">
@@ -534,7 +567,7 @@
       </block>
       <block type="py_dict_keys" gap="8"></block>
     </category>
-    <category name="計算" colour="#B71C1C">
+    <category name="計算" colour="#FB8C00">
       <block type="py_math_op" gap="8">
         <value name="LEFT">
           <shadow type="val_number"><field name="NUM">0</field></shadow>
@@ -573,7 +606,7 @@
         </value>
       </block>
     </category>
-    <category name="値" colour="#5C81A6">
+    <category name="値" colour="#8E24AA">
       <block type="val_var" gap="8"></block>
       <block type="val_number" gap="8"></block>
       <block type="val_str" gap="8"></block>
@@ -581,7 +614,7 @@
       <sep gap="20"></sep>
       <block type="py_fstring" gap="8"></block>
     </category>
-    <category name="表示" colour="#607D8B">
+    <category name="表示" colour="#00ACC1">
       <block type="py_print" gap="8"></block>
       <block type="print_text" gap="8"></block>
       <block type="print_var_label" gap="8"></block>
@@ -589,18 +622,136 @@
     </category>
   </xml>
 
+  <!-- ゲームモード用ツールボックス -->
+  <xml id="toolbox-game" style="display:none">
+    <category name="ゲーム" colour="#EC407A">
+      <block type="game_init" gap="8">
+        <value name="W"><shadow type="val_number"><field name="NUM">480</field></shadow></value>
+        <value name="H"><shadow type="val_number"><field name="NUM">320</field></shadow></value>
+        <value name="TITLE"><shadow type="val_str"><field name="TEXT">ゲーム</field></shadow></value>
+      </block>
+      <block type="game_loop" gap="8"></block>
+      <block type="game_events" gap="8"></block>
+      <block type="game_fill" gap="8">
+        <value name="COLOR"><shadow type="colour_picker"><field name="COLOUR">#202020</field></shadow></value>
+      </block>
+      <sep gap="20"></sep>
+      <block type="game_draw_rect" gap="8">
+        <value name="X"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+        <value name="Y"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+        <value name="W"><shadow type="val_number"><field name="NUM">30</field></shadow></value>
+        <value name="H"><shadow type="val_number"><field name="NUM">30</field></shadow></value>
+        <value name="COLOR"><shadow type="colour_picker"><field name="COLOUR">#00c864</field></shadow></value>
+      </block>
+      <block type="game_draw_circle" gap="8">
+        <value name="X"><shadow type="val_number"><field name="NUM">100</field></shadow></value>
+        <value name="Y"><shadow type="val_number"><field name="NUM">100</field></shadow></value>
+        <value name="R"><shadow type="val_number"><field name="NUM">20</field></shadow></value>
+        <value name="COLOR"><shadow type="colour_picker"><field name="COLOUR">#ff0000</field></shadow></value>
+      </block>
+      <block type="game_draw_line" gap="8">
+        <value name="X1"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+        <value name="Y1"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+        <value name="X2"><shadow type="val_number"><field name="NUM">100</field></shadow></value>
+        <value name="Y2"><shadow type="val_number"><field name="NUM">100</field></shadow></value>
+        <value name="COLOR"><shadow type="colour_picker"><field name="COLOUR">#ffffff</field></shadow></value>
+      </block>
+      <block type="game_draw_text" gap="8">
+        <value name="TEXT"><shadow type="val_str"><field name="TEXT">Hello</field></shadow></value>
+        <value name="X"><shadow type="val_number"><field name="NUM">10</field></shadow></value>
+        <value name="Y"><shadow type="val_number"><field name="NUM">10</field></shadow></value>
+        <value name="SIZE"><shadow type="val_number"><field name="NUM">24</field></shadow></value>
+        <value name="COLOR"><shadow type="colour_picker"><field name="COLOUR">#ffffff</field></shadow></value>
+      </block>
+      <block type="game_draw_image" gap="8">
+        <value name="URL"><shadow type="val_str"><field name="TEXT">https://example.com/player.png</field></shadow></value>
+        <value name="X"><shadow type="val_number"><field name="NUM">100</field></shadow></value>
+        <value name="Y"><shadow type="val_number"><field name="NUM">100</field></shadow></value>
+      </block>
+      <sep gap="20"></sep>
+      <block type="game_flip" gap="8">
+        <value name="FPS"><shadow type="val_number"><field name="NUM">30</field></shadow></value>
+      </block>
+      <sep gap="20"></sep>
+      <block type="game_quit" gap="8"></block>
+    </category>
+    <category name="入力" colour="#00897B">
+      <block type="game_key_pressed" gap="8"></block>
+    </category>
+    <category name="当たり判定" colour="#EC407A">
+      <block type="game_rect" gap="8">
+        <value name="X"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+        <value name="Y"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+        <value name="W"><shadow type="val_number"><field name="NUM">30</field></shadow></value>
+        <value name="H"><shadow type="val_number"><field name="NUM">30</field></shadow></value>
+      </block>
+      <block type="game_collide" gap="8"></block>
+    </category>
+    <category name="変数" colour="#558B2F">
+      <block type="var_set" gap="8">
+        <value name="VALUE">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="var_change" gap="8">
+        <value name="AMOUNT">
+          <shadow type="val_number"><field name="NUM">1</field></shadow>
+        </value>
+      </block>
+    </category>
+    <category name="分岐" colour="#5E35B1">
+      <block type="pico_if" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="cond_compare" gap="8">
+        <value name="LEFT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+        <value name="RIGHT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="cond_and" gap="8"></block>
+      <block type="cond_or" gap="8"></block>
+      <block type="cond_not" gap="8"></block>
+    </category>
+    <category name="計算" colour="#FB8C00">
+      <block type="py_math_op" gap="8">
+        <value name="LEFT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+        <value name="RIGHT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="py_abs" gap="8">
+        <value name="VALUE">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+    </category>
+    <category name="値" colour="#8E24AA">
+      <block type="val_var" gap="8"></block>
+      <block type="val_number" gap="8"></block>
+      <block type="val_str" gap="8"></block>
+      <block type="val_bool" gap="8"></block>
+    </category>
+  </xml>
+
+  <script src="js/block_palette.js?v=20260427c"></script>
   <script src="js/tutorials.js"></script>
   <script src="js/serial.js"></script>
   <script src="js/blocks/gpio.js"></script>
   <script src="js/blocks/control.js"></script>
-  <script src="js/blocks/polyviabot.js"></script>
-  <script src="js/blocks/sensors.js"></script>
-  <script src="js/blocks/values.js"></script>
+  <script src="js/blocks/polyviabot.js?v=20260427c"></script>
+  <script src="js/blocks/sensors.js?v=20260427c"></script>
+  <script src="js/blocks/values.js?v=20260427b"></script>
   <script src="js/blocks/variables.js"></script>
   <script src="js/blocks/display.js"></script>
   <script src="js/generators/micropython.js"></script>
   <script src="js/blocks/python_intro.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/game_engine.js?v=20260427g"></script>
+  <script src="js/blocks/game.js?v=20260427b"></script>
+  <script src="js/app.js?v=20260427y"></script>
 
   <!-- エラー解説パネル（body末尾・fixed配置） -->
   <div id="error-hint">

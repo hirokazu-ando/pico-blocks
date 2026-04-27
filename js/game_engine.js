@@ -1,0 +1,465 @@
+// =====================================================
+// PycoBlocks Game Mode - pygame emulator for Skulpt
+// =====================================================
+
+(() => {
+  'use strict';
+
+  const PYGAME_JS = String.raw`var $builtinmodule = function(name) {
+  'use strict';
+
+  var Sk = globalThis.Sk;
+
+  var KEY_MAP = {
+    'ArrowRight': 275,
+    'ArrowLeft':  276,
+    'ArrowUp':    273,
+    'ArrowDown':  274,
+    'Space':       32,
+    'Enter':       13,
+    'KeyA': 97,  'KeyB': 98,  'KeyC': 99,  'KeyD': 100,
+    'KeyE': 101, 'KeyF': 102, 'KeyG': 103, 'KeyH': 104,
+    'KeyI': 105, 'KeyJ': 106, 'KeyK': 107, 'KeyL': 108,
+    'KeyM': 109, 'KeyN': 110, 'KeyO': 111, 'KeyP': 112,
+    'KeyQ': 113, 'KeyR': 114, 'KeyS': 115, 'KeyT': 116,
+    'KeyU': 117, 'KeyV': 118, 'KeyW': 119, 'KeyX': 120,
+    'KeyY': 121, 'KeyZ': 122,
+    'Digit0': 48, 'Digit1': 49, 'Digit2': 50, 'Digit3': 51,
+    'Digit4': 52, 'Digit5': 53, 'Digit6': 54, 'Digit7': 55,
+    'Digit8': 56, 'Digit9': 57
+  };
+
+  var QUIT = 256;
+  var KEYDOWN = 768;
+  var KEYUP = 769;
+
+  var keyState = {};    // { code: true/false }
+  var eventQueue = [];  // { type, key }
+
+  var _installedListeners = false;
+  function ensureListeners() {
+    if (_installedListeners) return;
+    _installedListeners = true;
+
+    window.addEventListener('keydown', function(e) {
+      var code = (KEY_MAP[e.code] !== undefined) ? KEY_MAP[e.code] : e.keyCode;
+      keyState[code] = true;
+      eventQueue.push({ type: KEYDOWN, key: code });
+      if (e.code && e.code.startsWith('Arrow')) e.preventDefault();
+      if (e.code === 'Space') e.preventDefault();
+    }, { passive: false });
+
+    window.addEventListener('keyup', function(e) {
+      var code = (KEY_MAP[e.code] !== undefined) ? KEY_MAP[e.code] : e.keyCode;
+      keyState[code] = false;
+      eventQueue.push({ type: KEYUP, key: code });
+    }, { passive: true });
+  }
+
+  function colorToCSS(color) {
+    if (typeof color === 'string') return color;
+    if (color && color.v && color.v.length >= 3) {
+      var r = Sk.ffi.remapToJs(color.v[0]);
+      var g = Sk.ffi.remapToJs(color.v[1]);
+      var b = Sk.ffi.remapToJs(color.v[2]);
+      return 'rgb(' + r + ',' + g + ',' + b + ')';
+    }
+    return String(color);
+  }
+
+  function tuple2_to_js(t) {
+    if (!t || !t.v || t.v.length < 2) return [0, 0];
+    return [Sk.ffi.remapToJs(t.v[0]), Sk.ffi.remapToJs(t.v[1])];
+  }
+
+  function tuple4_to_js(t) {
+    if (!t || !t.v || t.v.length < 4) return [0, 0, 0, 0];
+    return [
+      Sk.ffi.remapToJs(t.v[0]),
+      Sk.ffi.remapToJs(t.v[1]),
+      Sk.ffi.remapToJs(t.v[2]),
+      Sk.ffi.remapToJs(t.v[3])
+    ];
+  }
+
+  function makePyNamespace() {
+    var ns = {};
+    function toName(pyName) {
+      return (typeof pyName === 'string') ? pyName : Sk.ffi.remapToJs(pyName);
+    }
+    ns.tp$getattr = function(pyName) {
+      var name = toName(pyName);
+      if (Object.prototype.hasOwnProperty.call(ns, name)) return ns[name];
+      throw new Sk.builtin.AttributeError(name);
+    };
+    ns.tp$setattr = function(pyName, value) {
+      var name = toName(pyName);
+      ns[name] = value;
+    };
+    return ns;
+  }
+
+  function makeSurface(canvas) {
+    var surface = makePyNamespace();
+    surface._canvas = canvas;
+    surface._ctx = canvas.getContext('2d');
+    surface._width = canvas.width;
+    surface._height = canvas.height;
+
+    surface.fill = new Sk.builtin.func(function(color_py) {
+      var css = colorToCSS(color_py);
+      surface._ctx.save();
+      surface._ctx.fillStyle = css;
+      surface._ctx.fillRect(0, 0, surface._canvas.width, surface._canvas.height);
+      surface._ctx.restore();
+      return Sk.builtin.none.none$;
+    });
+
+    surface.blit = new Sk.builtin.func(function(src_surface_py, pos_py) {
+      var src = src_surface_py;
+      var pos = tuple2_to_js(pos_py);
+      if (src && src._canvas) {
+        surface._ctx.drawImage(src._canvas, pos[0], pos[1]);
+      }
+      return Sk.builtin.none.none$;
+    });
+
+    surface.get_rect = new Sk.builtin.func(function() {
+      return Rect(Sk.ffi.remapToPy(0), Sk.ffi.remapToPy(0),
+                  Sk.ffi.remapToPy(surface._canvas.width), Sk.ffi.remapToPy(surface._canvas.height));
+    });
+
+    surface.get_width = new Sk.builtin.func(function() {
+      return Sk.ffi.remapToPy(surface._canvas.width);
+    });
+
+    surface.get_height = new Sk.builtin.func(function() {
+      return Sk.ffi.remapToPy(surface._canvas.height);
+    });
+
+    return surface;
+  }
+
+  function Rect(x_py, y_py, w_py, h_py) {
+    var obj = makePyNamespace();
+    obj._isRect = true;
+    obj.x = x_py; obj.y = y_py; obj.width = w_py; obj.height = h_py;
+
+    obj.colliderect = new Sk.builtin.func(function(other) {
+      var ax = Sk.ffi.remapToJs(obj.x), ay = Sk.ffi.remapToJs(obj.y);
+      var aw = Sk.ffi.remapToJs(obj.width), ah = Sk.ffi.remapToJs(obj.height);
+      var bx = Sk.ffi.remapToJs(other.x), by = Sk.ffi.remapToJs(other.y);
+      var bw = Sk.ffi.remapToJs(other.width), bh = Sk.ffi.remapToJs(other.height);
+      var hit = (ax < bx + bw) && (ax + aw > bx) && (ay < by + bh) && (ay + ah > by);
+      return Sk.ffi.remapToPy(hit);
+    });
+
+    obj.move = new Sk.builtin.func(function(dx_py, dy_py) {
+      var dx = Sk.ffi.remapToJs(dx_py), dy = Sk.ffi.remapToJs(dy_py);
+      return Rect(Sk.ffi.remapToPy(Sk.ffi.remapToJs(obj.x) + dx),
+                  Sk.ffi.remapToPy(Sk.ffi.remapToJs(obj.y) + dy),
+                  obj.width, obj.height);
+    });
+
+    obj.move_ip = new Sk.builtin.func(function(dx_py, dy_py) {
+      var dx = Sk.ffi.remapToJs(dx_py), dy = Sk.ffi.remapToJs(dy_py);
+      obj.x = Sk.ffi.remapToPy(Sk.ffi.remapToJs(obj.x) + dx);
+      obj.y = Sk.ffi.remapToPy(Sk.ffi.remapToJs(obj.y) + dy);
+      return Sk.builtin.none.none$;
+    });
+
+    Object.defineProperty(obj, 'centerx', {
+      get: function() { return Sk.ffi.remapToPy(Sk.ffi.remapToJs(obj.x) + Sk.ffi.remapToJs(obj.width) / 2); },
+      set: function(v) { obj.x = Sk.ffi.remapToPy(Sk.ffi.remapToJs(v) - Sk.ffi.remapToJs(obj.width) / 2); }
+    });
+    Object.defineProperty(obj, 'centery', {
+      get: function() { return Sk.ffi.remapToPy(Sk.ffi.remapToJs(obj.y) + Sk.ffi.remapToJs(obj.height) / 2); },
+      set: function(v) { obj.y = Sk.ffi.remapToPy(Sk.ffi.remapToJs(v) - Sk.ffi.remapToJs(obj.height) / 2); }
+    });
+
+    return obj;
+  }
+
+  var display = makePyNamespace();
+  var event = makePyNamespace();
+  var key = makePyNamespace();
+  var draw = makePyNamespace();
+  var font = makePyNamespace();
+  var image = makePyNamespace();
+  var time = makePyNamespace();
+
+  var _mainSurface = null;
+
+  function ensureGameArea() {
+    var area = document.getElementById('game-canvas-area');
+    if (!area) return null;
+    area.style.display = '';
+    return area;
+  }
+
+  display.set_mode = new Sk.builtin.func(function(size_py) {
+    ensureListeners();
+    window.__pygameRunning = true;
+    var area = ensureGameArea();
+    if (!area) return Sk.builtin.none.none$;
+
+    var size = tuple2_to_js(size_py);
+    var w = size[0] || 480, h = size[1] || 320;
+
+    var cnv = area.querySelector('canvas');
+    if (!cnv) {
+      cnv = document.createElement('canvas');
+      cnv.className = 'pyco-game-canvas';
+      area.appendChild(cnv);
+    }
+    cnv.width = w; cnv.height = h;
+    _mainSurface = makeSurface(cnv);
+    return _mainSurface;
+  });
+
+  display.set_caption = new Sk.builtin.func(function(title_py) {
+    var title = Sk.ffi.remapToJs(title_py);
+    var bar = document.getElementById('game-title-bar');
+    if (bar) bar.textContent = title;
+    return Sk.builtin.none.none$;
+  });
+
+  display.flip = new Sk.builtin.func(function() {
+    return new Sk.misceval.promiseToSuspension(new Promise(function(resolve) {
+      requestAnimationFrame(function() { resolve(Sk.builtin.none.none$); });
+    }));
+  });
+
+  event.get = new Sk.builtin.func(function() {
+    if (window.__pygameRunning === false) {
+      eventQueue.push({ type: QUIT });
+      window.__pygameRunning = true; // prevent duplicate QUIT events
+    }
+    var items = eventQueue.splice(0, eventQueue.length).map(function(e) {
+      var obj = makePyNamespace();
+      obj.type = Sk.ffi.remapToPy(e.type);
+      if (e.key !== undefined) obj.key = Sk.ffi.remapToPy(e.key);
+      return obj;
+    });
+    return new Sk.builtin.list(items);
+  });
+
+  key.get_pressed = new Sk.builtin.func(function() {
+    var obj = makePyNamespace();
+    obj.mp$subscript = function(k_py) {
+      var k = Sk.ffi.remapToJs(k_py);
+      return Sk.ffi.remapToPy(!!keyState[k]);
+    };
+    return obj;
+  });
+
+  draw.rect = new Sk.builtin.func(function(surface_py, color_py, rect_py, width_py) {
+    var surface = surface_py;
+    var rect = tuple4_to_js(rect_py);
+    var width = width_py ? Sk.ffi.remapToJs(width_py) : 0;
+    var css = colorToCSS(color_py);
+    var ctx = surface._ctx;
+    ctx.save();
+    if (width && width > 0) {
+      ctx.strokeStyle = css;
+      ctx.lineWidth = width;
+      ctx.strokeRect(rect[0], rect[1], rect[2], rect[3]);
+    } else {
+      ctx.fillStyle = css;
+      ctx.fillRect(rect[0], rect[1], rect[2], rect[3]);
+    }
+    ctx.restore();
+    return Sk.builtin.none.none$;
+  });
+
+  draw.circle = new Sk.builtin.func(function(surface_py, color_py, pos_py, radius_py, width_py) {
+    var surface = surface_py;
+    var pos = tuple2_to_js(pos_py);
+    var r = Sk.ffi.remapToJs(radius_py);
+    var width = width_py ? Sk.ffi.remapToJs(width_py) : 0;
+    var css = colorToCSS(color_py);
+    var ctx = surface._ctx;
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(pos[0], pos[1], r, 0, Math.PI * 2);
+    if (width && width > 0) {
+      ctx.strokeStyle = css;
+      ctx.lineWidth = width;
+      ctx.stroke();
+    } else {
+      ctx.fillStyle = css;
+      ctx.fill();
+    }
+    ctx.restore();
+    return Sk.builtin.none.none$;
+  });
+
+  draw.line = new Sk.builtin.func(function(surface_py, color_py, p1_py, p2_py, width_py) {
+    var surface = surface_py;
+    var p1 = tuple2_to_js(p1_py);
+    var p2 = tuple2_to_js(p2_py);
+    var w = width_py ? Sk.ffi.remapToJs(width_py) : 1;
+    var css = colorToCSS(color_py);
+    var ctx = surface._ctx;
+    ctx.save();
+    ctx.strokeStyle = css;
+    ctx.lineWidth = w;
+    ctx.beginPath();
+    ctx.moveTo(p1[0], p1[1]);
+    ctx.lineTo(p2[0], p2[1]);
+    ctx.stroke();
+    ctx.restore();
+    return Sk.builtin.none.none$;
+  });
+
+  function makeFont(size) {
+    var f = makePyNamespace();
+    f._size = size || 24;
+    f.render = new Sk.builtin.func(function(text_py, antialias_py, color_py) {
+      var text = Sk.ffi.remapToJs(text_py);
+      var css = colorToCSS(color_py);
+      var cnv = document.createElement('canvas');
+      var ctx = cnv.getContext('2d');
+      ctx.font = f._size + 'px sans-serif';
+      var metrics = ctx.measureText(text);
+      cnv.width = Math.max(1, Math.ceil(metrics.width));
+      cnv.height = Math.max(1, Math.ceil(f._size * 1.4));
+      ctx = cnv.getContext('2d');
+      ctx.font = f._size + 'px sans-serif';
+      ctx.textBaseline = 'top';
+      ctx.fillStyle = css;
+      ctx.fillText(text, 0, 0);
+      return makeSurface(cnv);
+    });
+    return f;
+  }
+
+  font.SysFont = new Sk.builtin.func(function(name_py, size_py) {
+    var size = Sk.ffi.remapToJs(size_py);
+    return makeFont(size);
+  });
+  font.Font = new Sk.builtin.func(function(name_py, size_py) {
+    var size = Sk.ffi.remapToJs(size_py);
+    return makeFont(size);
+  });
+
+  image.load = new Sk.builtin.func(function(url_py) {
+    var url = Sk.ffi.remapToJs(url_py);
+    return new Sk.misceval.promiseToSuspension(new Promise(function(resolve, reject) {
+      var img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = function() {
+        var cnv = document.createElement('canvas');
+        cnv.width = img.width; cnv.height = img.height;
+        var ctx = cnv.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        resolve(makeSurface(cnv));
+      };
+      img.onerror = function() { reject(new Error('pygame.image.load failed: ' + url)); };
+      img.src = url;
+    }));
+  });
+
+  function makeClock() {
+    var clock = makePyNamespace();
+    clock._last = performance.now();
+    clock._fps = 0;
+    clock.tick = new Sk.builtin.func(function(fps_py) {
+      var fps = fps_py ? Sk.ffi.remapToJs(fps_py) : 60;
+      fps = fps || 60;
+      var ms = 1000 / fps;
+      var now = performance.now();
+      var dt = Math.max(1, now - clock._last);
+      clock._fps = 1000 / dt;
+      clock._last = now;
+      return new Sk.misceval.promiseToSuspension(new Promise(function(resolve) {
+        setTimeout(function() { resolve(Sk.builtin.none.none$); }, ms);
+      }));
+    });
+    clock.get_fps = new Sk.builtin.func(function() {
+      return Sk.ffi.remapToPy(clock._fps || 0);
+    });
+    return clock;
+  }
+
+  time.Clock = new Sk.builtin.func(function() { return makeClock(); });
+
+  function init() {
+    ensureListeners();
+    window.__pygameRunning = true;
+    return Sk.builtin.none.none$;
+  }
+
+  function quit() {
+    window.__pygameRunning = false;
+    return Sk.builtin.none.none$;
+  }
+
+  var mod = {};
+  mod.init = new Sk.builtin.func(init);
+  mod.quit = new Sk.builtin.func(quit);
+
+  mod.QUIT = Sk.ffi.remapToPy(QUIT);
+  mod.KEYDOWN = Sk.ffi.remapToPy(KEYDOWN);
+  mod.KEYUP = Sk.ffi.remapToPy(KEYUP);
+
+  mod.K_RIGHT  = Sk.ffi.remapToPy(275);
+  mod.K_LEFT   = Sk.ffi.remapToPy(276);
+  mod.K_UP     = Sk.ffi.remapToPy(273);
+  mod.K_DOWN   = Sk.ffi.remapToPy(274);
+  mod.K_SPACE  = Sk.ffi.remapToPy(32);
+  mod.K_RETURN = Sk.ffi.remapToPy(13);
+
+  mod.K_a = Sk.ffi.remapToPy(97);
+  mod.K_b = Sk.ffi.remapToPy(98);
+  mod.K_c = Sk.ffi.remapToPy(99);
+  mod.K_d = Sk.ffi.remapToPy(100);
+  mod.K_e = Sk.ffi.remapToPy(101);
+  mod.K_f = Sk.ffi.remapToPy(102);
+  mod.K_g = Sk.ffi.remapToPy(103);
+  mod.K_h = Sk.ffi.remapToPy(104);
+  mod.K_i = Sk.ffi.remapToPy(105);
+  mod.K_j = Sk.ffi.remapToPy(106);
+  mod.K_k = Sk.ffi.remapToPy(107);
+  mod.K_l = Sk.ffi.remapToPy(108);
+  mod.K_m = Sk.ffi.remapToPy(109);
+  mod.K_n = Sk.ffi.remapToPy(110);
+  mod.K_o = Sk.ffi.remapToPy(111);
+  mod.K_p = Sk.ffi.remapToPy(112);
+  mod.K_q = Sk.ffi.remapToPy(113);
+  mod.K_r = Sk.ffi.remapToPy(114);
+  mod.K_s = Sk.ffi.remapToPy(115);
+  mod.K_t = Sk.ffi.remapToPy(116);
+  mod.K_u = Sk.ffi.remapToPy(117);
+  mod.K_v = Sk.ffi.remapToPy(118);
+  mod.K_w = Sk.ffi.remapToPy(119);
+  mod.K_x = Sk.ffi.remapToPy(120);
+  mod.K_y = Sk.ffi.remapToPy(121);
+  mod.K_z = Sk.ffi.remapToPy(122);
+
+  mod.display = display;
+  mod.event = event;
+  mod.key = key;
+  mod.draw = draw;
+  mod.font = font;
+  mod.image = image;
+  mod.time = time;
+
+  mod.Rect = new Sk.builtin.func(function(x, y, w, h) { return Rect(x, y, w, h); });
+
+  return mod;
+};`;
+
+  window.PycoPygame = {
+    source: PYGAME_JS,
+    installIntoSkulpt: function(Sk) {
+      if (!Sk) return;
+      // Skulpt stdlib layout: use Sk.builtinFiles['files']
+      if (!Sk.builtinFiles) Sk.builtinFiles = { files: {} };
+      if (!Sk.builtinFiles['files']) Sk.builtinFiles['files'] = {};
+      Sk.builtinFiles['files']['pygame.js'] = PYGAME_JS;
+      Sk.builtinFiles['files']['pygame/__init__.js'] = PYGAME_JS;
+    }
+  };
+})();
+

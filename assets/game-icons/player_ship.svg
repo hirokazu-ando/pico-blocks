@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="shipBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6ee7ff"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
+    </linearGradient>
+  </defs>
+  <polygon points="64,8 98,108 64,92 30,108" fill="url(#shipBody)" stroke="#0c4a6e" stroke-width="6" stroke-linejoin="round"/>
+  <circle cx="64" cy="58" r="12" fill="#fef08a" stroke="#854d0e" stroke-width="4"/>
+  <polygon points="64,94 76,120 64,114 52,120" fill="#f97316" stroke="#9a3412" stroke-width="4" stroke-linejoin="round"/>
+</svg>

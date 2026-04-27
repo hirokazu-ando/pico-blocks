@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
     indentWithTabs: false,
   });
   let codingMode = false;
+  let syntaxCollapsed = false;
   let currentMode = 'micropython'; // 初期値は後で applyMode('python') で上書き
 
   // ===== ファイルタブ管理（Python入門モードのみ） =====
@@ -495,6 +496,10 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'val_bool':
         return block.getFieldValue('BOOL') === 'True' ? 'True' : 'False';
+      case 'colour_picker': {
+        const hex = block.getFieldValue('COLOUR') || '#ffffff';
+        return JSON.stringify(hex);
+      }
       case 'py_math_op': {
         const left  = valueToCode(block, 'LEFT', '0');
         const right = valueToCode(block, 'RIGHT', '0');
@@ -603,6 +608,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!mod || mod === '__none__') return `${func}(${arg})`;
         return `${mod}.${func}(${arg})`;
       }
+      case 'game_key_pressed': {
+        const key = block.getFieldValue('KEY') || 'K_RIGHT';
+        return `pygame.key.get_pressed()[pygame.${key}]`;
+      }
+      case 'game_rect': {
+        const x = valueToCode(block, 'X', '0');
+        const y = valueToCode(block, 'Y', '0');
+        const w = valueToCode(block, 'W', '10');
+        const h = valueToCode(block, 'H', '10');
+        return `pygame.Rect(${x}, ${y}, ${w}, ${h})`;
+      }
+      case 'game_collide': {
+        const a = valueToCode(block, 'A', 'pygame.Rect(0, 0, 1, 1)');
+        const b = valueToCode(block, 'B', 'pygame.Rect(0, 0, 1, 1)');
+        return `${a}.colliderect(${b})`;
+      }
       default:
         return '0';
     }
@@ -619,6 +640,108 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     switch (block.type) {
+
+      // ===== ゲームモード（pygame互換） =====
+      case 'game_init': {
+        const ln0 = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'W', ln0);
+        registerExprBlocksAtLineFromInput(block, 'H', ln0);
+        registerExprBlocksAtLineFromInput(block, 'TITLE', ln0);
+        const w = valueToCode(block, 'W', '480');
+        const h = valueToCode(block, 'H', '320');
+        const title = valueToCode(block, 'TITLE', '"ゲーム"');
+        code = appendLocal(code, indent + `pygame.init()\n`);
+        code = appendLocal(code, indent + `screen = pygame.display.set_mode((${w}, ${h}))\n`);
+        code = appendLocal(code, indent + `pygame.display.set_caption(${title})\n`);
+        code = appendLocal(code, indent + `clock = pygame.time.Clock()\n`);
+        break;
+      }
+      case 'game_loop': {
+        code = appendLocal(code, indent + `running = True\n`);
+        code = appendLocal(code, indent + `while running:\n`);
+        const inner = statementToCode(block, 'DO', indent + '    ');
+        code = appendChildBody(code, inner, indent + '    pass\n');
+        break;
+      }
+      case 'game_events': {
+        code = appendLocal(code, indent + `for event in pygame.event.get():\n`);
+        code = appendLocal(code, indent + `    if event.type == pygame.QUIT:\n`);
+        code = appendLocal(code, indent + `        running = False\n`);
+        break;
+      }
+      case 'game_fill': {
+        const lnFill = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'COLOR', lnFill);
+        const c = valueToCode(block, 'COLOR', '"#000000"');
+        code = appendLocal(code, indent + `screen.fill(${c})\n`);
+        break;
+      }
+      case 'game_draw_rect': {
+        const ln = _emitCtx.line;
+        ['X', 'Y', 'W', 'H', 'COLOR'].forEach(function(n) { registerExprBlocksAtLineFromInput(block, n, ln); });
+        const x = valueToCode(block, 'X', '0');
+        const y = valueToCode(block, 'Y', '0');
+        const w = valueToCode(block, 'W', '10');
+        const h = valueToCode(block, 'H', '10');
+        const c = valueToCode(block, 'COLOR', '"#ffffff"');
+        code = appendLocal(code, indent + `pygame.draw.rect(screen, ${c}, (${x}, ${y}, ${w}, ${h}))\n`);
+        break;
+      }
+      case 'game_draw_circle': {
+        const ln = _emitCtx.line;
+        ['X', 'Y', 'R', 'COLOR'].forEach(function(n) { registerExprBlocksAtLineFromInput(block, n, ln); });
+        const x = valueToCode(block, 'X', '0');
+        const y = valueToCode(block, 'Y', '0');
+        const r = valueToCode(block, 'R', '10');
+        const c = valueToCode(block, 'COLOR', '"#ffffff"');
+        code = appendLocal(code, indent + `pygame.draw.circle(screen, ${c}, (${x}, ${y}), ${r})\n`);
+        break;
+      }
+      case 'game_draw_line': {
+        const ln = _emitCtx.line;
+        ['X1', 'Y1', 'X2', 'Y2', 'COLOR'].forEach(function(n) { registerExprBlocksAtLineFromInput(block, n, ln); });
+        const x1 = valueToCode(block, 'X1', '0');
+        const y1 = valueToCode(block, 'Y1', '0');
+        const x2 = valueToCode(block, 'X2', '0');
+        const y2 = valueToCode(block, 'Y2', '0');
+        const c  = valueToCode(block, 'COLOR', '"#ffffff"');
+        code = appendLocal(code, indent + `pygame.draw.line(screen, ${c}, (${x1}, ${y1}), (${x2}, ${y2}))\n`);
+        break;
+      }
+      case 'game_draw_text': {
+        const ln = _emitCtx.line;
+        ['TEXT', 'X', 'Y', 'SIZE', 'COLOR'].forEach(function(n) { registerExprBlocksAtLineFromInput(block, n, ln); });
+        const t = valueToCode(block, 'TEXT', '"Hello"');
+        const x = valueToCode(block, 'X', '0');
+        const y = valueToCode(block, 'Y', '0');
+        const s = valueToCode(block, 'SIZE', '24');
+        const c = valueToCode(block, 'COLOR', '"#ffffff"');
+        code = appendLocal(code, indent + `_f = pygame.font.SysFont(None, ${s})\n`);
+        code = appendLocal(code, indent + `screen.blit(_f.render(${t}, True, ${c}), (${x}, ${y}))\n`);
+        break;
+      }
+      case 'game_draw_image': {
+        const ln = _emitCtx.line;
+        ['URL', 'X', 'Y'].forEach(function(n) { registerExprBlocksAtLineFromInput(block, n, ln); });
+        const url = valueToCode(block, 'URL', '"https://example.com/player.png"');
+        const x = valueToCode(block, 'X', '0');
+        const y = valueToCode(block, 'Y', '0');
+        code = appendLocal(code, indent + `_img = pygame.image.load(${url})\n`);
+        code = appendLocal(code, indent + `screen.blit(_img, (${x}, ${y}))\n`);
+        break;
+      }
+      case 'game_flip': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'FPS', ln);
+        const fps = valueToCode(block, 'FPS', '60');
+        code = appendLocal(code, indent + `pygame.display.flip()\n`);
+        code = appendLocal(code, indent + `clock.tick(${fps})\n`);
+        break;
+      }
+      case 'game_quit': {
+        code = appendLocal(code, indent + `pygame.quit()\n`);
+        break;
+      }
 
       // ===== 基本GPIO =====
       case 'pico_led_on': {
@@ -1113,6 +1236,8 @@ document.addEventListener('DOMContentLoaded', function() {
         importLines.push((showComments ? `# 自作モジュール ${mod} をインポート\n` : '') + `${cm}import ${mod}`);
       });
       header = importLines.length ? importLines.join('\n') + '\n\n' : '';
+    } else if (currentMode === 'game') {
+      header = (showComments ? '# ゲーム（pygame互換）\n' : '') + `${cm}import pygame\n\n`;
     } else {
       // ─── MicroPythonモード：既存ロジック ───
       const motorTypes = ['pvb_forward','pvb_backward','pvb_turn_right','pvb_turn_left','pvb_stop'];
@@ -1422,6 +1547,44 @@ document.addEventListener('DOMContentLoaded', function() {
           { label: '超音波',    code: 'dist = sonar()' },
         ]
       },
+    ],
+    game: [
+      {
+        cat: '初期化',
+        items: [
+          { label: '初期化', code: 'import pygame\npygame.init()' },
+          { label: '画面生成', code: 'screen = pygame.display.set_mode((640, 400))' },
+          { label: 'タイトル', code: 'pygame.display.set_caption("My Game")' },
+          { label: 'Clock', code: 'clock = pygame.time.Clock()' },
+        ]
+      },
+      {
+        cat: 'ループ',
+        items: [
+          { label: '基本ループ', code: 'running = True\nwhile running:\n    ...' },
+          { label: 'イベント処理', code: 'for event in pygame.event.get():\n    if event.type == pygame.QUIT:\n        running = False' },
+          { label: 'フレーム更新', code: 'pygame.display.flip()\nclock.tick(60)' },
+        ]
+      },
+      {
+        cat: '描画',
+        items: [
+          { label: '塗りつぶし', code: 'screen.fill("#202020")' },
+          { label: '四角', code: 'pygame.draw.rect(screen, "#00c864", (x, y, w, h))' },
+          { label: '円', code: 'pygame.draw.circle(screen, "#ff0000", (x, y), r)' },
+          { label: '線', code: 'pygame.draw.line(screen, "#ffffff", (x1, y1), (x2, y2))' },
+          { label: '文字', code: 'f = pygame.font.SysFont(None, 24)\nscreen.blit(f.render("SCORE", True, "#fff"), (10, 10))' },
+          { label: '画像', code: 'img = pygame.image.load("assets/game-icons/player_ship.svg")\nscreen.blit(img, (x, y))' },
+        ]
+      },
+      {
+        cat: '入力・判定',
+        items: [
+          { label: 'キー入力', code: 'keys = pygame.key.get_pressed()\nif keys[pygame.K_LEFT]:\n    x -= 5' },
+          { label: 'Rect作成', code: 'r1 = pygame.Rect(x, y, 32, 32)' },
+          { label: '衝突判定', code: 'if r1.colliderect(r2):\n    score += 1' },
+        ]
+      },
     ]
   };
 
@@ -1429,7 +1592,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const data = SYNTAX_REF[mode] || SYNTAX_REF.python;
     const container = document.getElementById('syntax-content');
     document.getElementById('syntax-mode-label').textContent =
-      mode === 'micropython' ? 'MicroPython' : 'Python入門';
+      mode === 'micropython' ? 'MicroPython'
+      : mode === 'game' ? 'ゲーム'
+      : 'Python入門';
     if (!container) return;
     container.replaceChildren();
 
@@ -1468,6 +1633,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  function updateSyntaxCollapseUI() {
+    const mainEl = document.querySelector('.main');
+    const btn = document.getElementById('btn-syntax-toggle');
+    const syntaxHeader = document.querySelector('#syntax-panel .syntax-header');
+    if (!mainEl || !btn) return;
+    if (codingMode && !syntaxCollapsed && syntaxHeader && btn.parentElement !== syntaxHeader) {
+      syntaxHeader.appendChild(btn);
+    } else if ((!codingMode || syntaxCollapsed) && btn.parentElement !== mainEl) {
+      mainEl.appendChild(btn);
+    }
+    mainEl.classList.toggle('syntax-collapsed', codingMode && syntaxCollapsed);
+    btn.style.display = codingMode ? 'inline-flex' : 'none';
+    btn.classList.toggle('syntax-btn-floating', codingMode && syntaxCollapsed);
+    btn.textContent = syntaxCollapsed ? '▶ リファレンス表示' : '◀ リファレンス非表示';
+    btn.title = syntaxCollapsed ? '構文リファレンスを表示' : '構文リファレンスを隠す';
+    btn.setAttribute('aria-expanded', syntaxCollapsed ? 'false' : 'true');
+  }
+
   // 構文パネルのクリックでエディタに挿入
   document.getElementById('syntax-content').addEventListener('click', function(e) {
     const item = e.target.closest('.syn-item');
@@ -1489,14 +1672,26 @@ document.addEventListener('DOMContentLoaded', function() {
     btnCodingMode.textContent = codingMode ? 'ブロック' : 'コード編集';
     btnCodingMode.classList.toggle('coding-active', codingMode);
     document.querySelector('.main').classList.toggle('coding-mode', codingMode);
+    updateSyntaxCollapseUI();
     if (codingMode) {
-      buildSyntaxPanel(currentMode);
+      if (!syntaxCollapsed) buildSyntaxPanel(currentMode);
       setTimeout(function() { editor.refresh(); }, 30);
     } else {
       generateCode();
       setTimeout(function() { Blockly.svgResize(workspace); }, 50);
     }
   });
+
+  const btnSyntaxToggle = document.getElementById('btn-syntax-toggle');
+  if (btnSyntaxToggle) {
+    btnSyntaxToggle.addEventListener('click', function() {
+      if (!codingMode) return;
+      syntaxCollapsed = !syntaxCollapsed;
+      if (!syntaxCollapsed) buildSyntaxPanel(currentMode);
+      updateSyntaxCollapseUI();
+      setTimeout(function() { editor.refresh(); }, 20);
+    });
+  }
 
   // ===== ブロック XML 保存 =====
   document.getElementById('btn-save-xml').addEventListener('click', function() {
@@ -1677,6 +1872,67 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // ===== モード切替 =====
 
+  function fitGameLayout(mainEl, forceDefault) {
+    if (!mainEl) return;
+    const rect = mainEl.getBoundingClientRect();
+    if (!rect.width) return;
+
+    const HANDLE_SIZE = 8;
+    const MIN_LEFT = 260;
+    const MIN_RIGHT = 260;
+
+    const minLeftPct = ((MIN_LEFT / rect.width) * 100);
+    const maxLeftPct = 100 - ((MIN_RIGHT + HANDLE_SIZE) / rect.width) * 100;
+
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+    const parsePct = (value, fallback) => {
+      const n = parseFloat((value || '').replace('%', ''));
+      return Number.isFinite(n) ? n : fallback;
+    };
+
+    const style = window.getComputedStyle(mainEl);
+    const curLeft = parsePct(mainEl.style.getPropertyValue('--game-left') || style.getPropertyValue('--game-left'), 50);
+    const baseLeft = forceDefault ? 50 : curLeft;
+    const nextLeft = clamp(baseLeft, minLeftPct, maxLeftPct);
+
+    mainEl.style.setProperty('--game-left', `${nextLeft}%`);
+  }
+
+  function fitGameColumnSplits(mainEl, forceDefault) {
+    if (!mainEl) return;
+    const rect = mainEl.getBoundingClientRect();
+    if (!rect.height) return;
+
+    const HANDLE_SIZE = 6;
+    const MIN_TOP = 90;
+    const MIN_BOTTOM = 90;
+    const minTopPct = (MIN_TOP / rect.height) * 100;
+    const maxTopPct = 100 - ((MIN_BOTTOM + HANDLE_SIZE) / rect.height) * 100;
+
+    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+    const parsePct = (value, fallback) => {
+      const n = parseFloat((value || '').replace('%', ''));
+      return Number.isFinite(n) ? n : fallback;
+    };
+
+    const style = window.getComputedStyle(mainEl);
+    const curLeftTop = parsePct(mainEl.style.getPropertyValue('--left-top') || style.getPropertyValue('--left-top'), 56);
+    const curRightTop = parsePct(mainEl.style.getPropertyValue('--right-top') || style.getPropertyValue('--right-top'), 56);
+    const nextLeftTop = clamp(forceDefault ? 56 : curLeftTop, minTopPct, maxTopPct);
+    const nextRightTop = clamp(forceDefault ? 56 : curRightTop, minTopPct, maxTopPct);
+    mainEl.style.setProperty('--left-top', `${nextLeftTop}%`);
+    mainEl.style.setProperty('--right-top', `${nextRightTop}%`);
+  }
+
+  function syncMainViewportHeight() {
+    const mainEl = document.querySelector('.main');
+    if (!mainEl) return;
+    const header = document.querySelector('header');
+    const headerH = header ? header.getBoundingClientRect().height : 0;
+    const mainH = Math.max(240, window.innerHeight - headerH);
+    mainEl.style.setProperty('--main-vh', `${mainH}px`);
+  }
+
   // モードを切り替える（clearWorkspace=trueのときワークスペースをクリア）
   function applyMode(mode, clearWorkspace) {
     currentMode = mode;
@@ -1684,6 +1940,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // モードボタン
     document.getElementById('btn-mode-python').classList.toggle('mode-btn--active', mode === 'python');
+    document.getElementById('btn-mode-game').classList.toggle('mode-btn--active', mode === 'game');
     document.getElementById('btn-mode-micropython').classList.toggle('mode-btn--active', mode === 'micropython');
 
     // ツールボックス切り替え
@@ -1691,11 +1948,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ラベル更新
     document.getElementById('title-sub').textContent =
-      mode === 'python' ? 'Python 入門' : 'Raspberry Pi Pico / MicroPython';
+      mode === 'python' ? 'Python 入門'
+      : mode === 'game' ? 'ゲーム'
+      : 'Raspberry Pi Pico / MicroPython';
     document.getElementById('code-header-title').textContent =
-      mode === 'python' ? 'Python Output' : 'MicroPython Output';
+      mode === 'python' ? 'Python Output'
+      : mode === 'game' ? 'Game'
+      : 'MicroPython Output';
     const tutLabel = document.getElementById('tut-mode-label');
-    if (tutLabel) tutLabel.textContent = mode === 'python' ? 'Python入門' : 'MicroPython';
+    if (tutLabel) tutLabel.textContent =
+      mode === 'python' ? 'Python入門'
+      : mode === 'game' ? 'ゲーム'
+      : 'MicroPython';
 
     // シリアル関連ボタン（MicroPython && Web Serial対応のみ表示）
     const showSerial = mode === 'micropython' && hasSerial;
@@ -1708,15 +1972,61 @@ document.addEventListener('DOMContentLoaded', function() {
     const demoBadge = document.getElementById('demo-badge');
     if (demoBadge) demoBadge.style.display = (mode === 'micropython' && !hasSerial) ? '' : 'none';
 
-    // Python シェル UI の切り替え
+    // Python/ゲーム 実行UI と ゲームCanvas の切り替え
     const btnRunPy  = document.getElementById('btn-run-python');
     const runPySep  = document.getElementById('run-py-sep');
     const monTitle  = document.getElementById('monitor-header-title');
+    const monPanel  = document.getElementById('monitor-panel');
+    const monAnchor = document.getElementById('monitor-panel-anchor');
+    const monitorMainAnchor = document.getElementById('monitor-main-anchor');
+    const gamePanelAnchor = document.getElementById('game-panel-anchor');
+    const gameMainAnchor = document.getElementById('game-main-anchor');
+    const mainEl = document.querySelector('.main');
+    const divider = document.querySelector('.divider');
+    const shellDock = document.getElementById('game-shell-dock');
+    const dockHandle = document.getElementById('game-dock-resize-handle');
+    const gameHandle = document.getElementById('game-resize-handle');
     const monOut    = document.getElementById('monitor-output');
-    if (mode === 'python') {
+    const monHdr    = document.querySelector('.monitor-header');
+    const monHandle = document.getElementById('monitor-resize-handle');
+    const gameArea  = document.getElementById('game-canvas-area');
+    const syntaxPanel = document.getElementById('syntax-panel');
+    const blocklyDiv = document.getElementById('blockly-div');
+    const codePanel = document.querySelector('.code-panel');
+    const codeOutput = document.getElementById('code-editor');
+    const syntaxHomeAnchor = document.getElementById('syntax-home-anchor');
+    const blocklyHomeAnchor = document.getElementById('blockly-home-anchor');
+    const codeHomeAnchor = document.getElementById('code-home-anchor');
+    const leftCol = document.getElementById('game-left-column');
+    const rightCol = document.getElementById('game-right-column');
+    const leftTopAnchor = document.getElementById('game-left-top-anchor');
+    const leftBottomAnchor = document.getElementById('game-left-bottom-anchor');
+    const rightTopAnchor = document.getElementById('game-right-top-anchor');
+    const rightBottomAnchor = document.getElementById('game-right-bottom-anchor');
+
+    // モード跨ぎで残るインラインサイズを都度リセット
+    if (blocklyDiv) {
+      blocklyDiv.style.width = '';
+      blocklyDiv.style.height = '';
+      blocklyDiv.style.flex = '';
+    }
+    if (syntaxPanel) {
+      syntaxPanel.style.width = '';
+      syntaxPanel.style.height = '';
+      syntaxPanel.style.flex = '';
+    }
+    if (codePanel) codePanel.style.flex = '';
+    if (codePanel) codePanel.style.width = '';
+    if (codePanel) codePanel.style.height = '';
+    if (codeOutput) codeOutput.style.flex = '';
+    if (monOut) monOut.style.flex = '';
+    if (gameArea) gameArea.style.height = '';
+    if (monPanel) monPanel.style.height = '';
+
+    if (mode === 'python' || mode === 'game') {
       if (btnRunPy) btnRunPy.style.display = '';
       if (runPySep) runPySep.style.display = '';
-      if (monTitle) monTitle.textContent = 'Python シェル';
+      if (monTitle) monTitle.textContent = mode === 'game' ? 'ゲーム シェル' : 'Python シェル';
       if (monOut)   { monOut.innerHTML = ''; monOut.classList.add('python-shell'); }
     } else {
       if (btnRunPy) btnRunPy.style.display = 'none';
@@ -1724,6 +2034,59 @@ document.addEventListener('DOMContentLoaded', function() {
       if (monTitle) monTitle.textContent = 'シリアルモニタ';
       if (monOut)   { monOut.innerHTML = ''; monOut.classList.remove('python-shell'); }
     }
+
+    // ゲームモードは 2x2 レイアウトに切替
+    if (mode === 'game') {
+      if (mainEl) mainEl.classList.add('game-layout');
+      if (divider) divider.style.display = 'none';
+      if (leftCol) leftCol.style.display = '';
+      if (rightCol) rightCol.style.display = '';
+      if (blocklyDiv && leftTopAnchor && blocklyDiv.parentElement !== leftCol) {
+        leftTopAnchor.insertAdjacentElement('afterend', blocklyDiv);
+      }
+      if (syntaxPanel && leftTopAnchor && syntaxPanel.parentElement !== leftCol) {
+        leftTopAnchor.insertAdjacentElement('afterend', syntaxPanel);
+      }
+      if (gameArea && leftBottomAnchor && gameArea.parentElement !== leftCol) {
+        leftBottomAnchor.insertAdjacentElement('afterend', gameArea);
+      }
+      if (codePanel && rightTopAnchor && codePanel.parentElement !== rightCol) {
+        rightTopAnchor.insertAdjacentElement('afterend', codePanel);
+      }
+      if (monPanel && rightBottomAnchor && monPanel.parentElement !== rightCol) {
+        rightBottomAnchor.insertAdjacentElement('afterend', monPanel);
+      }
+      fitGameLayout(mainEl, true);
+      fitGameColumnSplits(mainEl, true);
+    } else {
+      if (mainEl) mainEl.classList.remove('game-layout');
+      if (divider) divider.style.display = '';
+      if (leftCol) leftCol.style.display = 'none';
+      if (rightCol) rightCol.style.display = 'none';
+      if (syntaxPanel && syntaxHomeAnchor && syntaxPanel.parentElement !== syntaxHomeAnchor.parentElement) {
+        syntaxHomeAnchor.insertAdjacentElement('afterend', syntaxPanel);
+      }
+      if (blocklyDiv && blocklyHomeAnchor && blocklyDiv.parentElement !== blocklyHomeAnchor.parentElement) {
+        blocklyHomeAnchor.insertAdjacentElement('afterend', blocklyDiv);
+      }
+      if (codePanel && codeHomeAnchor && codePanel.parentElement !== codeHomeAnchor.parentElement) {
+        codeHomeAnchor.insertAdjacentElement('afterend', codePanel);
+      }
+      if (gameArea && gamePanelAnchor && gameArea.parentElement !== gamePanelAnchor.parentElement) {
+        gamePanelAnchor.insertAdjacentElement('afterend', gameArea);
+      }
+      if (monPanel && monAnchor && monPanel.parentElement !== monAnchor.parentElement) {
+        monAnchor.insertAdjacentElement('afterend', monPanel);
+      }
+    }
+
+    if (gameArea) gameArea.style.display = (mode === 'game') ? '' : 'none';
+    if (gameHandle) gameHandle.style.display = 'none';
+    if (monHdr)   monHdr.style.display   = '';
+    if (monOut)   monOut.style.display   = '';
+    if (monHandle) monHandle.style.display = '';
+    if (shellDock) shellDock.style.display = 'none';
+    if (dockHandle) dockHandle.style.display = 'none';
 
     // チュートリアルリセット
     Tutorial.resetForMode();
@@ -1735,13 +2098,24 @@ document.addEventListener('DOMContentLoaded', function() {
       if (mode === 'python') renderFileTabs();
     }
 
+    // Python入門以外は main.py を実体コードとして扱う（隠れタブ混線を防止）
+    if (mode !== 'python' && activeFileIdx !== 0) {
+      saveCurrentFile();
+      activeFileIdx = 0;
+      editor.setValue(pyFiles[0].content || '');
+      editor.setOption('readOnly', !codingMode);
+    }
+
     // コード再生成
     generateCode();
+    requestAnimationFrame(() => Blockly.svgResize(workspace));
 
     // コーディングモード中はモード変更時に構文パネルも更新
     if (codingMode) {
-      buildSyntaxPanel(mode);
+      if (!syntaxCollapsed) buildSyntaxPanel(mode);
     }
+    updateSyntaxCollapseUI();
+    syncMainViewportHeight();
 
   }
 
@@ -1751,6 +2125,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const hasBlocks = workspace.getAllBlocks(false).length > 0;
     if (hasBlocks && !confirm('Python入門モードに切り替えます。\nワークスペースのブロックがクリアされます。よろしいですか？')) return;
     applyMode('python', true);
+  });
+
+  document.getElementById('btn-mode-game').addEventListener('click', function() {
+    if (currentMode === 'game') return;
+    const hasBlocks = workspace.getAllBlocks(false).length > 0;
+    if (hasBlocks && !confirm('ゲームモードに切り替えます。\nワークスペースのブロックがクリアされます。よろしいですか？')) return;
+    applyMode('game', true);
   });
 
   document.getElementById('btn-mode-micropython').addEventListener('click', function() {
@@ -1769,6 +2150,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const bare = x.replace(/^\.\//, '');
     const found = pyFiles.find(function(f) { return f.name === bare; });
     if (found) return found.content;
+    // ゲームモード: pygame エミュレーターを read() 経由でも供給
+    if (currentMode === 'game' && window.PycoPygame && window.PycoPygame.source) {
+      if (bare === 'pygame' || bare === 'pygame.js' || bare === 'pygame/__init__.js' || bare.startsWith('pygame/')) {
+        return window.PycoPygame.source;
+      }
+    }
     // Skulpt 組み込みにフォールバック
     if (Sk.builtinFiles === undefined || Sk.builtinFiles['files'][x] === undefined) {
       throw "File not found: '" + x + "'";
@@ -1791,8 +2178,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     saveCurrentFile();
+    // ゲームモードでは「現在見えているコード」を優先して実行する
     const mainFile = pyFiles.find(function(f) { return f.name === 'main.py'; });
-    const code   = mainFile ? mainFile.content : editor.getValue();
+    const code = currentMode === 'game'
+      ? editor.getValue()
+      : (mainFile ? mainFile.content : editor.getValue());
     const monOut = document.getElementById('monitor-output');
 
     monOut.innerHTML = '';
@@ -1801,6 +2191,14 @@ document.addEventListener('DOMContentLoaded', function() {
     _pyStopRequested = false;
     clearErrorHighlights();
     setPythonRunning(true);
+
+    // ゲームモードは pygame エミュレーターを Skulpt に登録
+    if (currentMode === 'game' && window.PycoPygame && typeof window.PycoPygame.installIntoSkulpt === 'function') {
+      try { window.PycoPygame.installIntoSkulpt(Sk); } catch (e) { console.warn('pygame install failed', e); }
+    }
+    if (currentMode === 'game') {
+      window.__pygameRunning = true;
+    }
 
     Sk.configure({
       output: function(text) {
@@ -1968,6 +2366,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('btn-run-python').addEventListener('click', runPython);
   document.getElementById('btn-stop-python').addEventListener('click', function() {
     _pyStopRequested = true;
+    if (currentMode === 'game') {
+      window.__pygameRunning = false;
+    }
   });
 
   // ===== チュートリアルマネージャー =====
@@ -2203,26 +2604,49 @@ document.addEventListener('DOMContentLoaded', function() {
     const handle      = document.getElementById('monitor-resize-handle');
     const codeOutput  = document.getElementById('code-editor');
     const monitorOut  = document.getElementById('monitor-output');
+    const monitorPanel = document.getElementById('monitor-panel');
+    const mainEl = document.querySelector('.main');
+    const parsePct = (value, fallback) => {
+      const n = parseFloat((value || '').replace('%', ''));
+      return Number.isFinite(n) ? n : fallback;
+    };
     let dragging = false, startY = 0, startH = 0;
 
     function startDrag(clientY) {
       dragging = true;
       startY = clientY;
-      startH = codeOutput.getBoundingClientRect().height;
+      startH = (currentMode === 'game' && monitorPanel)
+        ? parsePct(mainEl.style.getPropertyValue('--right-top') || window.getComputedStyle(mainEl).getPropertyValue('--right-top'), 56)
+        : codeOutput.getBoundingClientRect().height;
       handle.classList.add('dragging');
       document.body.style.userSelect = 'none';
     }
     function onMove(clientY) {
       if (!dragging) return;
-      const newH = Math.max(60, startH + (clientY - startY));
-      codeOutput.style.flex = `0 0 ${newH}px`;
-      monitorOut.style.flex = '1 1 0';
+      if (currentMode === 'game') {
+        if (!mainEl) return;
+        const rect = mainEl.getBoundingClientRect();
+        if (!rect.height) return;
+        const minTop = (90 / rect.height) * 100;
+        const maxTop = 100 - ((90 + 6) / rect.height) * 100;
+        const deltaPct = ((clientY - startY) / rect.height) * 100;
+        const next = Math.max(minTop, Math.min(maxTop, startH + deltaPct));
+        mainEl.style.setProperty('--right-top', `${next}%`);
+        requestAnimationFrame(() => Blockly.svgResize(workspace));
+      } else {
+        const newH = Math.max(60, startH + (clientY - startY));
+        codeOutput.style.flex = `0 0 ${newH}px`;
+        monitorOut.style.flex = '1 1 0';
+      }
     }
     function endDrag() {
       if (!dragging) return;
       dragging = false;
       handle.classList.remove('dragging');
       document.body.style.userSelect = '';
+      if (currentMode === 'game') {
+        requestAnimationFrame(() => Blockly.svgResize(workspace));
+      }
     }
 
     handle.addEventListener('mousedown', e => { document.body.style.cursor = 'row-resize'; startDrag(e.clientY); });
@@ -2231,6 +2655,226 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); onMove(e.touches[0].clientY); } }, { passive: false });
     document.addEventListener('mouseup', () => { document.body.style.cursor = ''; endDrag(); });
     document.addEventListener('touchend', endDrag);
+  })();
+
+  // 上下リサイズ（コード表示 ↔ ゲーム画面）
+  (function() {
+    const handle   = document.getElementById('game-resize-handle');
+    const codeOut  = document.getElementById('code-editor');
+    const gameArea = document.getElementById('game-canvas-area');
+    if (!handle || !codeOut || !gameArea) return;
+
+    let dragging = false;
+    let startY = 0;
+    let startCodeH = 0;
+
+    function startDrag(clientY) {
+      if (currentMode !== 'game') return;
+      dragging = true;
+      startY = clientY;
+      startCodeH = codeOut.getBoundingClientRect().height;
+      handle.classList.add('dragging');
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'row-resize';
+    }
+
+    function onMove(clientY) {
+      if (!dragging) return;
+      const panel = document.querySelector('.code-panel');
+      if (!panel) return;
+      const panelH = panel.getBoundingClientRect().height;
+      const delta = clientY - startY;
+      const minCode = 80;
+      const minGame = 140;
+      const newCode = Math.max(minCode, Math.min(panelH - minGame, startCodeH + delta));
+      codeOut.style.flex = `0 0 ${newCode}px`;
+      gameArea.style.flex = '1 1 auto';
+    }
+
+    function endDrag() {
+      if (!dragging) return;
+      dragging = false;
+      handle.classList.remove('dragging');
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+    }
+
+    handle.addEventListener('mousedown', e => startDrag(e.clientY));
+    handle.addEventListener('touchstart', e => { e.preventDefault(); startDrag(e.touches[0].clientY); }, { passive: false });
+    document.addEventListener('mousemove', e => onMove(e.clientY));
+    document.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); onMove(e.touches[0].clientY); } }, { passive: false });
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
+  })();
+
+  // ゲーム表示エリアの個別上下リサイズ（ゲームパネルのみ）
+  (function() {
+    const handle = document.getElementById('game-area-resize-handle');
+    const mainEl = document.querySelector('.main');
+    if (!handle || !mainEl) return;
+
+    let dragging = false;
+    let startY = 0;
+    let startTopPct = 56;
+
+    function parsePct(value, fallback) {
+      const n = parseFloat((value || '').replace('%', ''));
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function startDrag(clientY) {
+      if (currentMode !== 'game') return;
+      dragging = true;
+      startY = clientY;
+      startTopPct = parsePct(mainEl.style.getPropertyValue('--left-top') || window.getComputedStyle(mainEl).getPropertyValue('--left-top'), 56);
+      handle.classList.add('dragging');
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'row-resize';
+    }
+
+    function onMove(clientY) {
+      if (!dragging || currentMode !== 'game') return;
+      const rect = mainEl.getBoundingClientRect();
+      if (!rect.height) return;
+      const minTop = (90 / rect.height) * 100;
+      const maxTop = 100 - ((90 + 6) / rect.height) * 100;
+      const deltaPct = ((clientY - startY) / rect.height) * 100;
+      const next = Math.max(minTop, Math.min(maxTop, startTopPct + deltaPct));
+      mainEl.style.setProperty('--left-top', `${next}%`);
+      requestAnimationFrame(() => Blockly.svgResize(workspace));
+    }
+
+    function endDrag() {
+      if (!dragging) return;
+      dragging = false;
+      handle.classList.remove('dragging');
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+      requestAnimationFrame(() => Blockly.svgResize(workspace));
+    }
+
+    handle.addEventListener('mousedown', e => startDrag(e.clientY));
+    handle.addEventListener('touchstart', e => { e.preventDefault(); startDrag(e.touches[0].clientY); }, { passive: false });
+    document.addEventListener('mousemove', e => onMove(e.clientY));
+    document.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); onMove(e.touches[0].clientY); } }, { passive: false });
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
+  })();
+
+  // 上下リサイズ（上エリア ↔ 下段ゲームシェル）
+  (function() {
+    const handle = document.getElementById('game-dock-resize-handle');
+    const shellDock = document.getElementById('game-shell-dock');
+    if (!handle || !shellDock) return;
+
+    let dragging = false;
+    let startY = 0;
+    let startH = 0;
+
+    function startDrag(clientY) {
+      if (currentMode !== 'game') return;
+      dragging = true;
+      startY = clientY;
+      startH = shellDock.getBoundingClientRect().height;
+      handle.classList.add('dragging');
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'row-resize';
+    }
+
+    function onMove(clientY) {
+      if (!dragging) return;
+      const main = document.querySelector('.main');
+      if (!main) return;
+      const viewport = window.innerHeight;
+      const header = document.querySelector('header');
+      const headerH = header ? header.getBoundingClientRect().height : 0;
+      const minDock = 120;
+      const maxDock = Math.max(minDock, viewport - headerH - 140);
+      const next = Math.max(minDock, Math.min(maxDock, startH - (clientY - startY)));
+      shellDock.style.height = next + 'px';
+    }
+
+    function endDrag() {
+      if (!dragging) return;
+      dragging = false;
+      handle.classList.remove('dragging');
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+    }
+
+    handle.addEventListener('mousedown', e => startDrag(e.clientY));
+    handle.addEventListener('touchstart', e => { e.preventDefault(); startDrag(e.touches[0].clientY); }, { passive: false });
+    document.addEventListener('mousemove', e => onMove(e.clientY));
+    document.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); onMove(e.touches[0].clientY); } }, { passive: false });
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
+  })();
+
+  // ゲーム2x2レイアウトの左右リサイズ
+  (function() {
+    const mainEl = document.querySelector('.main');
+    const vHandle = document.getElementById('game-grid-v-handle');
+    if (!mainEl || !vHandle) return;
+    let dragging = false;
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function calcBounds(rect) {
+      const HANDLE_SIZE = 8;
+      const MIN_LEFT = 260;
+      const MIN_RIGHT = 260;
+      return {
+        minLeftPct: (MIN_LEFT / rect.width) * 100,
+        maxLeftPct: 100 - ((MIN_RIGHT + HANDLE_SIZE) / rect.width) * 100
+      };
+    }
+
+    function startDrag() {
+      if (currentMode !== 'game' || !mainEl.classList.contains('game-layout')) return;
+      dragging = true;
+      vHandle.classList.add('dragging');
+      document.body.style.userSelect = 'none';
+      document.body.style.cursor = 'col-resize';
+    }
+
+    function moveDrag(clientX) {
+      if (!dragging || currentMode !== 'game') return;
+      const rect = mainEl.getBoundingClientRect();
+      if (!rect.width) return;
+      const bounds = calcBounds(rect);
+      const raw = ((clientX - rect.left) / rect.width) * 100;
+      mainEl.style.setProperty('--game-left', `${clamp(raw, bounds.minLeftPct, bounds.maxLeftPct)}%`);
+      requestAnimationFrame(() => Blockly.svgResize(workspace));
+    }
+
+    function endDrag() {
+      if (!dragging) return;
+      vHandle.classList.remove('dragging');
+      dragging = false;
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+      requestAnimationFrame(() => Blockly.svgResize(workspace));
+    }
+
+    vHandle.addEventListener('mousedown', startDrag);
+    vHandle.addEventListener('touchstart', e => { e.preventDefault(); startDrag(); }, { passive: false });
+    document.addEventListener('mousemove', e => moveDrag(e.clientX));
+    document.addEventListener('touchmove', e => {
+      if (!dragging) return;
+      e.preventDefault();
+      moveDrag(e.touches[0].clientX);
+    }, { passive: false });
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
+    window.addEventListener('resize', () => {
+      if (mainEl.classList.contains('game-layout')) {
+        fitGameLayout(mainEl, false);
+        fitGameColumnSplits(mainEl, false);
+        requestAnimationFrame(() => Blockly.svgResize(workspace));
+      }
+    });
   })();
 
   // ===== スクリーンショット保存 =====
@@ -2348,9 +2992,12 @@ document.addEventListener('DOMContentLoaded', function() {
     );
   })();
 
+  window.addEventListener('resize', syncMainViewportHeight);
+  syncMainViewportHeight();
+
   // ===== 初期化 =====
   Tutorial.init();
   // URLパラメータ ?mode=micropython でモードを指定できる（省略時は python）
   const _urlMode = new URLSearchParams(window.location.search).get('mode');
-  applyMode(_urlMode === 'micropython' ? 'micropython' : 'python', false);
+  applyMode(_urlMode === 'micropython' ? 'micropython' : (_urlMode === 'game' ? 'game' : 'python'), false);
 });
