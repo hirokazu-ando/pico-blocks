@@ -85,6 +85,115 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   let codingMode = false;
   let currentMode = 'micropython'; // 初期値は後で applyMode('python') で上書き
+
+  // ===== ファイルタブ管理（Python入門モードのみ） =====
+  let pyFiles = [{ name: 'main.py', content: '# ブロックを追加してください', blockXml: null }];
+  let activeFileIdx = 0;
+
+  // モジュール選択ドロップダウン用：ブロック定義（python_intro.js）から参照
+  window.getPyModuleOptions = function() {
+    const mods = pyFiles
+      .filter(function(f, i) { return i !== 0; })
+      .map(function(f) {
+        const name = f.name.replace(/\.py$/, '');
+        return [name, name];
+      });
+    return mods.length > 0 ? mods : [['（モジュールなし）', '__none__']];
+  };
+
+  function saveCurrentFile() {
+    pyFiles[activeFileIdx].content = editor.getValue();
+  }
+
+  function renderFileTabs() {
+    const bar = document.getElementById('file-tabs');
+    bar.innerHTML = '';
+    pyFiles.forEach(function(f, i) {
+      const tab = document.createElement('div');
+      tab.className = 'file-tab' + (i === activeFileIdx ? ' active' : '');
+      const name = document.createElement('span');
+      name.className = 'file-tab-name';
+      name.textContent = f.name;
+      tab.appendChild(name);
+      if (i !== 0) {
+        const close = document.createElement('span');
+        close.className = 'file-tab-close';
+        close.textContent = '×';
+        close.title = '削除';
+        close.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if (!confirm(f.name + ' を削除しますか？')) return;
+          // 削除前に現在のエディタ内容を保存
+          saveCurrentFile();
+          pyFiles.splice(i, 1);
+          const nextIdx = activeFileIdx >= pyFiles.length ? pyFiles.length - 1
+                        : activeFileIdx === i            ? Math.max(0, i - 1)
+                        : activeFileIdx > i              ? activeFileIdx - 1
+                        : activeFileIdx;
+          activeFileIdx = nextIdx;
+          editor.setValue(pyFiles[activeFileIdx].content);
+          editor.setOption('readOnly', activeFileIdx === 0 ? !codingMode : false);
+          // 削除後のアクティブファイルのBlocklyワークスペースを復元
+          workspace.clear();
+          if (pyFiles[activeFileIdx].blockXml) {
+            try {
+              const dom = new DOMParser().parseFromString(pyFiles[activeFileIdx].blockXml, 'text/xml');
+              Blockly.Xml.domToWorkspace(dom.documentElement, workspace);
+            } catch (e) {
+              console.warn('ワークスペース復元失敗:', e);
+            }
+          }
+          renderFileTabs();
+        });
+        tab.appendChild(close);
+      }
+      tab.addEventListener('click', function() { switchFile(i); });
+      bar.appendChild(tab);
+    });
+    const addBtn = document.createElement('button');
+    addBtn.id = 'btn-add-file';
+    addBtn.textContent = '+';
+    addBtn.title = 'ファイルを追加';
+    addBtn.addEventListener('click', addNewFile);
+    bar.appendChild(addBtn);
+  }
+
+  function switchFile(idx) {
+    saveCurrentFile();
+    // 現在のワークスペースXMLを保存
+    const curXml = Blockly.Xml.workspaceToDom(workspace);
+    pyFiles[activeFileIdx].blockXml = Blockly.Xml.domToText(curXml);
+
+    activeFileIdx = idx;
+    editor.setValue(pyFiles[idx].content);
+    // main.py はブロックモード時 readonly、サブファイルは常に編集可
+    editor.setOption('readOnly', idx === 0 ? !codingMode : false);
+
+    // 切替先ファイルのBlocklyワークスペースを復元
+    workspace.clear();
+    if (pyFiles[idx].blockXml) {
+      try {
+        const dom = new DOMParser().parseFromString(pyFiles[idx].blockXml, 'text/xml');
+        Blockly.Xml.domToWorkspace(dom.documentElement, workspace);
+      } catch (e) {
+        console.warn('ワークスペース復元失敗:', e);
+      }
+    }
+
+    renderFileTabs();
+  }
+
+  function addNewFile() {
+    const raw = prompt('ファイル名を入力してください（例: mymodule.py）');
+    if (!raw || !raw.trim()) return;
+    const fname = raw.trim().endsWith('.py') ? raw.trim() : raw.trim() + '.py';
+    if (pyFiles.find(function(f) { return f.name === fname; })) {
+      alert(fname + ' はすでに存在します');
+      return;
+    }
+    pyFiles.push({ name: fname, content: '', blockXml: null });
+    switchFile(pyFiles.length - 1);
+  }
   let Tutorial;   // 後で代入（generateCode から参照するため先に宣言）
   let blockLineMap = new Map(); // blockId → { from, to }（CodeMirror の 0 始まり行番号）
   const BLOCK_SEL_BG_CLASS = 'block-selection-highlight';
@@ -240,8 +349,10 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_def_noarg':     return `関数「${block.getFieldValue('NAME')}」を定義する`;
       case 'py_def':           return `関数「${block.getFieldValue('NAME')}」（引数: ${getVarName(block, 'PARAM')}）を定義する`;
       case 'py_return':        return '戻り値を返す（return）';
-      case 'py_call_stmt':     return `関数「${block.getFieldValue('NAME')}」を呼び出す`;
-      case 'py_call_val':      return `関数「${block.getFieldValue('NAME')}」の結果`;
+      case 'py_call_stmt':        return `関数「${block.getFieldValue('NAME')}」を呼び出す`;
+      case 'py_call_val':         return `関数「${block.getFieldValue('NAME')}」の結果`;
+      case 'py_module_call_stmt': return `モジュール「${block.getFieldValue('MODULE')}」の「${block.getFieldValue('FUNC')}」を呼び出す`;
+      case 'py_module_call_val':  return `モジュール「${block.getFieldValue('MODULE')}」の「${block.getFieldValue('FUNC')}」の結果`;
       case 'py_random_int':    return 'ランダムな整数';
       case 'py_type_cast':     return `型変換（${block.getFieldValue('TYPE')}）`;
       case 'py_abs':           return '絶対値（abs）';
@@ -434,6 +545,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const name = block.getFieldValue('NAME');
         const arg  = valueToCode(block, 'ARG', '');
         return `${name}(${arg})`;
+      }
+      case 'py_module_call_val': {
+        const mod  = block.getFieldValue('MODULE');
+        const func = block.getFieldValue('FUNC');
+        const arg  = valueToCode(block, 'ARG', '');
+        if (!mod || mod === '__none__') return `${func}(${arg})`;
+        return `${mod}.${func}(${arg})`;
       }
       default:
         return '0';
@@ -842,6 +960,16 @@ document.addEventListener('DOMContentLoaded', function() {
         code = appendLocal(code, indent + `${name}(${arg})\n`);
         break;
       }
+      case 'py_module_call_stmt': {
+        const mod    = block.getFieldValue('MODULE');
+        const func   = block.getFieldValue('FUNC');
+        const lnMod  = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'ARG', lnMod);
+        const arg    = valueToCode(block, 'ARG', '');
+        const call   = (!mod || mod === '__none__') ? `${func}(${arg})` : `${mod}.${func}(${arg})`;
+        code = appendLocal(code, indent + call + '\n');
+        break;
+      }
 
       default:
         code = appendLocal(code, indent + `pass  # 未対応ブロック: ${block.type}\n`);
@@ -881,17 +1009,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let header;
 
+    const cm = showComments ? '' : '# ';  // コメントOFF時はimport行を # で無効化
+
     if (currentMode === 'python') {
-      // ─── Python入門モード：標準Pythonヘッダー ───
+      // ─── Python入門モード：使用ブロックに応じてimportを挿入 ───
+      const needsTime   = blockTypes.has('pico_wait');
       const needsRandom = blockTypes.has('py_random_int');
-      header = 'import time\n' + (needsRandom ? 'import random\n' : '') + '\n';
+      const importLines = [];
+      if (needsTime)   importLines.push((showComments ? '# 時間待機（time.sleep）用\n' : '') + `${cm}import time`);
+      if (needsRandom) importLines.push((showComments ? '# 乱数生成（random.randint）用\n' : '') + `${cm}import random`);
+      // 自作モジュール呼び出しブロックで使われているモジュールを収集してimport
+      const usedModules = new Set();
+      allBlocks.forEach(function(b) {
+        if (b.type === 'py_module_call_stmt' || b.type === 'py_module_call_val') {
+          const mod = b.getFieldValue('MODULE');
+          if (mod && mod !== '__none__') usedModules.add(mod);
+        }
+      });
+      usedModules.forEach(function(mod) {
+        importLines.push((showComments ? `# 自作モジュール ${mod} をインポート\n` : '') + `${cm}import ${mod}`);
+      });
+      header = importLines.length ? importLines.join('\n') + '\n\n' : '';
     } else {
       // ─── MicroPythonモード：既存ロジック ───
       const motorTypes = ['pvb_forward','pvb_backward','pvb_turn_right','pvb_turn_left','pvb_stop'];
       const hasMotor   = motorTypes.some(t => blockTypes.has(t));
       const hasSonarVal = blockTypes.has('pvb_sonar_val');
 
-      const baseHeader = 'from machine import Pin, PWM, ADC\nimport utime\n\n';
+      const baseHeader =
+        (showComments ? '# Picoのピン・PWM・ADC制御用\n' : '') + `${cm}from machine import Pin, PWM, ADC\n` +
+        (showComments ? '# 時間待機用（MicroPython版 time モジュール）\n' : '') + `${cm}import utime\n\n`;
       const motorInit =
         '_lp = PWM(Pin(0)); _lp.freq(1000)\n' +
         '_lm = PWM(Pin(1)); _lm.freq(1000)\n' +
@@ -912,15 +1059,22 @@ document.addEventListener('DOMContentLoaded', function() {
       if (hasSonarVal) header += sonarHelper;
     }
 
+    const isMain = activeFileIdx === 0;
+
     blockLineMap.clear();
-    _emitCtx.line = (header.match(/\n/g) || []).length;
+    _emitCtx.line = isMain ? (header.match(/\n/g) || []).length : 0;
     let code = '';
     const topBlocks = workspace.getTopBlocks(true);
     for (const block of topBlocks) {
       code += blockToCode(block, '');
     }
+    // サブファイル（モジュール）はheaderなし・空でもプレースホルダーなし
+    const generated = isMain
+      ? header + (code || '# ブロックを追加してください')
+      : (code || '');
+    pyFiles[activeFileIdx].content = generated;
     if (!codingMode) {
-      editor.setValue(header + (code || '# ブロックを追加してください'));
+      editor.setValue(generated);
     }
 
     // コーディングモードではエディタとブロック由来の行が一致しないため選択ハイライトしない
@@ -1245,7 +1399,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const btnCodingMode = document.getElementById('btn-coding-mode');
   btnCodingMode.addEventListener('click', function() {
     codingMode = !codingMode;
-    editor.setOption('readOnly', codingMode ? false : true);
+    // main.py はブロックモード時 readonly、サブファイルは常に編集可
+    editor.setOption('readOnly', activeFileIdx === 0 ? !codingMode : false);
     btnCodingMode.textContent = codingMode ? 'ブロック' : 'コード編集';
     btnCodingMode.classList.toggle('coding-active', codingMode);
     document.querySelector('.main').classList.toggle('coding-mode', codingMode);
@@ -1293,11 +1448,12 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   document.getElementById('btn-download').addEventListener('click', function() {
-    const code = editor.getValue();
-    const blob = new Blob([code], { type: 'text/plain' });
+    saveCurrentFile();
+    const activeFile = pyFiles[activeFileIdx];
+    const blob = new Blob([activeFile.content], { type: 'text/plain' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'main.py';
+    a.download = currentMode === 'python' ? activeFile.name : 'main.py';
     a.click();
   });
 
@@ -1310,10 +1466,22 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = function(ev) {
-      fileMode = true;
-      editor.setValue(ev.target.result);
-      document.getElementById('serial-status').textContent = file.name + ' を読み込みました';
-      document.getElementById('serial-status').className = 'serial-status serial-status--ok';
+      if (currentMode === 'python') {
+        // Python入門モード: ファイル名でタブを検索、なければ追加
+        let idx = pyFiles.findIndex(function(f) { return f.name === file.name; });
+        if (idx === -1) {
+          pyFiles.push({ name: file.name, content: ev.target.result });
+          idx = pyFiles.length - 1;
+        } else {
+          pyFiles[idx].content = ev.target.result;
+        }
+        switchFile(idx);
+      } else {
+        fileMode = true;
+        editor.setValue(ev.target.result);
+        document.getElementById('serial-status').textContent = file.name + ' を読み込みました';
+        document.getElementById('serial-status').className = 'serial-status serial-status--ok';
+      }
     };
     reader.readAsText(file);
     e.target.value = '';
@@ -1475,6 +1643,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // チュートリアルリセット
     Tutorial.resetForMode();
 
+    // ファイルタブバー表示切り替え（Python入門モードのみ）
+    const fileTabs = document.getElementById('file-tabs');
+    if (fileTabs) {
+      fileTabs.style.display = mode === 'python' ? '' : 'none';
+      if (mode === 'python') renderFileTabs();
+    }
+
     // コード再生成
     generateCode();
 
@@ -1505,6 +1680,11 @@ document.addEventListener('DOMContentLoaded', function() {
   let _pyStopRequested = false;
 
   function skulptRead(x) {
+    // pyFiles から検索（'./foo.py' 形式にも対応）
+    const bare = x.replace(/^\.\//, '');
+    const found = pyFiles.find(function(f) { return f.name === bare; });
+    if (found) return found.content;
+    // Skulpt 組み込みにフォールバック
     if (Sk.builtinFiles === undefined || Sk.builtinFiles['files'][x] === undefined) {
       throw "File not found: '" + x + "'";
     }
@@ -1525,7 +1705,9 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    const code   = editor.getValue();
+    saveCurrentFile();
+    const mainFile = pyFiles.find(function(f) { return f.name === 'main.py'; });
+    const code   = mainFile ? mainFile.content : editor.getValue();
     const monOut = document.getElementById('monitor-output');
 
     monOut.innerHTML = '';
@@ -1856,7 +2038,124 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('touchend', endDrag);
   })();
 
+  // ===== スクリーンショット保存 =====
+  (function registerScreenshotMenu() {
+    function captureWorkspaceAsPng() {
+      const blocks = workspace.getAllBlocks(false);
+      if (blocks.length === 0) { alert('ブロックがありません'); return; }
+
+      const blockCanvas = workspace.getCanvas();
+      const bbox = blockCanvas.getBBox();
+      if (!bbox || bbox.width === 0 || bbox.height === 0) { alert('ブロックがありません'); return; }
+
+      const padding = 20;
+
+      // blockCanvas の CTM（translate+scale）でSVGルート座標に変換
+      const ctm = blockCanvas.getCTM();
+      const x1 = ctm.a * bbox.x + ctm.e;
+      const y1 = ctm.d * bbox.y + ctm.f;
+      const x2 = ctm.a * (bbox.x + bbox.width)  + ctm.e;
+      const y2 = ctm.d * (bbox.y + bbox.height) + ctm.f;
+
+      const viewX = x1 - padding;
+      const viewY = y1 - padding;
+      const viewW = (x2 - x1) + padding * 2;
+      const viewH = (y2 - y1) + padding * 2;
+      const imgW  = Math.ceil(viewW);
+      const imgH  = Math.ceil(viewH);
+
+      // BlobURL経由では外部CSS・CSS変数が解決されないため、
+      // クローン前にオリジナル要素のcomputedスタイルをインライン属性に書き込む
+      const inlineProps = ['fill', 'font-family', 'font-size', 'font-weight'];
+      const textEls = Array.from(blockCanvas.querySelectorAll('text, tspan'));
+      const savedAttrs = textEls.map(el => {
+        const saved = {};
+        inlineProps.forEach(p => { saved[p] = el.getAttribute(p); });
+        return saved;
+      });
+      textEls.forEach(el => {
+        const cs = window.getComputedStyle(el);
+        inlineProps.forEach(p => {
+          const camel = p.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
+          const val = cs[camel] || cs.getPropertyValue(p);
+          if (val && val !== 'none' && val !== '') el.setAttribute(p, val);
+        });
+      });
+
+      // blockCanvas のみを新しいSVGにラップ（背景・ツールボックスを含めない）
+      const ns = 'http://www.w3.org/2000/svg';
+      const newSvg = document.createElementNS(ns, 'svg');
+      newSvg.setAttribute('xmlns', ns);
+      newSvg.setAttribute('width',   imgW);
+      newSvg.setAttribute('height',  imgH);
+      newSvg.setAttribute('viewBox', `${viewX} ${viewY} ${viewW} ${viewH}`);
+
+      // defs（フィルター・クリッピング定義）をコピー
+      const origDefs = workspace.getParentSvg().querySelector('defs');
+      if (origDefs) newSvg.appendChild(origDefs.cloneNode(true));
+
+      // ブロック本体をコピー（インライン属性が書き込まれた状態でクローン）
+      newSvg.appendChild(blockCanvas.cloneNode(true));
+
+      // オリジナル要素を元の状態に戻す
+      textEls.forEach((el, i) => {
+        inlineProps.forEach(p => {
+          const v = savedAttrs[i][p];
+          if (v === null) el.removeAttribute(p);
+          else el.setAttribute(p, v);
+        });
+      });
+
+      const svgStr = new XMLSerializer().serializeToString(newSvg);
+      const blob   = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+      const url    = URL.createObjectURL(blob);
+
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        canvas.width  = imgW;
+        canvas.height = imgH;
+        canvas.getContext('2d').drawImage(img, 0, 0);
+
+        const a = document.createElement('a');
+        const now = new Date();
+        const ts = now.getFullYear()
+          + String(now.getMonth() + 1).padStart(2, '0')
+          + String(now.getDate()).padStart(2, '0') + '_'
+          + String(now.getHours()).padStart(2, '0')
+          + String(now.getMinutes()).padStart(2, '0')
+          + String(now.getSeconds()).padStart(2, '0');
+        a.download = `pyco_blocks_${ts}.png`;
+        a.href = canvas.toDataURL('image/png');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      };
+      img.onerror = function() { URL.revokeObjectURL(url); alert('画像の生成に失敗しました'); };
+      img.src = url;
+    }
+
+    const menuDef = {
+      displayText: '全ブロックを画像保存',
+      preconditionFn: function() {
+        return workspace.getAllBlocks(false).length > 0 ? 'enabled' : 'disabled';
+      },
+      callback: function() { captureWorkspaceAsPng(); },
+      weight: 200,
+    };
+
+    Blockly.ContextMenuRegistry.registry.register(
+      Object.assign({ id: 'pcb_screenshot_block', scopeType: Blockly.ContextMenuRegistry.ScopeType.BLOCK }, menuDef)
+    );
+    Blockly.ContextMenuRegistry.registry.register(
+      Object.assign({ id: 'pcb_screenshot_workspace', scopeType: Blockly.ContextMenuRegistry.ScopeType.WORKSPACE }, menuDef)
+    );
+  })();
+
   // ===== 初期化 =====
   Tutorial.init();
-  applyMode('python', false); // Python入門モードで開始
+  // URLパラメータ ?mode=micropython でモードを指定できる（省略時は python）
+  const _urlMode = new URLSearchParams(window.location.search).get('mode');
+  applyMode(_urlMode === 'micropython' ? 'micropython' : 'python', false);
 });

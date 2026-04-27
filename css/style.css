@@ -1531,3 +1531,80 @@ h1 {
   border-color: var(--accent-green);
   background: transparent;
 }
+
+/* ===== ファイルタブバー（Python入門モードのみ） ===== */
+#file-tabs {
+  display: flex;
+  align-items: stretch;
+  background: #060b06;
+  border-bottom: 1px solid var(--border-dim);
+  padding: 0;
+  gap: 0;
+  flex-shrink: 0;
+  z-index: 3;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-dim) transparent;
+}
+.file-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  border-right: 1px solid var(--border-dim);
+  white-space: nowrap;
+  user-select: none;
+  letter-spacing: 0.05em;
+  transition: background 0.1s, color 0.1s;
+}
+.file-tab:hover {
+  background: rgba(0,255,65,0.04);
+  color: var(--text-bright);
+}
+.file-tab.active {
+  color: var(--accent-green);
+  border-bottom-color: var(--accent-green);
+  background: rgba(0,255,65,0.06);
+}
+.file-tab-close {
+  cursor: pointer;
+  opacity: 0.35;
+  font-size: 0.62rem;
+  line-height: 1;
+  padding: 1px 3px;
+  border-radius: 2px;
+}
+.file-tab-close:hover {
+  opacity: 1;
+  color: #ff5555;
+  background: rgba(255,85,85,0.15);
+}
+#btn-add-file {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 12px;
+  line-height: 1;
+  flex-shrink: 0;
+  align-self: center;
+}
+#btn-add-file:hover {
+  color: var(--accent-green);
+}
+[data-theme="light"] #file-tabs {
+  background: #f0f0f0;
+  border-bottom-color: #ccc;
+}
+[data-theme="light"] .file-tab {
+  border-right-color: #ccc;
+}
+[data-theme="light"] .file-tab:hover {
+  background: rgba(0,0,0,0.05);
+}
