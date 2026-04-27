@@ -1172,6 +1172,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.type === Blockly.Events.BLOCK_DRAG && e.isStart) return;
     // 選択のみが変わったときはコード内容は変わらないので再生成しない
     if (e.type === Blockly.Events.SELECTED) return;
+    // ブロックを変更したらエラーハイライトをクリア
+    clearErrorHighlights();
     generateCode();
   });
 
@@ -1761,6 +1763,7 @@ document.addEventListener('DOMContentLoaded', function() {
     appendShellText('>>> 実行開始\n', false, 'py-prompt');
 
     _pyStopRequested = false;
+    clearErrorHighlights();
     setPythonRunning(true);
 
     Sk.configure({
@@ -1794,11 +1797,14 @@ document.addEventListener('DOMContentLoaded', function() {
         appendShellText('>>> 停止しました\n', false, 'py-prompt');
         return;
       }
-      let msg = err.toString ? err.toString() : String(err);
-      if (msg.includes('execLimit') || msg.includes('Execution exceeded')) {
-        msg = 'TimeLimitError: ループが多すぎます（実行ステップ上限を超えました）';
+      const parsed = parseSkulptError(err);
+      // シェルにエラー表示
+      appendShellText('\n' + parsed.title + '\n', true);
+      // ブロックハイライト（コーディングモードでなく blockLineMap がある場合のみ）
+      if (!codingMode && blockLineMap.size > 0) {
+        const bid = parsed.lineno ? blockIdAtLine(parsed.lineno) : null;
+        showErrorOnBlock(bid, parsed.title, parsed.detail);
       }
-      appendShellText('\n' + msg + '\n', true);
     }).finally(function() {
       setPythonRunning(false);
       monOut.scrollTop = monOut.scrollHeight;
@@ -1816,6 +1822,106 @@ document.addEventListener('DOMContentLoaded', function() {
     span.textContent = text;
     monOut.appendChild(span);
   }
+
+  // ===== エラーハイライト =====
+
+  // blockLineMap（0始まり行番号）から最も近いブロックIDを返す
+  function blockIdAtLine(lineNo1) {
+    const lineNo0 = lineNo1 - 1; // Skulptは1始まり → 0始まりに変換
+    let bestId = null, bestDist = Infinity;
+    blockLineMap.forEach(function(range, id) {
+      const dist = lineNo0 >= range.from && lineNo0 <= range.to
+        ? 0
+        : Math.min(Math.abs(lineNo0 - range.from), Math.abs(lineNo0 - range.to));
+      if (dist < bestDist) { bestDist = dist; bestId = id; }
+    });
+    return bestId;
+  }
+
+  function clearErrorHighlights() {
+    workspace.getAllBlocks(false).forEach(function(b) {
+      b.getSvgRoot().classList.remove('block-error-highlight');
+    });
+    const panel = document.getElementById('error-hint');
+    if (panel) panel.style.display = 'none';
+  }
+
+  function showErrorOnBlock(blockId, title, detail) {
+    clearErrorHighlights();
+    const block = blockId ? workspace.getBlockById(blockId) : null;
+    if (block) {
+      block.getSvgRoot().classList.add('block-error-highlight');
+      // エラーブロックが見えるようにスクロール
+      block.select();
+    }
+    const panel = document.getElementById('error-hint');
+    if (!panel) return;
+    document.getElementById('error-hint-title').textContent = title;
+    document.getElementById('error-hint-body').textContent = detail;
+    panel.style.display = 'block';
+  }
+
+  // Skulptエラーを解析して { lineno, title, detail } を返す
+  function parseSkulptError(err) {
+    const tp = err.tp$name || '';
+    let rawMsg = '';
+    try { rawMsg = err.args.v[0].v; } catch (e) { rawMsg = err.toString ? err.toString() : String(err); }
+
+    // 行番号取得（tracebackの最後のフレーム）
+    let lineno = null;
+    if (err.traceback && err.traceback.length > 0) {
+      lineno = err.traceback[err.traceback.length - 1].lineno;
+    }
+
+    // エラー種別ごとの日本語タイトル＋解説
+    let title = tp ? tp + ': ' + rawMsg : rawMsg;
+    let detail = '';
+
+    if (tp === 'NameError') {
+      const m = rawMsg.match(/name '(.+?)' is not defined/);
+      const name = m ? `「${m[1]}」` : '変数・関数名';
+      title = `NameError — ${name} が見つかりません`;
+      detail = `${name} はまだ定義されていません。\n・スペルミスがないか確認してください\n・変数を使う前に「変数に入れる」ブロックで値をセットしてください\n・関数を使う前に「関数を定義する」ブロックが必要です`;
+    } else if (tp === 'TypeError') {
+      title = `TypeError — データの型が合っていません`;
+      if (rawMsg.includes('unsupported operand') || rawMsg.includes('can only concatenate')) {
+        detail = `文字列と数値を足し算しようとしています。\n・数値に変換するには「型変換（int/float）」ブロックを使ってください\n・文字列として結合するには「文字列に変換（str）」してから「文字列連結」ブロックを使ってください`;
+      } else if (rawMsg.includes('takes') && rawMsg.includes('argument')) {
+        detail = `関数に渡す引数の数が間違っています。\n・関数定義の引数の数と、呼び出し時の引数の数を合わせてください`;
+      } else {
+        detail = `型（文字列・数値・リストなど）が合っていない操作をしています。\n原因: ${rawMsg}`;
+      }
+    } else if (tp === 'ZeroDivisionError') {
+      title = `ZeroDivisionError — 0 で割っています`;
+      detail = `割り算の右側（割る数）が 0 になっています。\n0 では割れないので、割る数が 0 にならないか確認してください。`;
+    } else if (tp === 'IndexError') {
+      title = `IndexError — リストの番号が範囲外です`;
+      detail = `リストに存在しない番号（インデックス）にアクセスしています。\n・リストの長さを「リストの長さ」ブロックで確認してください\n・番号は 0 から始まります（1番目 = 0、2番目 = 1…）`;
+    } else if (tp === 'AttributeError') {
+      title = `AttributeError — 存在しない機能を呼び出しています`;
+      detail = `その変数・オブジェクトには、その機能（メソッド）がありません。\n原因: ${rawMsg}`;
+    } else if (tp === 'ValueError') {
+      title = `ValueError — 値の形式が正しくありません`;
+      if (rawMsg.includes('invalid literal') && rawMsg.includes('int')) {
+        detail = `文字列を整数（int）に変換しようとしましたが、数字以外の文字が含まれています。\n・入力した文字列が「123」のような数字だけかどうか確認してください`;
+      } else {
+        detail = `値の形式が正しくありません。\n原因: ${rawMsg}`;
+      }
+    } else if (tp === 'IndentationError' || tp === 'SyntaxError') {
+      title = `${tp} — コードの形式エラー（ブロックモードでは通常発生しません）`;
+      detail = `コーディングモードで直接書いたコードに問題があります。\n原因: ${rawMsg}`;
+    } else if (rawMsg.includes('execLimit') || rawMsg.includes('Execution exceeded')) {
+      title = `TimeLimitError — 実行ステップ数の上限を超えました`;
+      detail = `ループが終わらずに繰り返し続けている可能性があります。\n・「ずっと繰り返す（while True）」の中に終了条件があるか確認してください\n・繰り返し回数が多すぎないか確認してください`;
+      lineno = null; // 特定行なし
+    } else {
+      detail = rawMsg;
+    }
+
+    return { lineno: lineno, title: title, detail: detail };
+  }
+
+  document.getElementById('error-hint-close').addEventListener('click', clearErrorHighlights);
 
   document.getElementById('btn-run-python').addEventListener('click', runPython);
   document.getElementById('btn-stop-python').addEventListener('click', function() {

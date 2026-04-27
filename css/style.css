@@ -1608,3 +1608,53 @@ h1 {
 [data-theme="light"] .file-tab:hover {
   background: rgba(0,0,0,0.05);
 }
+
+/* ===== エラーブロックハイライト ===== */
+.block-error-highlight > .blocklyPath {
+  stroke: #ff3333 !important;
+  stroke-width: 3px !important;
+  fill-opacity: 0.85 !important;
+}
+.block-error-highlight {
+  filter: drop-shadow(0 0 6px rgba(255, 60, 60, 0.9));
+}
+
+/* ===== エラー解説パネル ===== */
+#error-hint {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #2a0a0a;
+  border-top: 2px solid #ff4444;
+  color: #ff9999;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: 8px 14px;
+  z-index: 20;
+  white-space: pre-wrap;
+  line-height: 1.55;
+  max-height: 140px;
+  overflow-y: auto;
+}
+#error-hint .error-hint-title {
+  color: #ff4444;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+#error-hint .error-hint-close {
+  float: right;
+  cursor: pointer;
+  color: #888;
+  font-size: 1rem;
+  line-height: 1;
+  margin-left: 8px;
+}
+#error-hint .error-hint-close:hover { color: #fff; }
+[data-theme="light"] #error-hint {
+  background: #fff0f0;
+  color: #c0392b;
+  border-top-color: #e74c3c;
+}
+[data-theme="light"] #error-hint .error-hint-title { color: #c0392b; }
