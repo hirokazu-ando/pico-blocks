@@ -241,58 +241,16 @@
     </category>
   </xml>
 
-  <!-- Python入門モード用ツールボックス -->
+  <!-- Python入門モード用ツールボックス（カリキュラム Part 0 順） -->
   <xml id="toolbox-python" style="display:none">
-    <category name="繰り返し" colour="#E65100">
-      <block type="pico_repeat" gap="8">
-        <value name="TIMES">
-          <shadow type="val_number"><field name="NUM">10</field></shadow>
-        </value>
-      </block>
-      <block type="pico_for_range" gap="8">
-        <value name="N">
-          <shadow type="val_number"><field name="NUM">10</field></shadow>
-        </value>
-      </block>
-      <block type="pico_for_from_to" gap="8">
-        <value name="START">
-          <shadow type="val_number"><field name="NUM">0</field></shadow>
-        </value>
-        <value name="STOP">
-          <shadow type="val_number"><field name="NUM">10</field></shadow>
-        </value>
-        <value name="STEP">
-          <shadow type="val_number"><field name="NUM">1</field></shadow>
-        </value>
-      </block>
-      <block type="py_while" gap="8"></block>
-      <block type="py_for_list" gap="8"></block>
-      <sep gap="20"></sep>
-      <block type="py_break" gap="8"></block>
-      <block type="py_continue" gap="8"></block>
+    <!-- 0-0/0-1: print文 -->
+    <category name="表示" colour="#607D8B">
+      <block type="py_print" gap="8"></block>
+      <block type="print_text" gap="8"></block>
+      <block type="print_var_label" gap="8"></block>
+      <block type="print_separator" gap="8"></block>
     </category>
-    <category name="分岐" colour="#6A1B9A">
-      <block type="pico_if" gap="8"></block>
-      <sep gap="20"></sep>
-      <block type="cond_compare" gap="8">
-        <value name="LEFT">
-          <shadow type="val_number"><field name="NUM">0</field></shadow>
-        </value>
-        <value name="RIGHT">
-          <shadow type="val_number"><field name="NUM">0</field></shadow>
-        </value>
-      </block>
-      <block type="cond_and" gap="8"></block>
-      <block type="cond_or" gap="8"></block>
-      <block type="cond_not" gap="8"></block>
-    </category>
-    <category name="時間" colour="#00695C">
-      <block type="pico_wait" gap="8">
-        <value name="SEC">
-          <shadow type="val_number"><field name="NUM">1</field></shadow>
-        </value>
-      </block>
-    </category>
+    <!-- 0-2: 変数・代入 -->
     <category name="変数" colour="#2196F3">
       <block type="var_set" gap="8">
         <value name="VALUE">
@@ -305,66 +263,7 @@
         </value>
       </block>
     </category>
-    <category name="リスト" colour="#00897B">
-      <block type="py_list_empty" gap="8"></block>
-      <block type="py_list_append" gap="8">
-        <value name="VALUE">
-          <shadow type="val_number"><field name="NUM">0</field></shadow>
-        </value>
-      </block>
-      <block type="py_list_get" gap="8">
-        <value name="INDEX">
-          <shadow type="val_number"><field name="NUM">0</field></shadow>
-        </value>
-      </block>
-      <block type="py_list_set" gap="8">
-        <value name="INDEX">
-          <shadow type="val_number"><field name="NUM">0</field></shadow>
-        </value>
-        <value name="VALUE">
-          <shadow type="val_number"><field name="NUM">0</field></shadow>
-        </value>
-      </block>
-      <block type="py_list_len" gap="8"></block>
-    </category>
-    <category name="関数" colour="#F57F17">
-      <block type="py_def_noarg" gap="8"></block>
-      <block type="py_def" gap="8"></block>
-      <block type="py_return" gap="8"></block>
-      <sep gap="20"></sep>
-      <block type="py_call_stmt" gap="8"></block>
-      <block type="py_call_val" gap="8"></block>
-    </category>
-    <category name="モジュール" colour="#E65100">
-      <block type="py_module_call_stmt" gap="8"></block>
-      <block type="py_module_call_val" gap="8"></block>
-    </category>
-    <category name="辞書" colour="#4527A0">
-      <block type="py_dict_new" gap="8"></block>
-      <sep gap="20"></sep>
-      <block type="py_dict_set" gap="8">
-        <value name="KEY">
-          <shadow type="val_str"><field name="TEXT">キー</field></shadow>
-        </value>
-        <value name="VAL">
-          <shadow type="val_number"><field name="NUM">0</field></shadow>
-        </value>
-      </block>
-      <block type="py_dict_get" gap="8">
-        <value name="KEY">
-          <shadow type="val_str"><field name="TEXT">キー</field></shadow>
-        </value>
-      </block>
-      <block type="py_dict_keys" gap="8"></block>
-    </category>
-    <category name="値" colour="#5C81A6">
-      <block type="val_var" gap="8"></block>
-      <block type="val_number" gap="8"></block>
-      <block type="val_str" gap="8"></block>
-      <block type="val_bool" gap="8"></block>
-      <sep gap="20"></sep>
-      <block type="py_fstring" gap="8"></block>
-    </category>
+    <!-- 0-3/0-4: 四則演算・文字列操作・型変換・数学関数 -->
     <category name="計算" colour="#B71C1C">
       <block type="py_math_op" gap="8">
         <value name="LEFT">
@@ -404,14 +303,129 @@
         </value>
       </block>
     </category>
+    <!-- 0-1/0-4: リテラル値・f文字列 -->
+    <category name="値" colour="#5C81A6">
+      <block type="val_var" gap="8"></block>
+      <block type="val_number" gap="8"></block>
+      <block type="val_str" gap="8"></block>
+      <block type="val_bool" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_fstring" gap="8"></block>
+    </category>
+    <!-- 0-5: input -->
     <category name="入力" colour="#00838F">
       <block type="py_input" gap="8"></block>
     </category>
-    <category name="表示" colour="#607D8B">
-      <block type="py_print" gap="8"></block>
-      <block type="print_text" gap="8"></block>
-      <block type="print_var_label" gap="8"></block>
-      <block type="print_separator" gap="8"></block>
+    <!-- 0-6/0-7/0-8: 条件分岐・比較・論理演算 -->
+    <category name="分岐" colour="#6A1B9A">
+      <block type="pico_if" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="cond_compare" gap="8">
+        <value name="LEFT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+        <value name="RIGHT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="cond_and" gap="8"></block>
+      <block type="cond_or" gap="8"></block>
+      <block type="cond_not" gap="8"></block>
+    </category>
+    <!-- 0-9/0-10/0-11: for・while・ループ制御 -->
+    <category name="繰り返し" colour="#E65100">
+      <block type="pico_repeat" gap="8">
+        <value name="TIMES">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+      </block>
+      <block type="pico_for_range" gap="8">
+        <value name="N">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+      </block>
+      <block type="pico_for_from_to" gap="8">
+        <value name="START">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+        <value name="STOP">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+        <value name="STEP">
+          <shadow type="val_number"><field name="NUM">1</field></shadow>
+        </value>
+      </block>
+      <block type="py_while" gap="8"></block>
+      <block type="py_for_list" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_break" gap="8"></block>
+      <block type="py_continue" gap="8"></block>
+    </category>
+    <!-- 0-12: リスト -->
+    <category name="リスト" colour="#00897B">
+      <block type="py_list_empty" gap="8"></block>
+      <block type="py_list_append" gap="8">
+        <value name="VALUE">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="py_list_get" gap="8">
+        <value name="INDEX">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="py_list_set" gap="8">
+        <value name="INDEX">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+        <value name="VALUE">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="py_list_len" gap="8"></block>
+    </category>
+    <!-- 0-13: 辞書 -->
+    <category name="辞書" colour="#4527A0">
+      <block type="py_dict_new" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_dict_set" gap="8">
+        <value name="KEY">
+          <shadow type="val_str"><field name="TEXT">キー</field></shadow>
+        </value>
+        <value name="VAL">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="py_dict_get" gap="8">
+        <value name="KEY">
+          <shadow type="val_str"><field name="TEXT">キー</field></shadow>
+        </value>
+      </block>
+      <block type="py_dict_keys" gap="8"></block>
+    </category>
+    <!-- 0-14: 関数定義・呼び出し -->
+    <category name="関数" colour="#F57F17">
+      <block type="py_def_noarg" gap="8"></block>
+      <block type="py_def" gap="8"></block>
+      <block type="py_def_args2" gap="8"></block>
+      <block type="py_def_args3" gap="8"></block>
+      <block type="py_return" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_call_stmt" gap="8"></block>
+      <block type="py_call_val" gap="8"></block>
+    </category>
+    <!-- 0-15: モジュール呼び出し -->
+    <category name="モジュール" colour="#FF6F00">
+      <block type="py_module_call_stmt" gap="8"></block>
+      <block type="py_module_call_val" gap="8"></block>
+    </category>
+    <!-- 時間（Part 1以降で使用） -->
+    <category name="時間" colour="#00695C">
+      <block type="pico_wait" gap="8">
+        <value name="SEC">
+          <shadow type="val_number"><field name="NUM">1</field></shadow>
+        </value>
+      </block>
     </category>
   </xml>
 
@@ -502,6 +516,24 @@
       </block>
       <block type="py_list_len" gap="8"></block>
     </category>
+    <category name="辞書" colour="#4527A0">
+      <block type="py_dict_new" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_dict_set" gap="8">
+        <value name="KEY">
+          <shadow type="val_str"><field name="TEXT">キー</field></shadow>
+        </value>
+        <value name="VAL">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="py_dict_get" gap="8">
+        <value name="KEY">
+          <shadow type="val_str"><field name="TEXT">キー</field></shadow>
+        </value>
+      </block>
+      <block type="py_dict_keys" gap="8"></block>
+    </category>
     <category name="計算" colour="#B71C1C">
       <block type="py_math_op" gap="8">
         <value name="LEFT">
@@ -540,24 +572,6 @@
           <shadow type="val_number"><field name="NUM">10</field></shadow>
         </value>
       </block>
-    </category>
-    <category name="辞書" colour="#4527A0">
-      <block type="py_dict_new" gap="8"></block>
-      <sep gap="20"></sep>
-      <block type="py_dict_set" gap="8">
-        <value name="KEY">
-          <shadow type="val_str"><field name="TEXT">キー</field></shadow>
-        </value>
-        <value name="VAL">
-          <shadow type="val_number"><field name="NUM">0</field></shadow>
-        </value>
-      </block>
-      <block type="py_dict_get" gap="8">
-        <value name="KEY">
-          <shadow type="val_str"><field name="TEXT">キー</field></shadow>
-        </value>
-      </block>
-      <block type="py_dict_keys" gap="8"></block>
     </category>
     <category name="値" colour="#5C81A6">
       <block type="val_var" gap="8"></block>
