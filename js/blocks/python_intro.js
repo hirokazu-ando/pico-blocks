@@ -288,6 +288,46 @@ Blockly.Blocks['py_def'] = {
   }
 };
 
+Blockly.Blocks['py_def_args2'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('関数')
+      .appendField(new Blockly.FieldTextInput('my_func'), 'NAME')
+      .appendField('（引数:')
+      .appendField(new Blockly.FieldTextInput('a'), 'PARAM1')
+      .appendField(',')
+      .appendField(new Blockly.FieldTextInput('b'), 'PARAM2')
+      .appendField('）を定義する');
+    this.appendStatementInput('BODY').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour('#F57F17');
+    this.setTooltip('引数2つの関数を定義します（def name(a, b):）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_def_args3'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('関数')
+      .appendField(new Blockly.FieldTextInput('my_func'), 'NAME')
+      .appendField('（引数:')
+      .appendField(new Blockly.FieldTextInput('a'), 'PARAM1')
+      .appendField(',')
+      .appendField(new Blockly.FieldTextInput('b'), 'PARAM2')
+      .appendField(',')
+      .appendField(new Blockly.FieldTextInput('c'), 'PARAM3')
+      .appendField('）を定義する');
+    this.appendStatementInput('BODY').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour('#F57F17');
+    this.setTooltip('引数3つの関数を定義します（def name(a, b, c):）');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['py_return'] = {
   init: function() {
     this.appendValueInput('VALUE').setCheck(null);

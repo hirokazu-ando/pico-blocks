@@ -143,6 +143,11 @@ document.addEventListener('DOMContentLoaded', function() {
               console.warn('ワークスペース復元失敗:', e);
             }
           }
+          // ツールボックスも切替
+          if (currentMode === 'python') {
+            const tbId = activeFileIdx === 0 ? 'toolbox-python' : 'toolbox-module';
+            workspace.updateToolbox(document.getElementById(tbId));
+          }
           renderFileTabs();
         });
         tab.appendChild(close);
@@ -178,6 +183,12 @@ document.addEventListener('DOMContentLoaded', function() {
       } catch (e) {
         console.warn('ワークスペース復元失敗:', e);
       }
+    }
+
+    // ツールボックス切替: main.py → python/micropython、サブファイル → module
+    if (currentMode === 'python') {
+      const tbId = idx === 0 ? 'toolbox-python' : 'toolbox-module';
+      workspace.updateToolbox(document.getElementById(tbId));
     }
 
     renderFileTabs();
@@ -346,9 +357,11 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_for_list':      return `リスト「${getVarName(block, 'LIST')}」を順に繰り返す`;
       case 'py_break':         return 'ループを抜ける（break）';
       case 'py_continue':      return '次のループへ（continue）';
-      case 'py_def_noarg':     return `関数「${block.getFieldValue('NAME')}」を定義する`;
-      case 'py_def':           return `関数「${block.getFieldValue('NAME')}」（引数: ${getVarName(block, 'PARAM')}）を定義する`;
-      case 'py_return':        return '戻り値を返す（return）';
+      case 'py_def_noarg':  return `関数「${block.getFieldValue('NAME')}」を定義する`;
+      case 'py_def':        return `関数「${block.getFieldValue('NAME')}」（引数: ${getVarName(block, 'PARAM')}）を定義する`;
+      case 'py_def_args2':  return `関数「${block.getFieldValue('NAME')}」（引数: ${block.getFieldValue('PARAM1')}, ${block.getFieldValue('PARAM2')}）を定義する`;
+      case 'py_def_args3':  return `関数「${block.getFieldValue('NAME')}」（引数: ${block.getFieldValue('PARAM1')}, ${block.getFieldValue('PARAM2')}, ${block.getFieldValue('PARAM3')}）を定義する`;
+      case 'py_return':     return '戻り値を返す（return）';
       case 'py_call_stmt':        return `関数「${block.getFieldValue('NAME')}」を呼び出す`;
       case 'py_call_val':         return `関数「${block.getFieldValue('NAME')}」の結果`;
       case 'py_module_call_stmt': return `モジュール「${block.getFieldValue('MODULE')}」の「${block.getFieldValue('FUNC')}」を呼び出す`;
@@ -941,6 +954,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const name  = block.getFieldValue('NAME');
         const param = getVarName(block, 'PARAM');
         code = appendLocal(code, indent + `def ${name}(${param}):\n`);
+        const body = statementToCode(block, 'BODY', indent + '    ');
+        code = appendChildBody(code, body, indent + '    pass\n');
+        break;
+      }
+      case 'py_def_args2': {
+        const name = block.getFieldValue('NAME');
+        const p1   = block.getFieldValue('PARAM1');
+        const p2   = block.getFieldValue('PARAM2');
+        code = appendLocal(code, indent + `def ${name}(${p1}, ${p2}):\n`);
+        const body = statementToCode(block, 'BODY', indent + '    ');
+        code = appendChildBody(code, body, indent + '    pass\n');
+        break;
+      }
+      case 'py_def_args3': {
+        const name = block.getFieldValue('NAME');
+        const p1   = block.getFieldValue('PARAM1');
+        const p2   = block.getFieldValue('PARAM2');
+        const p3   = block.getFieldValue('PARAM3');
+        code = appendLocal(code, indent + `def ${name}(${p1}, ${p2}, ${p3}):\n`);
         const body = statementToCode(block, 'BODY', indent + '    ');
         code = appendChildBody(code, body, indent + '    pass\n');
         break;
