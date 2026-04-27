@@ -370,6 +370,11 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_list_set':      return `リスト「${getVarName(block, 'LIST')}」の要素変更`;
       case 'py_list_len':      return `リスト「${getVarName(block, 'LIST')}」の長さ`;
       case 'py_for_list':      return `リスト「${getVarName(block, 'LIST')}」を順に繰り返す`;
+      case 'py_fstring':       return 'f文字列';
+      case 'py_dict_new':      return '空の辞書 {}';
+      case 'py_dict_set':      return `辞書「${getVarName(block, 'DICT')}」にキーと値をセット`;
+      case 'py_dict_get':      return `辞書「${getVarName(block, 'DICT')}」からキーで取得`;
+      case 'py_dict_keys':     return `辞書「${getVarName(block, 'DICT')}」のキー一覧`;
       case 'py_break':         return 'ループを抜ける（break）';
       case 'py_continue':      return '次のループへ（continue）';
       case 'py_def_noarg':  return `関数「${block.getFieldValue('NAME')}」を定義する`;
@@ -549,6 +554,23 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_list_len': {
         const listName = getVarName(block, 'LIST');
         return `len(${listName})`;
+      }
+      case 'py_fstring': {
+        const pre  = block.getFieldValue('PRE') || '';
+        const post = block.getFieldValue('POST') || '';
+        const val  = valueToCode(block, 'VAR', '""');
+        return `f"${pre}{${val}}${post}"`;
+      }
+      case 'py_dict_new':
+        return '{}';
+      case 'py_dict_get': {
+        const dictName = getVarName(block, 'DICT');
+        const key = valueToCode(block, 'KEY', '""');
+        return `${dictName}[${key}]`;
+      }
+      case 'py_dict_keys': {
+        const dictName = getVarName(block, 'DICT');
+        return `list(${dictName}.keys())`;
       }
       case 'py_random_int': {
         const from = valueToCode(block, 'FROM', '1');
@@ -827,6 +849,10 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_abs':
       case 'py_round':
       case 'py_call_val':
+      case 'py_fstring':
+      case 'py_dict_new':
+      case 'py_dict_get':
+      case 'py_dict_keys':
         break;
       case 'pico_for_range': {
         const v      = getVarName(block, 'VAR');
@@ -928,6 +954,16 @@ document.addEventListener('DOMContentLoaded', function() {
         registerExprBlocksAtLineFromInput(block, 'VALUE', lnApp);
         const val = valueToCode(block, 'VALUE', 'None');
         code = appendLocal(code, indent + `${listName}.append(${val})\n`);
+        break;
+      }
+      case 'py_dict_set': {
+        const dictName = getVarName(block, 'DICT');
+        const lnDs = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'KEY', lnDs);
+        registerExprBlocksAtLineFromInput(block, 'VAL', lnDs);
+        const key = valueToCode(block, 'KEY', '""');
+        const val = valueToCode(block, 'VAL', 'None');
+        code = appendLocal(code, indent + `${dictName}[${key}] = ${val}\n`);
         break;
       }
       case 'py_list_set': {

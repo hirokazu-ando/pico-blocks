@@ -487,3 +487,88 @@ Blockly.Blocks['py_round'] = {
     this.setHelpUrl('');
   }
 };
+
+// =====================================================
+// f文字列ブロック
+// =====================================================
+
+Blockly.Blocks['py_fstring'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('f"')
+      .appendField(new Blockly.FieldTextInput('こんにちは、'), 'PRE')
+      .appendField('{');
+    this.appendValueInput('VAR').setCheck(null);
+    this.appendDummyInput()
+      .appendField('}')
+      .appendField(new Blockly.FieldTextInput('さん'), 'POST')
+      .appendField('"');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour('#5C81A6');
+    this.setTooltip('f文字列：変数を埋め込んだ文字列を作ります（例: f"こんにちは、{name}さん"）');
+    this.setHelpUrl('');
+  }
+};
+
+// =====================================================
+// 辞書（dict）ブロック
+// =====================================================
+
+Blockly.Blocks['py_dict_new'] = {
+  init: function() {
+    this.appendDummyInput().appendField('空の辞書 { }');
+    this.setOutput(true, null);
+    this.setColour('#4527A0');
+    this.setTooltip('空の辞書 {} を返します。var_set ブロックと組み合わせて変数に入れてください。');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_dict_set'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('辞書')
+      .appendField(new Blockly.FieldVariable('my_dict'), 'DICT')
+      .appendField('の');
+    this.appendValueInput('KEY').setCheck(null);
+    this.appendDummyInput().appendField('に');
+    this.appendValueInput('VAL').setCheck(null);
+    this.appendDummyInput().appendField('を入れる');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour('#4527A0');
+    this.setTooltip('辞書のキーに値をセットします（dict[key] = value）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_dict_get'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('辞書')
+      .appendField(new Blockly.FieldVariable('my_dict'), 'DICT')
+      .appendField('の');
+    this.appendValueInput('KEY').setCheck(null);
+    this.appendDummyInput().appendField('の値');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour('#4527A0');
+    this.setTooltip('辞書からキーに対応する値を取得します（dict[key]）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_dict_keys'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('辞書')
+      .appendField(new Blockly.FieldVariable('my_dict'), 'DICT')
+      .appendField('のキー一覧');
+    this.setOutput(true, null);
+    this.setColour('#4527A0');
+    this.setTooltip('辞書のキーをリストとして返します（list(dict.keys())）');
+    this.setHelpUrl('');
+  }
+};
