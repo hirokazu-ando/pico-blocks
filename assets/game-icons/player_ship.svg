@@ -1,11 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="shipBody" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#6ee7ff"/>
-      <stop offset="100%" stop-color="#0ea5e9"/>
+    <linearGradient id="psh" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5eead4"/>
+      <stop offset="45%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="psf" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#ea580c"/>
     </linearGradient>
   </defs>
-  <polygon points="64,8 98,108 64,92 30,108" fill="url(#shipBody)" stroke="#0c4a6e" stroke-width="6" stroke-linejoin="round"/>
-  <circle cx="64" cy="58" r="12" fill="#fef08a" stroke="#854d0e" stroke-width="4"/>
-  <polygon points="64,94 76,120 64,114 52,120" fill="#f97316" stroke="#9a3412" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M32 4L50 42h-6l-2 14h-20L20 42h-6L32 4z" fill="url(#psh)" stroke="#164e63" stroke-width="1.2" stroke-linejoin="round"/>
+  <ellipse cx="32" cy="30" rx="7" ry="9" fill="#0f172a" opacity=".35"/>
+  <ellipse cx="32" cy="28" rx="4" ry="5" fill="#e0f2fe" opacity=".9"/>
+  <path d="M22 42h20" stroke="#67e8f9" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+  <path d="M26 48L32 58L38 48" fill="url(#psf)" stroke="#9a3412" stroke-width=".8" stroke-linejoin="round"/>
 </svg>

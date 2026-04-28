@@ -1,5 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <circle cx="64" cy="64" r="46" fill="#facc15" stroke="#a16207" stroke-width="8"/>
-  <circle cx="64" cy="64" r="28" fill="#fde047" stroke="#ca8a04" stroke-width="6"/>
-  <path d="M64 40 V88 M48 52 H72 C78 52 82 56 82 62 C82 68 78 72 72 72 H48" fill="none" stroke="#854d0e" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="cog" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="50%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#a16207"/>
+    </linearGradient>
+    <linearGradient id="coh" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff7c2"/>
+      <stop offset="100%" stop-color="#eab308"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="26" fill="url(#cog)" stroke="#713f12" stroke-width="1.5"/>
+  <circle cx="32" cy="32" r="17" fill="none" stroke="url(#coh)" stroke-width="2.5" opacity=".9"/>
+  <path d="M32 16v32M24 22c0-4 16-4 16 0M24 42c0 4 16 4 16 0" stroke="#854d0e" stroke-width="2" stroke-linecap="round" fill="none"/>
 </svg>

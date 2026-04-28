@@ -22,6 +22,7 @@ window.PycoPalette = {
   game: '#EC407A',
   functions: '#FF7043',
   modules: '#546E7A',
+  customPython: '#455A64',
   timing: '#2E7D32',
   polyvia: '#EF5350',
   sensorValue: '#EF5350',

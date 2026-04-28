@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="meg" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#78716c"/>
+      <stop offset="100%" stop-color="#44403c"/>
+    </linearGradient>
+    <linearGradient id="mef" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fdba74"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+  </defs>
+  <path d="M12 46c8-28 28-38 44-38-4 22-14 38-44 38z" fill="url(#meg)" stroke="#292524" stroke-width="1.2"/>
+  <ellipse cx="24" cy="36" rx="6" ry="5" fill="#57534e" opacity=".6"/>
+  <path d="M48 12c6 10 8 22 6 34" fill="none" stroke="url(#mef)" stroke-width="8" stroke-linecap="round" opacity=".85"/>
+</svg>

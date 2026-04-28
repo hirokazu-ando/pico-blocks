@@ -36,6 +36,12 @@
   var keyState = {};    // { code: true/false }
   var eventQueue = [];  // { type, key }
 
+  var mouseX = 0;
+  var mouseY = 0;
+  var mouseButtons = [false, false, false];
+  var MOUSEBUTTONDOWN = 1025;
+  var MOUSEBUTTONUP   = 1026;
+
   var _installedListeners = false;
   function ensureListeners() {
     if (_installedListeners) return;
@@ -54,26 +60,50 @@
       keyState[code] = false;
       eventQueue.push({ type: KEYUP, key: code });
     }, { passive: true });
+
+    window.addEventListener('mousemove', function(e) {
+      var area = document.getElementById('game-canvas-area');
+      if (!area) return;
+      var cnv = area.querySelector('canvas');
+      if (!cnv) { mouseX = e.clientX; mouseY = e.clientY; return; }
+      var rect = cnv.getBoundingClientRect();
+      mouseX = Math.round(e.clientX - rect.left);
+      mouseY = Math.round(e.clientY - rect.top);
+    }, { passive: true });
+
+    window.addEventListener('mousedown', function(e) {
+      if (e.button >= 0 && e.button <= 2) mouseButtons[e.button] = true;
+      eventQueue.push({ type: MOUSEBUTTONDOWN, button: e.button });
+    }, { passive: true });
+
+    window.addEventListener('mouseup', function(e) {
+      if (e.button >= 0 && e.button <= 2) mouseButtons[e.button] = false;
+      eventQueue.push({ type: MOUSEBUTTONUP, button: e.button });
+    }, { passive: true });
   }
 
   function colorToCSS(color) {
     if (typeof color === 'string') return color;
-    if (color && color.v && color.v.length >= 3) {
+    // Skulpt文字列: v が JavaScript string → そのまま使う
+    if (color && typeof color.v === 'string') return color.v;
+    // Skulptタプル/リスト (r, g, b): v が JavaScript Array
+    if (color && Array.isArray(color.v) && color.v.length >= 3) {
       var r = Sk.ffi.remapToJs(color.v[0]);
       var g = Sk.ffi.remapToJs(color.v[1]);
       var b = Sk.ffi.remapToJs(color.v[2]);
       return 'rgb(' + r + ',' + g + ',' + b + ')';
     }
-    return String(color);
+    try { return String(Sk.ffi.remapToJs(color)); } catch(e) {}
+    return '#ffffff';
   }
 
   function tuple2_to_js(t) {
-    if (!t || !t.v || t.v.length < 2) return [0, 0];
+    if (!t || !Array.isArray(t.v) || t.v.length < 2) return [0, 0];
     return [Sk.ffi.remapToJs(t.v[0]), Sk.ffi.remapToJs(t.v[1])];
   }
 
   function tuple4_to_js(t) {
-    if (!t || !t.v || t.v.length < 4) return [0, 0, 0, 0];
+    if (!t || !Array.isArray(t.v) || t.v.length < 4) return [0, 0, 0, 0];
     return [
       Sk.ffi.remapToJs(t.v[0]),
       Sk.ffi.remapToJs(t.v[1]),
@@ -154,6 +184,25 @@
       return Sk.ffi.remapToPy(hit);
     });
 
+    obj.collidepoint = new Sk.builtin.func(function(px_py, py_py) {
+      var px = Sk.ffi.remapToJs(px_py), py = Sk.ffi.remapToJs(py_py);
+      var ax = Sk.ffi.remapToJs(obj.x), ay = Sk.ffi.remapToJs(obj.y);
+      var aw = Sk.ffi.remapToJs(obj.width), ah = Sk.ffi.remapToJs(obj.height);
+      var hit = (px >= ax && px < ax + aw && py >= ay && py < ay + ah);
+      return Sk.ffi.remapToPy(hit);
+    });
+
+    obj.union = new Sk.builtin.func(function(other) {
+      var ax = Sk.ffi.remapToJs(obj.x), ay = Sk.ffi.remapToJs(obj.y);
+      var aw = Sk.ffi.remapToJs(obj.width), ah = Sk.ffi.remapToJs(obj.height);
+      var bx = Sk.ffi.remapToJs(other.x), by = Sk.ffi.remapToJs(other.y);
+      var bw = Sk.ffi.remapToJs(other.width), bh = Sk.ffi.remapToJs(other.height);
+      var left = Math.min(ax, bx), top = Math.min(ay, by);
+      var right = Math.max(ax + aw, bx + bw), bottom = Math.max(ay + ah, by + bh);
+      return Rect(Sk.ffi.remapToPy(left), Sk.ffi.remapToPy(top),
+                  Sk.ffi.remapToPy(right - left), Sk.ffi.remapToPy(bottom - top));
+    });
+
     obj.move = new Sk.builtin.func(function(dx_py, dy_py) {
       var dx = Sk.ffi.remapToJs(dx_py), dy = Sk.ffi.remapToJs(dy_py);
       return Rect(Sk.ffi.remapToPy(Sk.ffi.remapToJs(obj.x) + dx),
@@ -183,6 +232,7 @@
   var display = makePyNamespace();
   var event = makePyNamespace();
   var key = makePyNamespace();
+  var mouse = makePyNamespace();
   var draw = makePyNamespace();
   var font = makePyNamespace();
   var image = makePyNamespace();
@@ -249,6 +299,22 @@
     obj.mp$subscript = function(k_py) {
       var k = Sk.ffi.remapToJs(k_py);
       return Sk.ffi.remapToPy(!!keyState[k]);
+    };
+    return obj;
+  });
+
+  mouse.get_pos = new Sk.builtin.func(function() {
+    return new Sk.builtin.tuple([
+      Sk.ffi.remapToPy(mouseX),
+      Sk.ffi.remapToPy(mouseY)
+    ]);
+  });
+
+  mouse.get_pressed = new Sk.builtin.func(function() {
+    var obj = makePyNamespace();
+    obj.mp$subscript = function(idx_py) {
+      var i = Sk.ffi.remapToJs(idx_py);
+      return Sk.ffi.remapToPy(!!mouseButtons[i]);
     };
     return obj;
   });
@@ -346,8 +412,19 @@
   image.load = new Sk.builtin.func(function(url_py) {
     var url = Sk.ffi.remapToJs(url_py);
     return new Sk.misceval.promiseToSuspension(new Promise(function(resolve, reject) {
+      var base = (typeof document !== 'undefined' && document.baseURI) ? document.baseURI : (typeof window !== 'undefined' ? window.location.href : '');
+      var resolved;
+      try {
+        resolved = base ? new URL(String(url), base).href : String(url);
+      } catch (e) {
+        resolved = String(url);
+      }
       var img = new Image();
-      img.crossOrigin = 'anonymous';
+      // http(s) の別ドメイン画像を Canvas に描くため CORS が必要な場合のみ付与する。
+      // 相対パス・file:// では付与すると読み込み失敗することがある（同一オリジンは不要）。
+      if (/^https?:\/\//i.test(resolved)) {
+        img.crossOrigin = 'anonymous';
+      }
       img.onload = function() {
         var cnv = document.createElement('canvas');
         cnv.width = img.width; cnv.height = img.height;
@@ -356,8 +433,57 @@
         resolve(makeSurface(cnv));
       };
       img.onerror = function() { reject(new Error('pygame.image.load failed: ' + url)); };
-      img.src = url;
+      img.src = resolved;
     }));
+  });
+
+  var transform = makePyNamespace();
+  transform.scale = new Sk.builtin.func(function(surface_py, size_py) {
+    var src = surface_py;
+    if (!src || !src._canvas) return surface_py;
+    var sz = tuple2_to_js(size_py);
+    var nw = Math.max(1, Math.floor(sz[0]));
+    var nh = Math.max(1, Math.floor(sz[1]));
+    var cnv = document.createElement('canvas');
+    cnv.width = nw; cnv.height = nh;
+    var ctx = cnv.getContext('2d');
+    try { ctx.imageSmoothingQuality = 'high'; } catch (e) {}
+    ctx.drawImage(src._canvas, 0, 0, nw, nh);
+    return makeSurface(cnv);
+  });
+
+  transform.flip = new Sk.builtin.func(function(surface_py, bx_py, by_py) {
+    var src = surface_py;
+    if (!src || !src._canvas) return surface_py;
+    var bx = !!Sk.ffi.remapToJs(bx_py), by = !!Sk.ffi.remapToJs(by_py);
+    var w = src._canvas.width, h = src._canvas.height;
+    var cnv = document.createElement('canvas');
+    cnv.width = w; cnv.height = h;
+    var ctx = cnv.getContext('2d');
+    ctx.translate(bx ? w : 0, by ? h : 0);
+    ctx.scale(bx ? -1 : 1, by ? -1 : 1);
+    ctx.drawImage(src._canvas, 0, 0);
+    return makeSurface(cnv);
+  });
+
+  transform.rotate = new Sk.builtin.func(function(surface_py, angle_py) {
+    var src = surface_py;
+    if (!src || !src._canvas) return surface_py;
+    var angleDeg = Sk.ffi.remapToJs(angle_py);
+    if (!angleDeg) return surface_py;
+    var w = src._canvas.width, h = src._canvas.height;
+    var rad = angleDeg * Math.PI / 180;
+    var cos = Math.abs(Math.cos(rad)), sin = Math.abs(Math.sin(rad));
+    var nw = Math.ceil(w * cos + h * sin);
+    var nh = Math.ceil(w * sin + h * cos);
+    var cnv = document.createElement('canvas');
+    cnv.width = nw; cnv.height = nh;
+    var ctx = cnv.getContext('2d');
+    try { ctx.imageSmoothingQuality = 'high'; } catch (e) {}
+    ctx.translate(nw / 2, nh / 2);
+    ctx.rotate(-rad);
+    ctx.drawImage(src._canvas, -w / 2, -h / 2);
+    return makeSurface(cnv);
   });
 
   function makeClock() {
@@ -384,9 +510,16 @@
 
   time.Clock = new Sk.builtin.func(function() { return makeClock(); });
 
+  var _gameStartTime = null;
+  time.get_ticks = new Sk.builtin.func(function() {
+    if (_gameStartTime === null) _gameStartTime = performance.now();
+    return Sk.ffi.remapToPy(Math.round(performance.now() - _gameStartTime));
+  });
+
   function init() {
     ensureListeners();
     window.__pygameRunning = true;
+    _gameStartTime = performance.now();
     return Sk.builtin.none.none$;
   }
 
@@ -402,6 +535,8 @@
   mod.QUIT = Sk.ffi.remapToPy(QUIT);
   mod.KEYDOWN = Sk.ffi.remapToPy(KEYDOWN);
   mod.KEYUP = Sk.ffi.remapToPy(KEYUP);
+  mod.MOUSEBUTTONDOWN = Sk.ffi.remapToPy(MOUSEBUTTONDOWN);
+  mod.MOUSEBUTTONUP   = Sk.ffi.remapToPy(MOUSEBUTTONUP);
 
   mod.K_RIGHT  = Sk.ffi.remapToPy(275);
   mod.K_LEFT   = Sk.ffi.remapToPy(276);
@@ -440,9 +575,11 @@
   mod.display = display;
   mod.event = event;
   mod.key = key;
+  mod.mouse = mouse;
   mod.draw = draw;
   mod.font = font;
   mod.image = image;
+  mod.transform = transform;
   mod.time = time;
 
   mod.Rect = new Sk.builtin.func(function(x, y, w, h) { return Rect(x, y, w, h); });

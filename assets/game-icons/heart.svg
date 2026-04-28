@@ -1,4 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <path d="M64 112 L18 68 C4 54 6 31 22 22 C34 15 49 18 58 30 L64 38 L70 30 C79 18 94 15 106 22 C122 31 124 54 110 68 Z"
-        fill="#f43f5e" stroke="#881337" stroke-width="6" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="hrt" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fda4af"/>
+      <stop offset="100%" stop-color="#e11d48"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 54C16 42 8 34 8 24c0-8 6.5-14 14.5-14 5 0 9.5 2.6 12 6.8 2.5-4.2 7-6.8 12-6.8C55 10 62 16 62 24c0 10-8 18-24 30z" fill="url(#hrt)" stroke="#9f1239" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M22 22c3-5 14-4 10 8-6-8-13-7-10-8z" fill="#fff" opacity=".35"/>
 </svg>

@@ -391,6 +391,45 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_type_cast':     return `型変換（${block.getFieldValue('TYPE')}）`;
       case 'py_abs':           return '絶対値（abs）';
       case 'py_round':         return '四捨五入（round）';
+      case 'game_color': {
+        const cnames = {'#EF4444':'赤','#F97316':'橙','#FACC15':'黄','#84CC16':'黄緑','#22C55E':'緑','#38BDF8':'水色','#3B82F6':'青','#A855F7':'紫','#EC4899':'ピンク','#F8FAFC':'白','#64748B':'灰','#1E293B':'黒','#FFD700':'金','#0F172A':'暗い青'};
+        return '色: ' + (cnames[block.getFieldValue('COLOR')] || block.getFieldValue('COLOR'));
+      }
+      case 'game_image_preset': {
+        const snames = {
+          'assets/game-icons/player_ship.svg': 'プレイヤー',
+          'assets/game-icons/rocket.svg': 'ロケット',
+          'assets/game-icons/enemy_bug.svg': '敵（ドローン）',
+          'assets/game-icons/coin.svg': 'コイン',
+          'assets/game-icons/gem.svg': 'ジェム',
+          'assets/game-icons/star.svg': 'スター',
+          'assets/game-icons/heart.svg': 'ハート',
+          'assets/game-icons/bullet.svg': '弾',
+          'assets/game-icons/energy.svg': 'エナジー',
+          'assets/game-icons/shield.svg': 'シールド',
+          'assets/game-icons/spike.svg': 'トゲ',
+          'assets/game-icons/meteor.svg': 'メテオ',
+          'assets/game-icons/portal.svg': 'ポータル',
+          'assets/game-icons/crate.svg': '木箱',
+        };
+        return '内蔵画像: ' + (snames[block.getFieldValue('IMG')] || block.getFieldValue('IMG'));
+      }
+      case 'game_draw_image': return '画像を描画する（サイズ・回転・反転対応）';
+      case 'game_rect_collidepoint': return 'Rect と点が重なるか（collidepoint）';
+      case 'game_rect_union': return '二つの Rect を包む最小矩形（union）';
+      case 'game_get_ticks':   return 'ゲーム開始からの時間（ms）';
+      case 'game_mouse_x':     return 'マウスのX座標';
+      case 'game_mouse_y':     return 'マウスのY座標';
+      case 'game_mouse_pressed': {
+        const btns = { '0': '左', '1': '中', '2': '右' };
+        return `マウス${btns[block.getFieldValue('BTN')] || '左'}ボタン押下判定`;
+      }
+      case 'game_rect_attr': {
+        const attrs = { x: 'x座標', y: 'y座標', width: '幅', height: '高さ', centerx: '中心x', centery: '中心y' };
+        return `Rectの${attrs[block.getFieldValue('ATTR')] || '属性'}`;
+      }
+      case 'py_custom_stmt': return 'カスタムPython（文・1行・縦連結で複数行）';
+      case 'py_custom_expr': return 'カスタムPython（式）';
       default:                 return block.type;
     }
   }
@@ -564,7 +603,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const pre  = block.getFieldValue('PRE') || '';
         const post = block.getFieldValue('POST') || '';
         const val  = valueToCode(block, 'VAR', '""');
-        return `f"${pre}{${val}}${post}"`;
+        // 二重引用符のみの f"..." だと {stats["hits"]} など式内の " が文字列を閉じて SyntaxError になる。
+        // 外側は単引用符 f'...' にし、PRE/POST に含まれる ' のみエスケープする。
+        function escSingleQuotedChunk(s) {
+          return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        }
+        return `f'${escSingleQuotedChunk(pre)}{${val}}${escSingleQuotedChunk(post)}'`;
       }
       case 'py_dict_new':
         return '{}';
@@ -623,6 +667,42 @@ document.addEventListener('DOMContentLoaded', function() {
         const a = valueToCode(block, 'A', 'pygame.Rect(0, 0, 1, 1)');
         const b = valueToCode(block, 'B', 'pygame.Rect(0, 0, 1, 1)');
         return `${a}.colliderect(${b})`;
+      }
+      case 'game_rect_collidepoint': {
+        const r = valueToCode(block, 'RECT', 'pygame.Rect(0, 0, 1, 1)');
+        const x = valueToCode(block, 'X', '0');
+        const y = valueToCode(block, 'Y', '0');
+        return `${r}.collidepoint(${x}, ${y})`;
+      }
+      case 'game_rect_union': {
+        const a = valueToCode(block, 'A', 'pygame.Rect(0, 0, 1, 1)');
+        const b = valueToCode(block, 'B', 'pygame.Rect(0, 0, 1, 1)');
+        return `${a}.union(${b})`;
+      }
+      case 'game_color':
+        return JSON.stringify(block.getFieldValue('COLOR'));
+      case 'game_image_preset':
+        return JSON.stringify(block.getFieldValue('IMG'));
+      case 'game_get_ticks':
+        return 'pygame.time.get_ticks()';
+      case 'game_mouse_x':
+        return 'pygame.mouse.get_pos()[0]';
+      case 'game_mouse_y':
+        return 'pygame.mouse.get_pos()[1]';
+      case 'game_mouse_pressed': {
+        const btn = block.getFieldValue('BTN') || '0';
+        return `pygame.mouse.get_pressed()[${btn}]`;
+      }
+      case 'game_rect_attr': {
+        const rect = valueToCode(block, 'RECT', 'pygame.Rect(0,0,0,0)');
+        const attr = block.getFieldValue('ATTR') || 'x';
+        return `${rect}.${attr}`;
+      }
+      case 'py_custom_expr': {
+        let raw = block.getFieldValue('CODE');
+        if (raw === undefined || raw === null) raw = '';
+        raw = String(raw).replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n')[0].trim();
+        return raw || 'None';
       }
       default:
         return '0';
@@ -722,11 +802,26 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'game_draw_image': {
         const ln = _emitCtx.line;
-        ['URL', 'X', 'Y'].forEach(function(n) { registerExprBlocksAtLineFromInput(block, n, ln); });
+        ['URL', 'X', 'Y', 'W', 'H', 'ROT'].forEach(function(n) { registerExprBlocksAtLineFromInput(block, n, ln); });
         const url = valueToCode(block, 'URL', '"https://example.com/player.png"');
         const x = valueToCode(block, 'X', '0');
         const y = valueToCode(block, 'Y', '0');
+        const w = valueToCode(block, 'W', '-1');
+        const h = valueToCode(block, 'H', '-1');
+        const rot = valueToCode(block, 'ROT', '0');
+        const flip = (block.getFieldValue && block.getFieldValue('FLIP')) || 'NONE';
         code = appendLocal(code, indent + `_img = pygame.image.load(${url})\n`);
+        code = appendLocal(code, indent + `_rw = ${w}; _rh = ${h}\n`);
+        code = appendLocal(code, indent + `_img = pygame.transform.scale(_img, (_rw, _rh)) if _rw > 0 and _rh > 0 else _img\n`);
+        code = appendLocal(code, indent + `_rot_deg = ${rot}\n`);
+        code = appendLocal(code, indent + `_img = pygame.transform.rotate(_img, _rot_deg) if _rot_deg != 0 else _img\n`);
+        if (flip === 'X') {
+          code = appendLocal(code, indent + `_img = pygame.transform.flip(_img, True, False)\n`);
+        } else if (flip === 'Y') {
+          code = appendLocal(code, indent + `_img = pygame.transform.flip(_img, False, True)\n`);
+        } else if (flip === 'XY') {
+          code = appendLocal(code, indent + `_img = pygame.transform.flip(_img, True, True)\n`);
+        }
         code = appendLocal(code, indent + `screen.blit(_img, (${x}, ${y}))\n`);
         break;
       }
@@ -740,6 +835,21 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'game_quit': {
         code = appendLocal(code, indent + `pygame.quit()\n`);
+        break;
+      }
+
+      case 'py_custom_stmt': {
+        let raw = block.getFieldValue('CODE');
+        if (raw === undefined || raw === null) raw = '';
+        raw = String(raw).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        if (!raw.trim()) {
+          code = appendLocal(code, indent + 'pass\n');
+          break;
+        }
+        const lines = raw.split('\n');
+        for (let li = 0; li < lines.length; li++) {
+          code = appendLocal(code, indent + lines[li] + '\n');
+        }
         break;
       }
 
@@ -1237,7 +1347,9 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       header = importLines.length ? importLines.join('\n') + '\n\n' : '';
     } else if (currentMode === 'game') {
-      header = (showComments ? '# ゲーム（pygame互換）\n' : '') + `${cm}import pygame\n\n`;
+      const needsRandom = blockTypes.has('py_random_int');
+      header = (showComments ? '# ゲーム（pygame互換）\n' : '') + `${cm}import pygame\n` +
+               (needsRandom ? `${cm}import random\n` : '') + '\n';
     } else {
       // ─── MicroPythonモード：既存ロジック ───
       const motorTypes = ['pvb_forward','pvb_backward','pvb_turn_right','pvb_turn_left','pvb_stop'];
@@ -1574,7 +1686,7 @@ document.addEventListener('DOMContentLoaded', function() {
           { label: '円', code: 'pygame.draw.circle(screen, "#ff0000", (x, y), r)' },
           { label: '線', code: 'pygame.draw.line(screen, "#ffffff", (x1, y1), (x2, y2))' },
           { label: '文字', code: 'f = pygame.font.SysFont(None, 24)\nscreen.blit(f.render("SCORE", True, "#fff"), (10, 10))' },
-          { label: '画像', code: 'img = pygame.image.load("assets/game-icons/player_ship.svg")\nscreen.blit(img, (x, y))' },
+          { label: '画像', code: '_img = pygame.image.load("assets/game-icons/player_ship.svg")\n_rw = -1; _rh = -1\n_img = pygame.transform.scale(_img, (_rw, _rh)) if _rw > 0 and _rh > 0 else _img\n_rot_deg = 0\n_img = pygame.transform.rotate(_img, _rot_deg) if _rot_deg != 0 else _img\nscreen.blit(_img, (x, y))' },
         ]
       },
       {
@@ -2150,9 +2262,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const bare = x.replace(/^\.\//, '');
     const found = pyFiles.find(function(f) { return f.name === bare; });
     if (found) return found.content;
-    // ゲームモード: pygame エミュレーターを read() 経由でも供給
+    // ゲームモード: pygame エミュレーターを read() 経由で供給（Skulptが渡すパス形式を問わず対応）
     if (currentMode === 'game' && window.PycoPygame && window.PycoPygame.source) {
-      if (bare === 'pygame' || bare === 'pygame.js' || bare === 'pygame/__init__.js' || bare.startsWith('pygame/')) {
+      if (x.includes('pygame')) {
         return window.PycoPygame.source;
       }
     }
@@ -2192,10 +2304,6 @@ document.addEventListener('DOMContentLoaded', function() {
     clearErrorHighlights();
     setPythonRunning(true);
 
-    // ゲームモードは pygame エミュレーターを Skulpt に登録
-    if (currentMode === 'game' && window.PycoPygame && typeof window.PycoPygame.installIntoSkulpt === 'function') {
-      try { window.PycoPygame.installIntoSkulpt(Sk); } catch (e) { console.warn('pygame install failed', e); }
-    }
     if (currentMode === 'game') {
       window.__pygameRunning = true;
     }
@@ -2215,6 +2323,11 @@ document.addEventListener('DOMContentLoaded', function() {
       yieldLimit: 200,   // 200ステップごとにブラウザへ制御を返す（停止ボタン応答に必要）
       __future__: Sk.python3,
     });
+
+    // Sk.configure の後に pygame を登録（configure が builtinFiles をリセットするため必ず後に呼ぶ）
+    if (currentMode === 'game' && window.PycoPygame && typeof window.PycoPygame.installIntoSkulpt === 'function') {
+      try { window.PycoPygame.installIntoSkulpt(Sk); } catch (e) { console.warn('pygame install failed', e); }
+    }
 
     Sk.misceval.asyncToPromise(function() {
       return Sk.importMainWithBody('<stdin>', false, code, true);
