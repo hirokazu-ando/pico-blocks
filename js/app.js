@@ -3111,6 +3111,19 @@ document.addEventListener('DOMContentLoaded', function() {
   // ===== 初期化 =====
   Tutorial.init();
   // URLパラメータ ?mode=micropython でモードを指定できる（省略時は python）
-  const _urlMode = new URLSearchParams(window.location.search).get('mode');
+  const _urlParams = new URLSearchParams(window.location.search);
+  const _urlMode = _urlParams.get('mode');
   applyMode(_urlMode === 'micropython' ? 'micropython' : (_urlMode === 'game' ? 'game' : 'python'), false);
+
+  // URLパラメータ ?src=path/to/file.xml でワークスペースにXMLを自動読み込み
+  const _urlSrc = _urlParams.get('src');
+  if (_urlSrc) {
+    fetch(_urlSrc)
+      .then(function(r) { return r.ok ? r.text() : Promise.reject('HTTP ' + r.status); })
+      .then(function(xmlText) {
+        var dom = Blockly.utils.xml.textToDom(xmlText);
+        Blockly.Xml.domToWorkspace(dom, workspace);
+      })
+      .catch(function(err) { console.warn('PycoBlocks: ?src= load failed:', err); });
+  }
 });
