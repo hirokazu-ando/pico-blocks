@@ -1249,6 +1249,7 @@ h1 {
   background: #0a120a;
   border-bottom: 1px solid var(--border-dim);
   flex-shrink: 0;
+  overflow: hidden;
 }
 .syntax-header-title {
   font-family: var(--font-mono);
@@ -1256,12 +1257,19 @@ h1 {
   color: var(--accent-green);
   letter-spacing: 0.08em;
   text-shadow: 0 0 6px rgba(0,255,65,0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+  min-width: 0;
 }
 .syntax-header-sub {
   font-family: var(--font-mono);
   font-size: 0.62rem;
   color: var(--text-dim);
   margin-left: auto;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* スクロール可能なコンテンツ領域 */
