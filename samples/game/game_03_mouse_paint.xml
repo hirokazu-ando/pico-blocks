@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="game_init" id="init1" x="10" y="10">
+    <value name="W">
+      <block type="val_number"><field name="NUM">480</field></block>
+    </value>
+    <value name="H">
+      <block type="val_number"><field name="NUM">320</field></block>
+    </value>
+    <value name="TITLE">
+      <block type="val_str"><field name="TEXT">Sample 03 Mouse paint</field></block>
+    </value>
+    <next>
+      <block type="game_loop" id="loop1">
+        <statement name="DO">
+          <block type="game_events" id="ev1">
+            <next>
+              <block type="game_fill" id="fill1">
+                <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#f5f5f5</field></block></value>
+                <next>
+                  <block type="pico_if" id="ifm">
+                    <value name="IF0">
+                      <block type="game_mouse_pressed" id="mp">
+                        <field name="BTN">0</field>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="game_draw_circle" id="dc">
+                        <value name="X"><block type="game_mouse_x"></block></value>
+                        <value name="Y"><block type="game_mouse_y"></block></value>
+                        <value name="R"><block type="val_number"><field name="NUM">8</field></block></value>
+                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#e91e63</field></block></value>
+                      </block>
+                    </statement>
+                    <next>
+                      <block type="game_draw_text">
+                        <value name="TEXT"><block type="val_str"><field name="TEXT">Hold left button to draw</field></block></value>
+                        <value name="X"><block type="val_number"><field name="NUM">100</field></block></value>
+                        <value name="Y"><block type="val_number"><field name="NUM">4</field></block></value>
+                        <value name="SIZE"><block type="val_number"><field name="NUM">20</field></block></value>
+                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#333333</field></block></value>
+                        <next>
+                          <block type="game_flip">
+                            <value name="FPS"><block type="val_number"><field name="NUM">120</field></block></value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <next>
+          <block type="game_quit"></block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

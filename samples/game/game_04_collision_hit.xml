@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vid_px">player_x</variable>
+    <variable id="vid_py">player_y</variable>
+  </variables>
+  <block type="game_init" id="init1" x="10" y="10">
+    <value name="W">
+      <block type="val_number"><field name="NUM">480</field></block>
+    </value>
+    <value name="H">
+      <block type="val_number"><field name="NUM">320</field></block>
+    </value>
+    <value name="TITLE">
+      <block type="val_str"><field name="TEXT">Sample 04 Collision</field></block>
+    </value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vid_px">player_x</field>
+        <value name="VALUE"><block type="val_number"><field name="NUM">40</field></block></value>
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="vid_py">player_y</field>
+            <value name="VALUE"><block type="val_number"><field name="NUM">140</field></block></value>
+            <next>
+              <block type="game_loop">
+                <statement name="DO">
+                  <block type="game_events">
+                    <next>
+                      <block type="game_fill">
+                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#37474f</field></block></value>
+                        <next>
+                          <block type="pico_if">
+                            <value name="IF0">
+                              <block type="game_key_pressed"><field name="KEY">K_RIGHT</field></block>
+                            </value>
+                            <statement name="DO0">
+                              <block type="var_change">
+                                <field name="VAR" id="vid_px">player_x</field>
+                                <value name="AMOUNT"><block type="val_number"><field name="NUM">3</field></block></value>
+                              </block>
+                            </statement>
+                            <next>
+                              <block type="pico_if">
+                                <value name="IF0">
+                                  <block type="game_key_pressed"><field name="KEY">K_LEFT</field></block>
+                                </value>
+                                <statement name="DO0">
+                                  <block type="var_change">
+                                    <field name="VAR" id="vid_px">player_x</field>
+                                    <value name="AMOUNT"><block type="val_number"><field name="NUM">-3</field></block></value>
+                                  </block>
+                                </statement>
+                                <next>
+                                  <block type="pico_if">
+                                    <value name="IF0">
+                                      <block type="game_key_pressed"><field name="KEY">K_UP</field></block>
+                                    </value>
+                                    <statement name="DO0">
+                                      <block type="var_change">
+                                        <field name="VAR" id="vid_py">player_y</field>
+                                        <value name="AMOUNT"><block type="val_number"><field name="NUM">-3</field></block></value>
+                                      </block>
+                                    </statement>
+                                    <next>
+                                      <block type="pico_if">
+                                        <value name="IF0">
+                                          <block type="game_key_pressed"><field name="KEY">K_DOWN</field></block>
+                                        </value>
+                                        <statement name="DO0">
+                                          <block type="var_change">
+                                            <field name="VAR" id="vid_py">player_y</field>
+                                            <value name="AMOUNT"><block type="val_number"><field name="NUM">3</field></block></value>
+                                          </block>
+                                        </statement>
+                                        <next>
+                                          <block type="game_draw_rect">
+                                            <value name="X"><block type="val_number"><field name="NUM">300</field></block></value>
+                                            <value name="Y"><block type="val_number"><field name="NUM">120</field></block></value>
+                                            <value name="W"><block type="val_number"><field name="NUM">80</field></block></value>
+                                            <value name="H"><block type="val_number"><field name="NUM">80</field></block></value>
+                                            <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ff9800</field></block></value>
+                                            <next>
+                                              <block type="game_draw_rect">
+                                                <value name="X"><block type="val_var"><field name="VAR" id="vid_px">player_x</field></block></value>
+                                                <value name="Y"><block type="val_var"><field name="VAR" id="vid_py">player_y</field></block></value>
+                                                <value name="W"><block type="val_number"><field name="NUM">36</field></block></value>
+                                                <value name="H"><block type="val_number"><field name="NUM">36</field></block></value>
+                                                <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#4dd0e1</field></block></value>
+                                                <next>
+                                                  <block type="pico_if">
+                                                    <value name="IF0">
+                                                      <block type="game_collide" id="col1">
+                                                        <value name="A">
+                                                          <block type="game_rect">
+                                                            <value name="X"><block type="val_var"><field name="VAR" id="vid_px">player_x</field></block></value>
+                                                            <value name="Y"><block type="val_var"><field name="VAR" id="vid_py">player_y</field></block></value>
+                                                            <value name="W"><block type="val_number"><field name="NUM">36</field></block></value>
+                                                            <value name="H"><block type="val_number"><field name="NUM">36</field></block></value>
+                                                          </block>
+                                                        </value>
+                                                        <value name="B">
+                                                          <block type="game_rect">
+                                                            <value name="X"><block type="val_number"><field name="NUM">300</field></block></value>
+                                                            <value name="Y"><block type="val_number"><field name="NUM">120</field></block></value>
+                                                            <value name="W"><block type="val_number"><field name="NUM">80</field></block></value>
+                                                            <value name="H"><block type="val_number"><field name="NUM">80</field></block></value>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </value>
+                                                    <statement name="DO0">
+                                                      <block type="game_draw_text">
+                                                        <value name="TEXT"><block type="val_str"><field name="TEXT">HIT!</field></block></value>
+                                                        <value name="X"><block type="val_number"><field name="NUM">200</field></block></value>
+                                                        <value name="Y"><block type="val_number"><field name="NUM">50</field></block></value>
+                                                        <value name="SIZE"><block type="val_number"><field name="NUM">48</field></block></value>
+                                                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ffeb3b</field></block></value>
+                                                      </block>
+                                                    </statement>
+                                                    <next>
+                                                      <block type="game_draw_text">
+                                                        <value name="TEXT"><block type="val_str"><field name="TEXT">Touch orange = HIT</field></block></value>
+                                                        <value name="X"><block type="val_number"><field name="NUM">70</field></block></value>
+                                                        <value name="Y"><block type="val_number"><field name="NUM">8</field></block></value>
+                                                        <value name="SIZE"><block type="val_number"><field name="NUM">18</field></block></value>
+                                                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#eceff1</field></block></value>
+                                                        <next>
+                                                          <block type="game_flip">
+                                                            <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <next>
+                  <block type="game_quit"></block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

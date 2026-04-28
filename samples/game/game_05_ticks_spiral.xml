@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="game_init" id="init1" x="10" y="10">
+    <value name="W">
+      <block type="val_number"><field name="NUM">480</field></block>
+    </value>
+    <value name="H">
+      <block type="val_number"><field name="NUM">320</field></block>
+    </value>
+    <value name="TITLE">
+      <block type="val_str"><field name="TEXT">Sample 05 Ticks + math</field></block>
+    </value>
+    <next>
+      <block type="game_loop">
+        <statement name="DO">
+          <block type="game_events">
+            <next>
+              <block type="game_fill">
+                <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#0d1117</field></block></value>
+                <next>
+                  <block type="game_draw_line">
+                    <value name="X1"><block type="val_number"><field name="NUM">240</field></block></value>
+                    <value name="Y1"><block type="val_number"><field name="NUM">160</field></block></value>
+                    <value name="X2">
+                      <block type="py_math_op">
+                        <value name="LEFT"><block type="val_number"><field name="NUM">240</field></block></value>
+                        <field name="OP">+</field>
+                        <value name="RIGHT">
+                          <block type="py_math_op">
+                            <value name="LEFT"><block type="val_number"><field name="NUM">120</field></block></value>
+                            <field name="OP">*</field>
+                            <value name="RIGHT">
+                              <block type="py_round">
+                                <value name="VALUE">
+                                  <block type="py_math_op">
+                                    <value name="LEFT">
+                                      <block type="game_get_ticks"></block>
+                                    </value>
+                                    <field name="OP">/</field>
+                                    <value name="RIGHT"><block type="val_number"><field name="NUM">800</field></block></value>
+                                  </block>
+                                </value>
+                                <value name="DIGITS"><block type="val_number"><field name="NUM">0</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="Y2">
+                      <block type="py_math_op">
+                        <value name="LEFT"><block type="val_number"><field name="NUM">160</field></block></value>
+                        <field name="OP">+</field>
+                        <value name="RIGHT">
+                          <block type="py_math_op">
+                            <value name="LEFT"><block type="val_number"><field name="NUM">100</field></block></value>
+                            <field name="OP">*</field>
+                            <value name="RIGHT">
+                              <block type="py_round">
+                                <value name="VALUE">
+                                  <block type="py_math_op">
+                                    <value name="LEFT">
+                                      <block type="game_get_ticks"></block>
+                                    </value>
+                                    <field name="OP">%</field>
+                                    <value name="RIGHT"><block type="val_number"><field name="NUM">1000</field></block></value>
+                                  </block>
+                                </value>
+                                <value name="DIGITS"><block type="val_number"><field name="NUM">0</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#58a6ff</field></block></value>
+                    <next>
+                      <block type="game_draw_text">
+                        <value name="TEXT"><block type="val_str"><field name="TEXT">get_ticks + nested math</field></block></value>
+                        <value name="X"><block type="val_number"><field name="NUM">40</field></block></value>
+                        <value name="Y"><block type="val_number"><field name="NUM">10</field></block></value>
+                        <value name="SIZE"><block type="val_number"><field name="NUM">18</field></block></value>
+                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#c9d1d9</field></block></value>
+                        <next>
+                          <block type="game_flip">
+                            <value name="FPS"><block type="val_number"><field name="NUM">30</field></block></value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <next>
+          <block type="game_quit"></block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
