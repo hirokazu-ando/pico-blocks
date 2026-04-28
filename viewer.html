@@ -92,13 +92,14 @@
         }
       });
 
-      // 読み取り専用ワークスペース（ツールボックスなし・操作不可）
+      // 読み取り専用ワークスペース（ドラッグ・ズーム可能）
       var workspace = Blockly.inject('blockly-div', {
         readOnly:   true,
         renderer:   'zelos',
         theme:      viewerTheme,
-        scrollbars: false,
-        zoom: { controls: false, wheel: false },
+        scrollbars: true,
+        zoom: { controls: true, wheel: true, startScale: 0.9, maxScale: 3, minScale: 0.2 },
+        move: { scrollbars: true, drag: true, wheel: false },
       });
 
       if (!srcUrl) {
