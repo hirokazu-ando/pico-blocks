@@ -1,47 +1,64 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="game_init" id="init1" x="10" y="10">
-    <value name="W">
-      <block type="val_number"><field name="NUM">480</field></block>
-    </value>
-    <value name="H">
-      <block type="val_number"><field name="NUM">320</field></block>
-    </value>
-    <value name="TITLE">
-      <block type="val_str"><field name="TEXT">Sample 03 Mouse paint</field></block>
-    </value>
+  <!--
+    サンプル3: マウスペイント
+    確認ポイント: game_mouse_x / game_mouse_y / game_mouse_pressed
+    操作: 左クリック=ピンク小円, 右クリック=青大円
+    game_fill をループ外に置くことで描いた内容が残る
+  -->
+
+  <block type="game_init" x="20" y="20">
+    <value name="W"><shadow type="val_number"><field name="NUM">480</field></shadow></value>
+    <value name="H"><shadow type="val_number"><field name="NUM">320</field></shadow></value>
+    <value name="TITLE"><block type="val_str"><field name="TEXT">ペイント</field></block></value>
     <next>
-      <block type="game_loop" id="loop1">
-        <statement name="DO">
-          <block type="game_events" id="ev1">
-            <next>
-              <block type="game_fill" id="fill1">
-                <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#f5f5f5</field></block></value>
+      <!-- 背景を一度だけ塗る（ループ外） -->
+      <block type="game_fill">
+        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#1a1a2e</field></block></value>
+        <next>
+          <block type="game_loop">
+            <statement name="DO">
+              <block type="game_events">
                 <next>
-                  <block type="pico_if" id="ifm">
+                  <!-- 左クリック: 小さいピンク円 -->
+                  <block type="pico_if">
                     <value name="IF0">
-                      <block type="game_mouse_pressed" id="mp">
-                        <field name="BTN">0</field>
-                      </block>
+                      <block type="game_mouse_pressed"><field name="BTN">0</field></block>
                     </value>
                     <statement name="DO0">
-                      <block type="game_draw_circle" id="dc">
+                      <block type="game_draw_circle">
                         <value name="X"><block type="game_mouse_x"></block></value>
                         <value name="Y"><block type="game_mouse_y"></block></value>
-                        <value name="R"><block type="val_number"><field name="NUM">8</field></block></value>
-                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#e91e63</field></block></value>
+                        <value name="R"><block type="val_number"><field name="NUM">10</field></block></value>
+                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ff6699</field></block></value>
                       </block>
                     </statement>
                     <next>
-                      <block type="game_draw_text">
-                        <value name="TEXT"><block type="val_str"><field name="TEXT">Hold left button to draw</field></block></value>
-                        <value name="X"><block type="val_number"><field name="NUM">100</field></block></value>
-                        <value name="Y"><block type="val_number"><field name="NUM">4</field></block></value>
-                        <value name="SIZE"><block type="val_number"><field name="NUM">20</field></block></value>
-                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#333333</field></block></value>
+                      <!-- 右クリック: 大きい青円 -->
+                      <block type="pico_if">
+                        <value name="IF0">
+                          <block type="game_mouse_pressed"><field name="BTN">2</field></block>
+                        </value>
+                        <statement name="DO0">
+                          <block type="game_draw_circle">
+                            <value name="X"><block type="game_mouse_x"></block></value>
+                            <value name="Y"><block type="game_mouse_y"></block></value>
+                            <value name="R"><block type="val_number"><field name="NUM">25</field></block></value>
+                            <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#44aaff</field></block></value>
+                          </block>
+                        </statement>
                         <next>
-                          <block type="game_flip">
-                            <value name="FPS"><block type="val_number"><field name="NUM">120</field></block></value>
+                          <!-- 操作説明テキスト -->
+                          <block type="game_draw_text">
+                            <value name="TEXT"><block type="val_str"><field name="TEXT">左: 小  右: 大</field></block></value>
+                            <value name="X"><block type="val_number"><field name="NUM">10</field></block></value>
+                            <value name="Y"><block type="val_number"><field name="NUM">8</field></block></value>
+                            <value name="SIZE"><block type="val_number"><field name="NUM">20</field></block></value>
+                            <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#888888</field></block></value>
+                            <next>
+                              <block type="game_flip">
+                                <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
+                              </block>
+                            </next>
                           </block>
                         </next>
                       </block>
@@ -49,11 +66,11 @@
                   </block>
                 </next>
               </block>
+            </statement>
+            <next>
+              <block type="game_quit"></block>
             </next>
           </block>
-        </statement>
-        <next>
-          <block type="game_quit"></block>
         </next>
       </block>
     </next>

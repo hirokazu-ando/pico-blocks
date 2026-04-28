@@ -1,0 +1,252 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <!--
+    サンプル4: よけゲーム
+    確認ポイント: 変数・乱数・var_change・pico_if・game_collide・game_get_ticks・f文字列
+    操作: 矢印キーでプレイヤー(緑)を動かし赤い敵を避ける
+    敵を避けるたびにスコア+1, 難易度(速度)も上昇
+    期待コード:
+      px=225, ply=260, ex=240, ey=0, es=4, sc=0
+      while running:
+          ...
+          if K_RIGHT: px += 5
+          if K_LEFT:  px += -5
+          ey += es
+          if ey > 330:
+              ey = 0
+              ex = random(0, 450)
+              es += 1
+              sc += 1
+          if collide(player_rect, enemy_rect): running = False
+          draw player, enemy, score text
+  -->
+
+  <variables>
+    <variable id="dg_px">px</variable>
+    <variable id="dg_ply">ply</variable>
+    <variable id="dg_ex">ex</variable>
+    <variable id="dg_ey">ey</variable>
+    <variable id="dg_es">es</variable>
+    <variable id="dg_sc">sc</variable>
+    <variable id="dg_run">running</variable>
+  </variables>
+
+  <block type="var_set" x="20" y="20">
+    <field name="VAR" id="dg_px">px</field>
+    <value name="VALUE"><block type="val_number"><field name="NUM">225</field></block></value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="dg_ply">ply</field>
+        <value name="VALUE"><block type="val_number"><field name="NUM">260</field></block></value>
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="dg_ex">ex</field>
+            <value name="VALUE"><block type="val_number"><field name="NUM">240</field></block></value>
+            <next>
+              <block type="var_set">
+                <field name="VAR" id="dg_ey">ey</field>
+                <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+                <next>
+                  <block type="var_set">
+                    <field name="VAR" id="dg_es">es</field>
+                    <value name="VALUE"><block type="val_number"><field name="NUM">4</field></block></value>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="dg_sc">sc</field>
+                        <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+                        <next>
+                          <block type="game_init">
+                            <value name="W"><block type="val_number"><field name="NUM">480</field></block></value>
+                            <value name="H"><block type="val_number"><field name="NUM">320</field></block></value>
+                            <value name="TITLE"><block type="val_str"><field name="TEXT">よけゲーム</field></block></value>
+                            <next>
+                              <block type="game_loop">
+                                <statement name="DO">
+
+                                  <!-- イベント処理 -->
+                                  <block type="game_events">
+                                    <next>
+                                      <!-- 背景 -->
+                                      <block type="game_fill">
+                                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#001133</field></block></value>
+                                        <next>
+
+                                          <!-- 右キー -->
+                                          <block type="pico_if">
+                                            <value name="IF0">
+                                              <block type="game_key_pressed"><field name="KEY">K_RIGHT</field></block>
+                                            </value>
+                                            <statement name="DO0">
+                                              <block type="var_change">
+                                                <field name="VAR" id="dg_px">px</field>
+                                                <value name="AMOUNT"><block type="val_number"><field name="NUM">5</field></block></value>
+                                              </block>
+                                            </statement>
+                                            <next>
+
+                                              <!-- 左キー -->
+                                              <block type="pico_if">
+                                                <value name="IF0">
+                                                  <block type="game_key_pressed"><field name="KEY">K_LEFT</field></block>
+                                                </value>
+                                                <statement name="DO0">
+                                                  <block type="var_change">
+                                                    <field name="VAR" id="dg_px">px</field>
+                                                    <value name="AMOUNT"><block type="val_number"><field name="NUM">-5</field></block></value>
+                                                  </block>
+                                                </statement>
+                                                <next>
+
+                                                  <!-- 敵を下に移動 -->
+                                                  <block type="var_change">
+                                                    <field name="VAR" id="dg_ey">ey</field>
+                                                    <value name="AMOUNT">
+                                                      <block type="val_var"><field name="VAR" id="dg_es">es</field></block>
+                                                    </value>
+                                                    <next>
+
+                                                      <!-- 敵が画面外 → リセット + スコア -->
+                                                      <block type="pico_if">
+                                                        <value name="IF0">
+                                                          <block type="cond_compare">
+                                                            <field name="OP">&gt;</field>
+                                                            <value name="LEFT"><block type="val_var"><field name="VAR" id="dg_ey">ey</field></block></value>
+                                                            <value name="RIGHT"><block type="val_number"><field name="NUM">330</field></block></value>
+                                                          </block>
+                                                        </value>
+                                                        <statement name="DO0">
+                                                          <block type="var_set">
+                                                            <field name="VAR" id="dg_ey">ey</field>
+                                                            <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+                                                            <next>
+                                                              <block type="var_set">
+                                                                <field name="VAR" id="dg_ex">ex</field>
+                                                                <value name="VALUE">
+                                                                  <block type="py_random_int">
+                                                                    <value name="FROM"><block type="val_number"><field name="NUM">0</field></block></value>
+                                                                    <value name="TO"><block type="val_number"><field name="NUM">450</field></block></value>
+                                                                  </block>
+                                                                </value>
+                                                                <next>
+                                                                  <block type="var_change">
+                                                                    <field name="VAR" id="dg_es">es</field>
+                                                                    <value name="AMOUNT"><block type="val_number"><field name="NUM">1</field></block></value>
+                                                                    <next>
+                                                                      <block type="var_change">
+                                                                        <field name="VAR" id="dg_sc">sc</field>
+                                                                        <value name="AMOUNT"><block type="val_number"><field name="NUM">1</field></block></value>
+                                                                      </block>
+                                                                    </next>
+                                                                  </block>
+                                                                </next>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </statement>
+                                                        <next>
+
+                                                          <!-- 当たり判定 → ゲームオーバー -->
+                                                          <block type="pico_if">
+                                                            <value name="IF0">
+                                                              <block type="game_collide">
+                                                                <value name="A">
+                                                                  <block type="game_rect">
+                                                                    <value name="X"><block type="val_var"><field name="VAR" id="dg_px">px</field></block></value>
+                                                                    <value name="Y"><block type="val_var"><field name="VAR" id="dg_ply">ply</field></block></value>
+                                                                    <value name="W"><block type="val_number"><field name="NUM">30</field></block></value>
+                                                                    <value name="H"><block type="val_number"><field name="NUM">30</field></block></value>
+                                                                  </block>
+                                                                </value>
+                                                                <value name="B">
+                                                                  <block type="game_rect">
+                                                                    <value name="X"><block type="val_var"><field name="VAR" id="dg_ex">ex</field></block></value>
+                                                                    <value name="Y"><block type="val_var"><field name="VAR" id="dg_ey">ey</field></block></value>
+                                                                    <value name="W"><block type="val_number"><field name="NUM">30</field></block></value>
+                                                                    <value name="H"><block type="val_number"><field name="NUM">30</field></block></value>
+                                                                  </block>
+                                                                </value>
+                                                              </block>
+                                                            </value>
+                                                            <statement name="DO0">
+                                                              <block type="var_set">
+                                                                <field name="VAR" id="dg_run">running</field>
+                                                                <value name="VALUE"><block type="val_bool"><field name="BOOL">False</field></block></value>
+                                                              </block>
+                                                            </statement>
+                                                            <next>
+
+                                                              <!-- プレイヤー描画 -->
+                                                              <block type="game_draw_rect">
+                                                                <value name="X"><block type="val_var"><field name="VAR" id="dg_px">px</field></block></value>
+                                                                <value name="Y"><block type="val_var"><field name="VAR" id="dg_ply">ply</field></block></value>
+                                                                <value name="W"><block type="val_number"><field name="NUM">30</field></block></value>
+                                                                <value name="H"><block type="val_number"><field name="NUM">30</field></block></value>
+                                                                <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#00ff88</field></block></value>
+                                                                <next>
+
+                                                                  <!-- 敵描画 -->
+                                                                  <block type="game_draw_rect">
+                                                                    <value name="X"><block type="val_var"><field name="VAR" id="dg_ex">ex</field></block></value>
+                                                                    <value name="Y"><block type="val_var"><field name="VAR" id="dg_ey">ey</field></block></value>
+                                                                    <value name="W"><block type="val_number"><field name="NUM">30</field></block></value>
+                                                                    <value name="H"><block type="val_number"><field name="NUM">30</field></block></value>
+                                                                    <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ff4444</field></block></value>
+                                                                    <next>
+
+                                                                      <!-- スコア表示 -->
+                                                                      <block type="game_draw_text">
+                                                                        <value name="TEXT">
+                                                                          <block type="py_fstring">
+                                                                            <field name="PRE">スコア: </field>
+                                                                            <field name="POST"></field>
+                                                                            <value name="VAR"><block type="val_var"><field name="VAR" id="dg_sc">sc</field></block></value>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="X"><block type="val_number"><field name="NUM">10</field></block></value>
+                                                                        <value name="Y"><block type="val_number"><field name="NUM">10</field></block></value>
+                                                                        <value name="SIZE"><block type="val_number"><field name="NUM">28</field></block></value>
+                                                                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ffffff</field></block></value>
+                                                                        <next>
+                                                                          <block type="game_flip">
+                                                                            <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
+                                                                          </block>
+                                                                        </next>
+                                                                      </block>
+                                                                    </next>
+                                                                  </block>
+                                                                </next>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+
+                                </statement>
+                                <next>
+                                  <block type="game_quit"></block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
