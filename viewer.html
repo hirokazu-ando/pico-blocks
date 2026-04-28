@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PycoBlocks ブロックビューアー</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #f8fafc; }
+
+    #title-bar {
+      display: none;
+      background: #1e293b;
+      color: #e2e8f0;
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 13px;
+      padding: 0 14px;
+      height: 32px;
+      line-height: 32px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #blockly-div {
+      position: absolute;
+      left: 0;
+      right: 0;
+    }
+
+    #error-msg {
+      display: none;
+      position: absolute;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      font-family: sans-serif;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+  </style>
+  <script src="https://unpkg.com/blockly@12.5.1/blockly.min.js"
+          integrity="sha384-SxxR8fpocVLJMl6kYyBm33uuy9U1yy0gMrMavfyCd3lQRer3qaBMlcVb0VSAfzop"
+          crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="title-bar"></div>
+  <div id="blockly-div"></div>
+  <div id="error-msg">ブロックを読み込めませんでした</div>
+
+  <!-- ブロック定義（app.js・game_engine.js・Skulpt は不要） -->
+  <script src="js/block_palette.js?v=20260429a"></script>
+  <script src="js/blocks/gpio.js"></script>
+  <script src="js/blocks/control.js"></script>
+  <script src="js/blocks/polyviabot.js?v=20260427c"></script>
+  <script src="js/blocks/sensors.js?v=20260427c"></script>
+  <script src="js/blocks/values.js?v=20260427b"></script>
+  <script src="js/blocks/variables.js"></script>
+  <script src="js/blocks/display.js"></script>
+  <script src="js/generators/micropython.js"></script>
+  <script src="js/blocks/python_intro.js"></script>
+  <script src="js/blocks/custom_python.js?v=20260429b"></script>
+  <script src="js/blocks/game.js?v=20260429a"></script>
+
+  <script>
+    (function () {
+      var params    = new URLSearchParams(location.search);
+      var srcUrl    = params.get('src');
+      var titleText = params.get('title');
+
+      var titleBar  = document.getElementById('title-bar');
+      var blocklyDiv = document.getElementById('blockly-div');
+      var errorMsg  = document.getElementById('error-msg');
+
+      // タイトルバー表示
+      var topOffset = 0;
+      if (titleText) {
+        titleBar.textContent = titleText;
+        titleBar.style.display = 'block';
+        topOffset = 32;
+      }
+      blocklyDiv.style.top    = topOffset + 'px';
+      blocklyDiv.style.height = 'calc(100vh - ' + topOffset + 'px)';
+
+      // ライトテーマ
+      var viewerTheme = Blockly.Theme.defineTheme('pycoViewer', {
+        base: Blockly.Themes.Classic,
+        componentStyles: {
+          workspaceBackgroundColour: '#f8fafc',
+          scrollbarColour:           '#cbd5e1',
+          scrollbarOpacity:          0.6,
+        }
+      });
+
+      // 読み取り専用ワークスペース（ツールボックスなし・操作不可）
+      var workspace = Blockly.inject('blockly-div', {
+        readOnly:   true,
+        renderer:   'zelos',
+        theme:      viewerTheme,
+        scrollbars: false,
+        zoom: { controls: false, wheel: false },
+      });
+
+      if (!srcUrl) {
+        errorMsg.style.display = 'flex';
+        return;
+      }
+
+      // ?src= で指定されたXMLをフェッチしてワークスペースに展開
+      fetch(srcUrl)
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.text();
+        })
+        .then(function (xmlText) {
+          var dom = Blockly.utils.xml.textToDom(xmlText);
+          Blockly.Xml.domToWorkspace(dom, workspace);
+          // 少し遅延してからフィット（レイアウト確定後）
+          setTimeout(function () { workspace.zoomToFit(); }, 150);
+        })
+        .catch(function () {
+          blocklyDiv.style.display = 'none';
+          errorMsg.style.display   = 'flex';
+        });
+    })();
+  </script>
+</body>
+</html>
