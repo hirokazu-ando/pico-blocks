@@ -1351,19 +1351,17 @@ h1 {
 
 /* ============================================================
    レスポンシブ対応
-   ≤1100px: 装飾要素を非表示（ボタンを隠れにくくする）
-   ≤900px : ヘッダー折り返し・メイン縦積み（タブレット縦）
+   ≤1400px: ヘッダー2行化（ツールバーを2行目に折り返し・メインは横並び維持）
+   ≤900px : メイン縦積み（タブレット縦・スマートフォン横）
    ≤600px : ボタン縮小・補助要素を非表示（スマートフォン）
    ============================================================ */
 
-@media (max-width: 1100px) {
-  /* 装飾要素を先に消してツールバーにスペースを確保 */
-  .version-tag { display: none; }
-  .title-sub   { display: none; }
-}
+@media (max-width: 1400px) {
+  /* 装飾テキストを非表示にして行1を軽くする */
+  .version-tag,
+  .title-sub { display: none; }
 
-@media (max-width: 900px) {
-  /* ヘッダー：高さ固定を解除して折り返し可能に */
+  /* ヘッダー：高さ固定を解除して2行に折り返し可能に */
   header {
     height: auto;
     min-height: var(--header-h);
@@ -1372,13 +1370,10 @@ h1 {
     gap: 6px;
   }
 
-  /* タイトルブロックを左端に固定 */
-  .title-block { flex-shrink: 0; }
-
-  /* モード切替は右端へ */
+  /* モード切替を行1の右端へ */
   .mode-toggle { margin-left: auto; }
 
-  /* ツールバーは2行折り返し */
+  /* ツールバー：行2（幅100%・折り返し許可） */
   .toolbar {
     margin-left: 0;
     width: 100%;
@@ -1386,9 +1381,11 @@ h1 {
     gap: 6px;
     overflow-x: visible;
   }
+}
 
-  /* version-tag は折り返しライン確保のため非表示 */
-  .version-tag { display: none; }
+@media (max-width: 900px) {
+  /* タイトルブロックを左端に固定 */
+  .title-block { flex-shrink: 0; }
 
   /* ===== メインエリアを縦積みに ===== */
   .main { flex-direction: column; }
