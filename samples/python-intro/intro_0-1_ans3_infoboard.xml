@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="print_text" id="p1" x="30" y="30">
+    <field name="TEXT">========== 部活動紹介 ==========</field>
+    <next>
+      <block type="print_text" id="p2">
+        <field name="TEXT">名前：ロボット研究部</field>
+        <next>
+          <block type="print_separator" id="sep1">
+            <next>
+              <block type="print_text" id="p3">
+                <field name="TEXT">部員数：</field>
+                <next>
+                  <block type="py_print" id="pp1">
+                    <value name="VALUE">
+                      <block type="val_number" id="n1">
+                        <field name="NUM">12</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="print_separator" id="sep2">
+                        <next>
+                          <block type="print_text" id="p4">
+                            <field name="TEXT">活動日：月・水・金</field>
+                            <next>
+                              <block type="print_text" id="p5">
+                                <field name="TEXT">顧問：安藤 先生</field>
+                                <next>
+                                  <block type="print_text" id="p6">
+                                    <field name="TEXT">================================</field>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

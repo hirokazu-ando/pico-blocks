@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="print_text" id="p1" x="30" y="30">
+    <field name="TEXT">=== プロフィール ===</field>
+    <next>
+      <block type="print_text" id="p2">
+        <field name="TEXT">名前：田中 花子</field>
+        <next>
+          <block type="print_separator" id="sep1">
+            <next>
+              <block type="print_text" id="p3">
+                <field name="TEXT">身長（cm）：</field>
+                <next>
+                  <block type="py_print" id="pp1">
+                    <value name="VALUE">
+                      <block type="val_number" id="n1">
+                        <field name="NUM">162</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="print_text" id="p4">
+                        <field name="TEXT">体重（kg）：</field>
+                        <next>
+                          <block type="py_print" id="pp2">
+                            <value name="VALUE">
+                              <block type="val_number" id="n2">
+                                <field name="NUM">52</field>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
