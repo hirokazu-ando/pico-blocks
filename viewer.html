@@ -116,8 +116,23 @@
         .then(function (xmlText) {
           var dom = Blockly.utils.xml.textToDom(xmlText);
           Blockly.Xml.domToWorkspace(dom, workspace);
-          // 少し遅延してからフィット（レイアウト確定後）
-          setTimeout(function () { workspace.zoomToFit(); }, 150);
+
+          // details 閉じ中は blockly-div が 0×0 になり zoomToFit が失敗するため、
+          // 実サイズが確定するまで rAF でポーリングしてからフィットする
+          var fitted = false;
+          var deadline = Date.now() + 30000; // 最大30秒待つ
+          function tryFit() {
+            if (fitted) return;
+            if (Date.now() > deadline) return;
+            var rect = blocklyDiv.getBoundingClientRect();
+            if (rect.width > 0 && rect.height > 0) {
+              fitted = true;
+              workspace.zoomToFit();
+            } else {
+              requestAnimationFrame(tryFit);
+            }
+          }
+          requestAnimationFrame(tryFit);
         })
         .catch(function () {
           blocklyDiv.style.display = 'none';
