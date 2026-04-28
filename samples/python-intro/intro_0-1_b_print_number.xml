@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_print" id="p1" x="30" y="30">
+    <value name="VALUE">
+      <block type="val_number" id="n1">
+        <field name="NUM">42</field>
+      </block>
+    </value>
+  </block>
+</xml>

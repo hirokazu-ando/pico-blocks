@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="print_text" id="p1" x="30" y="30">
+    <field name="TEXT">山田 太郎</field>
+    <next>
+      <block type="print_text" id="p2">
+        <field name="TEXT">魁高専</field>
+        <next>
+          <block type="print_text" id="p3">
+            <field name="TEXT">数学</field>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
