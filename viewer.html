@@ -145,8 +145,10 @@
               fitted = true;
               if (needsReload) {
                 // height=0 で初期化されたブロックを正しいサイズで再描画する
+                // domToWorkspace は DOM を破壊的に処理するため xmlText から再パースする
                 workspace.clear();
-                Blockly.Xml.domToWorkspace(dom, workspace);
+                Blockly.Xml.domToWorkspace(
+                  Blockly.utils.xml.textToDom(xmlText), workspace);
               }
               workspace.zoomToFit();
             } else {
