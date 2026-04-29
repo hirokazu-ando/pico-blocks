@@ -92,14 +92,18 @@
         }
       });
 
-      // 読み取り専用ワークスペース（ドラッグ・ズーム可能）
+      // readOnly を外すことで FieldTextInput が正しい高さで描画される
+      // （readOnly:true だと入力欄が薄く潰れて表示される Blockly の挙動を回避）
+      // iframe 内の編集はリロードで元に戻るため問題なし
       var workspace = Blockly.inject('blockly-div', {
-        readOnly:   true,
+        readOnly:   false,
         renderer:   'zelos',
         theme:      viewerTheme,
         scrollbars: true,
         zoom: { controls: true, wheel: true, startScale: 0.9, maxScale: 3, minScale: 0.2 },
         move: { scrollbars: true, drag: true, wheel: false },
+        trashcan: false,
+        toolbox:  null,
       });
 
       if (!srcUrl) {
