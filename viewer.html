@@ -113,7 +113,9 @@
       // iframe 内の編集はリロードで元に戻るため問題なし
       var workspace = Blockly.inject('blockly-div', {
         readOnly:   false,
-        renderer:   'zelos',
+        // viewer では一部 FieldDropdown が縦に潰れて見えるため、
+        // 形状が安定しやすい geras レンダラを使う。
+        renderer:   'geras',
         theme:      viewerTheme,
         scrollbars: true,
         zoom: { controls: true, wheel: true, startScale: 0.9, maxScale: 3, minScale: 0.2 },

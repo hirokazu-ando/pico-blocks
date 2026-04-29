@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_print" id="b1" x="30" y="30">
+    <value name="VALUE"><block type="val_bool" id="b2"><field name="BOOL">True</field></block></value>
+    <next>
+      <block type="py_print" id="b3">
+        <value name="VALUE">
+          <block type="cond_compare" id="b4">
+            <field name="OP">==</field>
+            <value name="LEFT"><block type="val_number" id="b5"><field name="NUM">1</field></block></value>
+            <value name="RIGHT"><block type="val_number" id="b6"><field name="NUM">2</field></block></value>
+          </block>
+        </value>
+      </block>
+    </next>
+  </block>
+</xml>

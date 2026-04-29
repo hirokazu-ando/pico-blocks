@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="var_x">x</variable></variables>
+  <block type="py_input" id="b1" x="30" y="30"><field name="TYPE">int</field><field name="VAR" id="var_x">x</field><field name="PROMPT">数を入力してください</field>
+    <next><block type="pico_if" id="b2"><value name="IF0"><block type="cond_compare" id="b3"><field name="OP">&gt;</field><value name="LEFT"><block type="val_var" id="b4"><field name="VAR" id="var_x">x</field></block></value><value name="RIGHT"><block type="val_number" id="b5"><field name="NUM">0</field></block></value></block></value><statement name="DO0"><block type="print_text" id="b6"><field name="TEXT">OK</field></block></statement></block></next>
+  </block>
+</xml>

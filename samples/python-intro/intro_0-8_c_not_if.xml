@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="var_r">is_raining</variable></variables>
+  <block type="var_set" id="b1" x="30" y="30"><field name="VAR" id="var_r">is_raining</field><value name="VALUE"><block type="val_bool" id="b2"><field name="BOOL">False</field></block></value>
+    <next><block type="pico_if" id="b3"><value name="IF0"><block type="cond_not" id="b4"><value name="A"><block type="val_var" id="b5"><field name="VAR" id="var_r">is_raining</field></block></value></block></value><statement name="DO0"><block type="print_text" id="b6"><field name="TEXT">出発</field></block></statement></block></next>
+  </block>
+</xml>

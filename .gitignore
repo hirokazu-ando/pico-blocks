@@ -31,9 +31,7 @@ dist/
 build/
 
 # OneDrive 競合コピー（自動生成）
-*-DESKTOP-*.gitignore
-*-DESKTOP-*.js
-*-DESKTOP-*.md
+*-DESKTOP-*
 
 # Codex CLI
 .codex

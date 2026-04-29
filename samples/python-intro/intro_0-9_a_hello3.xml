@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="var_i">i</variable></variables>
+  <block type="pico_for_range" id="b1" x="30" y="30">
+    <field name="VAR" id="var_i">i</field>
+    <value name="N"><block type="val_number" id="b2"><field name="NUM">3</field></block></value>
+    <statement name="DO"><block type="print_text" id="b3"><field name="TEXT">Hello</field></block></statement>
+  </block>
+</xml>
