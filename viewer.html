@@ -44,6 +44,14 @@
       font-size: 14px;
       color: #94a3b8;
     }
+
+    /* FieldTextInput（py_input の案内文など）が縦に潰れて見えるのを防ぐ */
+    .blocklyHtmlInput,
+    .blocklyHtmlInput textarea {
+      min-height: 22px !important;
+      line-height: 1.35 !important;
+      box-sizing: border-box !important;
+    }
   </style>
   <script src="https://unpkg.com/blockly@12.5.1/blockly.min.js"
           integrity="sha384-SxxR8fpocVLJMl6kYyBm33uuy9U1yy0gMrMavfyCd3lQRer3qaBMlcVb0VSAfzop"
@@ -70,9 +78,11 @@
 
   <script>
     (function () {
-      var params    = new URLSearchParams(location.search);
-      var srcUrl    = params.get('src');
-      var titleText = params.get('title');
+      var params     = new URLSearchParams(location.search);
+      var srcUrl     = params.get('src');
+      // GitHub Pages に未配置の XML 用：UTF-8 を application/x-www-form-urlencoded 風に encodeURIComponent した文字列
+      var inlineXml  = params.get('xml');
+      var titleText  = params.get('title');
 
       var titleBar  = document.getElementById('title-bar');
       var blocklyDiv = document.getElementById('blockly-div');
@@ -112,17 +122,28 @@
         toolbox:  null,
       });
 
-      if (!srcUrl) {
+      if (!srcUrl && !inlineXml) {
         errorMsg.style.display = 'flex';
         return;
       }
 
-      // ?src= で指定されたXMLをフェッチしてワークスペースに展開
-      fetch(srcUrl)
-        .then(function (r) {
-          if (!r.ok) throw new Error('HTTP ' + r.status);
-          return r.text();
-        })
+      function resolveXmlText() {
+        if (inlineXml) {
+          try {
+            return Promise.resolve(decodeURIComponent(inlineXml));
+          } catch (e) {
+            return Promise.reject(e);
+          }
+        }
+        return fetch(srcUrl)
+          .then(function (r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.text();
+          });
+      }
+
+      // ?xml=（埋め込み）または ?src=（URLフェッチ）で XML を取得してワークスペースに展開
+      resolveXmlText()
         .then(function (xmlText) {
           var dom = Blockly.utils.xml.textToDom(xmlText);
 

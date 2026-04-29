@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="var_name">name</variable></variables>
+  <block type="py_input" id="b1" x="30" y="30">
+    <field name="TYPE">str</field>
+    <field name="VAR" id="var_name">name</field>
+    <field name="PROMPT">名前を入力してください</field>
+    <next><block type="py_print" id="b2"><value name="VALUE"><block type="val_var" id="b3"><field name="VAR" id="var_name">name</field></block></value></block></next>
+  </block>
+</xml>
