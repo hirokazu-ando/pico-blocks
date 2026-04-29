@@ -28,6 +28,12 @@
       right: 0;
     }
 
+    /* ブロック層の操作を無効化（ズームコントロールは別レイヤーなので影響なし） */
+    .blocklyBlockCanvas,
+    .blocklyBubbleCanvas {
+      pointer-events: none !important;
+    }
+
     #error-msg {
       display: none;
       position: absolute;
@@ -131,6 +137,10 @@
             var rect = blocklyDiv.getBoundingClientRect();
             if (rect.width > 0 && rect.height > 0) {
               fitted = true;
+              // details 閉じ中（height=0）で初期化されたブロックを正しいサイズで再描画する
+              var savedDom = Blockly.Xml.workspaceToDom(workspace);
+              workspace.clear();
+              Blockly.Xml.domToWorkspace(savedDom, workspace);
               workspace.zoomToFit();
             } else {
               requestAnimationFrame(tryFit);
