@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_num">my_number</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_num">my_number</field>
+    <value name="VALUE">
+      <block type="val_number" id="b2">
+        <field name="NUM">42</field>
+      </block>
+    </value>
+    <next>
+      <block type="print_var_label" id="b3">
+        <field name="LABEL">my_number: </field>
+        <field name="VAR" id="var_num">my_number</field>
+      </block>
+    </next>
+  </block>
+</xml>

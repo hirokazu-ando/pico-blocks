@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_cnt">count</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_cnt">count</field>
+    <value name="VALUE">
+      <block type="val_number" id="b2">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+    <next>
+      <block type="var_change" id="b3">
+        <field name="VAR" id="var_cnt">count</field>
+        <value name="AMOUNT"><block type="val_number" id="b4"><field name="NUM">1</field></block></value>
+        <next>
+          <block type="print_var_label" id="b5">
+            <field name="LABEL">count: </field>
+            <field name="VAR" id="var_cnt">count</field>
+            <next>
+              <block type="var_change" id="b6">
+                <field name="VAR" id="var_cnt">count</field>
+                <value name="AMOUNT"><block type="val_number" id="b7"><field name="NUM">1</field></block></value>
+                <next>
+                  <block type="print_var_label" id="b8">
+                    <field name="LABEL">count: </field>
+                    <field name="VAR" id="var_cnt">count</field>
+                    <next>
+                      <block type="var_change" id="b9">
+                        <field name="VAR" id="var_cnt">count</field>
+                        <value name="AMOUNT"><block type="val_number" id="b10"><field name="NUM">1</field></block></value>
+                        <next>
+                          <block type="print_var_label" id="b11">
+                            <field name="LABEL">count: </field>
+                            <field name="VAR" id="var_cnt">count</field>
+                            <next>
+                              <block type="var_change" id="b12">
+                                <field name="VAR" id="var_cnt">count</field>
+                                <value name="AMOUNT"><block type="val_number" id="b13"><field name="NUM">1</field></block></value>
+                                <next>
+                                  <block type="print_var_label" id="b14">
+                                    <field name="LABEL">count: </field>
+                                    <field name="VAR" id="var_cnt">count</field>
+                                    <next>
+                                      <block type="var_change" id="b15">
+                                        <field name="VAR" id="var_cnt">count</field>
+                                        <value name="AMOUNT"><block type="val_number" id="b16"><field name="NUM">1</field></block></value>
+                                        <next>
+                                          <block type="print_var_label" id="b17">
+                                            <field name="LABEL">count: </field>
+                                            <field name="VAR" id="var_cnt">count</field>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
