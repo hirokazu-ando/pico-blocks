@@ -125,6 +125,12 @@
         })
         .then(function (xmlText) {
           var dom = Blockly.utils.xml.textToDom(xmlText);
+
+          // ロード時点で高さが 0 なら details 閉じ中とみなし、
+          // サイズ確定後に XML を再ロードしてフィールドを正しく描画する
+          var initRect = blocklyDiv.getBoundingClientRect();
+          var needsReload = (initRect.width === 0 || initRect.height === 0);
+
           Blockly.Xml.domToWorkspace(dom, workspace);
 
           // details 閉じ中は blockly-div が 0×0 になり zoomToFit が失敗するため、
@@ -137,10 +143,11 @@
             var rect = blocklyDiv.getBoundingClientRect();
             if (rect.width > 0 && rect.height > 0) {
               fitted = true;
-              // details 閉じ中（height=0）で初期化されたブロックを正しいサイズで再描画する
-              var savedDom = Blockly.Xml.workspaceToDom(workspace);
-              workspace.clear();
-              Blockly.Xml.domToWorkspace(savedDom, workspace);
+              if (needsReload) {
+                // height=0 で初期化されたブロックを正しいサイズで再描画する
+                workspace.clear();
+                Blockly.Xml.domToWorkspace(dom, workspace);
+              }
               workspace.zoomToFit();
             } else {
               requestAnimationFrame(tryFit);
