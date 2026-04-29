@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_name">name</variable>
+    <variable id="var_score">score</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_name">name</field>
+    <value name="VALUE">
+      <block type="val_str" id="b2">
+        <field name="TEXT">山田 太郎</field>
+      </block>
+    </value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_score">score</field>
+        <value name="VALUE">
+          <block type="val_number" id="b4">
+            <field name="NUM">85</field>
+          </block>
+        </value>
+        <next>
+          <block type="py_print" id="b5">
+            <value name="VALUE">
+              <block type="py_fstring" id="b6">
+                <field name="PRE"></field>
+                <value name="VAR">
+                  <block type="val_var" id="b7">
+                    <field name="VAR" id="var_name">name</field>
+                  </block>
+                </value>
+                <field name="POST">さんの得点は</field>
+              </block>
+            </value>
+            <next>
+              <block type="py_print" id="b8">
+                <value name="VALUE">
+                  <block type="py_fstring" id="b9">
+                    <field name="PRE">得点: </field>
+                    <value name="VAR">
+                      <block type="val_var" id="b10">
+                        <field name="VAR" id="var_score">score</field>
+                      </block>
+                    </value>
+                    <field name="POST">点</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_print" id="b1" x="30" y="30">
+    <value name="VALUE">
+      <block type="val_str" id="b2">
+        <field name="TEXT">Hello, Python!</field>
+      </block>
+    </value>
+    <next>
+      <block type="py_print" id="b3">
+        <value name="VALUE">
+          <block type="val_str" id="b4">
+            <field name="TEXT">シングルクォートでもOK</field>
+          </block>
+        </value>
+      </block>
+    </next>
+  </block>
+</xml>

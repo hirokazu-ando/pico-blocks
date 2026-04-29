@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_last">last_name</variable>
+    <variable id="var_first">first_name</variable>
+    <variable id="var_full">full_name</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_last">last_name</field>
+    <value name="VALUE">
+      <block type="val_str" id="b2">
+        <field name="TEXT">山田</field>
+      </block>
+    </value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_first">first_name</field>
+        <value name="VALUE">
+          <block type="val_str" id="b4">
+            <field name="TEXT">太郎</field>
+          </block>
+        </value>
+        <next>
+          <block type="var_set" id="b5">
+            <field name="VAR" id="var_full">full_name</field>
+            <value name="VALUE">
+              <block type="py_str_concat" id="b6">
+                <value name="A">
+                  <block type="val_var" id="b7">
+                    <field name="VAR" id="var_last">last_name</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="py_str_concat" id="b8">
+                    <value name="A">
+                      <block type="val_str" id="b9">
+                        <field name="TEXT"> </field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="val_var" id="b10">
+                        <field name="VAR" id="var_first">first_name</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print" id="b11">
+                <value name="VALUE">
+                  <block type="val_var" id="b12">
+                    <field name="VAR" id="var_full">full_name</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
