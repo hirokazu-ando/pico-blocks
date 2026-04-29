@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_price">price</variable>
+    <variable id="var_paid">paid</variable>
+    <variable id="var_change">change</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_price">price</field>
+    <value name="VALUE"><block type="val_number" id="b2"><field name="NUM">380</field></block></value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_paid">paid</field>
+        <value name="VALUE"><block type="val_number" id="b4"><field name="NUM">1000</field></block></value>
+        <next>
+          <block type="var_set" id="b5">
+            <field name="VAR" id="var_change">change</field>
+            <value name="VALUE">
+              <block type="py_math_op" id="b6">
+                <value name="LEFT"><block type="val_var" id="b7"><field name="VAR" id="var_paid">paid</field></block></value>
+                <field name="OP">-</field>
+                <value name="RIGHT"><block type="val_var" id="b8"><field name="VAR" id="var_price">price</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="print_var_label" id="b9">
+                <field name="LABEL">お釣り: </field>
+                <field name="VAR" id="var_change">change</field>
+                <next>
+                  <block type="py_print" id="b10">
+                    <value name="VALUE">
+                      <block type="py_math_op" id="b11">
+                        <value name="LEFT"><block type="val_var" id="b12"><field name="VAR" id="var_change">change</field></block></value>
+                        <field name="OP">//</field>
+                        <value name="RIGHT"><block type="val_number" id="b13"><field name="NUM">500</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_print" id="b14">
+                        <value name="VALUE">
+                          <block type="py_math_op" id="b15">
+                            <value name="LEFT">
+                              <block type="py_math_op" id="b16">
+                                <value name="LEFT"><block type="val_var" id="b17"><field name="VAR" id="var_change">change</field></block></value>
+                                <field name="OP">%</field>
+                                <value name="RIGHT"><block type="val_number" id="b18"><field name="NUM">500</field></block></value>
+                              </block>
+                            </value>
+                            <field name="OP">//</field>
+                            <value name="RIGHT"><block type="val_number" id="b19"><field name="NUM">100</field></block></value>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_print" id="b20">
+                            <value name="VALUE">
+                              <block type="py_math_op" id="b21">
+                                <value name="LEFT">
+                                  <block type="py_math_op" id="b22">
+                                    <value name="LEFT"><block type="val_var" id="b23"><field name="VAR" id="var_change">change</field></block></value>
+                                    <field name="OP">%</field>
+                                    <value name="RIGHT"><block type="val_number" id="b24"><field name="NUM">100</field></block></value>
+                                  </block>
+                                </value>
+                                <field name="OP">//</field>
+                                <value name="RIGHT"><block type="val_number" id="b25"><field name="NUM">10</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

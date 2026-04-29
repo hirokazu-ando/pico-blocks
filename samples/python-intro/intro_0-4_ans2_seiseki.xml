@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_k">kokugo</variable>
+    <variable id="var_m">math</variable>
+    <variable id="var_e">english</variable>
+    <variable id="var_total">total</variable>
+    <variable id="var_avg">average</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_k">kokugo</field>
+    <value name="VALUE"><block type="val_number" id="b2"><field name="NUM">85</field></block></value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_m">math</field>
+        <value name="VALUE"><block type="val_number" id="b4"><field name="NUM">92</field></block></value>
+        <next>
+          <block type="var_set" id="b5">
+            <field name="VAR" id="var_e">english</field>
+            <value name="VALUE"><block type="val_number" id="b6"><field name="NUM">78</field></block></value>
+            <next>
+              <block type="var_set" id="b7">
+                <field name="VAR" id="var_total">total</field>
+                <value name="VALUE">
+                  <block type="py_math_op" id="b8">
+                    <value name="LEFT">
+                      <block type="py_math_op" id="b9">
+                        <value name="LEFT"><block type="val_var" id="b10"><field name="VAR" id="var_k">kokugo</field></block></value>
+                        <field name="OP">+</field>
+                        <value name="RIGHT"><block type="val_var" id="b11"><field name="VAR" id="var_m">math</field></block></value>
+                      </block>
+                    </value>
+                    <field name="OP">+</field>
+                    <value name="RIGHT"><block type="val_var" id="b12"><field name="VAR" id="var_e">english</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="var_set" id="b13">
+                    <field name="VAR" id="var_avg">average</field>
+                    <value name="VALUE">
+                      <block type="py_math_op" id="b14">
+                        <value name="LEFT"><block type="val_var" id="b15"><field name="VAR" id="var_total">total</field></block></value>
+                        <field name="OP">/</field>
+                        <value name="RIGHT"><block type="val_number" id="b16"><field name="NUM">3</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_print" id="b17">
+                        <value name="VALUE">
+                          <block type="py_fstring" id="b18">
+                            <field name="PRE">国語：</field>
+                            <value name="VAR"><block type="val_var" id="b19"><field name="VAR" id="var_k">kokugo</field></block></value>
+                            <field name="POST">点</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_print" id="b20">
+                            <value name="VALUE">
+                              <block type="py_fstring" id="b21">
+                                <field name="PRE">数学：</field>
+                                <value name="VAR"><block type="val_var" id="b22"><field name="VAR" id="var_m">math</field></block></value>
+                                <field name="POST">点</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="py_print" id="b23">
+                                <value name="VALUE">
+                                  <block type="py_fstring" id="b24">
+                                    <field name="PRE">英語：</field>
+                                    <value name="VAR"><block type="val_var" id="b25"><field name="VAR" id="var_e">english</field></block></value>
+                                    <field name="POST">点</field>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="print_var_label" id="b26">
+                                    <field name="LABEL">合計: </field>
+                                    <field name="VAR" id="var_total">total</field>
+                                    <next>
+                                      <block type="print_var_label" id="b27">
+                                        <field name="LABEL">平均: </field>
+                                        <field name="VAR" id="var_avg">average</field>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

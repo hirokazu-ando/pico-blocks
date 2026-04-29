@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_name">name</variable>
+    <variable id="var_age">age</variable>
+    <variable id="var_hobby">hobby</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_name">name</field>
+    <value name="VALUE"><block type="val_str" id="b2"><field name="TEXT">山田 太郎</field></block></value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_age">age</field>
+        <value name="VALUE"><block type="val_number" id="b4"><field name="NUM">16</field></block></value>
+        <next>
+          <block type="var_set" id="b5">
+            <field name="VAR" id="var_hobby">hobby</field>
+            <value name="VALUE"><block type="val_str" id="b6"><field name="TEXT">ロボット製作</field></block></value>
+            <next>
+              <block type="py_print" id="b7">
+                <value name="VALUE">
+                  <block type="py_fstring" id="b8">
+                    <field name="PRE"></field>
+                    <value name="VAR"><block type="val_var" id="b9"><field name="VAR" id="var_name">name</field></block></value>
+                    <field name="POST">です。</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_print" id="b10">
+                    <value name="VALUE">
+                      <block type="py_fstring" id="b11">
+                        <field name="PRE"></field>
+                        <value name="VAR"><block type="val_var" id="b12"><field name="VAR" id="var_age">age</field></block></value>
+                        <field name="POST">歳です。</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_print" id="b13">
+                        <value name="VALUE">
+                          <block type="py_fstring" id="b14">
+                            <field name="PRE">趣味は</field>
+                            <value name="VAR"><block type="val_var" id="b15"><field name="VAR" id="var_hobby">hobby</field></block></value>
+                            <field name="POST">です。</field>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

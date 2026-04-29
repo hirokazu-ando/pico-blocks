@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_name">name</variable>
+    <variable id="var_grade">grade</variable>
+    <variable id="var_cls">cls</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_name">name</field>
+    <value name="VALUE"><block type="val_str" id="b2"><field name="TEXT">山田 太郎</field></block></value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_grade">grade</field>
+        <value name="VALUE"><block type="val_str" id="b4"><field name="TEXT">2年</field></block></value>
+        <next>
+          <block type="var_set" id="b5">
+            <field name="VAR" id="var_cls">cls</field>
+            <value name="VALUE"><block type="val_str" id="b6"><field name="TEXT">Aクラス</field></block></value>
+            <next>
+              <block type="print_text" id="b7">
+                <field name="TEXT">┌──────────────────┐</field>
+                <next>
+                  <block type="py_print" id="b8">
+                    <value name="VALUE">
+                      <block type="py_fstring" id="b9">
+                        <field name="PRE">│  </field>
+                        <value name="VAR"><block type="val_var" id="b10"><field name="VAR" id="var_name">name</field></block></value>
+                        <field name="POST">        │</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_print" id="b11">
+                        <value name="VALUE">
+                          <block type="py_fstring" id="b12">
+                            <field name="PRE">│  </field>
+                            <value name="VAR"><block type="val_var" id="b13"><field name="VAR" id="var_grade">grade</field></block></value>
+                            <field name="POST"> Aクラス  │</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="print_text" id="b14">
+                            <field name="TEXT">└──────────────────┘</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

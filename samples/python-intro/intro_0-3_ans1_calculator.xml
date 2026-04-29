@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_a">a</variable>
+    <variable id="var_b">b</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_a">a</field>
+    <value name="VALUE"><block type="val_number" id="b2"><field name="NUM">15</field></block></value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_b">b</field>
+        <value name="VALUE"><block type="val_number" id="b4"><field name="NUM">4</field></block></value>
+        <next>
+          <block type="py_print" id="b5">
+            <value name="VALUE">
+              <block type="py_math_op" id="b6">
+                <value name="LEFT"><block type="val_var" id="b7"><field name="VAR" id="var_a">a</field></block></value>
+                <field name="OP">+</field>
+                <value name="RIGHT"><block type="val_var" id="b8"><field name="VAR" id="var_b">b</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print" id="b9">
+                <value name="VALUE">
+                  <block type="py_math_op" id="b10">
+                    <value name="LEFT"><block type="val_var" id="b11"><field name="VAR" id="var_a">a</field></block></value>
+                    <field name="OP">-</field>
+                    <value name="RIGHT"><block type="val_var" id="b12"><field name="VAR" id="var_b">b</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_print" id="b13">
+                    <value name="VALUE">
+                      <block type="py_math_op" id="b14">
+                        <value name="LEFT"><block type="val_var" id="b15"><field name="VAR" id="var_a">a</field></block></value>
+                        <field name="OP">*</field>
+                        <value name="RIGHT"><block type="val_var" id="b16"><field name="VAR" id="var_b">b</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_print" id="b17">
+                        <value name="VALUE">
+                          <block type="py_math_op" id="b18">
+                            <value name="LEFT"><block type="val_var" id="b19"><field name="VAR" id="var_a">a</field></block></value>
+                            <field name="OP">/</field>
+                            <value name="RIGHT"><block type="val_var" id="b20"><field name="VAR" id="var_b">b</field></block></value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
