@@ -576,4 +576,55 @@ Blockly.Blocks['py_dict_keys'] = {
   }
 };
 
+Blockly.Blocks['py_dict_literal'] = {
+  itemCount_: 2,
+
+  init: function() {
+    this.appendDummyInput('TOP')
+      .appendField('辞書 {')
+      .appendField(new Blockly.FieldDropdown([
+        ['1件', '1'], ['2件', '2'], ['3件', '3'], ['4件', '4']
+      ], this.onCountChanged_.bind(this)), 'COUNT');
+    this.rebuildShape_();
+    this.setOutput(true, null);
+    this.setColour(P.dict);
+    this.setTooltip('辞書リテラルを作ります（例: {"name": "Taro", "age": 16}）。キーと値のペアを1〜4個設定できます。');
+    this.setHelpUrl('');
+  },
+
+  onCountChanged_: function(val) {
+    this.itemCount_ = parseInt(val, 10);
+    this.rebuildShape_();
+  },
+
+  mutationToDom: function() {
+    const el = Blockly.utils.xml.createElement('mutation');
+    el.setAttribute('items', this.itemCount_);
+    return el;
+  },
+
+  domToMutation: function(xmlElement) {
+    this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+    const f = this.getField('COUNT');
+    if (f) f.setValue(String(this.itemCount_));
+    this.rebuildShape_();
+  },
+
+  rebuildShape_: function() {
+    let i = 0;
+    while (this.getInput('PAIR' + i)) {
+      this.removeInput('PAIR' + i);
+      i++;
+    }
+    if (this.getInput('BOTTOM')) this.removeInput('BOTTOM');
+    for (let j = 0; j < this.itemCount_; j++) {
+      this.appendValueInput('PAIR' + j)
+        .appendField('  キー')
+        .appendField(new Blockly.FieldTextInput('key' + (j + 1)), 'KEY' + j)
+        .appendField('値');
+    }
+    this.appendDummyInput('BOTTOM').appendField('}');
+  }
+};
+
 })();

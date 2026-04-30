@@ -373,6 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_for_list':      return `リスト「${getVarName(block, 'LIST')}」を順に繰り返す`;
       case 'py_fstring':       return 'f文字列';
       case 'py_dict_new':      return '空の辞書 {}';
+      case 'py_dict_literal':  return '辞書リテラル { キー: 値, ... }';
       case 'py_dict_set':      return `辞書「${getVarName(block, 'DICT')}」にキーと値をセット`;
       case 'py_dict_get':      return `辞書「${getVarName(block, 'DICT')}」からキーで取得`;
       case 'py_dict_keys':     return `辞書「${getVarName(block, 'DICT')}」のキー一覧`;
@@ -612,6 +613,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'py_dict_new':
         return '{}';
+      case 'py_dict_literal': {
+        const pairs = [];
+        for (let i = 0; i < block.itemCount_; i++) {
+          const key = block.getFieldValue('KEY' + i) || ('key' + (i + 1));
+          const val = valueToCode(block, 'PAIR' + i, 'None');
+          pairs.push(`"${key}": ${val}`);
+        }
+        return `{${pairs.join(', ')}}`;
+      }
       case 'py_dict_get': {
         const dictName = getVarName(block, 'DICT');
         const key = valueToCode(block, 'KEY', '""');
@@ -1084,6 +1094,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_call_val':
       case 'py_fstring':
       case 'py_dict_new':
+      case 'py_dict_literal':
       case 'py_dict_get':
       case 'py_dict_keys':
         break;
@@ -1591,6 +1602,16 @@ document.addEventListener('DOMContentLoaded', function() {
           { label: '変更',      code: 'my_list[0] = x' },
           { label: '長さ',      code: 'len(my_list)' },
           { label: '初期値あり', code: 'my_list = [1, 2, 3]' },
+        ]
+      },
+      {
+        cat: '辞書',
+        items: [
+          { label: '作成',      code: 'my_dict = {"key": value}' },
+          { label: '取得',      code: 'x = my_dict["key"]' },
+          { label: '追加・変更', code: 'my_dict["key"] = value' },
+          { label: 'キー一覧',  code: 'list(my_dict.keys())' },
+          { label: 'for文',     code: 'for k in my_dict.keys():\n    ...' },
         ]
       },
       {
