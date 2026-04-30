@@ -26,9 +26,23 @@
       position: absolute;
       left: 0;
       right: 0;
+      overflow: hidden;
     }
 
-    /* ブロック層の操作を無効化（ズームコントロールは別レイヤーなので影響なし） */
+    /*
+      ブロック数が多くiframe高さに収まらない場合、Blockly内部のscaleは
+      MIN_RENDER_SCALE(0.9)に固定し、SVG全体をCSS transformで縮小表示する。
+      これにより FieldTextInput が縦に潰れず、視覚的なサイズだけ調整できる。
+    */
+    #blockly-div.viewer-compact .blocklySvg {
+      transform-origin: top left;
+      transform: scale(var(--viewer-css-scale, 1));
+      /* 縮小した分だけSVGのDOM幅高を拡大し、Blocklyのスクロール計算を正常に保つ */
+      width:  calc(100% / var(--viewer-css-scale, 1)) !important;
+      height: calc(100% / var(--viewer-css-scale, 1)) !important;
+    }
+
+    /* ブロック操作を無効化（ズームコントロールは別レイヤーなので影響なし） */
     .blocklyBlockCanvas,
     .blocklyBubbleCanvas {
       pointer-events: none !important;
@@ -45,7 +59,7 @@
       color: #94a3b8;
     }
 
-    /* FieldTextInput / FieldNumber が zelos レンダラで縦に潰れて見えるのを防ぐ */
+    /* FieldTextInput / FieldNumber の編集オーバーレイの最低高さ */
     .blocklyHtmlInput,
     .blocklyHtmlInput input,
     .blocklyHtmlInput textarea {
@@ -81,20 +95,23 @@
 
   <script>
     (function () {
-      var params     = new URLSearchParams(location.search);
-      var srcUrl     = params.get('src');
-      // GitHub Pages に未配置の XML 用：UTF-8 を application/x-www-form-urlencoded 風に encodeURIComponent した文字列
-      var inlineXml  = params.get('xml');
-      var titleText  = params.get('title');
+      // FieldTextInput が視覚的に潰れない最低レンダリングスケール
+      // この値以下にBlocklyの内部倍率を下げず、不足分はCSS transformで補う
+      var MIN_RENDER_SCALE = 0.9;
 
-      var titleBar  = document.getElementById('title-bar');
+      var params    = new URLSearchParams(location.search);
+      var srcUrl    = params.get('src');
+      var inlineXml = params.get('xml');
+      var titleText = params.get('title');
+
+      var titleBar   = document.getElementById('title-bar');
       var blocklyDiv = document.getElementById('blockly-div');
-      var errorMsg  = document.getElementById('error-msg');
+      var errorMsg   = document.getElementById('error-msg');
 
-      // タイトルバー表示
+      // タイトルバー
       var topOffset = 0;
       if (titleText) {
-        titleBar.textContent = titleText;
+        titleBar.textContent = decodeURIComponent(titleText);
         titleBar.style.display = 'block';
         topOffset = 32;
       }
@@ -111,36 +128,25 @@
         }
       });
 
-      // readOnly を外すことで FieldTextInput が正しい高さで描画される
-      // （readOnly:true だと入力欄が薄く潰れて表示される Blockly の挙動を回避）
-      // iframe 内の編集はリロードで元に戻るため問題なし
+      // readOnly:false にすることで FieldTextInput が正しい高さで描画される
+      // （readOnly:true だと zelos で潰れる Blockly の挙動を回避）
       var workspace = Blockly.inject('blockly-div', {
         readOnly:   false,
-        // メインアプリと同じ zelos レンダラを使用してブロック形状を統一する
         renderer:   'zelos',
         theme:      viewerTheme,
         scrollbars: true,
-        zoom: { controls: true, wheel: true, startScale: 0.9, maxScale: 3, minScale: 0.2 },
+        zoom: { controls: true, wheel: true, startScale: 1.0, maxScale: 3, minScale: 0.3 },
         move: { scrollbars: true, drag: true, wheel: false },
         trashcan: false,
         toolbox:  null,
       });
 
-      // Blockly が <head> に CSS を後から注入するため、
-      // FieldTextInput の高さオーバーライドをここで再注入して確実に適用する
+      // Blocklyが後注入するCSSより確実に上書きするため動的に再注入
       (function() {
         var s = document.createElement('style');
-        s.textContent = [
-          '.blocklyHtmlInput,',
-          '.blocklyHtmlInput input,',
-          '.blocklyHtmlInput textarea {',
-          '  min-height: 36px !important;',
-          '  padding: 4px 8px !important;',
-          '  line-height: 1.4 !important;',
-          '  font-size: 14px !important;',
-          '  box-sizing: border-box !important;',
-          '}'
-        ].join('\n');
+        s.textContent = '.blocklyHtmlInput,.blocklyHtmlInput input,.blocklyHtmlInput textarea{'
+          + 'min-height:36px!important;padding:4px 8px!important;'
+          + 'line-height:1.4!important;font-size:14px!important;box-sizing:border-box!important}';
         document.head.appendChild(s);
       })();
 
@@ -149,83 +155,91 @@
         return;
       }
 
+      // ---------- XML取得 ----------
       function resolveXmlText() {
         if (inlineXml) {
-          try {
-            return Promise.resolve(decodeURIComponent(inlineXml));
-          } catch (e) {
-            return Promise.reject(e);
-          }
+          try   { return Promise.resolve(decodeURIComponent(inlineXml)); }
+          catch (e) { return Promise.reject(e); }
         }
-        return fetch(srcUrl)
-          .then(function (r) {
-            if (!r.ok) throw new Error('HTTP ' + r.status);
-            return r.text();
-          });
+        return fetch(srcUrl).then(function(r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.text();
+        });
       }
 
-      // ?xml=（埋め込み）または ?src=（URLフェッチ）で XML を取得してワークスペースに展開
+      // ---------- レイアウト適用 ----------
+      var currentXmlText = null;
+      var renderedOk     = false;  // 有効なサイズで一度描画が完了したか
+      var prevWasZero    = true;   // 前回のrect が 0×0 だったか
+
+      function applyLayout() {
+        if (!currentXmlText) return;
+
+        var rect = blocklyDiv.getBoundingClientRect();
+        var hasSize = (rect.width > 0 && rect.height > 0);
+
+        if (!hasSize) {
+          // サイズ未確定（details閉じ中など）
+          prevWasZero = true;
+          return;
+        }
+
+        // ① 0→有効サイズ への遷移、または初回描画 → XMLを再ロードして正しく描画
+        if (prevWasZero || !renderedOk) {
+          workspace.clear();
+          Blockly.Xml.domToWorkspace(
+            Blockly.utils.xml.textToDom(currentXmlText), workspace);
+          renderedOk = true;
+        }
+        prevWasZero = false;
+
+        // ② ブロックを画面に収める
+        workspace.zoomToFit();
+        var fittedScale = workspace.getScale();
+
+        // ③ 内部scaleをMIN_RENDER_SCALE以上に固定し、不足分をCSS transformで補う
+        if (fittedScale < MIN_RENDER_SCALE) {
+          workspace.setScale(MIN_RENDER_SCALE);
+          var cssScale = fittedScale / MIN_RENDER_SCALE;
+          blocklyDiv.style.setProperty('--viewer-css-scale', cssScale.toFixed(4));
+          blocklyDiv.classList.add('viewer-compact');
+        } else {
+          blocklyDiv.style.removeProperty('--viewer-css-scale');
+          blocklyDiv.classList.remove('viewer-compact');
+        }
+        workspace.scrollCenter();
+
+        // ④ 親フレームへブロック表示高さを通知（親にリスナーがあれば自動リサイズ可能）
+        requestAnimationFrame(function() {
+          try {
+            var svgEl = blocklyDiv.querySelector('.blocklySvg');
+            if (!svgEl) return;
+            var svgRect = svgEl.getBoundingClientRect();
+            if (svgRect.height < 10) return;
+            var totalH = Math.ceil(svgRect.height) + (titleBar.offsetHeight || 0) + 16;
+            window.parent.postMessage({ type: 'pyco-viewer-resize', height: totalH }, '*');
+          } catch(e) {}
+        });
+      }
+
+      // ---------- リサイズ対応（details開閉 / ウィンドウ変化） ----------
+      var resizeTimer;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(applyLayout, 120);
+      });
+
+      // ---------- XML ロード & 初回描画 ----------
       resolveXmlText()
-        .then(function (xmlText) {
-          var dom = Blockly.utils.xml.textToDom(xmlText);
-
-          // ロード時点で高さが 0 なら details 閉じ中とみなし、
-          // サイズ確定後に XML を再ロードしてフィールドを正しく描画する
-          var initRect = blocklyDiv.getBoundingClientRect();
-          var needsReload = (initRect.width === 0 || initRect.height === 0);
-
-          Blockly.Xml.domToWorkspace(dom, workspace);
-
-          // details 閉じ中は blockly-div が 0×0 になり zoomToFit が失敗するため、
-          // 実サイズが確定するまで rAF でポーリングしてからフィットする
-          var fitted = false;
-          var deadline = Date.now() + 30000; // 最大30秒待つ
-          function tryFit() {
-            if (fitted) return;
-            if (Date.now() > deadline) return;
-            var rect = blocklyDiv.getBoundingClientRect();
-            if (rect.width > 0 && rect.height > 0) {
-              fitted = true;
-              if (needsReload) {
-                // height=0 で初期化されたブロックを正しいサイズで再描画する
-                // domToWorkspace は DOM を破壊的に処理するため xmlText から再パースする
-                workspace.clear();
-                Blockly.Xml.domToWorkspace(
-                  Blockly.utils.xml.textToDom(xmlText), workspace);
-              }
-              workspace.zoomToFit();
-              // zoomToFit が縮小しすぎるとテキストフィールドが縦に細く見える。
-              // スケールが 0.85 未満なら 0.85 に固定してスクロールで対応する。
-              if (workspace.getScale() < 0.85) {
-                workspace.setScale(0.85);
-                workspace.scrollCenter();
-              }
-              // ブロック描画後の実際の高さを親フレームに通知して iframe を自動リサイズする
-              requestAnimationFrame(function() {
-                try {
-                  var titleH = titleBar.offsetHeight || 0;
-                  // SVG の実描画高さを取得（scrollHeight は position:absolute では不正確なため BBox を使う）
-                  var svgEl  = blocklyDiv.querySelector('.blocklySvg');
-                  var blockH = svgEl ? svgEl.getBoundingClientRect().height : 0;
-                  // ブロックが描画できていない場合は送信しない
-                  if (blockH < 10) return;
-                  var totalH = Math.ceil(blockH) + titleH + 32;
-                  window.parent.postMessage(
-                    { type: 'pyco-viewer-resize', height: totalH },
-                    '*'
-                  );
-                } catch(e) {}
-              });
-            } else {
-              requestAnimationFrame(tryFit);
-            }
-          }
-          requestAnimationFrame(tryFit);
+        .then(function(xmlText) {
+          currentXmlText = xmlText;
+          requestAnimationFrame(applyLayout);
         })
-        .catch(function () {
+        .catch(function() {
           blocklyDiv.style.display = 'none';
           errorMsg.style.display   = 'flex';
         });
+
     })();
   </script>
 </body>
