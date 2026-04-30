@@ -194,6 +194,12 @@
                   Blockly.utils.xml.textToDom(xmlText), workspace);
               }
               workspace.zoomToFit();
+              // zoomToFit が縮小しすぎるとテキストフィールドが縦に細く見える。
+              // スケールが 0.85 未満なら 0.85 に固定してスクロールで対応する。
+              if (workspace.getScale() < 0.85) {
+                workspace.setScale(0.85);
+                workspace.scrollCenter();
+              }
             } else {
               requestAnimationFrame(tryFit);
             }
