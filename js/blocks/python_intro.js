@@ -580,16 +580,19 @@ Blockly.Blocks['py_dict_literal'] = {
   itemCount_: 2,
 
   init: function() {
+    const countField = new Blockly.FieldDropdown([
+      ['1件', '1'], ['2件', '2'], ['3件', '3'], ['4件', '4']
+    ]);
     this.appendDummyInput('TOP')
       .appendField('辞書 {')
-      .appendField(new Blockly.FieldDropdown([
-        ['1件', '1'], ['2件', '2'], ['3件', '3'], ['4件', '4']
-      ], this.onCountChanged_.bind(this)), 'COUNT');
+      .appendField(countField, 'COUNT');
     this.rebuildShape_();
     this.setOutput(true, null);
     this.setColour(P.dict);
     this.setTooltip('辞書リテラルを作ります（例: {"name": "Taro", "age": 16}）。キーと値のペアを1〜4個設定できます。');
     this.setHelpUrl('');
+    // init 完了後にバリデーターを設定（init 中の早期発火を防ぐ）
+    countField.setValidator(this.onCountChanged_.bind(this));
   },
 
   onCountChanged_: function(val) {
@@ -604,10 +607,17 @@ Blockly.Blocks['py_dict_literal'] = {
   },
 
   domToMutation: function(xmlElement) {
-    this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
-    const f = this.getField('COUNT');
-    if (f) f.setValue(String(this.itemCount_));
+    const n = parseInt(xmlElement.getAttribute('items'), 10);
+    if (!isNaN(n)) this.itemCount_ = n;
+    // setValue の前に rebuildShape_ を呼んでから件数表示を同期する（バリデーター経由の二重実行を防ぐ）
     this.rebuildShape_();
+    const f = this.getField('COUNT');
+    if (f) {
+      const saved = f.getValidator ? f.getValidator() : null;
+      if (saved) f.setValidator(null);
+      f.setValue(String(this.itemCount_));
+      if (saved) f.setValidator(saved);
+    }
   },
 
   rebuildShape_: function() {

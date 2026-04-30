@@ -203,11 +203,13 @@
               // ブロック描画後の実際の高さを親フレームに通知して iframe を自動リサイズする
               requestAnimationFrame(function() {
                 try {
-                  var metrics = workspace.getMetricsManager().getContentMetrics(true);
-                  var scale   = workspace.getScale();
-                  var titleH  = titleBar.offsetHeight || 0;
-                  var blockH  = Math.ceil(metrics.height * scale);
-                  var totalH  = blockH + titleH + 48; // 余白 48px
+                  var titleH = titleBar.offsetHeight || 0;
+                  // SVG の実描画高さを取得（scrollHeight は position:absolute では不正確なため BBox を使う）
+                  var svgEl  = blocklyDiv.querySelector('.blocklySvg');
+                  var blockH = svgEl ? svgEl.getBoundingClientRect().height : 0;
+                  // ブロックが描画できていない場合は送信しない
+                  if (blockH < 10) return;
+                  var totalH = Math.ceil(blockH) + titleH + 32;
                   window.parent.postMessage(
                     { type: 'pyco-viewer-resize', height: totalH },
                     '*'
