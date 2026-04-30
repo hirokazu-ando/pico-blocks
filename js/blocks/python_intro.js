@@ -598,7 +598,7 @@ Blockly.Blocks['py_dict_literal'] = {
   },
 
   mutationToDom: function() {
-    const el = Blockly.utils.xml.createElement('mutation');
+    const el = document.createElement('mutation');
     el.setAttribute('items', this.itemCount_);
     return el;
   },

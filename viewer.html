@@ -200,6 +200,20 @@
                 workspace.setScale(0.85);
                 workspace.scrollCenter();
               }
+              // ブロック描画後の実際の高さを親フレームに通知して iframe を自動リサイズする
+              requestAnimationFrame(function() {
+                try {
+                  var metrics = workspace.getMetricsManager().getContentMetrics(true);
+                  var scale   = workspace.getScale();
+                  var titleH  = titleBar.offsetHeight || 0;
+                  var blockH  = Math.ceil(metrics.height * scale);
+                  var totalH  = blockH + titleH + 48; // 余白 48px
+                  window.parent.postMessage(
+                    { type: 'pyco-viewer-resize', height: totalH },
+                    '*'
+                  );
+                } catch(e) {}
+              });
             } else {
               requestAnimationFrame(tryFit);
             }
