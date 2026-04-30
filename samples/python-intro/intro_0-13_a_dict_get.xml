@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="var_person">person</variable></variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_person">person</field>
+    <value name="VALUE"><block type="py_custom_expr" id="b2"><field name="CODE">{"name": "Taro", "age": 16}</field></block></value>
+    <next>
+      <block type="py_print" id="b3">
+        <value name="VALUE">
+          <block type="py_dict_get" id="b4">
+            <field name="DICT" id="var_person">person</field>
+            <value name="KEY"><block type="val_str" id="b5"><field name="TEXT">name</field></block></value>
+          </block>
+        </value>
+      </block>
+    </next>
+  </block>
+</xml>

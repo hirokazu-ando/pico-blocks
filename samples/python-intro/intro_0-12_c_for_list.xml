@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="var_parts">parts</variable><variable id="var_item">item</variable></variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_parts">parts</field>
+    <value name="VALUE"><block type="py_custom_expr" id="b2"><field name="CODE">["LED", "sensor", "motor"]</field></block></value>
+    <next>
+      <block type="py_for_list" id="b3">
+        <field name="VAR" id="var_item">item</field>
+        <field name="LIST" id="var_parts">parts</field>
+        <statement name="DO">
+          <block type="py_print" id="b4">
+            <value name="VALUE"><block type="val_var" id="b5"><field name="VAR" id="var_item">item</field></block></value>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
+</xml>

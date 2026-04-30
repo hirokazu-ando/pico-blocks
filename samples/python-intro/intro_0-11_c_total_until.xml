@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="var_total">total</variable><variable id="var_n">n</variable></variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_total">total</field>
+    <value name="VALUE"><block type="val_number" id="b2"><field name="NUM">0</field></block></value>
+    <next>
+      <block type="py_while" id="b3">
+        <value name="COND">
+          <block type="cond_compare" id="b4">
+            <field name="OP">&lt;</field>
+            <value name="LEFT"><block type="val_var" id="b5"><field name="VAR" id="var_total">total</field></block></value>
+            <value name="RIGHT"><block type="val_number" id="b6"><field name="NUM">10</field></block></value>
+          </block>
+        </value>
+        <statement name="DO">
+          <block type="py_input" id="b7">
+            <field name="TYPE">int</field>
+            <field name="VAR" id="var_n">n</field>
+            <field name="PROMPT">足す数は？</field>
+            <next>
+              <block type="var_change" id="b8">
+                <field name="VAR" id="var_total">total</field>
+                <value name="AMOUNT"><block type="val_var" id="b9"><field name="VAR" id="var_n">n</field></block></value>
+                <next>
+                  <block type="py_print" id="b10">
+                    <value name="VALUE"><block type="val_var" id="b11"><field name="VAR" id="var_total">total</field></block></value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
+</xml>

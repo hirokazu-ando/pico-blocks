@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="var_scores">scores</variable></variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_scores">scores</field>
+    <value name="VALUE"><block type="py_custom_expr" id="b2"><field name="CODE">[80, 65, 90]</field></block></value>
+    <next>
+      <block type="py_list_set" id="b3">
+        <field name="LIST" id="var_scores">scores</field>
+        <value name="INDEX"><block type="val_number" id="b4"><field name="NUM">1</field></block></value>
+        <value name="VALUE"><block type="val_number" id="b5"><field name="NUM">75</field></block></value>
+        <next>
+          <block type="py_print" id="b6">
+            <value name="VALUE"><block type="py_list_len" id="b7"><field name="LIST" id="var_scores">scores</field></block></value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
