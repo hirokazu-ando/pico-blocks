@@ -30,10 +30,9 @@
     }
 
     /*
-      ブロック数が多くiframe高さに収まらない場合、Blockly内部のscaleは
-      MIN_RENDER_SCALE(1.0)に固定し、SVG全体をCSS transformで縮小表示する。
-      FieldTextInput の潰れを防ぐ。さらに MIN_VISUAL_SCALE 未満には縮めず
-      Workspace のスクロールで読みやすさを優先する（?readable=0 で従来挙動）。
+      Blockly のワークスペース縮尺は常に 1 に固定し、見た目のズームのみ
+      SVG の CSS transform で行う（内部スケールと CSS が混ざって細くなるのを抑える）。
+      minVisual の下限で読みやすさ優先（?readable=0 で強い収め）。
     */
     #blockly-div.viewer-compact .blocklySvg {
       transform-origin: top left;
@@ -97,12 +96,12 @@
 
   <script>
     (function () {
-      // FieldTextInput が視覚的に潰れない最低レンダリングスケール
-      // この値以下にBlocklyの内部倍率を下げず、不足分はCSS transformで補う
-      // 1.0 未満に内部scaleを落とさない（0.9 より細く見えるケースへの対処）。不足は CSS で。
+      // Blockly は常に縮尺 1.0 で描画し、画面上の収まりだけ CSS transform で合わせる
       var MIN_RENDER_SCALE = 1.0;
+      /** Blockly だけで済ませる経路との切り替えで細くなるのを避け、視覚倍率ほぼ1は CSS を使わない */
+      var VISUAL_NEAR_ONE_EPS = 0.01;
       /** 視覚倍率の下限（もっと大きく＝スクロール増）。?readable=0 で無効、?minVisual= で調整可。 */
-      var DEFAULT_MIN_VISUAL_SCALE = 0.82;
+      var DEFAULT_MIN_VISUAL_SCALE = 0.86;
 
       var params    = new URLSearchParams(location.search);
       var srcUrl    = params.get('src');
@@ -238,17 +237,27 @@
         // ② ブロックを画面に収める
         workspace.zoomToFit();
         var fittedScale = workspace.getScale();
+        if (!(fittedScale > 0) || fittedScale !== fittedScale) {
+          fittedScale = 1;
+        }
 
-        // ③ 内部scaleをMIN_RENDER_SCALE以上に固定し、不足分をCSS transformで補う
-        // minVisualFloor>0 のときは視覚倍率が floor 未満にならないよう上げる（縦スクロールでカバー）
-        if (fittedScale < MIN_RENDER_SCALE) {
-          var targetVisual = fittedScale;
-          if (minVisualFloor > 0) {
-            targetVisual = Math.max(fittedScale, minVisualFloor);
-          }
-          workspace.setScale(MIN_RENDER_SCALE);
-          var cssScale = targetVisual / MIN_RENDER_SCALE;
-          blocklyDiv.style.setProperty('--viewer-css-scale', cssScale.toFixed(4));
+        /** 画面上のサイズとなる倍率（zoomToFit の結果を CSS で再現） */
+        var targetVisual = fittedScale;
+        // ひどく細い縮小だけ抑える（readable=0 では丸ごと適用しない）
+        if (minVisualFloor > 0 && targetVisual < 1) {
+          targetVisual = Math.max(targetVisual, minVisualFloor);
+        }
+
+        /** inject 時 zoom.maxScale と揃える */
+        var VISUAL_SCALE_MAX = 2.95;
+        if (targetVisual > VISUAL_SCALE_MAX) {
+          targetVisual = VISUAL_SCALE_MAX;
+        }
+
+        workspace.setScale(MIN_RENDER_SCALE);
+        var useCss = Math.abs(targetVisual - 1) > VISUAL_NEAR_ONE_EPS;
+        if (useCss) {
+          blocklyDiv.style.setProperty('--viewer-css-scale', targetVisual.toFixed(4));
           blocklyDiv.classList.add('viewer-compact');
         } else {
           blocklyDiv.style.removeProperty('--viewer-css-scale');
