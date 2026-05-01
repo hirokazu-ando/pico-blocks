@@ -30,10 +30,10 @@
     }
 
     /*
-      Blockly のワークスペース縮尺は常に 1 に固定し、見た目のズームのみ
-      SVG の CSS transform で行う（内部スケールと CSS が混ざって細くなるのを抑える）。
-      minVisual の下限で読みやすさ優先（?readable=0 で強い収め）。
+      Viewer はメインエディタ（app.js と同様）に Zelos レンダラを合わせる。
+      SVG への CSS scale はかけず、ワークスペース縮尺だけで調整する。
     */
+    /* 旧 viewer-compact（CSS で SVG 縮小）は未使用だが残骸 URL との互換のため残す */
     #blockly-div.viewer-compact .blocklySvg {
       transform-origin: top left;
       transform: scale(var(--viewer-css-scale, 1));
@@ -96,12 +96,10 @@
 
   <script>
     (function () {
-      // Blockly は常に縮尺 1.0 で描画し、画面上の収まりだけ CSS transform で合わせる
-      var MIN_RENDER_SCALE = 1.0;
-      /** Blockly だけで済ませる経路との切り替えで細くなるのを避け、視覚倍率ほぼ1は CSS を使わない */
-      var VISUAL_NEAR_ONE_EPS = 0.01;
-      /** 視覚倍率の下限（もっと大きく＝スクロール増）。?readable=0 で無効、?minVisual= で調整可。 */
-      var DEFAULT_MIN_VISUAL_SCALE = 0.86;
+      // Blockly のワークスペース縮尺だけで調整（CSS で SVG は縮めない）。
+      // メインと同様 Zelos のため block 操作は pointer-events で止めている。
+      /** ワークスペース下限（これより細かくしない）。?readable=0 で縮めるまで許す */
+      var DEFAULT_MIN_VISUAL_SCALE = 0.88;
 
       var params    = new URLSearchParams(location.search);
       var srcUrl    = params.get('src');
@@ -141,8 +139,7 @@
         }
       });
 
-      // readOnly:false にすることで FieldTextInput が正しい高さで描画される
-      // （readOnly:true だと zelos で潰れる Blockly の挙動を回避）
+      // メインエディタ（app.js）と同じ Zelos。readOnly:false は Field の高さ測り（Zelos）向け。
       var workspace = Blockly.inject('blockly-div', {
         readOnly:   false,
         renderer:   'zelos',
@@ -154,7 +151,7 @@
         toolbox:  null,
       });
 
-      // Blocklyが後注入するCSSより確実に上書きするため動的に再注入
+      // Blockly が後から入れる既定 CSS を上書き（編集オーバーレイ／Viewer 共通）
       (function() {
         var s = document.createElement('style');
         s.textContent = '.blocklyHtmlInput,.blocklyHtmlInput input,.blocklyHtmlInput textarea{'
@@ -234,35 +231,23 @@
         }
         prevWasZero = false;
 
-        // ② ブロックを画面に収める
+        // ② Blockly のワークスペース縮尺だけで収め切り／下限（CSS transform は使わない）
         workspace.zoomToFit();
         var fittedScale = workspace.getScale();
         if (!(fittedScale > 0) || fittedScale !== fittedScale) {
           fittedScale = 1;
         }
-
-        /** 画面上のサイズとなる倍率（zoomToFit の結果を CSS で再現） */
-        var targetVisual = fittedScale;
-        // ひどく細い縮小だけ抑える（readable=0 では丸ごと適用しない）
-        if (minVisualFloor > 0 && targetVisual < 1) {
-          targetVisual = Math.max(targetVisual, minVisualFloor);
+        var targetBlockly = fittedScale;
+        if (minVisualFloor > 0 && targetBlockly < 1) {
+          targetBlockly = Math.max(targetBlockly, minVisualFloor);
         }
-
-        /** inject 時 zoom.maxScale と揃える */
         var VISUAL_SCALE_MAX = 2.95;
-        if (targetVisual > VISUAL_SCALE_MAX) {
-          targetVisual = VISUAL_SCALE_MAX;
+        if (targetBlockly > VISUAL_SCALE_MAX) {
+          targetBlockly = VISUAL_SCALE_MAX;
         }
-
-        workspace.setScale(MIN_RENDER_SCALE);
-        var useCss = Math.abs(targetVisual - 1) > VISUAL_NEAR_ONE_EPS;
-        if (useCss) {
-          blocklyDiv.style.setProperty('--viewer-css-scale', targetVisual.toFixed(4));
-          blocklyDiv.classList.add('viewer-compact');
-        } else {
-          blocklyDiv.style.removeProperty('--viewer-css-scale');
-          blocklyDiv.classList.remove('viewer-compact');
-        }
+        workspace.setScale(targetBlockly);
+        blocklyDiv.style.removeProperty('--viewer-css-scale');
+        blocklyDiv.classList.remove('viewer-compact');
         workspace.scrollCenter();
 
         lastLayoutW = rect.width;
