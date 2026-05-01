@@ -32,7 +32,8 @@
     /*
       ブロック数が多くiframe高さに収まらない場合、Blockly内部のscaleは
       MIN_RENDER_SCALE(0.9)に固定し、SVG全体をCSS transformで縮小表示する。
-      これにより FieldTextInput が縦に潰れず、視覚的なサイズだけ調整できる。
+      FieldTextInput の潰れを防ぐ。さらに MIN_VISUAL_SCALE 未満には縮めず
+      Workspace のスクロールで読みやすさを優先する（?readable=0 で従来挙動）。
     */
     #blockly-div.viewer-compact .blocklySvg {
       transform-origin: top left;
@@ -98,11 +99,22 @@
       // FieldTextInput が視覚的に潰れない最低レンダリングスケール
       // この値以下にBlocklyの内部倍率を下げず、不足分はCSS transformで補う
       var MIN_RENDER_SCALE = 0.9;
+      /** 視覚的な全体倍率の下限（これより小さい「収め切り」縮小はしないスクロール優先）。?readable=0 で無効化。 */
+      var DEFAULT_MIN_VISUAL_SCALE = 0.62;
 
       var params    = new URLSearchParams(location.search);
       var srcUrl    = params.get('src');
       var inlineXml = params.get('xml');
       var titleText = params.get('title');
+      var minVisualFloor = NaN;
+      if (params.get('readable') === '0') {
+        minVisualFloor = 0;
+      } else {
+        minVisualFloor = parseFloat(params.get('minVisual') || '');
+        if (!(minVisualFloor > 0 && minVisualFloor <= 1)) {
+          minVisualFloor = DEFAULT_MIN_VISUAL_SCALE;
+        }
+      }
 
       var titleBar   = document.getElementById('title-bar');
       var blocklyDiv = document.getElementById('blockly-div');
@@ -186,6 +198,10 @@
 
         // ① 0→有効サイズ への遷移、または初回描画 → XMLを再ロードして正しく描画
         if (prevWasZero || !renderedOk) {
+          // display:none 内で inject した場合、内部 SVG が 0×0 のまま。
+          // workspace.resize() でコンテナの現在サイズに同期してから描画する。
+          // これを省くと FieldTextInput の SVG テキスト測定が誤って縦潰れが残る。
+          workspace.resize();
           workspace.clear();
           Blockly.Xml.domToWorkspace(
             Blockly.utils.xml.textToDom(currentXmlText), workspace);
@@ -198,9 +214,14 @@
         var fittedScale = workspace.getScale();
 
         // ③ 内部scaleをMIN_RENDER_SCALE以上に固定し、不足分をCSS transformで補う
+        // minVisualFloor>0 のときは視覚倍率が floor 未満にならないよう上げる（縦スクロールでカバー）
         if (fittedScale < MIN_RENDER_SCALE) {
+          var targetVisual = fittedScale;
+          if (minVisualFloor > 0) {
+            targetVisual = Math.max(fittedScale, minVisualFloor);
+          }
           workspace.setScale(MIN_RENDER_SCALE);
-          var cssScale = fittedScale / MIN_RENDER_SCALE;
+          var cssScale = targetVisual / MIN_RENDER_SCALE;
           blocklyDiv.style.setProperty('--viewer-css-scale', cssScale.toFixed(4));
           blocklyDiv.classList.add('viewer-compact');
         } else {
