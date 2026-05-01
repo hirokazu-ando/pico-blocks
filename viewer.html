@@ -31,7 +31,7 @@
 
     /*
       ブロック数が多くiframe高さに収まらない場合、Blockly内部のscaleは
-      MIN_RENDER_SCALE(0.9)に固定し、SVG全体をCSS transformで縮小表示する。
+      MIN_RENDER_SCALE(1.0)に固定し、SVG全体をCSS transformで縮小表示する。
       FieldTextInput の潰れを防ぐ。さらに MIN_VISUAL_SCALE 未満には縮めず
       Workspace のスクロールで読みやすさを優先する（?readable=0 で従来挙動）。
     */
@@ -60,15 +60,16 @@
       color: #94a3b8;
     }
 
-    /* FieldTextInput / FieldNumber の編集オーバーレイの最低高さ */
+    /* FieldTextInput / FieldNumber：オーバーレイ編集時の読みやすさ（細さ対策で高さ・横幅の下限を持たせる） */
     .blocklyHtmlInput,
     .blocklyHtmlInput input,
     .blocklyHtmlInput textarea {
-      min-height: 36px !important;
-      padding: 4px 8px !important;
-      line-height: 1.4 !important;
+      min-height: 44px !important;
+      min-width: min(420px, 92vw) !important;
+      padding: 6px 10px !important;
+      line-height: 1.45 !important;
       box-sizing: border-box !important;
-      font-size: 14px !important;
+      font-size: 15px !important;
     }
   </style>
   <script src="https://unpkg.com/blockly@12.5.1/blockly.min.js"
@@ -98,9 +99,10 @@
     (function () {
       // FieldTextInput が視覚的に潰れない最低レンダリングスケール
       // この値以下にBlocklyの内部倍率を下げず、不足分はCSS transformで補う
-      var MIN_RENDER_SCALE = 0.9;
-      /** 視覚的な全体倍率の下限（これより小さい「収め切り」縮小はしないスクロール優先）。?readable=0 で無効化。 */
-      var DEFAULT_MIN_VISUAL_SCALE = 0.62;
+      // 1.0 未満に内部scaleを落とさない（0.9 より細く見えるケースへの対処）。不足は CSS で。
+      var MIN_RENDER_SCALE = 1.0;
+      /** 視覚倍率の下限（もっと大きく＝スクロール増）。?readable=0 で無効、?minVisual= で調整可。 */
+      var DEFAULT_MIN_VISUAL_SCALE = 0.82;
 
       var params    = new URLSearchParams(location.search);
       var srcUrl    = params.get('src');
@@ -157,8 +159,8 @@
       (function() {
         var s = document.createElement('style');
         s.textContent = '.blocklyHtmlInput,.blocklyHtmlInput input,.blocklyHtmlInput textarea{'
-          + 'min-height:36px!important;padding:4px 8px!important;'
-          + 'line-height:1.4!important;font-size:14px!important;box-sizing:border-box!important}';
+          + 'min-height:44px!important;min-width:min(420px,92vw)!important;padding:6px 10px!important;'
+          + 'line-height:1.45!important;font-size:15px!important;box-sizing:border-box!important}';
         document.head.appendChild(s);
       })();
 
