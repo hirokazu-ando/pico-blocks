@@ -3,14 +3,14 @@
   <variables><variable id="var_x">x</variable></variables>
   <block type="var_set" id="b1" x="30" y="30">
     <field name="VAR" id="var_x">x</field>
-    <value name="VALUE"><block type="val_number" id="b2"><field name="NUM">1</field></block></value>
+    <value name="VALUE"><block type="val_number" id="b2"><field name="NUM">10</field></block></value>
     <next>
       <block type="py_while" id="b3">
         <value name="COND">
           <block type="cond_compare" id="b4">
-            <field name="OP">&lt;=</field>
+            <field name="OP">&gt;=</field>
             <value name="LEFT"><block type="val_var" id="b5"><field name="VAR" id="var_x">x</field></block></value>
-            <value name="RIGHT"><block type="val_number" id="b6"><field name="NUM">5</field></block></value>
+            <value name="RIGHT"><block type="val_number" id="b6"><field name="NUM">1</field></block></value>
           </block>
         </value>
         <statement name="DO">
@@ -19,11 +19,14 @@
             <next>
               <block type="var_change" id="b9">
                 <field name="VAR" id="var_x">x</field>
-                <value name="AMOUNT"><block type="val_number" id="b10"><field name="NUM">1</field></block></value>
+                <value name="AMOUNT"><block type="val_number" id="b10"><field name="NUM">-1</field></block></value>
               </block>
             </next>
           </block>
         </statement>
+        <next>
+          <block type="print_text" id="b11"><field name="TEXT">発射！</field></block>
+        </next>
       </block>
     </next>
   </block>
