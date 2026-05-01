@@ -224,10 +224,17 @@
 
       // ---------- リサイズ対応（details開閉 / ウィンドウ変化） ----------
       var resizeTimer;
-      window.addEventListener('resize', function() {
+      function scheduleLayout() {
         clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(applyLayout, 120);
-      });
+        resizeTimer = setTimeout(applyLayout, 200);
+      }
+      window.addEventListener('resize', scheduleLayout);
+
+      // details の開閉でiframe内のwindow.resizeが発火しない場合があるため
+      // ResizeObserver でblocklyDivのサイズ変化を直接監視する
+      if (typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(scheduleLayout).observe(blocklyDiv);
+      }
 
       // ---------- XML ロード & 初回描画 ----------
       resolveXmlText()

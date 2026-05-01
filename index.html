@@ -360,6 +360,12 @@
     <!-- 0-6/0-7/0-8: 条件分岐・比較・論理演算 -->
     <category name="分岐" colour="#5E35B1">
       <block type="pico_if" gap="8"></block>
+      <block type="pico_if" gap="8">
+        <mutation elseif="0" else="1"></mutation>
+      </block>
+      <block type="pico_if" gap="8">
+        <mutation elseif="1" else="1"></mutation>
+      </block>
       <sep gap="20"></sep>
       <block type="cond_compare" gap="8">
         <value name="LEFT">

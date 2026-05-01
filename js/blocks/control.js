@@ -1,6 +1,9 @@
 (() => {
 const P = window.PycoPalette;
 
+// 各 elif/else ブランチの個別削除ボタン用 SVG（赤・16×16）
+const MINUS_BRANCH = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><rect width="16" height="16" rx="3" fill="%23ef4444"/><text x="8" y="12" text-anchor="middle" font-size="14" fill="white" font-family="monospace">-</text></svg>';
+
 Blockly.Blocks['pico_wait'] = {
   init: function() {
     this.appendValueInput('SEC').setCheck('Number');
@@ -71,34 +74,15 @@ Blockly.Blocks['pico_if'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(P.logic);
-    this.setTooltip('条件に応じて処理を分岐します。+ボタンで elif/else を追加できます');
+    this.setTooltip('条件に応じて処理を分岐します。+ボタンで else/elif を追加できます');
   },
 
+  // + ボタン：まず else を追加し、else がある場合は elif を追加する
   _addBranch: function() {
-    if (this.elseifCount_ === 0) {
-      this._addElseIf();
-    } else if (this.elseCount_ === 0) {
+    if (this.elseCount_ === 0) {
       this._addElse();
     } else {
-      this.removeInput('BUTTONS');
-      this.removeInput('ELSE_LABEL');
-      this.removeInput('ELSE');
-      this.elseCount_ = 0;
-
-      this.elseifCount_++;
-      const i = this.elseifCount_;
-      this.appendValueInput('IF' + i)
-        .setCheck('Boolean')
-        .appendField('そうでなくもし');
-      this.appendDummyInput('IF' + i + '_LABEL').appendField('だったら');
-      this.appendStatementInput('DO' + i).setCheck(null);
-
-      this.elseCount_ = 1;
-      this.appendDummyInput('ELSE_LABEL').appendField('そうでなければ');
-      this.appendStatementInput('ELSE').setCheck(null);
-
-      this._addButtons();
-      this.render && this.render();
+      this._addElseIf();
     }
   },
 
@@ -128,11 +112,18 @@ Blockly.Blocks['pico_if'] = {
     this.appendValueInput('IF' + i)
       .setCheck('Boolean')
       .appendField('そうでなくもし');
-    this.appendDummyInput('IF' + i + '_LABEL').appendField('だったら');
+    this.appendDummyInput('IF' + i + '_LABEL')
+      .appendField('だったら ')
+      .appendField(new Blockly.FieldImage(
+        MINUS_BRANCH, 16, 16, '-',
+        ((capturedI) => () => { this._removeElseIf(capturedI); })(i)
+      ));
     this.appendStatementInput('DO' + i).setCheck(null);
 
     if (hasElse) {
-      this.appendDummyInput('ELSE_LABEL').appendField('そうでなければ');
+      this.appendDummyInput('ELSE_LABEL')
+        .appendField('そうでなければ ')
+        .appendField(new Blockly.FieldImage(MINUS_BRANCH, 16, 16, '-', () => { this._removeElse(); }));
       this.appendStatementInput('ELSE').setCheck(null);
     }
     this._addButtons();
@@ -143,10 +134,67 @@ Blockly.Blocks['pico_if'] = {
     if (this.elseCount_ > 0) return;
     this.removeInput('BUTTONS');
     this.elseCount_ = 1;
-    this.appendDummyInput('ELSE_LABEL').appendField('そうでなければ');
+    this.appendDummyInput('ELSE_LABEL')
+      .appendField('そうでなければ ')
+      .appendField(new Blockly.FieldImage(MINUS_BRANCH, 16, 16, '-', () => { this._removeElse(); }));
     this.appendStatementInput('ELSE').setCheck(null);
     this._addButtons();
     this.initSvg && this.render();
+  },
+
+  // else ブランチを単独で削除
+  _removeElse: function() {
+    if (this.elseCount_ === 0) return;
+    this.removeInput('ELSE');
+    this.removeInput('ELSE_LABEL');
+    this.elseCount_ = 0;
+    this.removeInput('BUTTONS');
+    this._addButtons();
+    this.render && this.render();
+  },
+
+  // idx 番目の elif を削除して残りを詰め直す
+  _removeElseIf: function(idx) {
+    const total   = this.elseifCount_;
+    const hasElse = this.elseCount_ > 0;
+
+    // 全 elif インプットを逆順で削除（接続ブロックはワークスペースに切り離される）
+    for (let j = total; j >= 1; j--) {
+      if (this.getInput('DO' + j))            this.removeInput('DO' + j);
+      if (this.getInput('IF' + j + '_LABEL')) this.removeInput('IF' + j + '_LABEL');
+      if (this.getInput('IF' + j))            this.removeInput('IF' + j);
+    }
+    if (hasElse) {
+      if (this.getInput('ELSE'))       this.removeInput('ELSE');
+      if (this.getInput('ELSE_LABEL')) this.removeInput('ELSE_LABEL');
+    }
+    if (this.getInput('BUTTONS')) this.removeInput('BUTTONS');
+
+    // idx を除いた elif を再構築
+    this.elseifCount_ = 0;
+    for (let j = 1; j <= total; j++) {
+      if (j === idx) continue;
+      this.elseifCount_++;
+      const i = this.elseifCount_;
+      this.appendValueInput('IF' + i).setCheck('Boolean').appendField('そうでなくもし');
+      this.appendDummyInput('IF' + i + '_LABEL')
+        .appendField('だったら ')
+        .appendField(new Blockly.FieldImage(
+          MINUS_BRANCH, 16, 16, '-',
+          ((capturedI) => () => { this._removeElseIf(capturedI); })(i)
+        ));
+      this.appendStatementInput('DO' + i).setCheck(null);
+    }
+
+    if (hasElse) {
+      this.appendDummyInput('ELSE_LABEL')
+        .appendField('そうでなければ ')
+        .appendField(new Blockly.FieldImage(MINUS_BRANCH, 16, 16, '-', () => { this._removeElse(); }));
+      this.appendStatementInput('ELSE').setCheck(null);
+    }
+
+    this._addButtons();
+    this.render && this.render();
   },
 
   _removeLast: function() {
@@ -192,16 +240,23 @@ Blockly.Blocks['pico_if'] = {
     this.elseifCount_ = 0;
     this.elseCount_   = 0;
 
-    for (let i = 0; i < elseifCount; i++) {
+    for (let j = 0; j < elseifCount; j++) {
       this.elseifCount_++;
       const idx = this.elseifCount_;
       this.appendValueInput('IF' + idx).setCheck('Boolean').appendField('そうでなくもし');
-      this.appendDummyInput('IF' + idx + '_LABEL').appendField('だったら');
+      this.appendDummyInput('IF' + idx + '_LABEL')
+        .appendField('だったら ')
+        .appendField(new Blockly.FieldImage(
+          MINUS_BRANCH, 16, 16, '-',
+          ((capturedIdx) => () => { this._removeElseIf(capturedIdx); })(idx)
+        ));
       this.appendStatementInput('DO' + idx).setCheck(null);
     }
     if (elseCount > 0) {
       this.elseCount_ = 1;
-      this.appendDummyInput('ELSE_LABEL').appendField('そうでなければ');
+      this.appendDummyInput('ELSE_LABEL')
+        .appendField('そうでなければ ')
+        .appendField(new Blockly.FieldImage(MINUS_BRANCH, 16, 16, '-', () => { this._removeElse(); }));
       this.appendStatementInput('ELSE').setCheck(null);
     }
     this._addButtons();
