@@ -185,6 +185,13 @@
       var currentXmlText = null;
       var renderedOk     = false;  // 有効なサイズで一度描画が完了したか
       var prevWasZero    = true;   // 前回のrect が 0×0 だったか
+      var zeroRectRetries = 0;
+      /** blockly-div がまだ 0×0 のとき rAF で再試行する回数上限（親・iframe のレイアウト確定が遅い対策） */
+      var ZERO_RECT_RETRY_MAX = 48;
+      /** 直近でレイアウト済みだった領域から幅・高さがこれ以上変われば XML を取り直す（謎の細さ／はみ出しの対策） */
+      var LAYOUT_JUMP_RATIO = 0.11;
+      var lastLayoutW = 0;
+      var lastLayoutH = 0;
 
       function applyLayout() {
         if (!currentXmlText) return;
@@ -193,9 +200,26 @@
         var hasSize = (rect.width > 0 && rect.height > 0);
 
         if (!hasSize) {
-          // サイズ未確定（details閉じ中など）
           prevWasZero = true;
+          if (zeroRectRetries++ < ZERO_RECT_RETRY_MAX) {
+            requestAnimationFrame(applyLayout);
+          }
           return;
+        }
+
+        zeroRectRetries = 0;
+
+        // 一度描画したあとコンテナサイズが大きく変わったときはワークスペースごと張り替える
+        if (renderedOk && lastLayoutW > 0 && lastLayoutH > 0) {
+          var rw = rect.width / lastLayoutW;
+          var rh = rect.height / lastLayoutH;
+          if (
+            rw < 1 - LAYOUT_JUMP_RATIO || rw > 1 + LAYOUT_JUMP_RATIO ||
+            rh < 1 - LAYOUT_JUMP_RATIO || rh > 1 + LAYOUT_JUMP_RATIO
+          ) {
+            renderedOk = false;
+            prevWasZero = true;
+          }
         }
 
         // ① 0→有効サイズ への遷移、または初回描画 → XMLを再ロードして正しく描画
@@ -232,6 +256,9 @@
         }
         workspace.scrollCenter();
 
+        lastLayoutW = rect.width;
+        lastLayoutH = rect.height;
+
         // ④ 親フレームへブロック表示高さを通知（親にリスナーがあれば自動リサイズ可能）
         requestAnimationFrame(function() {
           try {
@@ -259,11 +286,28 @@
         new ResizeObserver(scheduleLayout).observe(blocklyDiv);
       }
 
+      document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) scheduleLayout();
+      });
+      window.addEventListener('pageshow', function(ev) {
+        if (ev.persisted) scheduleLayout();
+      });
+
       // ---------- XML ロード & 初回描画 ----------
       resolveXmlText()
         .then(function(xmlText) {
           currentXmlText = xmlText;
-          requestAnimationFrame(applyLayout);
+          zeroRectRetries = 0;
+          // 親レイアウト確定より先に動くことがあるため二重 rAF と遅延で再適用する
+          requestAnimationFrame(function() {
+            applyLayout();
+            requestAnimationFrame(applyLayout);
+          });
+          if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(function() { scheduleLayout(); });
+          }
+          setTimeout(scheduleLayout, 350);
+          setTimeout(scheduleLayout, 900);
         })
         .catch(function() {
           blocklyDiv.style.display = 'none';
