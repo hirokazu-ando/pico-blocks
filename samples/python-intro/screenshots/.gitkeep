@@ -1,0 +1,4 @@
+# Snapshot PNGs for WordPress articles; commit alongside matching intro_*.xml base names.
+#
+# PNG ?:
+#   python tools/blockshot.py render samples/python-intro/intro_0-1_ex1_word.xml samples/python-intro/screenshots/intro_0-1_ex1_word.png
