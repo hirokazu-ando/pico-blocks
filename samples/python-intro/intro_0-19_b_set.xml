@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_fruits">fruits</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_fruits">fruits</field>
+    <value name="VALUE">
+      <block type="py_set_literal" id="b2">
+        <mutation items="3"/>
+        <field name="COUNT">3</field>
+        <value name="ITEM0"><block type="val_str" id="b3"><field name="TEXT">apple</field></block></value>
+        <value name="ITEM1"><block type="val_str" id="b4"><field name="TEXT">banana</field></block></value>
+        <value name="ITEM2"><block type="val_str" id="b5"><field name="TEXT">apple</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="py_set_add" id="b6">
+        <field name="SET" id="var_fruits">fruits</field>
+        <value name="VALUE"><block type="val_str" id="b7"><field name="TEXT">cherry</field></block></value>
+      </block>
+    </next>
+  </block>
+</xml>

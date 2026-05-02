@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_point">point</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_point">point</field>
+    <value name="VALUE">
+      <block type="py_tuple_literal" id="b2">
+        <mutation items="3"/>
+        <field name="COUNT">3</field>
+        <value name="ITEM0"><block type="val_number" id="b3"><field name="NUM">35</field></block></value>
+        <value name="ITEM1"><block type="val_number" id="b4"><field name="NUM">139</field></block></value>
+        <value name="ITEM2"><block type="val_str" id="b5"><field name="TEXT">東京</field></block></value>
+      </block>
+    </value>
+  </block>
+</xml>

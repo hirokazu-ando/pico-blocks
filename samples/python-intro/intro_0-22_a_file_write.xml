@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_file_write" id="b1" x="30" y="30">
+    <field name="FILENAME">hello.txt</field>
+    <value name="CONTENT">
+      <block type="val_str" id="b2"><field name="TEXT">こんにちは、PycoBlocks！</field></block>
+    </value>
+  </block>
+</xml>
