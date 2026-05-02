@@ -3,16 +3,26 @@
   <variables><variable id="var_fruits">fruits</variable></variables>
   <block type="var_set" id="b1" x="30" y="30">
     <field name="VAR" id="var_fruits">fruits</field>
-    <value name="VALUE"><block type="py_custom_expr" id="b2"><field name="CODE">["apple", "orange", "grape"]</field></block></value>
-    <next>
-      <block type="py_print" id="b3">
+    <value name="VALUE"><block type="py_list_empty" id="b_empty"></block></value>
+    <next><block type="py_list_append" id="b_a10">
+      <field name="LIST" id="var_fruits">fruits</field>
+      <value name="VALUE"><block type="val_str" id="bv10"><field name="TEXT">apple</field></block></value>
+      <next><block type="py_list_append" id="b_a11">
+      <field name="LIST" id="var_fruits">fruits</field>
+      <value name="VALUE"><block type="val_str" id="bv11"><field name="TEXT">orange</field></block></value>
+      <next><block type="py_list_append" id="b_a12">
+      <field name="LIST" id="var_fruits">fruits</field>
+      <value name="VALUE"><block type="val_str" id="bv12"><field name="TEXT">grape</field></block></value>
+      <next><block type="py_print" id="b_print">
         <value name="VALUE">
-          <block type="py_list_get" id="b4">
+          <block type="py_list_get" id="b_get">
             <field name="LIST" id="var_fruits">fruits</field>
-            <value name="INDEX"><block type="val_number" id="b5"><field name="NUM">0</field></block></value>
+            <value name="INDEX"><block type="val_number" id="bv_idx"><field name="NUM">0</field></block></value>
           </block>
         </value>
-      </block>
-    </next>
+      </block></next>
+    </block></next>
+    </block></next>
+    </block></next>
   </block>
 </xml>

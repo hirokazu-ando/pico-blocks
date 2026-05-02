@@ -3,28 +3,37 @@
   <variables><variable id="var_scores">scores</variable><variable id="var_keys">keys</variable><variable id="var_name">name</variable></variables>
   <block type="var_set" id="b1" x="30" y="30">
     <field name="VAR" id="var_scores">scores</field>
-    <value name="VALUE"><block type="py_custom_expr" id="b2"><field name="CODE">{"math": 80, "science": 90}</field></block></value>
-    <next>
-      <block type="var_set" id="b3">
+    <value name="VALUE"><block type="py_dict_literal" id="b_lit">
+      <mutation items="2"></mutation>
+      <field name="COUNT">2</field>
+      <field name="KEY0">math</field>
+      <value name="PAIR0"><block type="val_number" id="bv_ma"><field name="NUM">80</field></block></value>
+      <field name="KEY1">science</field>
+      <value name="PAIR1"><block type="val_number" id="bv_sc"><field name="NUM">90</field></block></value>
+    </block></value>
+    <next><block type="var_set" id="b_ks">
         <field name="VAR" id="var_keys">keys</field>
-        <value name="VALUE"><block type="py_dict_keys" id="b4"><field name="DICT" id="var_scores">scores</field></block></value>
+        <value name="VALUE">
+          <block type="py_dict_keys" id="b_dk">
+            <field name="DICT" id="var_scores">scores</field>
+          </block>
+        </value>
         <next>
-          <block type="py_for_list" id="b5">
+          <block type="py_for_list" id="b_for">
             <field name="VAR" id="var_name">name</field>
             <field name="LIST" id="var_keys">keys</field>
             <statement name="DO">
-              <block type="py_print" id="b6">
+              <block type="py_print" id="b_pv">
                 <value name="VALUE">
-                  <block type="py_dict_get" id="b7">
+                  <block type="py_dict_get" id="b_dg">
                     <field name="DICT" id="var_scores">scores</field>
-                    <value name="KEY"><block type="val_var" id="b8"><field name="VAR" id="var_name">name</field></block></value>
+                    <value name="KEY"><block type="val_var" id="bv_nm"><field name="VAR" id="var_name">name</field></block></value>
                   </block>
                 </value>
               </block>
             </statement>
           </block>
         </next>
-      </block>
-    </next>
+      </block></next>
   </block>
 </xml>
