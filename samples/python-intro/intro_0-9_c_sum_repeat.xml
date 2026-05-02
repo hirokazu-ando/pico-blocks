@@ -7,7 +7,7 @@
     <next>
       <block type="pico_repeat" id="b3">
         <value name="TIMES"><block type="val_number" id="b4"><field name="NUM">3</field></block></value>
-        <statement name="DO"><block type="var_change" id="b5"><field name="VAR" id="var_s">s</field><value name="DELTA"><block type="val_number" id="b6"><field name="NUM">5</field></block></value></block></statement>
+        <statement name="DO"><block type="var_change" id="b5"><field name="VAR" id="var_s">s</field><value name="AMOUNT"><block type="val_number" id="b6"><field name="NUM">5</field></block></value></block></statement>
         <next><block type="py_print" id="b7"><value name="VALUE"><block type="val_var" id="b8"><field name="VAR" id="var_s">s</field></block></value></block></next>
       </block>
     </next>
