@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_text">text</variable>
+    <variable id="var_n">n</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_text">text</field>
+    <value name="VALUE">
+      <block type="val_str" id="b2"><field name="TEXT">42</field></block>
+    </value>
+    <next>
+      <block type="py_try_except" id="b3">
+        <field name="ETYPE">ValueError</field>
+        <statement name="BODY">
+          <block type="var_set" id="b4">
+            <field name="VAR" id="var_n">n</field>
+            <value name="VALUE">
+              <block type="py_type_cast" id="b5">
+                <field name="TYPE">int</field>
+                <value name="VALUE">
+                  <block type="val_var" id="b6"><field name="VAR" id="var_text">text</field></block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print" id="b7">
+                <value name="VALUE">
+                  <block type="py_str_concat" id="b8">
+                    <value name="A">
+                      <block type="val_str" id="b9"><field name="TEXT">変換成功：</field></block>
+                    </value>
+                    <value name="B">
+                      <block type="py_type_cast" id="b10">
+                        <field name="TYPE">str</field>
+                        <value name="VALUE">
+                          <block type="val_var" id="b11"><field name="VAR" id="var_n">n</field></block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <statement name="HANDLER">
+          <block type="py_print" id="b12">
+            <value name="VALUE">
+              <block type="val_str" id="b13"><field name="TEXT">整数に変換できませんでした</field></block>
+            </value>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
+</xml>

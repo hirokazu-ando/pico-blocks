@@ -439,6 +439,9 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_new_instance':     return `クラス「${block.getFieldValue('NAME')}」のインスタンスを作る`;
       case 'py_method_call_stmt': return `${getVarName(block, 'INST')}.${block.getFieldValue('METHOD')}() を呼ぶ`;
       case 'py_attr_get':         return `${getVarName(block, 'INST')}.${block.getFieldValue('ATTR')}`;
+      case 'py_try_except':       return `エラー（${block.getFieldValue('ETYPE')}）を処理する`;
+      case 'py_try_except_as':    return `エラーを ${getVarName(block, 'EVAR')} として処理する`;
+      case 'py_raise':            return `${block.getFieldValue('ETYPE')} を発生させる`;
       case 'py_custom_stmt': return 'カスタムPython（文・1行・縦連結で複数行）';
       case 'py_custom_expr': return 'カスタムPython（式）';
       default:                 return block.type;
@@ -1375,6 +1378,36 @@ document.addEventListener('DOMContentLoaded', function() {
         registerExprBlocksAtLineFromInput(block, 'ARG', ln);
         const arg = valueToCode(block, 'ARG', '');
         code = appendLocal(code, indent + `${inst}.${method}(${arg})\n`);
+        break;
+      }
+
+      // ===== 例外処理ブロック（0-17） =====
+      case 'py_try_except': {
+        const etype   = block.getFieldValue('ETYPE');
+        const tryBody = statementToCode(block, 'BODY', indent + '    ');
+        const handler = statementToCode(block, 'HANDLER', indent + '    ');
+        code = appendLocal(code, indent + `try:\n`);
+        code = appendChildBody(code, tryBody, indent + '    pass\n');
+        code = appendLocal(code, indent + `except ${etype}:\n`);
+        code = appendChildBody(code, handler, indent + '    pass\n');
+        break;
+      }
+      case 'py_try_except_as': {
+        const evar    = getVarName(block, 'EVAR');
+        const tryBody = statementToCode(block, 'BODY', indent + '    ');
+        const handler = statementToCode(block, 'HANDLER', indent + '    ');
+        code = appendLocal(code, indent + `try:\n`);
+        code = appendChildBody(code, tryBody, indent + '    pass\n');
+        code = appendLocal(code, indent + `except Exception as ${evar}:\n`);
+        code = appendChildBody(code, handler, indent + '    pass\n');
+        break;
+      }
+      case 'py_raise': {
+        const etype = block.getFieldValue('ETYPE');
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'MSG', ln);
+        const msg = valueToCode(block, 'MSG', '""');
+        code = appendLocal(code, indent + `raise ${etype}(${msg})\n`);
         break;
       }
 

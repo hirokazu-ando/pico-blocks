@@ -499,6 +499,15 @@
       <block type="py_method_call_stmt" gap="8"></block>
       <block type="py_attr_get" gap="8"></block>
     </category>
+    <!-- 0-17: 例外処理 -->
+    <category name="例外処理" colour="#D32F2F">
+      <block type="py_try_except" gap="8"></block>
+      <block type="py_try_except_as" gap="8"></block>
+      <sep gap="12"></sep>
+      <block type="py_raise" gap="8">
+        <value name="MSG"><shadow type="val_str"><field name="TEXT">エラーメッセージ</field></shadow></value>
+      </block>
+    </category>
     <!-- 時間（Part 1以降で使用） -->
     <category name="時間" colour="#2E7D32">
       <block type="pico_wait" gap="8">

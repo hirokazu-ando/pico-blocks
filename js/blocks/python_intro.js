@@ -588,6 +588,74 @@ Blockly.Blocks['py_attr_get'] = {
 };
 
 // =====================================================
+// 例外処理ブロック（0-17）
+// =====================================================
+
+const EX_TYPES = [
+  ['エラー全般（Exception）', 'Exception'],
+  ['ValueError',          'ValueError'],
+  ['ZeroDivisionError',   'ZeroDivisionError'],
+  ['TypeError',           'TypeError'],
+  ['IndexError',          'IndexError'],
+  ['KeyError',            'KeyError'],
+];
+
+Blockly.Blocks['py_try_except'] = {
+  init: function() {
+    this.appendDummyInput().appendField('試す：');
+    this.appendStatementInput('BODY').setCheck(null);
+    this.appendDummyInput()
+      .appendField('エラー（')
+      .appendField(new Blockly.FieldDropdown(EX_TYPES), 'ETYPE')
+      .appendField('）のとき：');
+    this.appendStatementInput('HANDLER').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.exceptions);
+    this.setTooltip('try/except：エラーが起きたときの処理を書きます（try: ... except ExcType:）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_try_except_as'] = {
+  init: function() {
+    this.appendDummyInput().appendField('試す：');
+    this.appendStatementInput('BODY').setCheck(null);
+    this.appendDummyInput()
+      .appendField('エラーを')
+      .appendField(new Blockly.FieldVariable('e'), 'EVAR')
+      .appendField('として受け取る：');
+    this.appendStatementInput('HANDLER').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.exceptions);
+    this.setTooltip('try/except Exception as e：エラーの内容を変数に受け取ります（try: ... except Exception as e:）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_raise'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('エラーを発生させる（')
+      .appendField(new Blockly.FieldDropdown([
+        ['ValueError',   'ValueError'],
+        ['TypeError',    'TypeError'],
+        ['Exception',    'Exception'],
+      ]), 'ETYPE')
+      .appendField('：');
+    this.appendValueInput('MSG').setCheck(null);
+    this.appendDummyInput().appendField('）');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.exceptions);
+    this.setTooltip('raise：意図的にエラーを発生させます（raise ExcType("msg")）');
+    this.setHelpUrl('');
+  }
+};
+
+// =====================================================
 // 計算追加ブロック
 // =====================================================
 

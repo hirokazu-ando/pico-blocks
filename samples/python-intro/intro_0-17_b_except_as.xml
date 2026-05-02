@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_e">e</variable>
+    <variable id="var_x">x</variable>
+  </variables>
+  <block type="py_try_except_as" id="b1" x="30" y="30">
+    <field name="EVAR" id="var_e">e</field>
+    <statement name="BODY">
+      <block type="var_set" id="b2">
+        <field name="VAR" id="var_x">x</field>
+        <value name="VALUE">
+          <block type="py_type_cast" id="b3">
+            <field name="TYPE">int</field>
+            <value name="VALUE">
+              <block type="val_str" id="b4"><field name="TEXT">abc</field></block>
+            </value>
+          </block>
+        </value>
+      </block>
+    </statement>
+    <statement name="HANDLER">
+      <block type="py_print" id="b5">
+        <value name="VALUE">
+          <block type="py_str_concat" id="b6">
+            <value name="A">
+              <block type="val_str" id="b7"><field name="TEXT">エラー：</field></block>
+            </value>
+            <value name="B">
+              <block type="py_type_cast" id="b8">
+                <field name="TYPE">str</field>
+                <value name="VALUE">
+                  <block type="val_var" id="b9"><field name="VAR" id="var_e">e</field></block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+</xml>
