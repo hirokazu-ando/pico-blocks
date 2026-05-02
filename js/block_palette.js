@@ -21,6 +21,7 @@ window.PycoPalette = {
   dict: '#6D4C41',
   game: '#EC407A',
   functions: '#FF7043',
+  classes:   '#7B1FA2',
   modules: '#546E7A',
   customPython: '#455A64',
   timing: '#2E7D32',

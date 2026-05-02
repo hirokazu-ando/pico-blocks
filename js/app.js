@@ -429,6 +429,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const attrs = { x: 'x座標', y: 'y座標', width: '幅', height: '高さ', centerx: '中心x', centery: '中心y' };
         return `Rectの${attrs[block.getFieldValue('ATTR')] || '属性'}`;
       }
+      case 'py_class_def':        return `クラス「${block.getFieldValue('NAME')}」を定義する`;
+      case 'py_class_init':       return `__init__（self, ${block.getFieldValue('PARAM')}）`;
+      case 'py_class_init2':      return `__init__（self, ${block.getFieldValue('PARAM1')}, ${block.getFieldValue('PARAM2')}）`;
+      case 'py_class_method':     return `メソッド「${block.getFieldValue('NAME')}」（引数なし）`;
+      case 'py_class_method1':    return `メソッド「${block.getFieldValue('NAME')}」（引数: ${block.getFieldValue('PARAM')}）`;
+      case 'py_self_set':         return `self.${block.getFieldValue('ATTR')} に代入`;
+      case 'py_self_get':         return `self.${block.getFieldValue('ATTR')}`;
+      case 'py_new_instance':     return `クラス「${block.getFieldValue('NAME')}」のインスタンスを作る`;
+      case 'py_method_call_stmt': return `${block.getFieldValue('INST')}.${block.getFieldValue('METHOD')}() を呼ぶ`;
+      case 'py_attr_get':         return `${block.getFieldValue('INST')}.${block.getFieldValue('ATTR')}`;
       case 'py_custom_stmt': return 'カスタムPython（文・1行・縦連結で複数行）';
       case 'py_custom_expr': return 'カスタムPython（式）';
       default:                 return block.type;
@@ -707,6 +717,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const rect = valueToCode(block, 'RECT', 'pygame.Rect(0,0,0,0)');
         const attr = block.getFieldValue('ATTR') || 'x';
         return `${rect}.${attr}`;
+      }
+      case 'py_self_get': {
+        const attr = block.getFieldValue('ATTR');
+        return `self.${attr}`;
+      }
+      case 'py_new_instance': {
+        const name = block.getFieldValue('NAME');
+        const arg  = valueToCode(block, 'ARG', '');
+        return `${name}(${arg})`;
+      }
+      case 'py_attr_get': {
+        const inst = block.getFieldValue('INST');
+        const attr = block.getFieldValue('ATTR');
+        return `${inst}.${attr}`;
       }
       case 'py_custom_expr': {
         let raw = block.getFieldValue('CODE');
@@ -1295,6 +1319,62 @@ document.addEventListener('DOMContentLoaded', function() {
         const arg    = valueToCode(block, 'ARG', '');
         const call   = (!mod || mod === '__none__') ? `${func}(${arg})` : `${mod}.${func}(${arg})`;
         code = appendLocal(code, indent + call + '\n');
+        break;
+      }
+
+      // ===== クラスブロック（0-16） =====
+      case 'py_class_def': {
+        const name = block.getFieldValue('NAME');
+        code = appendLocal(code, indent + `class ${name}:\n`);
+        const body = statementToCode(block, 'BODY', indent + '    ');
+        code = appendChildBody(code, body, indent + '    pass\n');
+        break;
+      }
+      case 'py_class_init': {
+        const param = block.getFieldValue('PARAM');
+        code = appendLocal(code, indent + `def __init__(self, ${param}):\n`);
+        const body = statementToCode(block, 'BODY', indent + '    ');
+        code = appendChildBody(code, body, indent + '    pass\n');
+        break;
+      }
+      case 'py_class_init2': {
+        const p1 = block.getFieldValue('PARAM1');
+        const p2 = block.getFieldValue('PARAM2');
+        code = appendLocal(code, indent + `def __init__(self, ${p1}, ${p2}):\n`);
+        const body = statementToCode(block, 'BODY', indent + '    ');
+        code = appendChildBody(code, body, indent + '    pass\n');
+        break;
+      }
+      case 'py_class_method': {
+        const name = block.getFieldValue('NAME');
+        code = appendLocal(code, indent + `def ${name}(self):\n`);
+        const body = statementToCode(block, 'BODY', indent + '    ');
+        code = appendChildBody(code, body, indent + '    pass\n');
+        break;
+      }
+      case 'py_class_method1': {
+        const name  = block.getFieldValue('NAME');
+        const param = block.getFieldValue('PARAM');
+        code = appendLocal(code, indent + `def ${name}(self, ${param}):\n`);
+        const body = statementToCode(block, 'BODY', indent + '    ');
+        code = appendChildBody(code, body, indent + '    pass\n');
+        break;
+      }
+      case 'py_self_set': {
+        const attr = block.getFieldValue('ATTR');
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'VALUE', ln);
+        const val = valueToCode(block, 'VALUE', '0');
+        code = appendLocal(code, indent + `self.${attr} = ${val}\n`);
+        break;
+      }
+      case 'py_method_call_stmt': {
+        const inst   = block.getFieldValue('INST');
+        const method = block.getFieldValue('METHOD');
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'ARG', ln);
+        const arg = valueToCode(block, 'ARG', '');
+        code = appendLocal(code, indent + `${inst}.${method}(${arg})\n`);
         break;
       }
 

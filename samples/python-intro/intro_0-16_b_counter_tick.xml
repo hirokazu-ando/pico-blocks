@@ -1,23 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt" id="b1" x="30" y="30">
-    <field name="CODE">class Counter:
-    def __init__(self, start):
-        self.value = start
-    def tick(self):
-        self.value = self.value + 1</field>
-    <next>
-      <block type="py_custom_stmt" id="b2">
-        <field name="CODE">counter = Counter(0)</field>
+  <variables><variable id="var_counter">counter</variable></variables>
+  <block type="py_class_def" id="b1" x="30" y="30">
+    <field name="NAME">Counter</field>
+    <statement name="BODY">
+      <block type="py_class_init" id="b2">
+        <field name="PARAM">start</field>
+        <statement name="BODY">
+          <block type="py_self_set" id="b3">
+            <field name="ATTR">value</field>
+            <value name="VALUE">
+              <block type="py_custom_expr" id="b4"><field name="CODE">start</field></block>
+            </value>
+          </block>
+        </statement>
         <next>
-          <block type="py_custom_stmt" id="b3">
-            <field name="CODE">counter.tick()</field>
+          <block type="py_class_method" id="b5">
+            <field name="NAME">tick</field>
+            <statement name="BODY">
+              <block type="py_self_set" id="b6">
+                <field name="ATTR">value</field>
+                <value name="VALUE">
+                  <block type="py_math_op" id="b7">
+                    <field name="OP">+</field>
+                    <value name="LEFT">
+                      <block type="py_self_get" id="b8"><field name="ATTR">value</field></block>
+                    </value>
+                    <value name="RIGHT">
+                      <block type="val_number" id="b9"><field name="NUM">1</field></block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="var_set" id="b10">
+        <field name="VAR" id="var_counter">counter</field>
+        <value name="VALUE">
+          <block type="py_new_instance" id="b11">
+            <field name="NAME">Counter</field>
+            <value name="ARG">
+              <block type="val_number" id="b12"><field name="NUM">0</field></block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="py_method_call_stmt" id="b13">
+            <field name="INST">counter</field>
+            <field name="METHOD">tick</field>
             <next>
-              <block type="py_custom_stmt" id="b4">
-                <field name="CODE">counter.tick()</field>
+              <block type="py_method_call_stmt" id="b14">
+                <field name="INST">counter</field>
+                <field name="METHOD">tick</field>
                 <next>
-                  <block type="py_custom_stmt" id="b5">
-                    <field name="CODE">print(counter.value)</field>
+                  <block type="py_print" id="b15">
+                    <value name="VALUE">
+                      <block type="py_attr_get" id="b16">
+                        <field name="INST">counter</field>
+                        <field name="ATTR">value</field>
+                      </block>
+                    </value>
                   </block>
                 </next>
               </block>

@@ -429,6 +429,165 @@ Blockly.Blocks['py_module_call_val'] = {
 };
 
 // =====================================================
+// クラスブロック（0-16）
+// =====================================================
+
+Blockly.Blocks['py_class_def'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('クラス')
+      .appendField(new Blockly.FieldTextInput('MyClass'), 'NAME')
+      .appendField('を定義する');
+    this.appendStatementInput('BODY').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.classes);
+    this.setTooltip('クラスを定義します（class Name:）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_class_init'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('初期化（self, 引数:')
+      .appendField(new Blockly.FieldTextInput('name'), 'PARAM')
+      .appendField('）');
+    this.appendStatementInput('BODY').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.classes);
+    this.setTooltip('__init__メソッドを定義します（引数1つ）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_class_init2'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('初期化（self, 引数:')
+      .appendField(new Blockly.FieldTextInput('width'), 'PARAM1')
+      .appendField(',')
+      .appendField(new Blockly.FieldTextInput('height'), 'PARAM2')
+      .appendField('）');
+    this.appendStatementInput('BODY').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.classes);
+    this.setTooltip('__init__メソッドを定義します（引数2つ）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_class_method'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('メソッド')
+      .appendField(new Blockly.FieldTextInput('greet'), 'NAME')
+      .appendField('（引数なし）');
+    this.appendStatementInput('BODY').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.classes);
+    this.setTooltip('selfのみのメソッドを定義します（def name(self):）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_class_method1'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('メソッド')
+      .appendField(new Blockly.FieldTextInput('my_method'), 'NAME')
+      .appendField('（引数:')
+      .appendField(new Blockly.FieldTextInput('param'), 'PARAM')
+      .appendField('）');
+    this.appendStatementInput('BODY').setCheck(null);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.classes);
+    this.setTooltip('引数1つのメソッドを定義します（def name(self, param):）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_self_set'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('self.')
+      .appendField(new Blockly.FieldTextInput('attr'), 'ATTR')
+      .appendField('に');
+    this.appendValueInput('VALUE').setCheck(null);
+    this.appendDummyInput().appendField('を入れる');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.classes);
+    this.setTooltip('self の属性に値を代入します（self.attr = value）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_self_get'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('self.')
+      .appendField(new Blockly.FieldTextInput('attr'), 'ATTR');
+    this.setOutput(true, null);
+    this.setColour(P.classes);
+    this.setTooltip('self の属性を取得します（self.attr）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_new_instance'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('クラス')
+      .appendField(new Blockly.FieldTextInput('MyClass'), 'NAME')
+      .appendField('（引数:');
+    this.appendValueInput('ARG').setCheck(null);
+    this.appendDummyInput().appendField('）で作る');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.classes);
+    this.setTooltip('クラスのインスタンスを作ります（ClassName(arg)）。引数不要なら空欄のままにしてください');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_method_call_stmt'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldTextInput('obj'), 'INST')
+      .appendField('.')
+      .appendField(new Blockly.FieldTextInput('method'), 'METHOD')
+      .appendField('（引数:');
+    this.appendValueInput('ARG').setCheck(null);
+    this.appendDummyInput().appendField('）を呼ぶ');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.classes);
+    this.setTooltip('メソッドを呼び出します（obj.method(arg)）。引数不要なら空欄のままにしてください');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_attr_get'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldTextInput('obj'), 'INST')
+      .appendField('.')
+      .appendField(new Blockly.FieldTextInput('attr'), 'ATTR');
+    this.setOutput(true, null);
+    this.setColour(P.classes);
+    this.setTooltip('インスタンスの属性を取得します（obj.attr）');
+    this.setHelpUrl('');
+  }
+};
+
+// =====================================================
 // 計算追加ブロック
 // =====================================================
 

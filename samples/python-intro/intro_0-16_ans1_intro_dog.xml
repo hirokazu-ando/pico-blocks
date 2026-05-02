@@ -1,17 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt" id="b1" x="30" y="30">
-    <field name="CODE">class Dog:
-    def __init__(self, name):
-        self.name = name
-    def greet(self):
-        print("こんにちは！ぼくの名前はね、" + self.name + "！")</field>
-    <next>
-      <block type="py_custom_stmt" id="b2">
-        <field name="CODE">buddy = Dog("バディ")</field>
+  <variables><variable id="var_buddy">buddy</variable></variables>
+  <block type="py_class_def" id="b1" x="30" y="30">
+    <field name="NAME">Dog</field>
+    <statement name="BODY">
+      <block type="py_class_init" id="b2">
+        <field name="PARAM">name</field>
+        <statement name="BODY">
+          <block type="py_self_set" id="b3">
+            <field name="ATTR">name</field>
+            <value name="VALUE">
+              <block type="py_custom_expr" id="b4"><field name="CODE">name</field></block>
+            </value>
+          </block>
+        </statement>
         <next>
-          <block type="py_custom_stmt" id="b3">
-            <field name="CODE">buddy.greet()</field>
+          <block type="py_class_method" id="b5">
+            <field name="NAME">greet</field>
+            <statement name="BODY">
+              <block type="py_print" id="b6">
+                <value name="VALUE">
+                  <block type="py_custom_expr" id="b7"><field name="CODE">"こんにちは！ぼくの名前はね、" + self.name + "！"</field></block>
+                </value>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="var_set" id="b8">
+        <field name="VAR" id="var_buddy">buddy</field>
+        <value name="VALUE">
+          <block type="py_new_instance" id="b9">
+            <field name="NAME">Dog</field>
+            <value name="ARG">
+              <block type="val_str" id="b10"><field name="TEXT">バディ</field></block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="py_method_call_stmt" id="b11">
+            <field name="INST">buddy</field>
+            <field name="METHOD">greet</field>
           </block>
         </next>
       </block>
