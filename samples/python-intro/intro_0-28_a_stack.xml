@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_stack">stack</variable>
+    <variable id="var_top">top</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_stack">stack</field>
+    <value name="VALUE"><block type="py_list_empty" id="b2"></block></value>
+    <next>
+      <block type="py_call_stmt" id="b3">
+        <field name="METHOD">append</field>
+        <value name="OBJECT"><block type="val_var" id="b4"><field name="VAR" id="var_stack">stack</field></block></value>
+        <value name="ARG0"><block type="val_str" id="b5"><field name="TEXT">A</field></block></value>
+        <next>
+          <block type="py_call_stmt" id="b6">
+            <field name="METHOD">append</field>
+            <value name="OBJECT"><block type="val_var" id="b7"><field name="VAR" id="var_stack">stack</field></block></value>
+            <value name="ARG0"><block type="val_str" id="b8"><field name="TEXT">B</field></block></value>
+            <next>
+              <block type="py_call_stmt" id="b9">
+                <field name="METHOD">append</field>
+                <value name="OBJECT"><block type="val_var" id="b10"><field name="VAR" id="var_stack">stack</field></block></value>
+                <value name="ARG0"><block type="val_str" id="b11"><field name="TEXT">C</field></block></value>
+                <next>
+                  <block type="py_print" id="b12">
+                    <value name="VALUE">
+                      <block type="py_fstring" id="b13">
+                        <field name="TEMPLATE">スタック: {}</field>
+                        <value name="VAL0"><block type="val_var" id="b14"><field name="VAR" id="var_stack">stack</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="var_set" id="b15">
+                        <field name="VAR" id="var_top">top</field>
+                        <value name="VALUE">
+                          <block type="py_call_val" id="b16">
+                            <field name="METHOD">pop</field>
+                            <value name="OBJECT"><block type="val_var" id="b17"><field name="VAR" id="var_stack">stack</field></block></value>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_print" id="b18">
+                            <value name="VALUE">
+                              <block type="py_fstring" id="b19">
+                                <field name="TEMPLATE">取り出し: {} → 残り: {}</field>
+                                <value name="VAL0"><block type="val_var" id="b20"><field name="VAR" id="var_top">top</field></block></value>
+                                <value name="VAL1"><block type="val_var" id="b21"><field name="VAR" id="var_stack">stack</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
