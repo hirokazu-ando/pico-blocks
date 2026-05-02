@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_n">n</variable>
+  </variables>
+  <block type="py_def" id="b1" x="30" y="30">
+    <field name="NAME">factorial</field>
+    <field name="ARG0">n</field>
+    <statement name="BODY">
+      <block type="controls_if" id="b2">
+        <value name="IF0">
+          <block type="logic_compare" id="b3">
+            <field name="OP">LTE</field>
+            <value name="A"><block type="val_var" id="b4"><field name="VAR" id="var_n">n</field></block></value>
+            <value name="B"><block type="val_number" id="b5"><field name="NUM">1</field></block></value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="py_return" id="b6">
+            <value name="VALUE"><block type="val_number" id="b7"><field name="NUM">1</field></block></value>
+          </block>
+        </statement>
+        <next>
+          <block type="py_return" id="b8">
+            <value name="VALUE">
+              <block type="py_math_op" id="b9">
+                <field name="OP">*</field>
+                <value name="LEFT"><block type="val_var" id="b10"><field name="VAR" id="var_n">n</field></block></value>
+                <value name="RIGHT">
+                  <block type="py_call_val" id="b11">
+                    <field name="METHOD">factorial</field>
+                    <value name="OBJECT">
+                      <block type="py_math_op" id="b12">
+                        <field name="OP">-</field>
+                        <value name="LEFT"><block type="val_var" id="b13"><field name="VAR" id="var_n">n</field></block></value>
+                        <value name="RIGHT"><block type="val_number" id="b14"><field name="NUM">1</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>
