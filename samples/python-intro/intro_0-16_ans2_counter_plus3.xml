@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt" id="b1" x="30" y="30">
+    <field name="CODE">class Counter:
+    def __init__(self, start):
+        self.value = start
+    def tick(self):
+        self.value = self.value + 1
+    def add3(self):
+        self.value = self.value + 3</field>
+    <next>
+      <block type="py_custom_stmt" id="b2">
+        <field name="CODE">c = Counter(10)</field>
+        <next>
+          <block type="py_custom_stmt" id="b3">
+            <field name="CODE">c.add3()</field>
+            <next>
+              <block type="py_custom_stmt" id="b4">
+                <field name="CODE">print(c.value)</field>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

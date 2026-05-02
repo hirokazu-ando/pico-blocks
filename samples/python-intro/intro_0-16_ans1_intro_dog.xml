@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt" id="b1" x="30" y="30">
+    <field name="CODE">class Dog:
+    def __init__(self, name):
+        self.name = name
+    def greet(self):
+        print("こんにちは！ぼくの名前はね、" + self.name + "！")</field>
+    <next>
+      <block type="py_custom_stmt" id="b2">
+        <field name="CODE">buddy = Dog("バディ")</field>
+        <next>
+          <block type="py_custom_stmt" id="b3">
+            <field name="CODE">buddy.greet()</field>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
