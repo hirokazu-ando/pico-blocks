@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_numbers">numbers</variable>
+    <variable id="var_max_val">max_val</variable>
+    <variable id="var_n">n</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_numbers">numbers</field>
+    <value name="VALUE"><block type="py_custom_expr" id="b2"><field name="CODE">[3, 7, 1, 9, 4, 6, 2]</field></block></value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_max_val">max_val</field>
+        <value name="VALUE">
+          <block type="py_list_get" id="b4">
+            <field name="LIST" id="var_numbers">numbers</field>
+            <value name="INDEX"><block type="val_number" id="b5"><field name="NUM">0</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_for_list" id="b6">
+            <field name="VAR" id="var_n">n</field>
+            <field name="LIST" id="var_numbers">numbers</field>
+            <statement name="DO">
+              <block type="pico_if" id="b7">
+                <mutation elseif="0" else="0"></mutation>
+                <value name="IF0">
+                  <block type="cond_compare" id="b8">
+                    <field name="OP">&gt;</field>
+                    <value name="LEFT"><block type="val_var" id="b9"><field name="VAR" id="var_n">n</field></block></value>
+                    <value name="RIGHT"><block type="val_var" id="b10"><field name="VAR" id="var_max_val">max_val</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="var_set" id="b11">
+                    <field name="VAR" id="var_max_val">max_val</field>
+                    <value name="VALUE"><block type="val_var" id="b12"><field name="VAR" id="var_n">n</field></block></value>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+            <next>
+              <block type="print_var_label" id="b13">
+                <field name="LABEL">最大値:</field>
+                <field name="VAR" id="var_max_val">max_val</field>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

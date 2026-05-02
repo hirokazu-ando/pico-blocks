@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_n">n</variable>
+  </variables>
+  <block type="py_input" id="b1" x="30" y="30">
+    <field name="TYPE">int</field>
+    <field name="VAR" id="var_n">n</field>
+    <field name="PROMPT">整数を入力してください</field>
+    <next>
+      <block type="pico_if" id="b2">
+        <mutation elseif="0" else="1"></mutation>
+        <value name="IF0">
+          <block type="cond_and" id="b3">
+            <value name="A">
+              <block type="cond_compare" id="b4">
+                <field name="OP">&gt;=</field>
+                <value name="LEFT"><block type="val_var" id="b5"><field name="VAR" id="var_n">n</field></block></value>
+                <value name="RIGHT"><block type="val_number" id="b6"><field name="NUM">10</field></block></value>
+              </block>
+            </value>
+            <value name="B">
+              <block type="cond_compare" id="b7">
+                <field name="OP">&lt;=</field>
+                <value name="LEFT"><block type="val_var" id="b8"><field name="VAR" id="var_n">n</field></block></value>
+                <value name="RIGHT"><block type="val_number" id="b9"><field name="NUM">100</field></block></value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="print_text" id="b10"><field name="TEXT">範囲内です</field></block>
+        </statement>
+        <statement name="ELSE">
+          <block type="print_text" id="b11"><field name="TEXT">範囲外です</field></block>
+        </statement>
+      </block>
+    </next>
+  </block>
+</xml>

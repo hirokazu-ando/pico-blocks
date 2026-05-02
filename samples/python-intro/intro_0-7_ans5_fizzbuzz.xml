@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_n">n</variable>
+  </variables>
+  <block type="py_input" id="b1" x="30" y="30">
+    <field name="TYPE">int</field>
+    <field name="VAR" id="var_n">n</field>
+    <field name="PROMPT">整数を入力してください</field>
+    <next>
+      <block type="pico_if" id="b2">
+        <mutation elseif="2" else="1"></mutation>
+        <value name="IF0">
+          <block type="cond_compare" id="b3">
+            <field name="OP">==</field>
+            <value name="LEFT">
+              <block type="py_math_op" id="b4">
+                <value name="LEFT"><block type="val_var" id="b5"><field name="VAR" id="var_n">n</field></block></value>
+                <field name="OP">%</field>
+                <value name="RIGHT"><block type="val_number" id="b6"><field name="NUM">15</field></block></value>
+              </block>
+            </value>
+            <value name="RIGHT"><block type="val_number" id="b7"><field name="NUM">0</field></block></value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="print_text" id="b8"><field name="TEXT">FizzBuzz</field></block>
+        </statement>
+        <value name="IF1">
+          <block type="cond_compare" id="b9">
+            <field name="OP">==</field>
+            <value name="LEFT">
+              <block type="py_math_op" id="b10">
+                <value name="LEFT"><block type="val_var" id="b11"><field name="VAR" id="var_n">n</field></block></value>
+                <field name="OP">%</field>
+                <value name="RIGHT"><block type="val_number" id="b12"><field name="NUM">3</field></block></value>
+              </block>
+            </value>
+            <value name="RIGHT"><block type="val_number" id="b13"><field name="NUM">0</field></block></value>
+          </block>
+        </value>
+        <statement name="DO1">
+          <block type="print_text" id="b14"><field name="TEXT">Fizz</field></block>
+        </statement>
+        <value name="IF2">
+          <block type="cond_compare" id="b15">
+            <field name="OP">==</field>
+            <value name="LEFT">
+              <block type="py_math_op" id="b16">
+                <value name="LEFT"><block type="val_var" id="b17"><field name="VAR" id="var_n">n</field></block></value>
+                <field name="OP">%</field>
+                <value name="RIGHT"><block type="val_number" id="b18"><field name="NUM">5</field></block></value>
+              </block>
+            </value>
+            <value name="RIGHT"><block type="val_number" id="b19"><field name="NUM">0</field></block></value>
+          </block>
+        </value>
+        <statement name="DO2">
+          <block type="print_text" id="b20"><field name="TEXT">Buzz</field></block>
+        </statement>
+        <statement name="ELSE">
+          <block type="py_print" id="b21">
+            <value name="VALUE"><block type="val_var" id="b22"><field name="VAR" id="var_n">n</field></block></value>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
+</xml>

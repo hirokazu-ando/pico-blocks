@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_total">total</variable>
+    <variable id="var_i">i</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_total">total</field>
+    <value name="VALUE"><block type="val_number" id="b2"><field name="NUM">0</field></block></value>
+    <next>
+      <block type="pico_for_from_to" id="b3">
+        <field name="VAR" id="var_i">i</field>
+        <value name="START"><block type="val_number" id="b4"><field name="NUM">1</field></block></value>
+        <value name="STOP"><block type="val_number" id="b5"><field name="NUM">101</field></block></value>
+        <value name="STEP"><block type="val_number" id="b6"><field name="NUM">1</field></block></value>
+        <statement name="DO">
+          <block type="pico_if" id="b7">
+            <mutation elseif="0" else="0"></mutation>
+            <value name="IF0">
+              <block type="cond_compare" id="b8">
+                <field name="OP">==</field>
+                <value name="LEFT">
+                  <block type="py_math_op" id="b9">
+                    <value name="LEFT"><block type="val_var" id="b10"><field name="VAR" id="var_i">i</field></block></value>
+                    <field name="OP">%</field>
+                    <value name="RIGHT"><block type="val_number" id="b11"><field name="NUM">2</field></block></value>
+                  </block>
+                </value>
+                <value name="RIGHT"><block type="val_number" id="b12"><field name="NUM">0</field></block></value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="var_change" id="b13">
+                <field name="VAR" id="var_total">total</field>
+                <value name="AMOUNT"><block type="val_var" id="b14"><field name="VAR" id="var_i">i</field></block></value>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <next>
+          <block type="py_print" id="b15">
+            <value name="VALUE"><block type="val_var" id="b16"><field name="VAR" id="var_total">total</field></block></value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

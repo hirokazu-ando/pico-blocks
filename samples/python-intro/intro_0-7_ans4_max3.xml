@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_a">a</variable>
+    <variable id="var_b">b</variable>
+    <variable id="var_c">c</variable>
+    <variable id="var_largest">largest</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_a">a</field>
+    <value name="VALUE"><block type="val_number" id="b2"><field name="NUM">7</field></block></value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_b">b</field>
+        <value name="VALUE"><block type="val_number" id="b4"><field name="NUM">12</field></block></value>
+        <next>
+          <block type="var_set" id="b5">
+            <field name="VAR" id="var_c">c</field>
+            <value name="VALUE"><block type="val_number" id="b6"><field name="NUM">5</field></block></value>
+            <next>
+              <block type="pico_if" id="b7">
+                <mutation elseif="1" else="1"></mutation>
+                <value name="IF0">
+                  <block type="cond_and" id="b8">
+                    <value name="A">
+                      <block type="cond_compare" id="b9">
+                        <field name="OP">&gt;=</field>
+                        <value name="LEFT"><block type="val_var" id="b10"><field name="VAR" id="var_a">a</field></block></value>
+                        <value name="RIGHT"><block type="val_var" id="b11"><field name="VAR" id="var_b">b</field></block></value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="cond_compare" id="b12">
+                        <field name="OP">&gt;=</field>
+                        <value name="LEFT"><block type="val_var" id="b13"><field name="VAR" id="var_a">a</field></block></value>
+                        <value name="RIGHT"><block type="val_var" id="b14"><field name="VAR" id="var_c">c</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="var_set" id="b15">
+                    <field name="VAR" id="var_largest">largest</field>
+                    <value name="VALUE"><block type="val_var" id="b16"><field name="VAR" id="var_a">a</field></block></value>
+                  </block>
+                </statement>
+                <value name="IF1">
+                  <block type="cond_compare" id="b17">
+                    <field name="OP">&gt;=</field>
+                    <value name="LEFT"><block type="val_var" id="b18"><field name="VAR" id="var_b">b</field></block></value>
+                    <value name="RIGHT"><block type="val_var" id="b19"><field name="VAR" id="var_c">c</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO1">
+                  <block type="var_set" id="b20">
+                    <field name="VAR" id="var_largest">largest</field>
+                    <value name="VALUE"><block type="val_var" id="b21"><field name="VAR" id="var_b">b</field></block></value>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="var_set" id="b22">
+                    <field name="VAR" id="var_largest">largest</field>
+                    <value name="VALUE"><block type="val_var" id="b23"><field name="VAR" id="var_c">c</field></block></value>
+                  </block>
+                </statement>
+                <next>
+                  <block type="print_var_label" id="b24">
+                    <field name="LABEL">最大値:</field>
+                    <field name="VAR" id="var_largest">largest</field>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

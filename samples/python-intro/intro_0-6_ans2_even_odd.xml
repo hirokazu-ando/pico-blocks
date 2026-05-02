@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_n">n</variable>
+  </variables>
+  <block type="py_input" id="b1" x="30" y="30">
+    <field name="TYPE">int</field>
+    <field name="VAR" id="var_n">n</field>
+    <field name="PROMPT">整数を入力してください</field>
+    <next>
+      <block type="py_print" id="b2">
+        <value name="VALUE">
+          <block type="cond_compare" id="b3">
+            <field name="OP">==</field>
+            <value name="LEFT">
+              <block type="py_math_op" id="b4">
+                <value name="LEFT"><block type="val_var" id="b5"><field name="VAR" id="var_n">n</field></block></value>
+                <field name="OP">%</field>
+                <value name="RIGHT"><block type="val_number" id="b6"><field name="NUM">2</field></block></value>
+              </block>
+            </value>
+            <value name="RIGHT"><block type="val_number" id="b7"><field name="NUM">0</field></block></value>
+          </block>
+        </value>
+      </block>
+    </next>
+  </block>
+</xml>

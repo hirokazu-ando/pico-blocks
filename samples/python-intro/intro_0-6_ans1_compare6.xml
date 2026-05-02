@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_a">a</variable>
+    <variable id="var_b">b</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_a">a</field>
+    <value name="VALUE"><block type="val_number" id="b2"><field name="NUM">70</field></block></value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_b">b</field>
+        <value name="VALUE"><block type="val_number" id="b4"><field name="NUM">70</field></block></value>
+        <next>
+          <block type="py_print" id="b5">
+            <value name="VALUE">
+              <block type="cond_compare" id="b6">
+                <field name="OP">==</field>
+                <value name="LEFT"><block type="val_var" id="b7"><field name="VAR" id="var_a">a</field></block></value>
+                <value name="RIGHT"><block type="val_var" id="b8"><field name="VAR" id="var_b">b</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print" id="b9">
+                <value name="VALUE">
+                  <block type="cond_compare" id="b10">
+                    <field name="OP">!=</field>
+                    <value name="LEFT"><block type="val_var" id="b11"><field name="VAR" id="var_a">a</field></block></value>
+                    <value name="RIGHT"><block type="val_var" id="b12"><field name="VAR" id="var_b">b</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_print" id="b13">
+                    <value name="VALUE">
+                      <block type="cond_compare" id="b14">
+                        <field name="OP">&lt;</field>
+                        <value name="LEFT"><block type="val_var" id="b15"><field name="VAR" id="var_a">a</field></block></value>
+                        <value name="RIGHT"><block type="val_var" id="b16"><field name="VAR" id="var_b">b</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_print" id="b17">
+                        <value name="VALUE">
+                          <block type="cond_compare" id="b18">
+                            <field name="OP">&gt;</field>
+                            <value name="LEFT"><block type="val_var" id="b19"><field name="VAR" id="var_a">a</field></block></value>
+                            <value name="RIGHT"><block type="val_var" id="b20"><field name="VAR" id="var_b">b</field></block></value>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_print" id="b21">
+                            <value name="VALUE">
+                              <block type="cond_compare" id="b22">
+                                <field name="OP">&lt;=</field>
+                                <value name="LEFT"><block type="val_var" id="b23"><field name="VAR" id="var_a">a</field></block></value>
+                                <value name="RIGHT"><block type="val_var" id="b24"><field name="VAR" id="var_b">b</field></block></value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="py_print" id="b25">
+                                <value name="VALUE">
+                                  <block type="cond_compare" id="b26">
+                                    <field name="OP">&gt;=</field>
+                                    <value name="LEFT"><block type="val_var" id="b27"><field name="VAR" id="var_a">a</field></block></value>
+                                    <value name="RIGHT"><block type="val_var" id="b28"><field name="VAR" id="var_b">b</field></block></value>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

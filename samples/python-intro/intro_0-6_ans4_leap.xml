@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_year">year</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_year">year</field>
+    <value name="VALUE"><block type="val_number" id="b2"><field name="NUM">2024</field></block></value>
+    <next>
+      <block type="py_print" id="b3">
+        <value name="VALUE">
+          <block type="cond_compare" id="b4">
+            <field name="OP">==</field>
+            <value name="LEFT">
+              <block type="py_math_op" id="b5">
+                <value name="LEFT"><block type="val_var" id="b6"><field name="VAR" id="var_year">year</field></block></value>
+                <field name="OP">%</field>
+                <value name="RIGHT"><block type="val_number" id="b7"><field name="NUM">4</field></block></value>
+              </block>
+            </value>
+            <value name="RIGHT"><block type="val_number" id="b8"><field name="NUM">0</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print" id="b9">
+            <value name="VALUE">
+              <block type="cond_compare" id="b10">
+                <field name="OP">==</field>
+                <value name="LEFT">
+                  <block type="py_math_op" id="b11">
+                    <value name="LEFT"><block type="val_var" id="b12"><field name="VAR" id="var_year">year</field></block></value>
+                    <field name="OP">%</field>
+                    <value name="RIGHT"><block type="val_number" id="b13"><field name="NUM">100</field></block></value>
+                  </block>
+                </value>
+                <value name="RIGHT"><block type="val_number" id="b14"><field name="NUM">0</field></block></value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
