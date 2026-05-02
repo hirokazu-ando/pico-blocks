@@ -14,8 +14,8 @@
         <value name="VALUE">
           <block type="py_math_op" id="b6">
             <field name="OP">*</field>
-            <value name="A"><block type="val_number" id="b7"><field name="NUM">3</field></block></value>
-            <value name="B"><block type="val_var" id="b8"><field name="VAR" id="var_i">i</field></block></value>
+            <value name="LEFT"><block type="val_number" id="b7"><field name="NUM">3</field></block></value>
+            <value name="RIGHT"><block type="val_var" id="b8"><field name="VAR" id="var_i">i</field></block></value>
           </block>
         </value>
       </block>
