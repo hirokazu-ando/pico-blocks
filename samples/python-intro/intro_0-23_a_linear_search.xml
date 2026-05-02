@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_data">data</variable>
+    <variable id="var_target">target</variable>
+    <variable id="var_i">i</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_data">data</field>
+    <value name="VALUE">
+      <block type="py_list_empty" id="b2">
+        <statement name="ITEMS">
+          <block type="py_list_append" id="b3">
+            <value name="ITEM"><block type="val_number" id="b4"><field name="NUM">5</field></block></value>
+            <next>
+              <block type="py_list_append" id="b5">
+                <value name="ITEM"><block type="val_number" id="b6"><field name="NUM">3</field></block></value>
+                <next>
+                  <block type="py_list_append" id="b7">
+                    <value name="ITEM"><block type="val_number" id="b8"><field name="NUM">9</field></block></value>
+                    <next>
+                      <block type="py_list_append" id="b9">
+                        <value name="ITEM"><block type="val_number" id="b10"><field name="NUM">1</field></block></value>
+                        <next>
+                          <block type="py_list_append" id="b11">
+                            <value name="ITEM"><block type="val_number" id="b12"><field name="NUM">7</field></block></value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </value>
+    <next>
+      <block type="var_set" id="b13">
+        <field name="VAR" id="var_target">target</field>
+        <value name="VALUE"><block type="val_number" id="b14"><field name="NUM">9</field></block></value>
+        <next>
+          <block type="py_for_list" id="b15">
+            <field name="VAR" id="var_i">i</field>
+            <value name="LIST"><block type="val_var" id="b16"><field name="VAR" id="var_data">data</field></block></value>
+            <statement name="DO">
+              <block type="controls_if" id="b17">
+                <value name="IF0">
+                  <block type="logic_compare" id="b18">
+                    <field name="OP">EQ</field>
+                    <value name="A"><block type="val_var" id="b19"><field name="VAR" id="var_i">i</field></block></value>
+                    <value name="B"><block type="val_var" id="b20"><field name="VAR" id="var_target">target</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="py_print" id="b21">
+                    <value name="VALUE"><block type="val_str" id="b22"><field name="TEXT">見つかった！</field></block></value>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

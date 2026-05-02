@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_data">data</variable>
+    <variable id="var_target">target</variable>
+    <variable id="var_idx">idx</variable>
+    <variable id="var_found">found</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_data">data</field>
+    <value name="VALUE">
+      <block type="py_list_empty" id="b2">
+        <statement name="ITEMS">
+          <block type="py_list_append" id="b3">
+            <value name="ITEM"><block type="val_number" id="b4"><field name="NUM">5</field></block></value>
+            <next>
+              <block type="py_list_append" id="b5">
+                <value name="ITEM"><block type="val_number" id="b6"><field name="NUM">3</field></block></value>
+                <next>
+                  <block type="py_list_append" id="b7">
+                    <value name="ITEM"><block type="val_number" id="b8"><field name="NUM">9</field></block></value>
+                    <next>
+                      <block type="py_list_append" id="b9">
+                        <value name="ITEM"><block type="val_number" id="b10"><field name="NUM">1</field></block></value>
+                        <next>
+                          <block type="py_list_append" id="b11">
+                            <value name="ITEM"><block type="val_number" id="b12"><field name="NUM">7</field></block></value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </value>
+    <next>
+      <block type="var_set" id="b13">
+        <field name="VAR" id="var_target">target</field>
+        <value name="VALUE"><block type="val_number" id="b14"><field name="NUM">9</field></block></value>
+        <next>
+          <block type="var_set" id="b15">
+            <field name="VAR" id="var_idx">idx</field>
+            <value name="VALUE"><block type="val_number" id="b16"><field name="NUM">0</field></block></value>
+            <next>
+              <block type="var_set" id="b17">
+                <field name="VAR" id="var_found">found</field>
+                <value name="VALUE"><block type="val_bool" id="b18"><field name="BOOL">FALSE</field></block></value>
+                <next>
+                  <block type="py_while" id="b19">
+                    <value name="COND">
+                      <block type="logic_operation" id="b20">
+                        <field name="OP">AND</field>
+                        <value name="A">
+                          <block type="logic_compare" id="b21">
+                            <field name="OP">LT</field>
+                            <value name="A"><block type="val_var" id="b22"><field name="VAR" id="var_idx">idx</field></block></value>
+                            <value name="B"><block type="py_list_len" id="b23"><value name="LIST"><block type="val_var" id="b24"><field name="VAR" id="var_data">data</field></block></value></block></value>
+                          </block>
+                        </value>
+                        <value name="B">
+                          <block type="logic_negate" id="b25">
+                            <value name="BOOL"><block type="val_var" id="b26"><field name="VAR" id="var_found">found</field></block></value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <statement name="DO">
+                      <block type="controls_if" id="b27">
+                        <value name="IF0">
+                          <block type="logic_compare" id="b28">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                              <block type="py_list_get" id="b29">
+                                <value name="LIST"><block type="val_var" id="b30"><field name="VAR" id="var_data">data</field></block></value>
+                                <value name="INDEX"><block type="val_var" id="b31"><field name="VAR" id="var_idx">idx</field></block></value>
+                              </block>
+                            </value>
+                            <value name="B"><block type="val_var" id="b32"><field name="VAR" id="var_target">target</field></block></value>
+                          </block>
+                        </value>
+                        <statement name="DO0">
+                          <block type="var_set" id="b33">
+                            <field name="VAR" id="var_found">found</field>
+                            <value name="VALUE"><block type="val_bool" id="b34"><field name="BOOL">TRUE</field></block></value>
+                          </block>
+                        </statement>
+                      </block>
+                    </statement>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
