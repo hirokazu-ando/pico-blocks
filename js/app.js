@@ -536,6 +536,24 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_raise':            return `${block.getFieldValue('ETYPE')} を発生させる`;
       case 'py_custom_stmt': return 'カスタムPython（文・1行・縦連結で複数行）';
       case 'py_custom_expr': return 'カスタムPython（式）';
+      // Part 2 descriptions
+      case 'py_import_plt':    return 'matplotlib をインポートする';
+      case 'py_plt_plot':      return '折れ線グラフを追加する（plt.plot）';
+      case 'py_plt_bar':       return '棒グラフを追加する（plt.bar）';
+      case 'py_plt_scatter':   return '散布図を追加する（plt.scatter）';
+      case 'py_plt_hist':      return `ヒストグラムを追加する（bins=${block.getFieldValue('BINS')}）`;
+      case 'py_plt_title':     return 'グラフのタイトルを設定する（plt.title）';
+      case 'py_plt_xlabel':    return 'X軸ラベルを設定する（plt.xlabel）';
+      case 'py_plt_ylabel':    return 'Y軸ラベルを設定する（plt.ylabel）';
+      case 'py_plt_show':      return 'グラフを表示する（plt.show）';
+      case 'py_import_stats':  return 'statistics をインポートする';
+      case 'py_stats_mean':    return 'リストの平均（statistics.mean）';
+      case 'py_stats_median':  return 'リストの中央値（statistics.median）';
+      case 'py_stats_stdev':   return 'リストの標準偏差（statistics.stdev）';
+      case 'py_stats_mode':    return 'リストの最頻値（statistics.mode）';
+      case 'py_import_csv':    return 'csv をインポートする';
+      case 'py_csv_read_rows': return `CSV「${block.getFieldValue('FILENAME')}」を読み込む`;
+      case 'py_csv_get_col':   return `列 ${block.getFieldValue('COL')} を数値リストとして取り出す`;
       default:                 return block.type;
     }
   }
@@ -755,6 +773,17 @@ document.addEventListener('DOMContentLoaded', function() {
         return `max(${getVarName(block, 'LIST')})`;
       case 'py_sum_call':
         return `sum(${getVarName(block, 'LIST')})`;
+
+      // ===== Part 2: statistics value ブロック =====
+      case 'py_stats_mean':
+        return `statistics.mean(${valueToCode(block, 'DATA', '[]')})`;
+      case 'py_stats_median':
+        return `statistics.median(${valueToCode(block, 'DATA', '[]')})`;
+      case 'py_stats_stdev':
+        return `statistics.stdev(${valueToCode(block, 'DATA', '[]')})`;
+      case 'py_stats_mode':
+        return `statistics.mode(${valueToCode(block, 'DATA', '[]')})`;
+
       case 'py_dict_new':
         return '{}';
       case 'py_dict_literal': {
@@ -1598,6 +1627,97 @@ document.addEventListener('DOMContentLoaded', function() {
         registerExprBlocksAtLineFromInput(block, 'MSG', ln);
         const msg = valueToCode(block, 'MSG', '""');
         code = appendLocal(code, indent + `raise ${etype}(${msg})\n`);
+        break;
+      }
+
+      // ===== Part 2: matplotlib pyplot ブロック =====
+      case 'py_import_plt': {
+        code = appendLocal(code, indent + 'import matplotlib.pyplot as plt\n');
+        break;
+      }
+      case 'py_plt_plot': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'X', ln);
+        registerExprBlocksAtLineFromInput(block, 'Y', ln);
+        const px = valueToCode(block, 'X', '[]');
+        const py = valueToCode(block, 'Y', '[]');
+        code = appendLocal(code, indent + `plt.plot(${px}, ${py})\n`);
+        break;
+      }
+      case 'py_plt_bar': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'X', ln);
+        registerExprBlocksAtLineFromInput(block, 'Y', ln);
+        const bx = valueToCode(block, 'X', '[]');
+        const by = valueToCode(block, 'Y', '[]');
+        code = appendLocal(code, indent + `plt.bar(${bx}, ${by})\n`);
+        break;
+      }
+      case 'py_plt_scatter': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'X', ln);
+        registerExprBlocksAtLineFromInput(block, 'Y', ln);
+        const sx = valueToCode(block, 'X', '[]');
+        const sy = valueToCode(block, 'Y', '[]');
+        code = appendLocal(code, indent + `plt.scatter(${sx}, ${sy})\n`);
+        break;
+      }
+      case 'py_plt_hist': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'DATA', ln);
+        const hdata = valueToCode(block, 'DATA', '[]');
+        const bins  = block.getFieldValue('BINS') || '10';
+        code = appendLocal(code, indent + `plt.hist(${hdata}, bins=${bins})\n`);
+        break;
+      }
+      case 'py_plt_title': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'TEXT', ln);
+        const tt = valueToCode(block, 'TEXT', '""');
+        code = appendLocal(code, indent + `plt.title(${tt})\n`);
+        break;
+      }
+      case 'py_plt_xlabel': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'TEXT', ln);
+        const xlbl = valueToCode(block, 'TEXT', '""');
+        code = appendLocal(code, indent + `plt.xlabel(${xlbl})\n`);
+        break;
+      }
+      case 'py_plt_ylabel': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'TEXT', ln);
+        const ylbl = valueToCode(block, 'TEXT', '""');
+        code = appendLocal(code, indent + `plt.ylabel(${ylbl})\n`);
+        break;
+      }
+      case 'py_plt_show': {
+        code = appendLocal(code, indent + 'plt.show()\n');
+        break;
+      }
+
+      // ===== Part 2: statistics ブロック =====
+      case 'py_import_stats': {
+        code = appendLocal(code, indent + 'import statistics\n');
+        break;
+      }
+      case 'py_import_csv': {
+        code = appendLocal(code, indent + 'import csv\n');
+        break;
+      }
+      case 'py_csv_read_rows': {
+        const csvVar  = getVarName(block, 'VAR');
+        const csvFile = block.getFieldValue('FILENAME') || 'data.csv';
+        code = appendLocal(code, indent + `with open("${csvFile}") as _f:\n`);
+        code = appendLocal(code, indent + `    _rows = list(csv.reader(_f))\n`);
+        code = appendLocal(code, indent + `${csvVar} = _rows[1:] if len(_rows) > 1 else []\n`);
+        break;
+      }
+      case 'py_csv_get_col': {
+        const colVar  = getVarName(block, 'VAR');
+        const rowsVar = getVarName(block, 'ROWS');
+        const colIdx  = block.getFieldValue('COL') || '0';
+        code = appendLocal(code, indent + `${colVar} = [float(r[${colIdx}]) for r in ${rowsVar} if len(r) > ${colIdx}]\n`);
         break;
       }
 
@@ -2633,6 +2753,15 @@ document.addEventListener('DOMContentLoaded', function() {
       window.__pygameRunning = true;
     }
 
+    // matplotlib プロットエリアをクリア（前回の描画を消す）
+    const plotArea = document.getElementById('pyco-plot-area');
+    if (plotArea) {
+      plotArea.innerHTML = '';
+      plotArea.style.display = 'none';
+    }
+    // Skulpt matplotlib の描画先として pyco-plot-area を設定
+    Sk.TurtleGraphics = { target: 'pyco-plot-area', width: 600, height: 420 };
+
     Sk.configure({
       output: function(text) {
         appendShellText(text);
@@ -2670,6 +2799,10 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }).then(function() {
       appendShellText('>>> 完了\n', false, 'py-prompt');
+      // matplotlib でグラフが描かれた場合は表示
+      if (plotArea && plotArea.querySelector('canvas, svg, img')) {
+        plotArea.style.display = 'block';
+      }
     }).catch(function(err) {
       if (_pyStopRequested) {
         appendShellText('>>> 停止しました\n', false, 'py-prompt');

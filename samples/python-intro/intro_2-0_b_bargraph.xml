@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_labels">labels</variable>
+    <variable id="var_scores">scores</variable>
+  </variables>
+  <block type="py_import_plt" id="b1" x="30" y="30">
+    <next>
+      <block type="var_set" id="b2">
+        <field name="VAR" id="var_labels">labels</field>
+        <value name="VALUE">
+          <block type="py_custom_expr" id="b3"><field name="CODE">["国語", "数学", "英語", "理科"]</field></block>
+        </value>
+        <next>
+          <block type="var_set" id="b4">
+            <field name="VAR" id="var_scores">scores</field>
+            <value name="VALUE">
+              <block type="py_custom_expr" id="b5"><field name="CODE">[78, 85, 92, 67]</field></block>
+            </value>
+            <next>
+              <block type="py_plt_bar" id="b6">
+                <value name="X"><block type="val_var" id="b7"><field name="VAR" id="var_labels">labels</field></block></value>
+                <value name="Y"><block type="val_var" id="b8"><field name="VAR" id="var_scores">scores</field></block></value>
+                <next>
+                  <block type="py_plt_title" id="b9">
+                    <value name="TEXT"><block type="val_str" id="b10"><field name="TEXT">科目別点数</field></block></value>
+                    <next>
+                      <block type="py_plt_ylabel" id="b11">
+                        <value name="TEXT"><block type="val_str" id="b12"><field name="TEXT">点数</field></block></value>
+                        <next>
+                          <block type="py_plt_show" id="b13"></block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

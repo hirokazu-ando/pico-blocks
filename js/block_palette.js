@@ -26,6 +26,8 @@ window.PycoPalette = {
   tuples:   '#0288D1',
   builtins: '#00796B',
   modules: '#546E7A',
+  chart:   '#1565C0',   // Part 2: matplotlib
+  stats:   '#00695C',   // Part 2: statistics / csv
   customPython: '#455A64',
   timing: '#2E7D32',
   polyvia: '#EF5350',

@@ -106,6 +106,8 @@
           </div>
         </div>
         <pre id="monitor-output"></pre>
+        <!-- Part 2: matplotlib プロット表示エリア -->
+        <div id="pyco-plot-area" style="display:none; background:#fff; border-top:1px solid #e2e8f0; padding:8px; text-align:center; overflow:auto;"></div>
       </div>
     </div>
     <div id="game-main-anchor" style="display:none"></div>
@@ -572,6 +574,59 @@
         <field name="CODE">0</field>
       </block>
     </category>
+    <!-- Part 2: グラフ（matplotlib） -->
+    <category name="グラフ" colour="#1565C0">
+      <block type="py_import_plt" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_plt_plot" gap="8">
+        <value name="X"><shadow type="val_var"><field name="VAR">x</field></shadow></value>
+        <value name="Y"><shadow type="val_var"><field name="VAR">y</field></shadow></value>
+      </block>
+      <block type="py_plt_bar" gap="8">
+        <value name="X"><shadow type="val_var"><field name="VAR">labels</field></shadow></value>
+        <value name="Y"><shadow type="val_var"><field name="VAR">values</field></shadow></value>
+      </block>
+      <block type="py_plt_scatter" gap="8">
+        <value name="X"><shadow type="val_var"><field name="VAR">x</field></shadow></value>
+        <value name="Y"><shadow type="val_var"><field name="VAR">y</field></shadow></value>
+      </block>
+      <block type="py_plt_hist" gap="8">
+        <value name="DATA"><shadow type="val_var"><field name="VAR">data</field></shadow></value>
+      </block>
+      <sep gap="20"></sep>
+      <block type="py_plt_title" gap="8">
+        <value name="TEXT"><shadow type="val_str"><field name="TEXT">タイトル</field></shadow></value>
+      </block>
+      <block type="py_plt_xlabel" gap="8">
+        <value name="TEXT"><shadow type="val_str"><field name="TEXT">X軸</field></shadow></value>
+      </block>
+      <block type="py_plt_ylabel" gap="8">
+        <value name="TEXT"><shadow type="val_str"><field name="TEXT">Y軸</field></shadow></value>
+      </block>
+      <sep gap="20"></sep>
+      <block type="py_plt_show" gap="8"></block>
+    </category>
+    <!-- Part 2: 統計・CSV -->
+    <category name="統計・CSV" colour="#00695C">
+      <block type="py_import_stats" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_stats_mean" gap="8">
+        <value name="DATA"><shadow type="val_var"><field name="VAR">data</field></shadow></value>
+      </block>
+      <block type="py_stats_median" gap="8">
+        <value name="DATA"><shadow type="val_var"><field name="VAR">data</field></shadow></value>
+      </block>
+      <block type="py_stats_stdev" gap="8">
+        <value name="DATA"><shadow type="val_var"><field name="VAR">data</field></shadow></value>
+      </block>
+      <block type="py_stats_mode" gap="8">
+        <value name="DATA"><shadow type="val_var"><field name="VAR">data</field></shadow></value>
+      </block>
+      <sep gap="20"></sep>
+      <block type="py_import_csv" gap="8"></block>
+      <block type="py_csv_read_rows" gap="8"></block>
+      <block type="py_csv_get_col" gap="8"></block>
+    </category>
   </xml>
 
   <!-- モジュールタブ専用ツールボックス -->
@@ -990,6 +1045,7 @@
   <script src="js/blocks/display.js"></script>
   <script src="js/generators/micropython.js"></script>
   <script src="js/blocks/python_intro.js"></script>
+  <script src="js/blocks/data_analysis.js"></script>
   <script src="js/blocks/custom_python.js?v=20260429b"></script>
   <script src="js/game_engine.js?v=20260429a"></script>
   <script src="js/blocks/game.js?v=20260429a"></script>
