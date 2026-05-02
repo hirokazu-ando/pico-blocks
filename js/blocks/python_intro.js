@@ -864,4 +864,289 @@ Blockly.Blocks['py_dict_literal'] = {
   }
 };
 
+
+// =====================================================
+// 0-19: タプル・セット
+// =====================================================
+
+Blockly.Blocks['py_tuple_literal'] = {
+  itemCount_: 2,
+  init: function() {
+    const countField = new Blockly.FieldDropdown([
+      ['1個', '1'], ['2個', '2'], ['3個', '3'], ['4個', '4'], ['5個', '5']
+    ]);
+    this.appendDummyInput('TOP')
+      .appendField('タプル (')
+      .appendField(countField, 'COUNT');
+    this.rebuildShape_();
+    this.setOutput(true, null);
+    this.setColour(P.tuples);
+    this.setTooltip('変更できないデータの並び（タプル）を作ります');
+    this.setHelpUrl('');
+    countField.setValidator(this.onCountChanged_.bind(this));
+  },
+  onCountChanged_: function(val) {
+    this.itemCount_ = parseInt(val, 10);
+    this.rebuildShape_();
+  },
+  mutationToDom: function() {
+    const el = document.createElement('mutation');
+    el.setAttribute('items', this.itemCount_);
+    return el;
+  },
+  domToMutation: function(xmlElement) {
+    const n = parseInt(xmlElement.getAttribute('items'), 10);
+    if (!isNaN(n)) this.itemCount_ = n;
+    this.rebuildShape_();
+    const f = this.getField('COUNT');
+    if (f) {
+      const saved = f.getValidator ? f.getValidator() : null;
+      if (saved) f.setValidator(null);
+      f.setValue(String(this.itemCount_));
+      if (saved) f.setValidator(saved);
+    }
+  },
+  rebuildShape_: function() {
+    let i = 0;
+    while (this.getInput('ITEM' + i)) { this.removeInput('ITEM' + i); i++; }
+    if (this.getInput('BOTTOM')) this.removeInput('BOTTOM');
+    for (let j = 0; j < this.itemCount_; j++) {
+      this.appendValueInput('ITEM' + j)
+        .appendField(j === 0 ? '' : ',');
+    }
+    this.appendDummyInput('BOTTOM').appendField(')');
+  }
+};
+
+Blockly.Blocks['py_set_literal'] = {
+  itemCount_: 2,
+  init: function() {
+    const countField = new Blockly.FieldDropdown([
+      ['1個', '1'], ['2個', '2'], ['3個', '3'], ['4個', '4'], ['5個', '5']
+    ]);
+    this.appendDummyInput('TOP')
+      .appendField('セット {')
+      .appendField(countField, 'COUNT');
+    this.rebuildShape_();
+    this.setOutput(true, null);
+    this.setColour(P.tuples);
+    this.setTooltip('重複なし・順序なしのデータの集まり（セット）を作ります');
+    this.setHelpUrl('');
+    countField.setValidator(this.onCountChanged_.bind(this));
+  },
+  onCountChanged_: function(val) {
+    this.itemCount_ = parseInt(val, 10);
+    this.rebuildShape_();
+  },
+  mutationToDom: function() {
+    const el = document.createElement('mutation');
+    el.setAttribute('items', this.itemCount_);
+    return el;
+  },
+  domToMutation: function(xmlElement) {
+    const n = parseInt(xmlElement.getAttribute('items'), 10);
+    if (!isNaN(n)) this.itemCount_ = n;
+    this.rebuildShape_();
+    const f = this.getField('COUNT');
+    if (f) {
+      const saved = f.getValidator ? f.getValidator() : null;
+      if (saved) f.setValidator(null);
+      f.setValue(String(this.itemCount_));
+      if (saved) f.setValidator(saved);
+    }
+  },
+  rebuildShape_: function() {
+    let i = 0;
+    while (this.getInput('ITEM' + i)) { this.removeInput('ITEM' + i); i++; }
+    if (this.getInput('BOTTOM')) this.removeInput('BOTTOM');
+    for (let j = 0; j < this.itemCount_; j++) {
+      this.appendValueInput('ITEM' + j)
+        .appendField(j === 0 ? '' : ',');
+    }
+    this.appendDummyInput('BOTTOM').appendField('}');
+  }
+};
+
+Blockly.Blocks['py_set_add'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('セット')
+      .appendField(new Blockly.FieldVariable('my_set'), 'SET');
+    this.appendValueInput('VALUE').setCheck(null).appendField('に');
+    this.appendDummyInput().appendField('を追加する');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.tuples);
+    this.setTooltip('セットに要素を追加します（set.add(x)）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_set_discard'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('セット')
+      .appendField(new Blockly.FieldVariable('my_set'), 'SET');
+    this.appendValueInput('VALUE').setCheck(null).appendField('から');
+    this.appendDummyInput().appendField('を削除する');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.tuples);
+    this.setTooltip('セットから要素を削除します（set.discard(x)）。要素がなくてもエラーになりません。');
+    this.setHelpUrl('');
+  }
+};
+
+// =====================================================
+// 0-20: リスト内包表記
+// =====================================================
+
+Blockly.Blocks['py_list_comp'] = {
+  init: function() {
+    this.appendDummyInput().appendField('[');
+    this.appendValueInput('EXPR').setCheck(null);
+    this.appendDummyInput()
+      .appendField('for')
+      .appendField(new Blockly.FieldVariable('x'), 'VAR')
+      .appendField('in');
+    this.appendValueInput('LIST').setCheck(null);
+    this.appendDummyInput().appendField(']');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.lists);
+    this.setTooltip('[式 for 変数 in リスト] の形でリストを作ります（リスト内包表記）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_list_comp_if'] = {
+  init: function() {
+    this.appendDummyInput().appendField('[');
+    this.appendValueInput('EXPR').setCheck(null);
+    this.appendDummyInput()
+      .appendField('for')
+      .appendField(new Blockly.FieldVariable('x'), 'VAR')
+      .appendField('in');
+    this.appendValueInput('LIST').setCheck(null);
+    this.appendDummyInput().appendField('if');
+    this.appendValueInput('COND').setCheck(null);
+    this.appendDummyInput().appendField(']');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.lists);
+    this.setTooltip('[式 for 変数 in リスト if 条件] の形でリストを絞り込みながら作ります');
+    this.setHelpUrl('');
+  }
+};
+
+// =====================================================
+// 0-21: 組み込み関数
+// =====================================================
+
+Blockly.Blocks['py_enumerate_for'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('番号')
+      .appendField(new Blockly.FieldVariable('i'), 'IDX')
+      .appendField('と値')
+      .appendField(new Blockly.FieldVariable('v'), 'VAL')
+      .appendField('で');
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('my_list'), 'LIST')
+      .appendField('を順に繰り返す');
+    this.appendStatementInput('DO').setCheck(null);
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('enumerate() で番号と値を同時に取り出しながら繰り返します（for i, v in enumerate(list)）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_zip_for'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('変数')
+      .appendField(new Blockly.FieldVariable('a'), 'VAR_A')
+      .appendField('と')
+      .appendField(new Blockly.FieldVariable('b'), 'VAR_B')
+      .appendField('で');
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('list1'), 'LIST_A')
+      .appendField('と')
+      .appendField(new Blockly.FieldVariable('list2'), 'LIST_B')
+      .appendField('を同時に繰り返す');
+    this.appendStatementInput('DO').setCheck(null);
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('zip() で2つのリストを同時に繰り返します（for a, b in zip(list1, list2)）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_sorted_call'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('my_list'), 'LIST')
+      .appendField('を')
+      .appendField(new Blockly.FieldDropdown([['昇順', 'False'], ['降順', 'True']]), 'REVERSE')
+      .appendField('に並び替え');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('sorted() でリストを並び替えた新しいリストを返します（元のリストは変わりません）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_min_call'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('my_list'), 'LIST')
+      .appendField('の最小値');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('min() でリストの中の最小値を返します');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_max_call'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('my_list'), 'LIST')
+      .appendField('の最大値');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('max() でリストの中の最大値を返します');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_sum_call'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('my_list'), 'LIST')
+      .appendField('の合計');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('sum() でリストの全要素の合計を返します');
+    this.setHelpUrl('');
+  }
+};
+
 })();

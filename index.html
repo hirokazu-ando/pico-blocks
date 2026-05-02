@@ -357,6 +357,12 @@
     <category name="入力" colour="#00897B">
       <block type="py_input" gap="8"></block>
     </category>
+    <category name="📁 ファイル" colour="#0e7490">
+      <block type="py_file_write"></block>
+      <block type="py_file_append"></block>
+      <block type="py_file_read"></block>
+      <block type="py_file_readlines"></block>
+    </category>
     <!-- 0-6/0-7/0-8: 条件分岐・比較・論理演算 -->
     <category name="分岐" colour="#5E35B1">
       <block type="pico_if" gap="8"></block>
@@ -430,6 +436,48 @@
         </value>
       </block>
       <block type="py_list_len" gap="8"></block>
+      <sep gap="20"></sep>
+      <!-- 0-20: リスト内包表記 -->
+      <block type="py_list_comp" gap="8">
+        <value name="EXPR"><shadow type="val_var"></shadow></value>
+        <value name="LIST"><shadow type="py_list_empty"></shadow></value>
+      </block>
+      <block type="py_list_comp_if" gap="8">
+        <value name="EXPR"><shadow type="val_var"></shadow></value>
+        <value name="LIST"><shadow type="py_list_empty"></shadow></value>
+      </block>
+    </category>
+    <!-- 0-19: タプル・セット -->
+    <category name="タプル・セット" colour="#0288D1">
+      <block type="py_tuple_literal" gap="8">
+        <mutation items="2"/>
+        <field name="COUNT">2</field>
+      </block>
+      <block type="py_set_literal" gap="8">
+        <mutation items="2"/>
+        <field name="COUNT">2</field>
+      </block>
+      <sep gap="20"></sep>
+      <block type="py_set_add" gap="8">
+        <value name="VALUE">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="py_set_discard" gap="8">
+        <value name="VALUE">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+    </category>
+    <!-- 0-21: 組み込み関数 -->
+    <category name="組み込み関数" colour="#00796B">
+      <block type="py_enumerate_for" gap="8"></block>
+      <block type="py_zip_for" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_sorted_call" gap="8"></block>
+      <block type="py_min_call" gap="8"></block>
+      <block type="py_max_call" gap="8"></block>
+      <block type="py_sum_call" gap="8"></block>
     </category>
     <!-- 0-13: 辞書 -->
     <category name="辞書" colour="#6D4C41">

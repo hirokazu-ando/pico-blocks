@@ -221,6 +221,86 @@ document.addEventListener('DOMContentLoaded', function() {
     pyFiles.push({ name: fname, content: '', blockXml: null });
     switchFile(pyFiles.length - 1);
   }
+
+  function pycoFlushToTab(fname, content, append) {
+    const existing = pyFiles.find(f => f.name === fname);
+    if (existing) {
+      existing.content = append ? (existing.content + content) : content;
+      if (pyFiles[activeFileIdx].name === fname) {
+        if (typeof pyEditor !== 'undefined' && pyEditor) {
+          pyEditor.setValue(existing.content);
+        } else if (editor) {
+          editor.setValue(existing.content);
+        }
+      }
+    } else {
+      pyFiles.push({ name: fname, content: content, blockXml: null });
+    }
+    renderFileTabs();
+  }
+
+  function makePycoFileObj(fname, mode) {
+    let writeBuffer = '';
+    let readContent = '';
+
+    if (mode === 'r') {
+      const tab = pyFiles.find(f => f.name === fname);
+      if (!tab) {
+        throw new Sk.builtin.IOError('ファイルが見つかりません: ' + fname);
+      }
+      readContent = tab.content;
+    }
+
+    const fileObj = new Sk.builtin.object();
+    fileObj.tp$getattr = function(name) {
+      if (name === '__enter__') {
+        return new Sk.builtin.func(function() { return fileObj; });
+      }
+      if (name === '__exit__') {
+        return new Sk.builtin.func(function(_t, _v, _tb) {
+          if (mode === 'w') pycoFlushToTab(fname, writeBuffer, false);
+          if (mode === 'a') pycoFlushToTab(fname, writeBuffer, true);
+          return Sk.builtin.bool.false$;
+        });
+      }
+      if (name === 'write') {
+        return new Sk.builtin.func(function(data) {
+          writeBuffer += Sk.ffi.remapToJs(data);
+          return Sk.builtin.none.none$;
+        });
+      }
+      if (name === 'read') {
+        return new Sk.builtin.func(function() {
+          return Sk.ffi.remapToPy(readContent);
+        });
+      }
+      if (name === 'readlines') {
+        return new Sk.builtin.func(function() {
+          const lines = readContent.split('\n').map(l => Sk.ffi.remapToPy(l));
+          return new Sk.builtin.list(lines);
+        });
+      }
+      if (name === 'readline') {
+        return new Sk.builtin.func(function() {
+          const idx = readContent.indexOf('\n');
+          if (idx === -1) {
+            const line = readContent;
+            readContent = '';
+            return Sk.ffi.remapToPy(line);
+          }
+          const line = readContent.slice(0, idx + 1);
+          readContent = readContent.slice(idx + 1);
+          return Sk.ffi.remapToPy(line);
+        });
+      }
+      if (name === 'close') {
+        return new Sk.builtin.func(function() { return Sk.builtin.none.none$; });
+      }
+      return Sk.builtin.none.none$;
+    };
+    return fileObj;
+  }
+
   let Tutorial;   // 後で代入（generateCode から参照するため先に宣言）
   let blockLineMap = new Map(); // blockId → { from, to }（CodeMirror の 0 始まり行番号）
   const BLOCK_SEL_BG_CLASS = 'block-selection-highlight';
@@ -377,6 +457,18 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_dict_set':      return `辞書「${getVarName(block, 'DICT')}」にキーと値をセット`;
       case 'py_dict_get':      return `辞書「${getVarName(block, 'DICT')}」からキーで取得`;
       case 'py_dict_keys':     return `辞書「${getVarName(block, 'DICT')}」のキー一覧`;
+      case 'py_tuple_literal':  return 'タプル ( ... )';
+      case 'py_set_literal':    return 'セット { ... }';
+      case 'py_set_add':        return `セット「${getVarName(block, 'SET')}」に要素を追加`;
+      case 'py_set_discard':    return `セット「${getVarName(block, 'SET')}」から要素を削除`;
+      case 'py_list_comp':      return 'リスト内包表記 [式 for 変数 in リスト]';
+      case 'py_list_comp_if':   return 'リスト内包表記（条件付き）';
+      case 'py_enumerate_for':  return `リスト「${getVarName(block, 'LIST')}」を番号付きで繰り返す`;
+      case 'py_zip_for':        return `リスト「${getVarName(block, 'LIST_A')}」と「${getVarName(block, 'LIST_B')}」を同時に繰り返す`;
+      case 'py_sorted_call':    return `リスト「${getVarName(block, 'LIST')}」を並び替え`;
+      case 'py_min_call':       return `リスト「${getVarName(block, 'LIST')}」の最小値`;
+      case 'py_max_call':       return `リスト「${getVarName(block, 'LIST')}」の最大値`;
+      case 'py_sum_call':       return `リスト「${getVarName(block, 'LIST')}」の合計`;
       case 'py_break':         return 'ループを抜ける（break）';
       case 'py_continue':      return '次のループへ（continue）';
       case 'py_def_noarg':  return `関数「${block.getFieldValue('NAME')}」を定義する`;
@@ -624,6 +716,45 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return `f'${escSingleQuotedChunk(pre)}{${val}}${escSingleQuotedChunk(post)}'`;
       }
+      case 'py_tuple_literal': {
+        const tupleItems = [];
+        for (let i = 0; i < (block.itemCount_ || 2); i++) {
+          tupleItems.push(valueToCode(block, 'ITEM' + i, 'None'));
+        }
+        if (tupleItems.length === 1) return `(${tupleItems[0]},)`;
+        return `(${tupleItems.join(', ')})`;
+      }
+      case 'py_set_literal': {
+        const setItems = [];
+        for (let i = 0; i < (block.itemCount_ || 2); i++) {
+          setItems.push(valueToCode(block, 'ITEM' + i, 'None'));
+        }
+        return `{${setItems.join(', ')}}`;
+      }
+      case 'py_list_comp': {
+        const lcExpr = valueToCode(block, 'EXPR', 'x');
+        const lcVar  = getVarName(block, 'VAR');
+        const lcList = valueToCode(block, 'LIST', '[]');
+        return `[${lcExpr} for ${lcVar} in ${lcList}]`;
+      }
+      case 'py_list_comp_if': {
+        const lciExpr = valueToCode(block, 'EXPR', 'x');
+        const lciVar  = getVarName(block, 'VAR');
+        const lciList = valueToCode(block, 'LIST', '[]');
+        const lciCond = valueToCode(block, 'COND', 'True');
+        return `[${lciExpr} for ${lciVar} in ${lciList} if ${lciCond}]`;
+      }
+      case 'py_sorted_call': {
+        const sortList    = getVarName(block, 'LIST');
+        const sortReverse = block.getFieldValue('REVERSE') || 'False';
+        return `sorted(${sortList}, reverse=${sortReverse})`;
+      }
+      case 'py_min_call':
+        return `min(${getVarName(block, 'LIST')})`;
+      case 'py_max_call':
+        return `max(${getVarName(block, 'LIST')})`;
+      case 'py_sum_call':
+        return `sum(${getVarName(block, 'LIST')})`;
       case 'py_dict_new':
         return '{}';
       case 'py_dict_literal': {
@@ -1215,6 +1346,65 @@ document.addEventListener('DOMContentLoaded', function() {
         registerExprBlocksAtLineFromInput(block, 'VALUE', lnPrint);
         const val = valueToCode(block, 'VALUE', '""');
         code = appendLocal(code, indent + `print(${val})\n`);
+        break;
+      }
+      case 'py_set_add': {
+        const setAddName = getVarName(block, 'SET');
+        const setAddVal  = valueToCode(block, 'VALUE', 'None');
+        code = appendLocal(code, indent + `${setAddName}.add(${setAddVal})\n`);
+        break;
+      }
+      case 'py_set_discard': {
+        const setDisName = getVarName(block, 'SET');
+        const setDisVal  = valueToCode(block, 'VALUE', 'None');
+        code = appendLocal(code, indent + `${setDisName}.discard(${setDisVal})\n`);
+        break;
+      }
+      case 'py_enumerate_for': {
+        const enumIdx  = getVarName(block, 'IDX');
+        const enumVal  = getVarName(block, 'VAL');
+        const enumList = getVarName(block, 'LIST');
+        code = appendLocal(code, indent + `for ${enumIdx}, ${enumVal} in enumerate(${enumList}):\n`);
+        const enumInner = statementToCode(block, 'DO', indent + '    ');
+        code = appendChildBody(code, enumInner, indent + '    pass\n');
+        break;
+      }
+      case 'py_zip_for': {
+        const zipA     = getVarName(block, 'VAR_A');
+        const zipB     = getVarName(block, 'VAR_B');
+        const zipListA = getVarName(block, 'LIST_A');
+        const zipListB = getVarName(block, 'LIST_B');
+        code = appendLocal(code, indent + `for ${zipA}, ${zipB} in zip(${zipListA}, ${zipListB}):\n`);
+        const zipInner = statementToCode(block, 'DO', indent + '    ');
+        code = appendChildBody(code, zipInner, indent + '    pass\n');
+        break;
+      }
+      case 'py_file_write': {
+        const fname = block.getFieldValue('FILENAME') || 'data.txt';
+        const content = valueToCode(block, 'CONTENT', '""');
+        code = appendLocal(code, indent + `with open("${fname}", "w") as _f:\n`);
+        code = appendLocal(code, indent + `    _f.write(${content})\n`);
+        break;
+      }
+      case 'py_file_append': {
+        const fname = block.getFieldValue('FILENAME') || 'data.txt';
+        const content = valueToCode(block, 'CONTENT', '""');
+        code = appendLocal(code, indent + `with open("${fname}", "a") as _f:\n`);
+        code = appendLocal(code, indent + `    _f.write(${content})\n`);
+        break;
+      }
+      case 'py_file_read': {
+        const fname = block.getFieldValue('FILENAME') || 'data.txt';
+        const varName = block.getFieldValue('VAR') || 'content';
+        code = appendLocal(code, indent + `with open("${fname}") as _f:\n`);
+        code = appendLocal(code, indent + `    ${varName} = _f.read()\n`);
+        break;
+      }
+      case 'py_file_readlines': {
+        const fname = block.getFieldValue('FILENAME') || 'data.txt';
+        const varName = block.getFieldValue('VAR') || 'lines';
+        code = appendLocal(code, indent + `with open("${fname}") as _f:\n`);
+        code = appendLocal(code, indent + `    ${varName} = _f.readlines()\n`);
         break;
       }
 
@@ -2457,6 +2647,12 @@ document.addEventListener('DOMContentLoaded', function() {
       inputfunTakesPrompt: true,
       yieldLimit: 200,   // 200ステップごとにブラウザへ制御を返す（停止ボタン応答に必要）
       __future__: Sk.python3,
+    });
+
+    Sk.builtins['open'] = new Sk.builtin.func(function(filename, mode) {
+      const fname = Sk.ffi.remapToJs(filename);
+      const m = mode ? Sk.ffi.remapToJs(mode) : 'r';
+      return makePycoFileObj(fname, m);
     });
 
     // Sk.configure の後に pygame を登録（configure が builtinFiles をリセットするため必ず後に呼ぶ）

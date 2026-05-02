@@ -23,6 +23,8 @@ window.PycoPalette = {
   functions: '#FF7043',
   classes:     '#7B1FA2',
   exceptions:  '#D32F2F',
+  tuples:   '#0288D1',
+  builtins: '#00796B',
   modules: '#546E7A',
   customPython: '#455A64',
   timing: '#2E7D32',
