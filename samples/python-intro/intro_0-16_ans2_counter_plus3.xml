@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <variables><variable id="var_c">c</variable></variables>
+  <variables>
+    <variable id="var_start">start</variable>
+    <variable id="var_c">c</variable>
+  </variables>
   <block type="py_class_def" id="b1" x="30" y="30">
     <field name="NAME">Counter</field>
     <statement name="BODY">
       <block type="py_class_init" id="b2">
-        <field name="PARAM">start</field>
+        <field name="PARAM" id="var_start">start</field>
         <statement name="BODY">
           <block type="py_self_set" id="b3">
             <field name="ATTR">value</field>
             <value name="VALUE">
-              <block type="py_custom_expr" id="b4"><field name="CODE">start</field></block>
+              <block type="val_var" id="b4"><field name="VAR" id="var_start">start</field></block>
             </value>
           </block>
         </statement>
@@ -71,13 +74,13 @@
         </value>
         <next>
           <block type="py_method_call_stmt" id="b18">
-            <field name="INST">c</field>
+            <field name="INST" id="var_c">c</field>
             <field name="METHOD">add3</field>
             <next>
               <block type="py_print" id="b19">
                 <value name="VALUE">
                   <block type="py_attr_get" id="b20">
-                    <field name="INST">c</field>
+                    <field name="INST" id="var_c">c</field>
                     <field name="ATTR">value</field>
                   </block>
                 </value>

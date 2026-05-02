@@ -451,7 +451,7 @@ Blockly.Blocks['py_class_init'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('初期化（self, 引数:')
-      .appendField(new Blockly.FieldTextInput('name'), 'PARAM')
+      .appendField(new Blockly.FieldVariable('name'), 'PARAM')
       .appendField('）');
     this.appendStatementInput('BODY').setCheck(null);
     this.setPreviousStatement(true, null);
@@ -466,9 +466,9 @@ Blockly.Blocks['py_class_init2'] = {
   init: function() {
     this.appendDummyInput()
       .appendField('初期化（self, 引数:')
-      .appendField(new Blockly.FieldTextInput('width'), 'PARAM1')
+      .appendField(new Blockly.FieldVariable('width'), 'PARAM1')
       .appendField(',')
-      .appendField(new Blockly.FieldTextInput('height'), 'PARAM2')
+      .appendField(new Blockly.FieldVariable('height'), 'PARAM2')
       .appendField('）');
     this.appendStatementInput('BODY').setCheck(null);
     this.setPreviousStatement(true, null);
@@ -500,7 +500,7 @@ Blockly.Blocks['py_class_method1'] = {
       .appendField('メソッド')
       .appendField(new Blockly.FieldTextInput('my_method'), 'NAME')
       .appendField('（引数:')
-      .appendField(new Blockly.FieldTextInput('param'), 'PARAM')
+      .appendField(new Blockly.FieldVariable('param'), 'PARAM')
       .appendField('）');
     this.appendStatementInput('BODY').setCheck(null);
     this.setPreviousStatement(true, null);
@@ -559,7 +559,7 @@ Blockly.Blocks['py_new_instance'] = {
 Blockly.Blocks['py_method_call_stmt'] = {
   init: function() {
     this.appendDummyInput()
-      .appendField(new Blockly.FieldTextInput('obj'), 'INST')
+      .appendField(new Blockly.FieldVariable('obj'), 'INST')
       .appendField('.')
       .appendField(new Blockly.FieldTextInput('method'), 'METHOD')
       .appendField('（引数:');
@@ -577,7 +577,7 @@ Blockly.Blocks['py_method_call_stmt'] = {
 Blockly.Blocks['py_attr_get'] = {
   init: function() {
     this.appendDummyInput()
-      .appendField(new Blockly.FieldTextInput('obj'), 'INST')
+      .appendField(new Blockly.FieldVariable('obj'), 'INST')
       .appendField('.')
       .appendField(new Blockly.FieldTextInput('attr'), 'ATTR');
     this.setOutput(true, null);

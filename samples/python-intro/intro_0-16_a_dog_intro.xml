@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <variables><variable id="var_dog">dog</variable></variables>
+  <variables>
+    <variable id="var_name">name</variable>
+    <variable id="var_dog">dog</variable>
+  </variables>
   <block type="py_class_def" id="b1" x="30" y="30">
     <field name="NAME">Dog</field>
     <statement name="BODY">
       <block type="py_class_init" id="b2">
-        <field name="PARAM">name</field>
+        <field name="PARAM" id="var_name">name</field>
         <statement name="BODY">
           <block type="py_self_set" id="b3">
             <field name="ATTR">name</field>
             <value name="VALUE">
-              <block type="py_custom_expr" id="b4"><field name="CODE">name</field></block>
+              <block type="val_var" id="b4"><field name="VAR" id="var_name">name</field></block>
             </value>
           </block>
         </statement>
@@ -20,7 +23,21 @@
             <statement name="BODY">
               <block type="py_print" id="b6">
                 <value name="VALUE">
-                  <block type="py_custom_expr" id="b7"><field name="CODE">"こんにちは！ぼくの名前はね、" + self.name + "！"</field></block>
+                  <block type="py_str_concat" id="b7">
+                    <value name="A">
+                      <block type="py_str_concat" id="b8">
+                        <value name="A">
+                          <block type="val_str" id="b9"><field name="TEXT">こんにちは！ぼくの名前はね、</field></block>
+                        </value>
+                        <value name="B">
+                          <block type="py_self_get" id="b10"><field name="ATTR">name</field></block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="val_str" id="b11"><field name="TEXT">！</field></block>
+                    </value>
+                  </block>
                 </value>
               </block>
             </statement>
@@ -29,19 +46,19 @@
       </block>
     </statement>
     <next>
-      <block type="var_set" id="b8">
+      <block type="var_set" id="b12">
         <field name="VAR" id="var_dog">dog</field>
         <value name="VALUE">
-          <block type="py_new_instance" id="b9">
+          <block type="py_new_instance" id="b13">
             <field name="NAME">Dog</field>
             <value name="ARG">
-              <block type="val_str" id="b10"><field name="TEXT">ポチ</field></block>
+              <block type="val_str" id="b14"><field name="TEXT">ポチ</field></block>
             </value>
           </block>
         </value>
         <next>
-          <block type="py_method_call_stmt" id="b11">
-            <field name="INST">dog</field>
+          <block type="py_method_call_stmt" id="b15">
+            <field name="INST" id="var_dog">dog</field>
             <field name="METHOD">greet</field>
           </block>
         </next>

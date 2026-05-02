@@ -430,15 +430,15 @@ document.addEventListener('DOMContentLoaded', function() {
         return `Rectの${attrs[block.getFieldValue('ATTR')] || '属性'}`;
       }
       case 'py_class_def':        return `クラス「${block.getFieldValue('NAME')}」を定義する`;
-      case 'py_class_init':       return `__init__（self, ${block.getFieldValue('PARAM')}）`;
-      case 'py_class_init2':      return `__init__（self, ${block.getFieldValue('PARAM1')}, ${block.getFieldValue('PARAM2')}）`;
+      case 'py_class_init':       return `__init__（self, ${getVarName(block, 'PARAM')}）`;
+      case 'py_class_init2':      return `__init__（self, ${getVarName(block, 'PARAM1')}, ${getVarName(block, 'PARAM2')}）`;
       case 'py_class_method':     return `メソッド「${block.getFieldValue('NAME')}」（引数なし）`;
-      case 'py_class_method1':    return `メソッド「${block.getFieldValue('NAME')}」（引数: ${block.getFieldValue('PARAM')}）`;
+      case 'py_class_method1':    return `メソッド「${block.getFieldValue('NAME')}」（引数: ${getVarName(block, 'PARAM')}）`;
       case 'py_self_set':         return `self.${block.getFieldValue('ATTR')} に代入`;
       case 'py_self_get':         return `self.${block.getFieldValue('ATTR')}`;
       case 'py_new_instance':     return `クラス「${block.getFieldValue('NAME')}」のインスタンスを作る`;
-      case 'py_method_call_stmt': return `${block.getFieldValue('INST')}.${block.getFieldValue('METHOD')}() を呼ぶ`;
-      case 'py_attr_get':         return `${block.getFieldValue('INST')}.${block.getFieldValue('ATTR')}`;
+      case 'py_method_call_stmt': return `${getVarName(block, 'INST')}.${block.getFieldValue('METHOD')}() を呼ぶ`;
+      case 'py_attr_get':         return `${getVarName(block, 'INST')}.${block.getFieldValue('ATTR')}`;
       case 'py_custom_stmt': return 'カスタムPython（文・1行・縦連結で複数行）';
       case 'py_custom_expr': return 'カスタムPython（式）';
       default:                 return block.type;
@@ -728,7 +728,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${name}(${arg})`;
       }
       case 'py_attr_get': {
-        const inst = block.getFieldValue('INST');
+        const inst = getVarName(block, 'INST');
         const attr = block.getFieldValue('ATTR');
         return `${inst}.${attr}`;
       }
@@ -1331,15 +1331,15 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
       case 'py_class_init': {
-        const param = block.getFieldValue('PARAM');
+        const param = getVarName(block, 'PARAM');
         code = appendLocal(code, indent + `def __init__(self, ${param}):\n`);
         const body = statementToCode(block, 'BODY', indent + '    ');
         code = appendChildBody(code, body, indent + '    pass\n');
         break;
       }
       case 'py_class_init2': {
-        const p1 = block.getFieldValue('PARAM1');
-        const p2 = block.getFieldValue('PARAM2');
+        const p1 = getVarName(block, 'PARAM1');
+        const p2 = getVarName(block, 'PARAM2');
         code = appendLocal(code, indent + `def __init__(self, ${p1}, ${p2}):\n`);
         const body = statementToCode(block, 'BODY', indent + '    ');
         code = appendChildBody(code, body, indent + '    pass\n');
@@ -1354,7 +1354,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'py_class_method1': {
         const name  = block.getFieldValue('NAME');
-        const param = block.getFieldValue('PARAM');
+        const param = getVarName(block, 'PARAM');
         code = appendLocal(code, indent + `def ${name}(self, ${param}):\n`);
         const body = statementToCode(block, 'BODY', indent + '    ');
         code = appendChildBody(code, body, indent + '    pass\n');
@@ -1369,7 +1369,7 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
       case 'py_method_call_stmt': {
-        const inst   = block.getFieldValue('INST');
+        const inst   = getVarName(block, 'INST');
         const method = block.getFieldValue('METHOD');
         const ln = _emitCtx.line;
         registerExprBlocksAtLineFromInput(block, 'ARG', ln);
