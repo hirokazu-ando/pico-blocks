@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_s">s</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_s">s</field>
+    <value name="VALUE">
+      <block type="py_call_val" id="b2">
+        <field name="METHOD">strip</field>
+        <value name="OBJECT">
+          <block type="val_str" id="b3"><field name="TEXT">  hello world  </field></block>
+        </value>
+      </block>
+    </value>
+    <next>
+      <block type="py_print" id="b4">
+        <value name="VALUE">
+          <block type="py_call_val" id="b5">
+            <field name="METHOD">replace</field>
+            <value name="OBJECT">
+              <block type="val_var" id="b6"><field name="VAR" id="var_s">s</field></block>
+            </value>
+            <value name="ARG0">
+              <block type="val_str" id="b7"><field name="TEXT">world</field></block>
+            </value>
+            <value name="ARG1">
+              <block type="val_str" id="b8"><field name="TEXT">Python</field></block>
+            </value>
+          </block>
+        </value>
+      </block>
+    </next>
+  </block>
+</xml>
