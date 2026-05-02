@@ -1852,6 +1852,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const xml = dom.documentElement;
         workspace.clear();
         Blockly.Xml.domToWorkspace(xml, workspace);
+        window.__PCO_LAST_XML_SRC = file.name;
       } catch (err) {
         alert('XML の読み込みに失敗しました: ' + err.message);
       }
@@ -3011,6 +3012,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   })();
 
+  // ?src= で XML を読み込んだときのパス（スクリーンショットの既定ファイル名に利用）
+  window.__PCO_LAST_XML_SRC = window.__PCO_LAST_XML_SRC || '';
+
   // ===== スクリーンショット保存 =====
   (function registerScreenshotMenu() {
     function captureWorkspaceAsPng() {
@@ -3098,7 +3102,15 @@ document.addEventListener('DOMContentLoaded', function() {
           + String(now.getHours()).padStart(2, '0')
           + String(now.getMinutes()).padStart(2, '0')
           + String(now.getSeconds()).padStart(2, '0');
-        a.download = `pyco_blocks_${ts}.png`;
+        let basename = '';
+        try {
+          const raw = typeof window.__PCO_LAST_XML_SRC === 'string' ? window.__PCO_LAST_XML_SRC.trim() : '';
+          if (raw) {
+            const last = raw.split(/[/?#]/).filter(Boolean).pop();
+            if (last && /\.xml$/i.test(last)) basename = last.replace(/\.xml$/i, '');
+          }
+        } catch (_) {}
+        a.download = basename ? `${basename}.png` : `pyco_blocks_${ts}.png`;
         a.href = canvas.toDataURL('image/png');
         document.body.appendChild(a);
         a.click();
@@ -3139,6 +3151,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // URLパラメータ ?src=path/to/file.xml でワークスペースにXMLを自動読み込み
   const _urlSrc = _urlParams.get('src');
   if (_urlSrc) {
+    window.__PCO_LAST_XML_SRC = _urlSrc;
     fetch(_urlSrc)
       .then(function(r) { return r.ok ? r.text() : Promise.reject('HTTP ' + r.status); })
       .then(function(xmlText) {
