@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="var_fruits">fruits</variable></variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_fruits">fruits</field>
+    <value name="VALUE"><block type="py_custom_expr" id="b2"><field name="CODE">["apple", "orange", "grape"]</field></block></value>
+    <next>
+      <block type="py_print" id="b3">
+        <value name="VALUE">
+          <block type="py_list_get" id="b4">
+            <field name="LIST" id="var_fruits">fruits</field>
+            <value name="INDEX"><block type="val_number" id="b5"><field name="NUM">0</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print" id="b6">
+            <value name="VALUE">
+              <block type="py_list_get" id="b7">
+                <field name="LIST" id="var_fruits">fruits</field>
+                <value name="INDEX"><block type="val_number" id="b8"><field name="NUM">1</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print" id="b9">
+                <value name="VALUE">
+                  <block type="py_list_get" id="b10">
+                    <field name="LIST" id="var_fruits">fruits</field>
+                    <value name="INDEX"><block type="val_number" id="b11"><field name="NUM">2</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
