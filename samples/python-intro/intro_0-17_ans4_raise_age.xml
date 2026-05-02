@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_age">age</variable>
+    <variable id="var_e">e</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_age">age</field>
+    <value name="VALUE">
+      <block type="val_number" id="b2"><field name="NUM">-5</field></block>
+    </value>
+    <next>
+      <block type="py_try_except_as" id="b3">
+        <field name="EVAR" id="var_e">e</field>
+        <statement name="BODY">
+          <block type="pico_if" id="b4">
+            <mutation elseif="0" else="0"></mutation>
+            <value name="IF0">
+              <block type="cond_compare" id="b5">
+                <field name="OP">&lt;</field>
+                <value name="LEFT">
+                  <block type="val_var" id="b6"><field name="VAR" id="var_age">age</field></block>
+                </value>
+                <value name="RIGHT">
+                  <block type="val_number" id="b7"><field name="NUM">0</field></block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="py_raise" id="b8">
+                <field name="ETYPE">ValueError</field>
+                <value name="MSG">
+                  <block type="val_str" id="b9"><field name="TEXT">年齢は0以上にしてください</field></block>
+                </value>
+              </block>
+            </statement>
+            <next>
+              <block type="py_print" id="b10">
+                <value name="VALUE">
+                  <block type="py_str_concat" id="b11">
+                    <value name="A">
+                      <block type="val_str" id="b12"><field name="TEXT">年齢：</field></block>
+                    </value>
+                    <value name="B">
+                      <block type="py_type_cast" id="b13">
+                        <field name="TYPE">str</field>
+                        <value name="VALUE">
+                          <block type="val_var" id="b14"><field name="VAR" id="var_age">age</field></block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <statement name="HANDLER">
+          <block type="py_print" id="b15">
+            <value name="VALUE">
+              <block type="py_str_concat" id="b16">
+                <value name="A">
+                  <block type="val_str" id="b17"><field name="TEXT">エラー：</field></block>
+                </value>
+                <value name="B">
+                  <block type="py_type_cast" id="b18">
+                    <field name="TYPE">str</field>
+                    <value name="VALUE">
+                      <block type="val_var" id="b19"><field name="VAR" id="var_e">e</field></block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
+</xml>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_fruits">fruits</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_fruits">fruits</field>
+    <value name="VALUE">
+      <block type="py_list_empty" id="b2"></block>
+    </value>
+    <next>
+      <block type="py_list_append" id="b3">
+        <field name="LIST" id="var_fruits">fruits</field>
+        <value name="VALUE">
+          <block type="val_str" id="b4"><field name="TEXT">りんご</field></block>
+        </value>
+        <next>
+          <block type="py_list_append" id="b5">
+            <field name="LIST" id="var_fruits">fruits</field>
+            <value name="VALUE">
+              <block type="val_str" id="b6"><field name="TEXT">バナナ</field></block>
+            </value>
+            <next>
+              <block type="py_list_append" id="b7">
+                <field name="LIST" id="var_fruits">fruits</field>
+                <value name="VALUE">
+                  <block type="val_str" id="b8"><field name="TEXT">みかん</field></block>
+                </value>
+                <next>
+                  <block type="py_try_except" id="b9">
+                    <field name="ETYPE">IndexError</field>
+                    <statement name="BODY">
+                      <block type="py_print" id="b10">
+                        <value name="VALUE">
+                          <block type="py_list_get" id="b11">
+                            <field name="LIST" id="var_fruits">fruits</field>
+                            <value name="INDEX">
+                              <block type="val_number" id="b12"><field name="NUM">5</field></block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </statement>
+                    <statement name="HANDLER">
+                      <block type="py_print" id="b13">
+                        <value name="VALUE">
+                          <block type="val_str" id="b14"><field name="TEXT">その番号の果物はありません</field></block>
+                        </value>
+                      </block>
+                    </statement>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
