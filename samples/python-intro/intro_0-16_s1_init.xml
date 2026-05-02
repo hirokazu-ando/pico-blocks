@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables><variable id="var_name">name</variable></variables>
+  <block type="py_class_init" id="b1" x="30" y="30">
+    <field name="PARAM" id="var_name">name</field>
+    <statement name="BODY">
+      <block type="py_self_set" id="b2">
+        <field name="ATTR">name</field>
+        <value name="VALUE">
+          <block type="val_var" id="b3"><field name="VAR" id="var_name">name</field></block>
+        </value>
+      </block>
+    </statement>
+  </block>
+</xml>
