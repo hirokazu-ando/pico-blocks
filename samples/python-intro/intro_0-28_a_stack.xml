@@ -32,8 +32,8 @@
                       <block type="var_set" id="b12">
                         <field name="VAR" id="var_top">top</field>
                         <value name="VALUE">
-                          <block type="py_custom_expr" id="b13">
-                            <field name="CODE">stack.pop()</field>
+                          <block type="py_list_pop" id="b13">
+                            <field name="LIST" id="var_stack">stack</field>
                           </block>
                         </value>
                         <next>

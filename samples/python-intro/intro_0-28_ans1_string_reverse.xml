@@ -31,21 +31,26 @@
                 </value>
                 <statement name="DO">
                   <block type="py_list_append" id="b9">
-                    <value name="LIST">
-                      <block type="val_var" id="b10"><field name="VAR" id="var_stack">stack</field></block>
-                    </value>
-                    <value name="ITEM">
-                      <block type="val_var" id="b11"><field name="VAR" id="var_ch">ch</field></block>
+                    <field name="LIST" id="var_stack">stack</field>
+                    <value name="VALUE">
+                      <block type="val_var" id="b10"><field name="VAR" id="var_ch">ch</field></block>
                     </value>
                   </block>
                 </statement>
                 <next>
-                  <block type="py_custom_stmt" id="b12">
-                    <field name="CODE">while stack:&#10;    result += stack.pop()</field>
+                  <block type="py_while" id="b11">
+                    <value name="COND">
+                      <block type="val_var" id="b12"><field name="VAR" id="var_stack">stack</field></block>
+                    </value>
+                    <statement name="DO">
+                      <block type="py_custom_stmt" id="b13">
+                        <field name="CODE">result += stack.pop()</field>
+                      </block>
+                    </statement>
                     <next>
-                      <block type="py_print" id="b13">
+                      <block type="py_print" id="b14">
                         <value name="VALUE">
-                          <block type="val_var" id="b14"><field name="VAR" id="var_result">result</field></block>
+                          <block type="val_var" id="b15"><field name="VAR" id="var_result">result</field></block>
                         </value>
                       </block>
                     </next>

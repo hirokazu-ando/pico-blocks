@@ -2,6 +2,45 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="vq">queue</variable>
+    <variable id="vc">customer</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vq">queue</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">deque(["田中", "鈴木", "山田", "伊藤", "佐藤"])</field></block></value><next><block type="py_custom_stmt"><field name="CODE">from collections import deque</field><next><block type="py_custom_stmt"><field name="CODE">while queue:</field><next><block type="py_custom_stmt"><field name="CODE">    customer = queue.popleft()</field><next><block type="py_custom_stmt"><field name="CODE">    print(f"{customer}さんを対応中（残り{len(queue)}人）")</field></block></next></block></next></block></next></block></next></block>
+  <block type="py_custom_stmt" id="b0" x="30" y="30">
+    <field name="CODE">from collections import deque</field>
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="vq">queue</field>
+        <value name="VALUE">
+          <block type="py_custom_expr" id="b2">
+            <field name="CODE">deque(["田中", "鈴木", "山田", "伊藤", "佐藤"])</field>
+          </block>
+        </value>
+        <next>
+          <block type="py_while" id="b3">
+            <value name="COND">
+              <block type="val_var" id="b4"><field name="VAR" id="vq">queue</field></block>
+            </value>
+            <statement name="DO">
+              <block type="var_set" id="b5">
+                <field name="VAR" id="vc">customer</field>
+                <value name="VALUE">
+                  <block type="py_custom_expr" id="b6">
+                    <field name="CODE">queue.popleft()</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_print" id="b7">
+                    <value name="VALUE">
+                      <block type="py_custom_expr" id="b8">
+                        <field name="CODE">f"{customer}さんを対応中（残り{len(queue)}人）"</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

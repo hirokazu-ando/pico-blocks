@@ -1,48 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable id="var_data">data</variable>
-    <variable id="var_dupes">dupes</variable>
-    <variable id="var_item">item</variable>
+    <variable id="var_nums">nums</variable>
+    <variable id="var_seen">seen</variable>
+    <variable id="var_dupes">duplicates</variable>
+    <variable id="var_v">v</variable>
+    <variable id="var_result">result</variable>
   </variables>
   <block type="var_set" id="b1" x="30" y="30">
-    <field name="VAR" id="var_data">data</field>
+    <field name="VAR" id="var_nums">nums</field>
     <value name="VALUE">
-      <block type="py_list_literal"><mutation items="7"/><value name="ITEM0"><block type="val_number"><field name="NUM">3</field></block></value><value name="ITEM1"><block type="val_number"><field name="NUM">1</field></block></value><value name="ITEM2"><block type="val_number"><field name="NUM">4</field></block></value><value name="ITEM3"><block type="val_number"><field name="NUM">1</field></block></value><value name="ITEM4"><block type="val_number"><field name="NUM">5</field></block></value><value name="ITEM5"><block type="val_number"><field name="NUM">3</field></block></value><value name="ITEM6"><block type="val_number"><field name="NUM">2</field></block></value></block>
+      <block type="py_list_literal"><mutation items="8"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">3</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">7</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">2</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">9</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">2</field></block></value>
+        <value name="ITEM5"><block type="val_number"><field name="NUM">5</field></block></value>
+        <value name="ITEM6"><block type="val_number"><field name="NUM">7</field></block></value>
+        <value name="ITEM7"><block type="val_number"><field name="NUM">1</field></block></value>
+      </block>
     </value>
     <next>
-      <block type="var_set" id="b3">
-        <field name="VAR" id="var_dupes">dupes</field>
+      <block type="var_set" id="b2">
+        <field name="VAR" id="var_seen">seen</field>
         <value name="VALUE">
-          <block type="py_list_empty" id="b4"/>
+          <block type="py_custom_expr" id="b3"><field name="CODE">set()</field></block>
         </value>
         <next>
-          <block type="py_for_list" id="b5">
-            <field name="VAR" id="var_item">item</field>
-            <value name="LIST">
-              <block type="val_var" id="b6"><field name="VAR" id="var_data">data</field></block>
+          <block type="var_set" id="b4">
+            <field name="VAR" id="var_dupes">duplicates</field>
+            <value name="VALUE">
+              <block type="py_custom_expr" id="b5"><field name="CODE">set()</field></block>
             </value>
-            <statement name="DO">
-              <block type="controls_if" id="b7">
-                <value name="IF0">
-                  <block type="py_custom_expr" id="b8">
-                    <field name="CODE">data.count(item) &gt; 1 and item not in dupes</field>
-                  </block>
+            <next>
+              <block type="py_for_list" id="b6">
+                <field name="VAR" id="var_v">v</field>
+                <value name="LIST">
+                  <block type="val_var" id="b7"><field name="VAR" id="var_nums">nums</field></block>
                 </value>
-                <statement name="DO0">
-                  <block type="py_list_append" id="b9">
-                    <value name="ITEM">
-                      <block type="val_var" id="b10"><field name="VAR" id="var_item">item</field></block>
+                <statement name="DO">
+                  <block type="controls_if" id="b8">
+                    <value name="IF0">
+                      <block type="py_custom_expr" id="b9">
+                        <field name="CODE">v in seen</field>
+                      </block>
                     </value>
+                    <statement name="DO0">
+                      <block type="py_custom_stmt" id="b10">
+                        <field name="CODE">duplicates.add(v)</field>
+                      </block>
+                    </statement>
+                    <next>
+                      <block type="py_custom_stmt" id="b11">
+                        <field name="CODE">seen.add(v)</field>
+                      </block>
+                    </next>
                   </block>
                 </statement>
-              </block>
-            </statement>
-            <next>
-              <block type="py_print" id="b11">
-                <value name="VALUE">
-                  <block type="val_var" id="b12"><field name="VAR" id="var_dupes">dupes</field></block>
-                </value>
+                <next>
+                  <block type="var_set" id="b12">
+                    <field name="VAR" id="var_result">result</field>
+                    <value name="VALUE">
+                      <block type="py_custom_expr" id="b13">
+                        <field name="CODE">sorted(duplicates)</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_print" id="b14">
+                        <value name="VALUE">
+                          <block type="py_custom_expr" id="b15">
+                            <field name="CODE">f"重複している値: {result}"</field>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
               </block>
             </next>
           </block>

@@ -1,7 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable id="vd">data</variable>
+    <variable id="vd">original</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vd">data</field><value name="VALUE"><block type="py_list_literal"><mutation items="9"/><value name="ITEM0"><block type="val_number"><field name="NUM">5</field></block></value><value name="ITEM1"><block type="val_number"><field name="NUM">3</field></block></value><value name="ITEM2"><block type="val_number"><field name="NUM">8</field></block></value><value name="ITEM3"><block type="val_number"><field name="NUM">1</field></block></value><value name="ITEM4"><block type="val_number"><field name="NUM">9</field></block></value><value name="ITEM5"><block type="val_number"><field name="NUM">2</field></block></value><value name="ITEM6"><block type="val_number"><field name="NUM">7</field></block></value><value name="ITEM7"><block type="val_number"><field name="NUM">4</field></block></value><value name="ITEM8"><block type="val_number"><field name="NUM">6</field></block></value></block></value><next><block type="py_custom_stmt"><field name="CODE">def bubble_sort(data):</field><next><block type="py_custom_stmt"><field name="CODE">    data = data[:]</field><next><block type="py_custom_stmt"><field name="CODE">    n = len(data)</field><next><block type="py_custom_stmt"><field name="CODE">    for i in range(n - 1):</field><next><block type="py_custom_stmt"><field name="CODE">        for j in range(n - i - 1):</field><next><block type="py_custom_stmt"><field name="CODE">            if data[j] &gt; data[j + 1]:</field><next><block type="py_custom_stmt"><field name="CODE">                data[j], data[j + 1] = data[j + 1], data[j]</field><next><block type="py_custom_stmt"><field name="CODE">    return data</field><next><block type="py_custom_stmt"><field name="CODE">def insertion_sort(data):</field><next><block type="py_custom_stmt"><field name="CODE">    data = data[:]</field><next><block type="py_custom_stmt"><field name="CODE">    for i in range(1, len(data)):</field><next><block type="py_custom_stmt"><field name="CODE">        key, j = data[i], i - 1</field><next><block type="py_custom_stmt"><field name="CODE">        while j &gt;= 0 and data[j] &gt; key:</field><next><block type="py_custom_stmt"><field name="CODE">            data[j + 1] = data[j]; j -= 1</field><next><block type="py_custom_stmt"><field name="CODE">        data[j + 1] = key</field><next><block type="py_custom_stmt"><field name="CODE">    return data</field><next><block type="py_custom_stmt"><field name="CODE">print(bubble_sort(data))</field><next><block type="py_custom_stmt"><field name="CODE">print(insertion_sort(data))</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vd">original</field>
+    <value name="VALUE">
+      <block type="py_list_literal"><mutation items="5"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">64</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">25</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">12</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">22</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">11</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="py_custom_stmt">
+        <field name="CODE">def bubble_sort(data):        # 隣同士を比較・交換、安定、O(n²)</field>
+        <next><block type="py_custom_stmt"><field name="CODE">    data = data[:]</field>
+        <next><block type="py_custom_stmt"><field name="CODE">    n = len(data)</field>
+        <next><block type="py_custom_stmt"><field name="CODE">    for i in range(n - 1):</field>
+        <next><block type="py_custom_stmt"><field name="CODE">        for j in range(n - i - 1):</field>
+        <next><block type="py_custom_stmt"><field name="CODE">            if data[j] &gt; data[j + 1]:</field>
+        <next><block type="py_custom_stmt"><field name="CODE">                data[j], data[j + 1] = data[j + 1], data[j]</field>
+        <next><block type="py_custom_stmt"><field name="CODE">    return data</field>
+        <next><block type="py_custom_stmt"><field name="CODE">def insertion_sort(data):     # カード挿入方式、安定、O(n²)</field>
+        <next><block type="py_custom_stmt"><field name="CODE">    data = data[:]</field>
+        <next><block type="py_custom_stmt"><field name="CODE">    n = len(data)</field>
+        <next><block type="py_custom_stmt"><field name="CODE">    for i in range(1, n):</field>
+        <next><block type="py_custom_stmt"><field name="CODE">        key = data[i]</field>
+        <next><block type="py_custom_stmt"><field name="CODE">        j = i - 1</field>
+        <next><block type="py_custom_stmt"><field name="CODE">        while j &gt;= 0 and data[j] &gt; key:</field>
+        <next><block type="py_custom_stmt"><field name="CODE">            data[j + 1] = data[j]</field>
+        <next><block type="py_custom_stmt"><field name="CODE">            j -= 1</field>
+        <next><block type="py_custom_stmt"><field name="CODE">        data[j + 1] = key</field>
+        <next><block type="py_custom_stmt"><field name="CODE">    return data</field>
+        <next><block type="py_custom_stmt"><field name="CODE">def selection_sort(data):     # 最小値を選んで前へ、不安定、O(n²)</field>
+        <next><block type="py_custom_stmt"><field name="CODE">    data = data[:]</field>
+        <next><block type="py_custom_stmt"><field name="CODE">    n = len(data)</field>
+        <next><block type="py_custom_stmt"><field name="CODE">    for i in range(n - 1):</field>
+        <next><block type="py_custom_stmt"><field name="CODE">        min_idx = i</field>
+        <next><block type="py_custom_stmt"><field name="CODE">        for j in range(i + 1, n):</field>
+        <next><block type="py_custom_stmt"><field name="CODE">            if data[j] &lt; data[min_idx]:</field>
+        <next><block type="py_custom_stmt"><field name="CODE">                min_idx = j</field>
+        <next><block type="py_custom_stmt"><field name="CODE">        data[i], data[min_idx] = data[min_idx], data[i]</field>
+        <next><block type="py_custom_stmt"><field name="CODE">    return data</field>
+        <next><block type="py_custom_stmt"><field name="CODE">print("バブル:  ", bubble_sort(original))</field>
+        <next><block type="py_custom_stmt"><field name="CODE">print("挿入:    ", insertion_sort(original))</field>
+        <next><block type="py_custom_stmt"><field name="CODE">print("選択:    ", selection_sort(original))</field>
+        <next><block type="py_custom_stmt"><field name="CODE">print("Python: ", sorted(original))</field>
+        </block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+      </block>
+    </next>
+  </block>
 </xml>
