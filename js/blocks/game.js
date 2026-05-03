@@ -370,20 +370,20 @@
 
   // ===== \u753b\u50cf\u30d7\u30ea\u30bb\u30c3\u30c8 =====
   var GAME_SPRITES = [
-    [{ src: 'assets/game-icons/player_ship.svg', width: 24, height: 24, alt: '\u30d7\u30ec\u30a4\u30e4\u30fc' }, 'assets/game-icons/player_ship.svg'],
-    [{ src: 'assets/game-icons/rocket.svg',       width: 24, height: 24, alt: '\u30ed\u30b1\u30c3\u30c8' },       'assets/game-icons/rocket.svg'],
-    [{ src: 'assets/game-icons/enemy_bug.svg',   width: 24, height: 24, alt: '\u6575\uff08\u30c9\u30ed\u30fc\u30f3\uff09' }, 'assets/game-icons/enemy_bug.svg'],
-    [{ src: 'assets/game-icons/coin.svg',        width: 24, height: 24, alt: '\u30b3\u30a4\u30f3' },           'assets/game-icons/coin.svg'],
-    [{ src: 'assets/game-icons/gem.svg',         width: 24, height: 24, alt: '\u30b8\u30a7\u30e0' },           'assets/game-icons/gem.svg'],
-    [{ src: 'assets/game-icons/star.svg',        width: 24, height: 24, alt: '\u30b9\u30bf\u30fc' },           'assets/game-icons/star.svg'],
-    [{ src: 'assets/game-icons/heart.svg',       width: 24, height: 24, alt: '\u30cf\u30fc\u30c8' },           'assets/game-icons/heart.svg'],
-    [{ src: 'assets/game-icons/bullet.svg',      width: 24, height: 24, alt: '\u5f3e' },                       'assets/game-icons/bullet.svg'],
-    [{ src: 'assets/game-icons/energy.svg',      width: 24, height: 24, alt: '\u30a8\u30ca\u30b8\u30fc' },       'assets/game-icons/energy.svg'],
-    [{ src: 'assets/game-icons/shield.svg',      width: 24, height: 24, alt: '\u30b7\u30fc\u30eb\u30c9' },       'assets/game-icons/shield.svg'],
-    [{ src: 'assets/game-icons/spike.svg',       width: 24, height: 24, alt: '\u30c8\u30b2' },                  'assets/game-icons/spike.svg'],
-    [{ src: 'assets/game-icons/meteor.svg',      width: 24, height: 24, alt: '\u30e1\u30c6\u30aa' },            'assets/game-icons/meteor.svg'],
-    [{ src: 'assets/game-icons/portal.svg',      width: 24, height: 24, alt: '\u30dd\u30fc\u30bf\u30eb' },       'assets/game-icons/portal.svg'],
-    [{ src: 'assets/game-icons/crate.svg',       width: 24, height: 24, alt: '\u6728\u7bb1' },                  'assets/game-icons/crate.svg'],
+    ['\u30d7\u30ec\u30a4\u30e4\u30fc',  'assets/game-icons/player_ship.svg'],
+    ['\u30ed\u30b1\u30c3\u30c8',    'assets/game-icons/rocket.svg'],
+    ['\u6575\uff08\u866b\uff09',    'assets/game-icons/enemy_bug.svg'],
+    ['\u30b3\u30a4\u30f3',      'assets/game-icons/coin.svg'],
+    ['\u30b8\u30a7\u30e0',      'assets/game-icons/gem.svg'],
+    ['\u30b9\u30bf\u30fc',      'assets/game-icons/star.svg'],
+    ['\u30cf\u30fc\u30c8',      'assets/game-icons/heart.svg'],
+    ['\u5f3e',          'assets/game-icons/bullet.svg'],
+    ['\u30a8\u30ca\u30b8\u30fc',    'assets/game-icons/energy.svg'],
+    ['\u30b7\u30fc\u30eb\u30c9',    'assets/game-icons/shield.svg'],
+    ['\u30c8\u30b2',        'assets/game-icons/spike.svg'],
+    ['\u30e1\u30c6\u30aa',      'assets/game-icons/meteor.svg'],
+    ['\u30dd\u30fc\u30bf\u30eb',    'assets/game-icons/portal.svg'],
+    ['\u6728\u7bb1',        'assets/game-icons/crate.svg'],
   ];
 
   Blockly.Blocks['game_image_preset'] = {

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_biggest">biggest</variable>
+  </variables>
+  <block type="py_def_args3" id="b1" x="30" y="30">
+    <field name="NAME">max3</field>
+    <field name="PARAM1">a</field>
+    <field name="PARAM2">b</field>
+    <field name="PARAM3">c</field>
+    <statement name="BODY">
+      <block type="var_set" id="b2">
+        <field name="VAR" id="var_biggest">biggest</field>
+        <value name="VALUE"><block type="py_custom_expr" id="b3"><field name="CODE">a</field></block></value>
+        <next>
+          <block type="pico_if" id="b4">
+            <value name="IF0">
+              <block type="cond_compare" id="b5">
+                <field name="OP">&gt;</field>
+                <value name="LEFT"><block type="py_custom_expr" id="b6"><field name="CODE">b</field></block></value>
+                <value name="RIGHT"><block type="val_var" id="b7"><field name="VAR" id="var_biggest">biggest</field></block></value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="var_set" id="b8">
+                <field name="VAR" id="var_biggest">biggest</field>
+                <value name="VALUE"><block type="py_custom_expr" id="b9"><field name="CODE">b</field></block></value>
+              </block>
+            </statement>
+            <next>
+              <block type="pico_if" id="b10">
+                <value name="IF0">
+                  <block type="cond_compare" id="b11">
+                    <field name="OP">&gt;</field>
+                    <value name="LEFT"><block type="py_custom_expr" id="b12"><field name="CODE">c</field></block></value>
+                    <value name="RIGHT"><block type="val_var" id="b13"><field name="VAR" id="var_biggest">biggest</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="var_set" id="b14">
+                    <field name="VAR" id="var_biggest">biggest</field>
+                    <value name="VALUE"><block type="py_custom_expr" id="b15"><field name="CODE">c</field></block></value>
+                  </block>
+                </statement>
+                <next>
+                  <block type="py_return" id="b16">
+                    <value name="VALUE"><block type="val_var" id="b17"><field name="VAR" id="var_biggest">biggest</field></block></value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="py_print" id="b18">
+        <value name="VALUE">
+          <block type="py_call_val" id="b19">
+            <field name="NAME">max3</field>
+            <value name="ARG"><block type="py_custom_expr" id="b20"><field name="CODE">12, 5, 20</field></block></value>
+          </block>
+        </value>
+      </block>
+    </next>
+  </block>
+</xml>

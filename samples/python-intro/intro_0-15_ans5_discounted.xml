@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_def_args2" id="b1" x="30" y="30">
+    <field name="NAME">discounted</field>
+    <field name="PARAM1">price</field>
+    <field name="PARAM2">rate</field>
+    <statement name="BODY">
+      <block type="py_return" id="b2">
+        <value name="VALUE">
+          <block type="py_custom_expr" id="b3"><field name="CODE">int(price * (1 - rate))</field></block>
+        </value>
+      </block>
+    </statement>
+    <next>
+      <block type="py_print" id="b4">
+        <value name="VALUE">
+          <block type="py_call_val" id="b5">
+            <field name="NAME">discounted</field>
+            <value name="ARG"><block type="py_custom_expr" id="b6"><field name="CODE">2000, 0.15</field></block></value>
+          </block>
+        </value>
+      </block>
+    </next>
+  </block>
+</xml>
