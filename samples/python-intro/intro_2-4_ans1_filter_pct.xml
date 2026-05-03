@@ -42,33 +42,45 @@
         <next>
           <block type="py_print" id="b10">
             <value name="VALUE">
-              <block type="py_list_len" id="b11">
-                <value name="LIST"><block type="val_var" id="b12"><field name="VAR" id="var_high">high</field></block></value>
+              <block type="py_fstring" id="b10f">
+                <field name="PRE">80点以上の人数: </field>
+                <value name="VAR">
+                  <block type="py_list_len" id="b11">
+                    <value name="LIST"><block type="val_var" id="b12"><field name="VAR" id="var_high">high</field></block></value>
+                  </block>
+                </value>
+                <field name="POST"></field>
               </block>
             </value>
             <next>
               <block type="py_print" id="b13">
                 <value name="VALUE">
-                  <block type="py_math_op" id="b14">
-                    <field name="OP">*</field>
-                    <value name="LEFT">
-                      <block type="py_math_op" id="b15">
-                        <field name="OP">/</field>
+                  <block type="py_fstring" id="b13f">
+                    <field name="PRE">割合: </field>
+                    <value name="VAR">
+                      <block type="py_math_op" id="b14">
+                        <field name="OP">*</field>
                         <value name="LEFT">
-                          <block type="py_list_len" id="b16">
-                            <value name="LIST"><block type="val_var" id="b17"><field name="VAR" id="var_high">high</field></block></value>
+                          <block type="py_math_op" id="b15">
+                            <field name="OP">/</field>
+                            <value name="LEFT">
+                              <block type="py_list_len" id="b16">
+                                <value name="LIST"><block type="val_var" id="b17"><field name="VAR" id="var_high">high</field></block></value>
+                              </block>
+                            </value>
+                            <value name="RIGHT">
+                              <block type="py_list_len" id="b18">
+                                <value name="LIST"><block type="val_var" id="b19"><field name="VAR" id="var_scores">scores</field></block></value>
+                              </block>
+                            </value>
                           </block>
                         </value>
                         <value name="RIGHT">
-                          <block type="py_list_len" id="b18">
-                            <value name="LIST"><block type="val_var" id="b19"><field name="VAR" id="var_scores">scores</field></block></value>
-                          </block>
+                          <block type="val_number" id="b20"><field name="NUM">100</field></block>
                         </value>
                       </block>
                     </value>
-                    <value name="RIGHT">
-                      <block type="val_number" id="b20"><field name="NUM">100</field></block>
-                    </value>
+                    <field name="POST"> %</field>
                   </block>
                 </value>
               </block>

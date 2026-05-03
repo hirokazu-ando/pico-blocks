@@ -45,11 +45,23 @@
                   </block>
                 </value>
                 <next>
-                  <block type="py_custom_stmt" id="b9">
-                    <field name="CODE">print("平均:", avg)</field>
+                  <block type="py_print" id="b9">
+                    <value name="VALUE">
+                      <block type="py_fstring" id="b9f">
+                        <field name="PRE">平均: </field>
+                        <value name="VAR"><block type="val_var" id="b9v"><field name="VAR" id="var_avg">avg</field></block></value>
+                        <field name="POST"></field>
+                      </block>
+                    </value>
                     <next>
-                      <block type="py_custom_stmt" id="b10">
-                        <field name="CODE">print("中央値:", median)</field>
+                      <block type="py_print" id="b10">
+                        <value name="VALUE">
+                          <block type="py_fstring" id="b10f">
+                            <field name="PRE">中央値: </field>
+                            <value name="VAR"><block type="val_var" id="b10v"><field name="VAR" id="var_median">median</field></block></value>
+                            <field name="POST"></field>
+                          </block>
+                        </value>
                       </block>
                     </next>
                   </block>
