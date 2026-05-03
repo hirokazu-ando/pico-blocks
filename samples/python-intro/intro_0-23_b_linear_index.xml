@@ -49,8 +49,7 @@
                       </block>
                     </statement>
                     <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">data.pop()</field>
+                      <block type="py_list_pop"><field name="LIST" id="var_data">data</field>
                         <next>
                           <block type="controls_if">
                             <value name="IF0">

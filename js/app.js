@@ -485,6 +485,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_set_op':       return `セット「${getVarName(block, 'SET_A')}」${block.getFieldValue('OP')}「${getVarName(block, 'SET_B')}」`;
       case 'py_sorted_set':   return `リスト「${getVarName(block, 'LIST')}」の重複を除いて昇順に並べる`;
       case 'py_fstring2':     return `"${block.getFieldValue('PRE')}{${getVarName(block, 'VAR1')}}${block.getFieldValue('MID')}{${getVarName(block, 'VAR2')}}${block.getFieldValue('POST')}"`;
+      case 'py_list_pop':     return `リスト「${getVarName(block, 'LIST')}」の末尾を取り出す（pop）`;
       case 'py_enumerate_start_for': return `リスト「${getVarName(block, 'LIST')}」を番号（${block.getFieldValue('START')}から）付きで繰り返す`;
       case 'py_map_call':      return `リスト「${getVarName(block, 'LIST')}」を一括変換（map）`;
       case 'py_break':         return 'ループを抜ける（break）';
@@ -864,6 +865,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const f2V2   = getVarName(block, 'VAR2');
         const f2Post = block.getFieldValue('POST') || '';
         return `f"${f2Pre}{${f2V1}}${f2Mid}{${f2V2}}${f2Post}"`;
+      }
+      case 'py_list_pop': {
+        return `${getVarName(block, 'LIST')}.pop()`;
       }
       case 'py_map_call': {
         const mapList = getVarName(block, 'LIST');
