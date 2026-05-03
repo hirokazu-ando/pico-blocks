@@ -11,7 +11,7 @@
       <block type="py_list_comp" id="b2">
         <value name="EXPR">
           <block type="py_math_op" id="b3">
-            <field name="OP">Pow</field>
+            <field name="OP">**</field>
             <value name="LEFT"><block type="val_var" id="b4"><field name="VAR" id="var_x">x</field></block></value>
             <value name="RIGHT"><block type="val_number" id="b5"><field name="NUM">2</field></block></value>
           </block>

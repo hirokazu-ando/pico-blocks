@@ -13,10 +13,10 @@
         <value name="LIST"><block type="val_var" id="b4"><field name="VAR" id="var_nums">nums</field></block></value>
         <value name="COND">
           <block type="cond_compare" id="b5">
-            <field name="OP">Eq</field>
+            <field name="OP">==</field>
             <value name="LEFT">
               <block type="py_math_op" id="b6">
-                <field name="OP">Mod</field>
+                <field name="OP">%</field>
                 <value name="LEFT"><block type="val_var" id="b7"><field name="VAR" id="var_x">x</field></block></value>
                 <value name="RIGHT"><block type="val_number" id="b8"><field name="NUM">2</field></block></value>
               </block>

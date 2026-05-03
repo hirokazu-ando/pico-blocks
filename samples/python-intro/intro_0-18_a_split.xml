@@ -1,27 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable id="var_words">words</variable>
+    <variable id="vt">text</variable>
+    <variable id="vw">words</variable>
   </variables>
-  <block type="var_set" id="b1" x="30" y="30">
-    <field name="VAR" id="var_words">words</field>
-    <value name="VALUE">
-      <block type="py_call_val" id="b2">
-        <field name="METHOD">split</field>
-        <value name="OBJECT">
-          <block type="val_str" id="b3"><field name="TEXT">apple,banana,cherry</field></block>
-        </value>
-        <value name="ARG0">
-          <block type="val_str" id="b4"><field name="TEXT">,</field></block>
-        </value>
-      </block>
-    </value>
-    <next>
-      <block type="py_print" id="b5">
-        <value name="VALUE">
-          <block type="val_var" id="b6"><field name="VAR" id="var_words">words</field></block>
-        </value>
-      </block>
-    </next>
-  </block>
+  <block type="var_set"><field name="VAR" id="vt">text</field><value name="VALUE"><block type="val_str"><field name="TEXT">apple,banana,cherry</field></block></value><next><block type="var_set"><field name="VAR" id="vw">words</field><value name="VALUE"><block type="py_str_split"><field name="VAR" id="vt">text</field><field name="SEP">,</field></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vw">words</field></block></value></block></next></block></next></block>
 </xml>
