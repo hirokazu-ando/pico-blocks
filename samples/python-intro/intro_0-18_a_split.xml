@@ -3,6 +3,48 @@
   <variables>
     <variable id="vt">text</variable>
     <variable id="vw">words</variable>
+    <variable id="vs">sentence</variable>
+    <variable id="vp">parts</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vt">text</field><value name="VALUE"><block type="val_str"><field name="TEXT">apple,banana,cherry</field></block></value><next><block type="var_set"><field name="VAR" id="vw">words</field><value name="VALUE"><block type="py_str_split"><field name="VAR" id="vt">text</field><field name="SEP">,</field></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vw">words</field></block></value></block></next></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vt">text</field>
+    <value name="VALUE"><block type="val_str"><field name="TEXT">apple,banana,cherry</field></block></value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vw">words</field>
+        <value name="VALUE"><block type="py_str_split"><field name="VAR" id="vt">text</field><field name="SEP">,</field></block></value>
+        <next>
+          <block type="py_print">
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="vw">words</field></block></value>
+            <next>
+              <block type="py_print">
+                <value name="VALUE">
+                  <block type="py_custom_expr">
+                    <field name="CODE">words[1]</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="var_set">
+                    <field name="VAR" id="vs">sentence</field>
+                    <value name="VALUE"><block type="val_str"><field name="TEXT">one two three</field></block></value>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="vp">parts</field>
+                        <value name="VALUE"><block type="py_str_split"><field name="VAR" id="vs">sentence</field><field name="SEP"></field></block></value>
+                        <next>
+                          <block type="py_print">
+                            <value name="VALUE"><block type="val_var"><field name="VAR" id="vp">parts</field></block></value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

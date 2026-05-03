@@ -3,6 +3,39 @@
   <variables>
     <variable id="vc">colors</variable>
     <variable id="vr">result</variable>
+    <variable id="vn">nums</variable>
+    <variable id="vcl">csv_line</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vc">colors</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["赤", "青", "緑"]</field></block></value><next><block type="var_set"><field name="VAR" id="vr">result</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">" - ".join(colors)</field></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vr">result</field></block></value></block></next></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vc">colors</field>
+    <value name="VALUE"><block type="py_custom_expr"><field name="CODE">["赤", "青", "緑"]</field></block></value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vr">result</field>
+        <value name="VALUE"><block type="py_custom_expr"><field name="CODE">" - ".join(colors)</field></block></value>
+        <next>
+          <block type="py_print">
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="vr">result</field></block></value>
+            <next>
+              <block type="var_set">
+                <field name="VAR" id="vn">nums</field>
+                <value name="VALUE"><block type="py_custom_expr"><field name="CODE">["10", "20", "30"]</field></block></value>
+                <next>
+                  <block type="var_set">
+                    <field name="VAR" id="vcl">csv_line</field>
+                    <value name="VALUE"><block type="py_custom_expr"><field name="CODE">",".join(nums)</field></block></value>
+                    <next>
+                      <block type="py_print">
+                        <value name="VALUE"><block type="val_var"><field name="VAR" id="vcl">csv_line</field></block></value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>
