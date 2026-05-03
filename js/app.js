@@ -474,6 +474,10 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_str_strip':     return `文字列「${getVarName(block, 'VAR')}」の前後の空白を取り除く`;
       case 'py_str_replace':   return `文字列「${getVarName(block, 'VAR')}」の文字を置換`;
       case 'py_str_find':      return `文字列「${getVarName(block, 'VAR')}」の中で検索`;
+      case 'py_str_join':      return `文字列「${block.getFieldValue('SEP')}」でリスト「${getVarName(block, 'LIST')}」を結合`;
+      case 'py_str_lstrip':    return `文字列「${getVarName(block, 'VAR')}」の左端の空白を取り除く`;
+      case 'py_str_rstrip':    return `文字列「${getVarName(block, 'VAR')}」の右端の空白を取り除く`;
+      case 'py_str_find_from': return `文字列「${getVarName(block, 'VAR')}」の中で「${block.getFieldValue('SUB')}」を${block.getFieldValue('START')}文字目から探す`;
       case 'py_enumerate_start_for': return `リスト「${getVarName(block, 'LIST')}」を番号（${block.getFieldValue('START')}から）付きで繰り返す`;
       case 'py_map_call':      return `リスト「${getVarName(block, 'LIST')}」を一括変換（map）`;
       case 'py_break':         return 'ループを抜ける（break）';
@@ -805,6 +809,23 @@ document.addEventListener('DOMContentLoaded', function() {
         const strFindVar = getVarName(block, 'VAR');
         const strFindSub = block.getFieldValue('SUB') || '';
         return `${strFindVar}.find(${JSON.stringify(strFindSub)})`;
+      }
+      case 'py_str_join': {
+        const joinSep = block.getFieldValue('SEP') || '';
+        const joinList = getVarName(block, 'LIST');
+        return `${JSON.stringify(joinSep)}.join(${joinList})`;
+      }
+      case 'py_str_lstrip': {
+        return `${getVarName(block, 'VAR')}.lstrip()`;
+      }
+      case 'py_str_rstrip': {
+        return `${getVarName(block, 'VAR')}.rstrip()`;
+      }
+      case 'py_str_find_from': {
+        const findFromVar = getVarName(block, 'VAR');
+        const findFromSub = block.getFieldValue('SUB') || '';
+        const findFromStart = block.getFieldValue('START') || 0;
+        return `${findFromVar}.find(${JSON.stringify(findFromSub)}, ${findFromStart})`;
       }
       case 'py_map_call': {
         const mapList = getVarName(block, 'LIST');

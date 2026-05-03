@@ -1267,6 +1267,71 @@ Blockly.Blocks['py_map_call'] = {
 };
 
 // =====================================================
+// 0-18: 追加文字列メソッド（join / lstrip / rstrip / find_from）
+// =====================================================
+
+Blockly.Blocks['py_str_join'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('文字列')
+      .appendField(new Blockly.FieldTextInput(','), 'SEP')
+      .appendField('でリスト')
+      .appendField(new Blockly.FieldVariable('my_list'), 'LIST')
+      .appendField('を結合');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.math);
+    this.setTooltip('区切り文字でリストの要素を結合して文字列にします（sep.join(list)）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_str_lstrip'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('文字列')
+      .appendField(new Blockly.FieldVariable('text'), 'VAR')
+      .appendField('の左端の空白を取り除く');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.math);
+    this.setTooltip('文字列の左端（先頭）の空白を取り除きます（str.lstrip()）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_str_rstrip'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('文字列')
+      .appendField(new Blockly.FieldVariable('text'), 'VAR')
+      .appendField('の右端の空白を取り除く');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.math);
+    this.setTooltip('文字列の右端（末尾）の空白を取り除きます（str.rstrip()）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_str_find_from'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('文字列')
+      .appendField(new Blockly.FieldVariable('text'), 'VAR')
+      .appendField('の中で')
+      .appendField(new Blockly.FieldTextInput('keyword'), 'SUB')
+      .appendField('を')
+      .appendField(new Blockly.FieldNumber(1, 0, 1000), 'START')
+      .appendField('文字目から探す');
+    this.setOutput(true, null);
+    this.setColour(P.math);
+    this.setTooltip('指定した位置から文字列を検索します（str.find(sub, start)）');
+    this.setHelpUrl('');
+  }
+};
+
+// =====================================================
 // リストリテラル（＋／－ボタンで要素を増減）
 // =====================================================
 const _LIST_PLUS = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(

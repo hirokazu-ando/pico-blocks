@@ -25,8 +25,10 @@
               <block type="var_set">
                 <field name="VAR" id="vpos2">pos2</field>
                 <value name="VALUE">
-                  <block type="py_custom_expr">
-                    <field name="CODE">text.find("Python", 1)</field>
+                  <block type="py_str_find_from">
+                    <field name="VAR" id="vtext">text</field>
+                    <field name="SUB">Python</field>
+                    <field name="START">1</field>
                   </block>
                 </value>
                 <next>

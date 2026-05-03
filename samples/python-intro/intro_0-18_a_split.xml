@@ -19,8 +19,9 @@
             <next>
               <block type="py_print">
                 <value name="VALUE">
-                  <block type="py_custom_expr">
-                    <field name="CODE">words[1]</field>
+                  <block type="py_list_get">
+                    <field name="LIST" id="vw">words</field>
+                    <value name="INDEX"><block type="val_number"><field name="NUM">1</field></block></value>
                   </block>
                 </value>
                 <next>

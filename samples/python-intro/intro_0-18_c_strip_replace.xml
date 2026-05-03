@@ -4,6 +4,7 @@
     <variable id="vrw">raw</variable>
     <variable id="vs">s</variable>
     <variable id="vns">new_s</variable>
+    <variable id="vhi">hi</variable>
   </variables>
   <block type="var_set" x="30" y="30">
     <field name="VAR" id="vrw">raw</field>
@@ -23,11 +24,17 @@
                   <block type="py_print">
                     <value name="VALUE"><block type="val_var"><field name="VAR" id="vns">new_s</field></block></value>
                     <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">print("  hi  ".lstrip())</field>
+                      <block type="var_set">
+                        <field name="VAR" id="vhi">hi</field>
+                        <value name="VALUE"><block type="val_str"><field name="TEXT">  hi  </field></block></value>
                         <next>
-                          <block type="py_custom_stmt">
-                            <field name="CODE">print("  hi  ".rstrip())</field>
+                          <block type="py_print">
+                            <value name="VALUE"><block type="py_str_lstrip"><field name="VAR" id="vhi">hi</field></block></value>
+                            <next>
+                              <block type="py_print">
+                                <value name="VALUE"><block type="py_str_rstrip"><field name="VAR" id="vhi">hi</field></block></value>
+                              </block>
+                            </next>
                           </block>
                         </next>
                       </block>

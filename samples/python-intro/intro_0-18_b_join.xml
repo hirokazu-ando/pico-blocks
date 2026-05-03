@@ -19,7 +19,7 @@
     <next>
       <block type="var_set">
         <field name="VAR" id="vr">result</field>
-        <value name="VALUE"><block type="py_custom_expr"><field name="CODE">" - ".join(colors)</field></block></value>
+        <value name="VALUE"><block type="py_str_join"><field name="SEP"> - </field><field name="LIST" id="vc">colors</field></block></value>
         <next>
           <block type="py_print">
             <value name="VALUE"><block type="val_var"><field name="VAR" id="vr">result</field></block></value>
@@ -37,7 +37,7 @@
                 <next>
                   <block type="var_set">
                     <field name="VAR" id="vcl">csv_line</field>
-                    <value name="VALUE"><block type="py_custom_expr"><field name="CODE">",".join(nums)</field></block></value>
+                    <value name="VALUE"><block type="py_str_join"><field name="SEP">,</field><field name="LIST" id="vn">nums</field></block></value>
                     <next>
                       <block type="py_print">
                         <value name="VALUE"><block type="val_var"><field name="VAR" id="vcl">csv_line</field></block></value>
