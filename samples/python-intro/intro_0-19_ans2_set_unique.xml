@@ -2,8 +2,7 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="vn">nums</variable>
-    <variable id="vns">nums_set</variable>
     <variable id="vu">unique_sorted</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vn">nums</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[3, 1, 4, 1, 5, 9, 2, 6, 5, 3]</field></block></value><next><block type="var_set"><field name="VAR" id="vns">nums_set</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">set(nums)</field></block></value><next><block type="var_set"><field name="VAR" id="vu">unique_sorted</field><value name="VALUE"><block type="py_sorted_call"><field name="LIST" id="vns">nums_set</field><field name="REVERSE">False</field></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vu">unique_sorted</field></block></value></block></next></block></next></block></next></block>
+  <block type="var_set"><field name="VAR" id="vn">nums</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[3, 1, 4, 1, 5, 9, 2, 6, 5, 3]</field></block></value><next><block type="var_set"><field name="VAR" id="vu">unique_sorted</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">sorted(set(nums))</field></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vu">unique_sorted</field></block></value></block></next></block></next></block>
 </xml>
