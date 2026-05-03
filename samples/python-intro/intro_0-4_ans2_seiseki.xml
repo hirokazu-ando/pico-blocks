@@ -72,13 +72,23 @@
                                   </block>
                                 </value>
                                 <next>
-                                  <block type="print_var_label" id="b26">
-                                    <field name="LABEL">合計: </field>
-                                    <field name="VAR" id="var_total">total</field>
+                                  <block type="py_print" id="b26">
+                                    <value name="VALUE">
+                                      <block type="py_fstring" id="b26f">
+                                        <field name="PRE">合計：</field>
+                                        <value name="VAR"><block type="val_var" id="b26v"><field name="VAR" id="var_total">total</field></block></value>
+                                        <field name="POST">点</field>
+                                      </block>
+                                    </value>
                                     <next>
-                                      <block type="print_var_label" id="b27">
-                                        <field name="LABEL">平均: </field>
-                                        <field name="VAR" id="var_avg">average</field>
+                                      <block type="py_print" id="b27">
+                                        <value name="VALUE">
+                                          <block type="py_fstring" id="b27f">
+                                            <field name="PRE">平均：</field>
+                                            <value name="VAR"><block type="val_var" id="b27v"><field name="VAR" id="var_avg">average</field></block></value>
+                                            <field name="POST">点</field>
+                                          </block>
+                                        </value>
                                       </block>
                                     </next>
                                   </block>
