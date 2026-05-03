@@ -23,14 +23,12 @@
         <statement name="DO">
           <block type="py_print">
             <value name="VALUE">
-              <block type="py_str_concat">
-                <value name="A">
-                  <block type="py_str_concat">
-                    <value name="A"><block type="val_var"><field name="VAR" id="var_i">i</field></block></value>
-                    <value name="B"><block type="val_str"><field name="TEXT">: </field></block></value>
-                  </block>
-                </value>
-                <value name="B"><block type="val_var"><field name="VAR" id="var_f">f</field></block></value>
+              <block type="py_fstring2">
+                <field name="PRE"></field>
+                <field name="VAR1" id="var_i">i</field>
+                <field name="MID">: </field>
+                <field name="VAR2" id="var_f">f</field>
+                <field name="POST"></field>
               </block>
             </value>
           </block>
