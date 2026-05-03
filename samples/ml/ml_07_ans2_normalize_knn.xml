@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_X">X</variable>
+    <variable id="var_y">y</variable>
+    <variable id="var_Xn">X_norm</variable>
+    <variable id="var_clf">clf</variable>
+    <variable id="var_X_tr">X_tr</variable>
+    <variable id="var_X_te">X_te</variable>
+    <variable id="var_y_tr">y_tr</variable>
+    <variable id="var_y_te">y_te</variable>
+    <variable id="var_pred">pred</variable>
+  </variables>
+  <block type="ml_import" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_X">X</field>
+        <value name="VALUE"><block type="py_custom_expr" id="bx"><field name="CODE">[[160,55,20],[175,70,22],[155,48,18],[185,80,25],[165,60,21]]</field></block></value>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_y">y</field>
+            <value name="VALUE"><block type="py_custom_expr" id="by"><field name="CODE">['A','B','A','B','A']</field></block></value>
+            <next>
+              <block type="var_set" id="b3">
+                <field name="VAR" id="var_Xn">X_norm</field>
+                <value name="VALUE">
+                  <block type="py_call_val" id="b_norm">
+                    <field name="NAME">pyco_ml.normalize</field>
+                    <value name="ARG"><block type="val_var" id="bvX"><field name="VAR" id="var_X">X</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="ml_split" id="b4">
+                    <field name="X_TR" id="var_X_tr">X_tr</field>
+                    <field name="X_TE" id="var_X_te">X_te</field>
+                    <field name="Y_TR" id="var_y_tr">y_tr</field>
+                    <field name="Y_TE" id="var_y_te">y_te</field>
+                    <value name="X"><block type="val_var" id="bvXn"><field name="VAR" id="var_Xn">X_norm</field></block></value>
+                    <value name="Y"><block type="val_var" id="bvy"><field name="VAR" id="var_y">y</field></block></value>
+                    <field name="RATIO">0.2</field>
+                    <next>
+                      <block type="ml_knn" id="b5">
+                        <field name="VAR" id="var_clf">clf</field>
+                        <field name="K">3</field>
+                        <next>
+                          <block type="ml_fit" id="b6">
+                            <value name="MODEL"><block type="val_var" id="bv1"><field name="VAR" id="var_clf">clf</field></block></value>
+                            <value name="X_TRAIN"><block type="val_var" id="bv2"><field name="VAR" id="var_X_tr">X_tr</field></block></value>
+                            <value name="Y_TRAIN"><block type="val_var" id="bv3"><field name="VAR" id="var_y_tr">y_tr</field></block></value>
+                            <next>
+                              <block type="ml_predict_stmt" id="b7">
+                                <field name="VAR" id="var_pred">pred</field>
+                                <value name="MODEL"><block type="val_var" id="bv4"><field name="VAR" id="var_clf">clf</field></block></value>
+                                <value name="X_TEST"><block type="val_var" id="bv5"><field name="VAR" id="var_X_te">X_te</field></block></value>
+                                <next>
+                                  <block type="py_print" id="b8">
+                                    <value name="VALUE"><block type="val_var" id="bv6"><field name="VAR" id="var_pred">pred</field></block></value>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

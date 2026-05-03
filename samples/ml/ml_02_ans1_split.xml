@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_X_tr">X_tr</variable>
+    <variable id="var_X_te">X_te</variable>
+    <variable id="var_y_tr">y_tr</variable>
+    <variable id="var_y_te">y_te</variable>
+  </variables>
+  <block type="ml_import" id="b0" x="30" y="30">
+    <next>
+      <block type="ml_split" id="b1">
+        <field name="X_TR" id="var_X_tr">X_tr</field>
+        <field name="X_TE" id="var_X_te">X_te</field>
+        <field name="Y_TR" id="var_y_tr">y_tr</field>
+        <field name="Y_TE" id="var_y_te">y_te</field>
+        <value name="X">
+          <block type="py_custom_expr" id="bx"><field name="CODE">[[1,1],[1,2],[2,3],[3,1],[3,2],[4,3]]</field></block>
+        </value>
+        <value name="Y">
+          <block type="py_custom_expr" id="by"><field name="CODE">['A','A','B','A','B','B']</field></block>
+        </value>
+        <field name="RATIO">0.3</field>
+        <next>
+          <block type="py_print" id="b2">
+            <value name="VALUE">
+              <block type="py_call_val" id="b3">
+                <field name="NAME">len</field>
+                <value name="ARG"><block type="val_var" id="bv1"><field name="VAR" id="var_X_tr">X_tr</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print" id="b4">
+                <value name="VALUE">
+                  <block type="py_call_val" id="b5">
+                    <field name="NAME">len</field>
+                    <value name="ARG"><block type="val_var" id="bv2"><field name="VAR" id="var_X_te">X_te</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

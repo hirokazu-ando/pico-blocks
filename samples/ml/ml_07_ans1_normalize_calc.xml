@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_x">x</variable>
+    <variable id="var_xmin">x_min</variable>
+    <variable id="var_xmax">x_max</variable>
+    <variable id="var_n">normalized</variable>
+  </variables>
+  <block type="var_set" id="b0" x="30" y="30">
+    <field name="VAR" id="var_x">x</field>
+    <value name="VALUE"><block type="val_number" id="n0"><field name="NUM">170</field></block></value>
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_xmin">x_min</field>
+        <value name="VALUE"><block type="val_number" id="n1"><field name="NUM">160</field></block></value>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_xmax">x_max</field>
+            <value name="VALUE"><block type="val_number" id="n2"><field name="NUM">180</field></block></value>
+            <next>
+              <block type="var_set" id="b3">
+                <field name="VAR" id="var_n">normalized</field>
+                <value name="VALUE">
+                  <block type="py_math_op" id="b4">
+                    <field name="OP">/</field>
+                    <value name="LEFT">
+                      <block type="py_math_op" id="b5">
+                        <field name="OP">-</field>
+                        <value name="LEFT"><block type="val_var" id="bv1"><field name="VAR" id="var_x">x</field></block></value>
+                        <value name="RIGHT"><block type="val_var" id="bv2"><field name="VAR" id="var_xmin">x_min</field></block></value>
+                      </block>
+                    </value>
+                    <value name="RIGHT">
+                      <block type="py_math_op" id="b6">
+                        <field name="OP">-</field>
+                        <value name="LEFT"><block type="val_var" id="bv3"><field name="VAR" id="var_xmax">x_max</field></block></value>
+                        <value name="RIGHT"><block type="val_var" id="bv4"><field name="VAR" id="var_xmin">x_min</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_print" id="b7">
+                    <value name="VALUE"><block type="val_var" id="bv5"><field name="VAR" id="var_n">normalized</field></block></value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

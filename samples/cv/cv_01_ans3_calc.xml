@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="cv_import" id="b0" x="30" y="30">
+    <next>
+      <block type="py_print" id="b1">
+        <value name="VALUE">
+          <block type="py_math_op" id="b2">
+            <field name="OP">*</field>
+            <value name="LEFT"><block type="val_number" id="n1"><field name="NUM">200</field></block></value>
+            <value name="RIGHT"><block type="val_number" id="n2"><field name="NUM">150</field></block></value>
+          </block>
+        </value>
+      </block>
+    </next>
+  </block>
+</xml>
