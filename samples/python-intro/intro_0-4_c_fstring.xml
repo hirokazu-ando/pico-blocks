@@ -23,20 +23,20 @@
           <block type="py_print" id="b5">
             <value name="VALUE">
               <block type="py_fstring" id="b6">
-                <field name="PRE"></field>
+                <field name="PRE">名前：</field>
                 <value name="VAR">
                   <block type="val_var" id="b7">
                     <field name="VAR" id="var_name">name</field>
                   </block>
                 </value>
-                <field name="POST">さんの得点は</field>
+                <field name="POST"></field>
               </block>
             </value>
             <next>
               <block type="py_print" id="b8">
                 <value name="VALUE">
                   <block type="py_fstring" id="b9">
-                    <field name="PRE">得点: </field>
+                    <field name="PRE">得点：</field>
                     <value name="VAR">
                       <block type="val_var" id="b10">
                         <field name="VAR" id="var_score">score</field>
@@ -45,6 +45,19 @@
                     <field name="POST">点</field>
                   </block>
                 </value>
+                <next>
+                  <block type="py_print" id="b11">
+                    <value name="VALUE">
+                      <block type="py_fstring2" id="b12">
+                        <field name="PRE"></field>
+                        <field name="VAR1" id="var_name">name</field>
+                        <field name="MID">さんの得点は</field>
+                        <field name="VAR2" id="var_score">score</field>
+                        <field name="POST">点です。</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
               </block>
             </next>
           </block>

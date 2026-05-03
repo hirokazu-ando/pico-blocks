@@ -3,18 +3,43 @@
   <block type="py_print" id="b1" x="30" y="30">
     <value name="VALUE">
       <block type="py_math_op" id="b2">
-        <value name="LEFT">
-          <block type="val_number" id="b3">
-            <field name="NUM">10</field>
-          </block>
-        </value>
+        <value name="LEFT"><block type="val_number" id="b3"><field name="NUM">10</field></block></value>
         <field name="OP">+</field>
-        <value name="RIGHT">
-          <block type="val_number" id="b4">
-            <field name="NUM">3</field>
-          </block>
-        </value>
+        <value name="RIGHT"><block type="val_number" id="b4"><field name="NUM">3</field></block></value>
       </block>
     </value>
+    <next>
+      <block type="py_print" id="b5">
+        <value name="VALUE">
+          <block type="py_math_op" id="b6">
+            <value name="LEFT"><block type="val_number" id="b7"><field name="NUM">10</field></block></value>
+            <field name="OP">-</field>
+            <value name="RIGHT"><block type="val_number" id="b8"><field name="NUM">3</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print" id="b9">
+            <value name="VALUE">
+              <block type="py_math_op" id="b10">
+                <value name="LEFT"><block type="val_number" id="b11"><field name="NUM">10</field></block></value>
+                <field name="OP">*</field>
+                <value name="RIGHT"><block type="val_number" id="b12"><field name="NUM">3</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print" id="b13">
+                <value name="VALUE">
+                  <block type="py_math_op" id="b14">
+                    <value name="LEFT"><block type="val_number" id="b15"><field name="NUM">10</field></block></value>
+                    <field name="OP">/</field>
+                    <value name="RIGHT"><block type="val_number" id="b16"><field name="NUM">3</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
   </block>
 </xml>
