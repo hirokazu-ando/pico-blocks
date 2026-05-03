@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable id="va">animals</variable>
+    <variable id="van">animals</variable>
+    <variable id="vln">long_names</variable>
+    <variable id="va">a</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="va">animals</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["cat", "elephant", "ox", "giraffe", "ant", "hippopotamus"]</field></block></value><next><block type="py_custom_stmt"><field name="CODE">long_names = [a for a in animals if len(a) &gt;= 5]</field><next><block type="py_custom_stmt"><field name="CODE">print(long_names)</field></block></next></block></next></block>
+  <block type="var_set"><field name="VAR" id="van">animals</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["cat", "elephant", "ox", "giraffe", "ant", "hippopotamus"]</field></block></value><next><block type="var_set"><field name="VAR" id="vln">long_names</field><value name="VALUE"><block type="py_list_comp_if"><field name="VAR" id="va">a</field><value name="EXPR"><block type="val_var"><field name="VAR" id="va">a</field></block></value><value name="LIST"><block type="val_var"><field name="VAR" id="van">animals</field></block></value><value name="COND"><block type="py_custom_expr"><field name="CODE">len(a) &gt;= 5</field></block></value></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vln">long_names</field></block></value></block></next></block></next></block>
 </xml>

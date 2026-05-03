@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <variables>
-    <variable id="vf">filename</variable>
-  </variables>
-  <block type="var_set"><field name="VAR" id="vf">filename</field><value name="VALUE"><block type="val_str"><field name="TEXT">sample.txt</field></block></value><next><block type="py_custom_stmt"><field name="CODE">try:</field><next><block type="py_custom_stmt"><field name="CODE">    with open(filename, "r", encoding="utf-8") as f:</field><next><block type="py_custom_stmt"><field name="CODE">        lines = f.readlines()</field><next><block type="py_custom_stmt"><field name="CODE">    print(f"行数: {len(lines)}")</field><next><block type="py_custom_stmt"><field name="CODE">except FileNotFoundError:</field><next><block type="py_custom_stmt"><field name="CODE">    print("ファイルが見つかりません")</field></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <block type="py_try_except"><field name="ETYPE">FileNotFoundError</field><statement name="BODY"><block type="py_file_readlines"><field name="FILENAME">sample.txt</field><field name="VAR">lines</field><next><block type="py_print"><value name="VALUE"><block type="py_fstring"><field name="PRE">行数: </field><value name="VAR"><block type="py_custom_expr"><field name="CODE">len(lines)</field></block></value><field name="POST"></field></block></value></block></next></block></statement><statement name="HANDLER"><block type="py_print"><value name="VALUE"><block type="val_str"><field name="TEXT">ファイルが見つかりません</field></block></value></block></statement></block>
 </xml>

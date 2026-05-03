@@ -3,6 +3,7 @@
   <variables>
     <variable id="va">class_a</variable>
     <variable id="vb">class_b</variable>
+    <variable id="vc">common</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="va">class_a</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["田中", "鈴木", "山田", "佐藤"]</field></block></value><next><block type="var_set"><field name="VAR" id="vb">class_b</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["山田", "伊藤", "田中", "中村"]</field></block></value><next><block type="py_custom_stmt"><field name="CODE">common = set(class_a) &amp; set(class_b)</field><next><block type="py_custom_stmt"><field name="CODE">print("両クラスにいる生徒:", common)</field></block></next></block></next></block></next></block>
+  <block type="var_set"><field name="VAR" id="va">class_a</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["田中", "鈴木", "山田", "佐藤"]</field></block></value><next><block type="var_set"><field name="VAR" id="vb">class_b</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["山田", "伊藤", "田中", "中村"]</field></block></value><next><block type="var_set"><field name="VAR" id="vc">common</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">set(class_a) &amp; set(class_b)</field></block></value><next><block type="py_print"><value name="VALUE"><block type="py_fstring"><field name="PRE">両クラスにいる生徒: </field><value name="VAR"><block type="val_var"><field name="VAR" id="vc">common</field></block></value><field name="POST"></field></block></value></block></next></block></next></block></next></block>
 </xml>

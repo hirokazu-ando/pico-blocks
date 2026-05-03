@@ -2,7 +2,9 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="vr">raw</variable>
+    <variable id="vp">parts</variable>
     <variable id="vc">cleaned</variable>
+    <variable id="vpi">p</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vr">raw</field><value name="VALUE"><block type="val_str"><field name="TEXT">  Python  ,  Java  ,  C++  </field></block></value><next><block type="py_custom_stmt"><field name="CODE">parts = raw.split(",")</field><next><block type="var_set"><field name="VAR" id="vc">cleaned</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[]</field></block></value><next><block type="py_custom_stmt"><field name="CODE">for p in parts:</field><next><block type="py_custom_stmt"><field name="CODE">    cleaned.append(p.strip())</field><next><block type="py_custom_stmt"><field name="CODE">print(cleaned)</field></block></next></block></next></block></next></block></next></block></next></block>
+  <block type="var_set"><field name="VAR" id="vr">raw</field><value name="VALUE"><block type="val_str"><field name="TEXT">  Python  ,  Java  ,  C++  </field></block></value><next><block type="var_set"><field name="VAR" id="vp">parts</field><value name="VALUE"><block type="py_str_split"><field name="VAR" id="vr">raw</field><field name="SEP">,</field></block></value><next><block type="var_set"><field name="VAR" id="vc">cleaned</field><value name="VALUE"><block type="py_list_empty"></block></value><next><block type="py_for_list"><field name="VAR" id="vpi">p</field><field name="LIST" id="vp">parts</field><statement name="DO"><block type="py_list_append"><field name="LIST" id="vc">cleaned</field><value name="VALUE"><block type="py_str_strip"><field name="VAR" id="vpi">p</field></block></value></block></statement><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vc">cleaned</field></block></value></block></next></block></next></block></next></block></next></block>
 </xml>

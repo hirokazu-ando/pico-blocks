@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">multiples_of_3 = [n for n in range(1, 21) if n % 3 == 0]</field><next><block type="py_custom_stmt"><field name="CODE">print(multiples_of_3)</field></block></next></block>
+  <variables>
+    <variable id="vm">multiples_of_3</variable>
+    <variable id="vn">n</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vm">multiples_of_3</field><value name="VALUE"><block type="py_list_comp_if"><field name="VAR" id="vn">n</field><value name="EXPR"><block type="val_var"><field name="VAR" id="vn">n</field></block></value><value name="LIST"><block type="py_custom_expr"><field name="CODE">range(1, 21)</field></block></value><value name="COND"><block type="py_custom_expr"><field name="CODE">n % 3 == 0</field></block></value></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vm">multiples_of_3</field></block></value></block></next></block>
 </xml>

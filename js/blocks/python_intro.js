@@ -1149,4 +1149,121 @@ Blockly.Blocks['py_sum_call'] = {
   }
 };
 
+// =====================================================
+// 0-18: 文字列メソッド
+// =====================================================
+
+Blockly.Blocks['py_str_split'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('文字列')
+      .appendField(new Blockly.FieldVariable('text'), 'VAR')
+      .appendField('を')
+      .appendField(new Blockly.FieldTextInput(','), 'SEP')
+      .appendField('で分割（空欄=空白）');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.math);
+    this.setTooltip('文字列を区切り文字で分割してリストにします（str.split()）。区切り文字を空欄にすると空白で分割します。');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_str_strip'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('文字列')
+      .appendField(new Blockly.FieldVariable('text'), 'VAR')
+      .appendField('の前後の空白を取り除く');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.math);
+    this.setTooltip('文字列の先頭と末尾の空白を取り除きます（str.strip()）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_str_replace'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('文字列')
+      .appendField(new Blockly.FieldVariable('text'), 'VAR')
+      .appendField('の')
+      .appendField(new Blockly.FieldTextInput('old'), 'OLD')
+      .appendField('を')
+      .appendField(new Blockly.FieldTextInput('new'), 'NEW')
+      .appendField('に置換');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.math);
+    this.setTooltip('文字列中の特定の文字列を別の文字列に置き換えます（str.replace()）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_str_find'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('文字列')
+      .appendField(new Blockly.FieldVariable('text'), 'VAR')
+      .appendField('の中で')
+      .appendField(new Blockly.FieldTextInput('keyword'), 'SUB')
+      .appendField('を探す');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.math);
+    this.setTooltip('文字列中で部分文字列を検索し、最初の位置（インデックス）を返します。見つからなければ -1 を返します（str.find()）');
+    this.setHelpUrl('');
+  }
+};
+
+// =====================================================
+// 0-21: 組み込み関数（追加）
+// =====================================================
+
+Blockly.Blocks['py_enumerate_start_for'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('番号（')
+      .appendField(new Blockly.FieldNumber(1, 0, 100), 'START')
+      .appendField('から）')
+      .appendField(new Blockly.FieldVariable('i'), 'IDX')
+      .appendField('と値')
+      .appendField(new Blockly.FieldVariable('v'), 'VAL')
+      .appendField('で');
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('my_list'), 'LIST')
+      .appendField('を順に繰り返す');
+    this.appendStatementInput('DO').setCheck(null);
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('enumerate() で番号と値を同時に取り出します。番号の開始値を指定できます（for i, v in enumerate(list, start=N)）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_map_call'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('my_list'), 'LIST')
+      .appendField('の各要素を')
+      .appendField(new Blockly.FieldDropdown([
+        ['整数（int）',  'int'],
+        ['小数（float）', 'float'],
+        ['文字列（str）', 'str'],
+        ['絶対値（abs）', 'abs'],
+      ]), 'TYPE')
+      .appendField('に変換したリスト');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('リストの全要素を一括変換した新しいリストを返します（list(map(type, list))）');
+    this.setHelpUrl('');
+  }
+};
+
 })();

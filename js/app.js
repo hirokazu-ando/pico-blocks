@@ -469,6 +469,12 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_min_call':       return `リスト「${getVarName(block, 'LIST')}」の最小値`;
       case 'py_max_call':       return `リスト「${getVarName(block, 'LIST')}」の最大値`;
       case 'py_sum_call':       return `リスト「${getVarName(block, 'LIST')}」の合計`;
+      case 'py_str_split':     return `文字列「${getVarName(block, 'VAR')}」を分割`;
+      case 'py_str_strip':     return `文字列「${getVarName(block, 'VAR')}」の前後の空白を取り除く`;
+      case 'py_str_replace':   return `文字列「${getVarName(block, 'VAR')}」の文字を置換`;
+      case 'py_str_find':      return `文字列「${getVarName(block, 'VAR')}」の中で検索`;
+      case 'py_enumerate_start_for': return `リスト「${getVarName(block, 'LIST')}」を番号（${block.getFieldValue('START')}から）付きで繰り返す`;
+      case 'py_map_call':      return `リスト「${getVarName(block, 'LIST')}」を一括変換（map）`;
       case 'py_break':         return 'ループを抜ける（break）';
       case 'py_continue':      return '次のループへ（continue）';
       case 'py_def_noarg':  return `関数「${block.getFieldValue('NAME')}」を定義する`;
@@ -773,6 +779,30 @@ document.addEventListener('DOMContentLoaded', function() {
         return `max(${getVarName(block, 'LIST')})`;
       case 'py_sum_call':
         return `sum(${getVarName(block, 'LIST')})`;
+      case 'py_str_split': {
+        const strSplitVar = getVarName(block, 'VAR');
+        const strSplitSep = block.getFieldValue('SEP') || '';
+        return strSplitSep ? `${strSplitVar}.split(${JSON.stringify(strSplitSep)})` : `${strSplitVar}.split()`;
+      }
+      case 'py_str_strip': {
+        return `${getVarName(block, 'VAR')}.strip()`;
+      }
+      case 'py_str_replace': {
+        const strReplVar = getVarName(block, 'VAR');
+        const strReplOld = block.getFieldValue('OLD') || '';
+        const strReplNew = block.getFieldValue('NEW') || '';
+        return `${strReplVar}.replace(${JSON.stringify(strReplOld)}, ${JSON.stringify(strReplNew)})`;
+      }
+      case 'py_str_find': {
+        const strFindVar = getVarName(block, 'VAR');
+        const strFindSub = block.getFieldValue('SUB') || '';
+        return `${strFindVar}.find(${JSON.stringify(strFindSub)})`;
+      }
+      case 'py_map_call': {
+        const mapList = getVarName(block, 'LIST');
+        const mapType = block.getFieldValue('TYPE') || 'int';
+        return `list(map(${mapType}, ${mapList}))`;
+      }
 
       // ===== Part 2: statistics value ブロック =====
       case 'py_stats_mean':
@@ -1434,6 +1464,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const varName = block.getFieldValue('VAR') || 'lines';
         code = appendLocal(code, indent + `with open("${fname}") as _f:\n`);
         code = appendLocal(code, indent + `    ${varName} = _f.readlines()\n`);
+        break;
+      }
+      case 'py_enumerate_start_for': {
+        const esIdx   = getVarName(block, 'IDX');
+        const esVal   = getVarName(block, 'VAL');
+        const esList  = getVarName(block, 'LIST');
+        const esStart = block.getFieldValue('START') || '0';
+        code = appendLocal(code, indent + `for ${esIdx}, ${esVal} in enumerate(${esList}, start=${esStart}):\n`);
+        const esInner = statementToCode(block, 'DO', indent + '    ');
+        code = appendChildBody(code, esInner, indent + '    pass\n');
         break;
       }
 

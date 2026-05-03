@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">with open("text.txt", "w", encoding="utf-8") as f:</field><next><block type="py_custom_stmt"><field name="CODE">    f.write("the cat sat on the mat the cat\n")</field><next><block type="py_custom_stmt"><field name="CODE">counter = {}</field><next><block type="py_custom_stmt"><field name="CODE">with open("text.txt", "r", encoding="utf-8") as f:</field><next><block type="py_custom_stmt"><field name="CODE">    for word in f.read().split():</field><next><block type="py_custom_stmt"><field name="CODE">        counter[word] = counter.get(word, 0) + 1</field><next><block type="py_custom_stmt"><field name="CODE">print(counter)</field></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <variables>
+    <variable id="vc">counter</variable>
+    <variable id="vw">words</variable>
+    <variable id="vwd">word</variable>
+  </variables>
+  <block type="py_file_write"><field name="FILENAME">text.txt</field><value name="CONTENT"><block type="val_str"><field name="TEXT">the cat sat on the mat the cat\n</field></block></value><next><block type="var_set"><field name="VAR" id="vc">counter</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">{}</field></block></value><next><block type="py_file_read"><field name="FILENAME">text.txt</field><field name="VAR">content</field><next><block type="var_set"><field name="VAR" id="vw">words</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">content.split()</field></block></value><next><block type="py_for_list"><field name="VAR" id="vwd">word</field><field name="LIST" id="vw">words</field><statement name="DO"><block type="py_custom_stmt"><field name="CODE">counter[word] = counter.get(word, 0) + 1</field></block></statement><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vc">counter</field></block></value></block></next></block></next></block></next></block></next></block></next></block>
 </xml>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable id="vp">pos</variable>
+    <variable id="vpos">pos</variable>
+    <variable id="vx">x</variable>
+    <variable id="vy">y</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vp">pos</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">(10, 20)</field></block></value><next><block type="py_custom_stmt"><field name="CODE">x, y = pos</field><next><block type="py_custom_stmt"><field name="CODE">print("x =", x)</field><next><block type="py_custom_stmt"><field name="CODE">print("y =", y)</field></block></next></block></next></block></next></block>
+  <block type="var_set"><field name="VAR" id="vpos">pos</field><value name="VALUE"><block type="py_tuple_literal"><mutation items="2"></mutation><value name="ITEM0"><block type="val_number"><field name="NUM">10</field></block></value><value name="ITEM1"><block type="val_number"><field name="NUM">20</field></block></value></block></value><next><block type="py_custom_stmt"><field name="CODE">x, y = pos</field><next><block type="py_print"><value name="VALUE"><block type="py_fstring"><field name="PRE">x = </field><value name="VAR"><block type="val_var"><field name="VAR" id="vx">x</field></block></value><field name="POST"></field></block></value><next><block type="py_print"><value name="VALUE"><block type="py_fstring"><field name="PRE">y = </field><value name="VAR"><block type="val_var"><field name="VAR" id="vy">y</field></block></value><field name="POST"></field></block></value></block></next></block></next></block></next></block>
 </xml>

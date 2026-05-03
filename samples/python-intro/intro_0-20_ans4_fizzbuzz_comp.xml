@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">result = [</field><next><block type="py_custom_stmt"><field name="CODE">    "FizzBuzz" if n % 15 == 0</field><next><block type="py_custom_stmt"><field name="CODE">    else "Fizz" if n % 3 == 0</field><next><block type="py_custom_stmt"><field name="CODE">    else "Buzz" if n % 5 == 0</field><next><block type="py_custom_stmt"><field name="CODE">    else n</field><next><block type="py_custom_stmt"><field name="CODE">    for n in range(1, 16)</field><next><block type="py_custom_stmt"><field name="CODE">]</field><next><block type="py_custom_stmt"><field name="CODE">print(result)</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <variables>
+    <variable id="vr">result</variable>
+    <variable id="vn">n</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vr">result</field><value name="VALUE"><block type="py_list_comp"><field name="VAR" id="vn">n</field><value name="EXPR"><block type="py_custom_expr"><field name="CODE">"FizzBuzz" if n % 15 == 0 else "Fizz" if n % 3 == 0 else "Buzz" if n % 5 == 0 else n</field></block></value><value name="LIST"><block type="py_custom_expr"><field name="CODE">range(1, 16)</field></block></value></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vr">result</field></block></value></block></next></block>
 </xml>

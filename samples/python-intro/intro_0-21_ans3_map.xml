@@ -2,6 +2,7 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="vsn">str_nums</variable>
+    <variable id="vin">int_nums</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vsn">str_nums</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["5", "3", "8", "1", "9"]</field></block></value><next><block type="py_custom_stmt"><field name="CODE">int_nums = list(map(int, str_nums))</field><next><block type="py_custom_stmt"><field name="CODE">print("合計:", sum(int_nums))</field></block></next></block></next></block>
+  <block type="var_set"><field name="VAR" id="vsn">str_nums</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["5", "3", "8", "1", "9"]</field></block></value><next><block type="var_set"><field name="VAR" id="vin">int_nums</field><value name="VALUE"><block type="py_map_call"><field name="LIST" id="vsn">str_nums</field><field name="TYPE">int</field></block></value><next><block type="py_print"><value name="VALUE"><block type="py_fstring"><field name="PRE">合計: </field><value name="VAR"><block type="py_sum_call"><field name="LIST" id="vin">int_nums</field></block></value><field name="POST"></field></block></value></block></next></block></next></block>
 </xml>
