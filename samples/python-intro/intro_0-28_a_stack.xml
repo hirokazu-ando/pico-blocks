@@ -39,8 +39,12 @@
                         <next>
                           <block type="py_print" id="b14">
                             <value name="VALUE">
-                              <block type="py_custom_expr" id="b15">
-                                <field name="CODE">f"取り出し: {top} → 残り: {stack}"</field>
+                              <block type="py_fstring2">
+                                <field name="PRE">取り出し: </field>
+                                <field name="VAR1" id="var_top">top</field>
+                                <field name="MID"> → 残り: </field>
+                                <field name="VAR2" id="var_stack">stack</field>
+                                <field name="POST"></field>
                               </block>
                             </value>
                           </block>
