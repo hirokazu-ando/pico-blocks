@@ -9,37 +9,25 @@
         <field name="VAR" id="var_temp">temp</field>
         <value name="VALUE">
           <block type="py_list_literal">
-        <mutation items="7"/>
-        <value name="ITEM0"><block type="val_number"><field name="NUM">28</field></block></value>
-        <value name="ITEM1"><block type="val_number"><field name="NUM">30</field></block></value>
-        <value name="ITEM2"><block type="val_number"><field name="NUM">27</field></block></value>
-        <value name="ITEM3"><block type="val_number"><field name="NUM">32</field></block></value>
-        <value name="ITEM4"><block type="val_number"><field name="NUM">35</field></block></value>
-        <value name="ITEM5"><block type="val_number"><field name="NUM">29</field></block></value>
-        <value name="ITEM6"><block type="val_number"><field name="NUM">31</field></block></value>
-      </block>
+            <mutation items="7"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">28</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">30</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">27</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">32</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">35</field></block></value>
+            <value name="ITEM5"><block type="val_number"><field name="NUM">29</field></block></value>
+            <value name="ITEM6"><block type="val_number"><field name="NUM">31</field></block></value>
+          </block>
         </value>
         <next>
-          <block type="py_print" id="b4">
-            <value name="VALUE">
-              <block type="py_stats_mean" id="b5">
-                <value name="DATA"><block type="val_var" id="b6"><field name="VAR" id="var_temp">temp</field></block></value>
-              </block>
-            </value>
+          <block type="py_custom_stmt" id="b3">
+            <field name="CODE">print("平均:", statistics.mean(temp))</field>
             <next>
-              <block type="py_print" id="b7">
-                <value name="VALUE">
-                  <block type="py_stats_median" id="b8">
-                    <value name="DATA"><block type="val_var" id="b9"><field name="VAR" id="var_temp">temp</field></block></value>
-                  </block>
-                </value>
+              <block type="py_custom_stmt" id="b4">
+                <field name="CODE">print("中央値:", statistics.median(temp))</field>
                 <next>
-                  <block type="py_print" id="b10">
-                    <value name="VALUE">
-                      <block type="py_stats_stdev" id="b11">
-                        <value name="DATA"><block type="val_var" id="b12"><field name="VAR" id="var_temp">temp</field></block></value>
-                      </block>
-                    </value>
+                  <block type="py_custom_stmt" id="b5">
+                    <field name="CODE">print("標準偏差:", round(statistics.stdev(temp), 2))</field>
                   </block>
                 </next>
               </block>

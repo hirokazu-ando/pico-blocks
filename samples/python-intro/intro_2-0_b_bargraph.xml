@@ -10,11 +10,12 @@
         <field name="VAR" id="var_labels">labels</field>
         <value name="VALUE">
           <block type="py_list_literal">
-        <mutation items="4"/>
+        <mutation items="5"/>
         <value name="ITEM0"><block type="val_str"><field name="TEXT">国語</field></block></value>
         <value name="ITEM1"><block type="val_str"><field name="TEXT">数学</field></block></value>
         <value name="ITEM2"><block type="val_str"><field name="TEXT">英語</field></block></value>
         <value name="ITEM3"><block type="val_str"><field name="TEXT">理科</field></block></value>
+        <value name="ITEM4"><block type="val_str"><field name="TEXT">社会</field></block></value>
       </block>
         </value>
         <next>
@@ -22,11 +23,12 @@
             <field name="VAR" id="var_scores">scores</field>
             <value name="VALUE">
               <block type="py_list_literal">
-        <mutation items="4"/>
+        <mutation items="5"/>
         <value name="ITEM0"><block type="val_number"><field name="NUM">78</field></block></value>
-        <value name="ITEM1"><block type="val_number"><field name="NUM">85</field></block></value>
-        <value name="ITEM2"><block type="val_number"><field name="NUM">92</field></block></value>
-        <value name="ITEM3"><block type="val_number"><field name="NUM">67</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">92</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">65</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">88</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">70</field></block></value>
       </block>
             </value>
             <next>
@@ -35,7 +37,7 @@
                 <value name="Y"><block type="val_var" id="b8"><field name="VAR" id="var_scores">scores</field></block></value>
                 <next>
                   <block type="py_plt_title" id="b9">
-                    <value name="TEXT"><block type="val_str" id="b10"><field name="TEXT">科目別点数</field></block></value>
+                    <value name="TEXT"><block type="val_str" id="b10"><field name="TEXT">教科別得点</field></block></value>
                     <next>
                       <block type="py_plt_ylabel" id="b11">
                         <value name="TEXT"><block type="val_str" id="b12"><field name="TEXT">点数</field></block></value>

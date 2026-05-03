@@ -37,7 +37,7 @@
                 <value name="Y"><block type="val_var" id="b8"><field name="VAR" id="var_y">y</field></block></value>
                 <next>
                   <block type="py_plt_title" id="b9">
-                    <value name="TEXT"><block type="val_str" id="b10"><field name="TEXT">二乗グラフ</field></block></value>
+                    <value name="TEXT"><block type="val_str" id="b10"><field name="TEXT">二乗のグラフ</field></block></value>
                     <next>
                       <block type="py_plt_show" id="b11"></block>
                     </next>

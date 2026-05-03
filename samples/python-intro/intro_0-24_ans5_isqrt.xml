@@ -1,4 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">def isqrt(n):</field><next><block type="py_custom_stmt"><field name="CODE">    left, right = 0, n</field><next><block type="py_custom_stmt"><field name="CODE">    while left &lt;= right:</field><next><block type="py_custom_stmt"><field name="CODE">        mid = (left + right) // 2</field><next><block type="py_custom_stmt"><field name="CODE">        if mid * mid &lt;= n &lt; (mid + 1) ** 2:</field><next><block type="py_custom_stmt"><field name="CODE">            return mid</field><next><block type="py_custom_stmt"><field name="CODE">        elif mid * mid &lt; n:</field><next><block type="py_custom_stmt"><field name="CODE">            left = mid + 1</field><next><block type="py_custom_stmt"><field name="CODE">        else:</field><next><block type="py_custom_stmt"><field name="CODE">            right = mid - 1</field><next><block type="py_custom_stmt"><field name="CODE">print(isqrt(16))</field><next><block type="py_custom_stmt"><field name="CODE">print(isqrt(100))</field><next><block type="py_custom_stmt"><field name="CODE">print(isqrt(50))</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <block type="py_custom_stmt" x="30" y="30">
+    <field name="CODE">def isqrt(n):</field>
+    <next>
+      <block type="py_custom_stmt">
+        <field name="CODE">    left, right = 0, n</field>
+        <next>
+          <block type="py_custom_stmt">
+            <field name="CODE">    while left &lt;= right:</field>
+            <next>
+              <block type="py_custom_stmt">
+                <field name="CODE">        mid = (left + right) // 2</field>
+                <next>
+                  <block type="py_custom_stmt">
+                    <field name="CODE">        if mid * mid == n:</field>
+                    <next>
+                      <block type="py_custom_stmt">
+                        <field name="CODE">            return mid</field>
+                        <next>
+                          <block type="py_custom_stmt">
+                            <field name="CODE">        elif mid * mid &lt; n:</field>
+                            <next>
+                              <block type="py_custom_stmt">
+                                <field name="CODE">            left = mid + 1</field>
+                                <next>
+                                  <block type="py_custom_stmt">
+                                    <field name="CODE">        else:</field>
+                                    <next>
+                                      <block type="py_custom_stmt">
+                                        <field name="CODE">            right = mid - 1</field>
+                                        <next>
+                                          <block type="py_custom_stmt">
+                                            <field name="CODE">    return right</field>
+                                            <next>
+                                              <block type="py_print">
+                                                <value name="VALUE">
+                                                  <block type="py_custom_expr">
+                                                    <field name="CODE">isqrt(25)</field>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="py_print">
+                                                    <value name="VALUE">
+                                                      <block type="py_custom_expr">
+                                                        <field name="CODE">isqrt(30)</field>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <block type="py_print">
+                                                        <value name="VALUE">
+                                                          <block type="py_custom_expr">
+                                                            <field name="CODE">isqrt(144)</field>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>
