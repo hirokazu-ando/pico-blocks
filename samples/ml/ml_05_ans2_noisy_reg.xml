@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_X">X</variable>
+    <variable id="var_y">y</variable>
+    <variable id="var_y_noisy">y_noisy</variable>
+    <variable id="var_reg">reg</variable>
+    <variable id="var_pred">pred</variable>
+  </variables>
+  <block type="ml_import" id="b0" x="30" y="30">
+    <next>
+      <block type="py_custom_stmt" id="cs0">
+        <field name="CODE">import random</field>
+        <next>
+          <block type="var_set" id="b1">
+            <field name="VAR" id="var_X">X</field>
+            <value name="VALUE">
+              <block type="py_custom_expr" id="bx"><field name="CODE">[[i] for i in range(1, 11)]</field></block>
+            </value>
+            <next>
+              <block type="var_set" id="b2">
+                <field name="VAR" id="var_y">y</field>
+                <value name="VALUE">
+                  <block type="py_custom_expr" id="by"><field name="CODE">[v * 2 for v in range(1, 11)]</field></block>
+                </value>
+                <next>
+                  <block type="var_set" id="b3">
+                    <field name="VAR" id="var_y_noisy">y_noisy</field>
+                    <value name="VALUE">
+                      <block type="py_custom_expr" id="byn"><field name="CODE">[v + random.uniform(-2, 2) for v in y]</field></block>
+                    </value>
+                    <next>
+                      <block type="ml_linreg" id="b4">
+                        <field name="VAR" id="var_reg">reg</field>
+                        <next>
+                          <block type="ml_fit" id="b5">
+                            <value name="MODEL"><block type="val_var" id="bv1"><field name="VAR" id="var_reg">reg</field></block></value>
+                            <value name="X_TRAIN"><block type="val_var" id="bv2"><field name="VAR" id="var_X">X</field></block></value>
+                            <value name="Y_TRAIN"><block type="val_var" id="bv3"><field name="VAR" id="var_y_noisy">y_noisy</field></block></value>
+                            <next>
+                              <block type="ml_predict_stmt" id="b6">
+                                <field name="VAR" id="var_pred">pred</field>
+                                <value name="MODEL"><block type="val_var" id="bv4"><field name="VAR" id="var_reg">reg</field></block></value>
+                                <value name="X_TEST">
+                                  <block type="py_custom_expr" id="bte"><field name="CODE">[[11]]</field></block>
+                                </value>
+                                <next>
+                                  <block type="py_print" id="b7">
+                                    <value name="VALUE"><block type="val_var" id="bv5"><field name="VAR" id="var_pred">pred</field></block></value>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

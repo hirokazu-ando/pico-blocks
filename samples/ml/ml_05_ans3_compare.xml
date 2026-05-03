@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="ml_import" id="b0" x="30" y="30">
+    <next>
+      <block type="py_print" id="b1">
+        <value name="VALUE">
+          <block type="val_str" id="vs1"><field name="TEXT">KNN は分類、LinearRegression は回帰に使います</field></block>
+        </value>
+      </block>
+    </next>
+  </block>
+</xml>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_X3">X3</variable>
+    <variable id="var_y3">y3</variable>
+  </variables>
+  <block type="ml_import" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_X3">X3</field>
+        <value name="VALUE">
+          <block type="py_custom_expr" id="bx"><field name="CODE">[[160,55,20],[175,70,22],[150,48,18],[185,80,25],[162,58,21],[170,65,23]]</field></block>
+        </value>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_y3">y3</field>
+            <value name="VALUE">
+              <block type="py_custom_expr" id="by"><field name="CODE">['A','B','A','B','A','B']</field></block>
+            </value>
+            <next>
+              <block type="py_print" id="b3">
+                <value name="VALUE">
+                  <block type="py_list_len" id="bl1">
+                    <field name="LIST" id="var_X3">X3</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_print" id="b4">
+                    <value name="VALUE">
+                      <block type="py_custom_expr" id="blen"><field name="CODE">len(X3[0])</field></block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

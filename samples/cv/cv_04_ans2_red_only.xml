@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_img">img</variable>
+    <variable id="var_img2">img2</variable>
+    <variable id="var_w">w</variable>
+    <variable id="var_h">h</variable>
+  </variables>
+  <block type="cv_import" id="b0" x="30" y="30">
+    <next>
+      <block type="cv_load" id="b1">
+        <field name="VAR" id="var_img">img</field>
+        <field name="SAMPLE">gradient</field>
+        <next>
+          <block type="cv_copy" id="b2">
+            <field name="VAR" id="var_img2">img2</field>
+            <value name="IMG"><block type="val_var" id="bv1"><field name="VAR" id="var_img">img</field></block></value>
+            <next>
+              <block type="var_set" id="b3">
+                <field name="VAR" id="var_w">w</field>
+                <value name="VALUE">
+                  <block type="cv_width" id="bcw">
+                    <value name="IMG"><block type="val_var" id="bv2"><field name="VAR" id="var_img">img</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="var_set" id="b4">
+                    <field name="VAR" id="var_h">h</field>
+                    <value name="VALUE">
+                      <block type="cv_height" id="bch">
+                        <value name="IMG"><block type="val_var" id="bv3"><field name="VAR" id="var_img">img</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_custom_stmt" id="cs1">
+                        <field name="CODE">for x in range(w):</field>
+                        <next>
+                          <block type="py_custom_stmt" id="cs2">
+                            <field name="CODE">  for y in range(h):</field>
+                            <next>
+                              <block type="py_custom_stmt" id="cs3">
+                                <field name="CODE">    r, g, b = pyco_cv.get_pixel(img, x, y)</field>
+                                <next>
+                                  <block type="py_custom_stmt" id="cs4">
+                                    <field name="CODE">    pyco_cv.set_pixel(img2, x, y, r, 0, 0)</field>
+                                    <next>
+                                      <block type="cv_show" id="b5">
+                                        <value name="IMG"><block type="val_var" id="bv4"><field name="VAR" id="var_img2">img2</field></block></value>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

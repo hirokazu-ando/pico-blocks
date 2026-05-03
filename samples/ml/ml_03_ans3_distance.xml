@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_dist">dist</variable>
+  </variables>
+  <block type="ml_import" id="b0" x="30" y="30">
+    <next>
+      <block type="py_custom_stmt" id="cs1">
+        <field name="CODE">import math</field>
+        <next>
+          <block type="py_custom_stmt" id="cs2">
+            <field name="CODE">x1, y1 = 1, 1</field>
+            <next>
+              <block type="py_custom_stmt" id="cs3">
+                <field name="CODE">x2, y2 = 4, 3</field>
+                <next>
+                  <block type="var_set" id="b1">
+                    <field name="VAR" id="var_dist">dist</field>
+                    <value name="VALUE">
+                      <block type="py_custom_expr" id="bce">
+                        <field name="CODE">math.sqrt((x2-x1)**2 + (y2-y1)**2)</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_print" id="b2">
+                        <value name="VALUE"><block type="val_var" id="bvd"><field name="VAR" id="var_dist">dist</field></block></value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

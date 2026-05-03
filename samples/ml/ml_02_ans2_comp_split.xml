@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_X">X</variable>
+    <variable id="var_y">y</variable>
+    <variable id="var_X_tr">X_tr</variable>
+    <variable id="var_X_te">X_te</variable>
+    <variable id="var_y_tr">y_tr</variable>
+    <variable id="var_y_te">y_te</variable>
+  </variables>
+  <block type="ml_import" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_X">X</field>
+        <value name="VALUE">
+          <block type="py_custom_expr" id="bx"><field name="CODE">[[i, i+1] for i in range(10)]</field></block>
+        </value>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_y">y</field>
+            <value name="VALUE">
+              <block type="py_custom_expr" id="by"><field name="CODE">['A' if i &lt; 5 else 'B' for i in range(10)]</field></block>
+            </value>
+            <next>
+              <block type="ml_split" id="b3">
+                <field name="X_TR" id="var_X_tr">X_tr</field>
+                <field name="X_TE" id="var_X_te">X_te</field>
+                <field name="Y_TR" id="var_y_tr">y_tr</field>
+                <field name="Y_TE" id="var_y_te">y_te</field>
+                <value name="X"><block type="val_var" id="bvX"><field name="VAR" id="var_X">X</field></block></value>
+                <value name="Y"><block type="val_var" id="bvy"><field name="VAR" id="var_y">y</field></block></value>
+                <field name="RATIO">0.2</field>
+                <next>
+                  <block type="py_custom_stmt" id="cs1">
+                    <field name="CODE">print('訓練:', len(X_tr), ' テスト:', len(X_te))</field>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_samples">samples</variable>
+  </variables>
+  <block type="cv_import" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_samples">samples</field>
+        <value name="VALUE">
+          <block type="py_list_empty" id="ble"></block>
+        </value>
+        <next>
+          <block type="py_list_append" id="ba1">
+            <field name="LIST" id="var_samples">samples</field>
+            <value name="VALUE"><block type="val_str" id="vs1"><field name="TEXT">gradient</field></block></value>
+            <next>
+              <block type="py_list_append" id="ba2">
+                <field name="LIST" id="var_samples">samples</field>
+                <value name="VALUE"><block type="val_str" id="vs2"><field name="TEXT">checker</field></block></value>
+                <next>
+                  <block type="py_list_append" id="ba3">
+                    <field name="LIST" id="var_samples">samples</field>
+                    <value name="VALUE"><block type="val_str" id="vs3"><field name="TEXT">circle</field></block></value>
+                    <next>
+                      <block type="py_list_append" id="ba4">
+                        <field name="LIST" id="var_samples">samples</field>
+                        <value name="VALUE"><block type="val_str" id="vs4"><field name="TEXT">stripes</field></block></value>
+                        <next>
+                          <block type="py_custom_stmt" id="cs1">
+                            <field name="CODE">for name in samples:</field>
+                            <next>
+                              <block type="py_custom_stmt" id="cs2">
+                                <field name="CODE">  img = pyco_cv.load(name)</field>
+                                <next>
+                                  <block type="py_custom_stmt" id="cs3">
+                                    <field name="CODE">  gray = pyco_cv.to_gray(img)</field>
+                                    <next>
+                                      <block type="py_custom_stmt" id="cs4">
+                                        <field name="CODE">  blurred = pyco_cv.filter_blur(gray, 5)</field>
+                                        <next>
+                                          <block type="py_custom_stmt" id="cs5">
+                                            <field name="CODE">  edge = pyco_cv.filter_edge(blurred)</field>
+                                            <next>
+                                              <block type="py_custom_stmt" id="cs6">
+                                                <field name="CODE">  pyco_cv.show(edge)</field>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

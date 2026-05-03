@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_X">X</variable>
+    <variable id="var_y">y</variable>
+    <variable id="var_reg">reg</variable>
+    <variable id="var_preds">preds</variable>
+  </variables>
+  <block type="ml_import" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_X">X</field>
+        <value name="VALUE">
+          <block type="py_custom_expr" id="bx"><field name="CODE">[[1],[2],[3],[4],[5],[6],[7],[8],[9],[10]]</field></block>
+        </value>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_y">y</field>
+            <value name="VALUE">
+              <block type="py_custom_expr" id="by"><field name="CODE">[2,4,6,8,10,12,14,16,18,20]</field></block>
+            </value>
+            <next>
+              <block type="ml_linreg" id="b3">
+                <field name="VAR" id="var_reg">reg</field>
+                <next>
+                  <block type="ml_fit" id="b4">
+                    <value name="MODEL"><block type="val_var" id="bv1"><field name="VAR" id="var_reg">reg</field></block></value>
+                    <value name="X_TRAIN"><block type="val_var" id="bv2"><field name="VAR" id="var_X">X</field></block></value>
+                    <value name="Y_TRAIN"><block type="val_var" id="bv3"><field name="VAR" id="var_y">y</field></block></value>
+                    <next>
+                      <block type="ml_predict_stmt" id="b5">
+                        <field name="VAR" id="var_preds">preds</field>
+                        <value name="MODEL"><block type="val_var" id="bv4"><field name="VAR" id="var_reg">reg</field></block></value>
+                        <value name="X_TEST"><block type="val_var" id="bv5"><field name="VAR" id="var_X">X</field></block></value>
+                        <next>
+                          <block type="py_custom_stmt" id="cs1">
+                            <field name="CODE">for i in range(len(y)):</field>
+                            <next>
+                              <block type="py_custom_stmt" id="cs2">
+                                <field name="CODE">  print(preds[i] - y[i])</field>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
