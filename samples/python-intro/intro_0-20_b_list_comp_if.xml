@@ -1,30 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
+    <variable id="var_n">n</variable>
     <variable id="var_nums">nums</variable>
-    <variable id="var_x">x</variable>
     <variable id="var_evens">evens</variable>
+    <variable id="var_big_doubled">big_doubled</variable>
   </variables>
-  <block type="var_set" id="b1" x="30" y="30">
+  <block type="var_set" x="30" y="30">
     <field name="VAR" id="var_evens">evens</field>
     <value name="VALUE">
-      <block type="py_list_comp_if" id="b2">
-        <value name="EXPR"><block type="val_var" id="b3"><field name="VAR" id="var_x">x</field></block></value>
-        <value name="LIST"><block type="val_var" id="b4"><field name="VAR" id="var_nums">nums</field></block></value>
+      <block type="py_list_comp_if">
+        <field name="VAR" id="var_n">n</field>
+        <value name="EXPR"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+        <value name="LIST"><block type="val_var"><field name="VAR" id="var_nums">nums</field></block></value>
         <value name="COND">
-          <block type="cond_compare" id="b5">
+          <block type="cond_compare">
             <field name="OP">==</field>
             <value name="LEFT">
-              <block type="py_math_op" id="b6">
+              <block type="py_math_op">
                 <field name="OP">%</field>
-                <value name="LEFT"><block type="val_var" id="b7"><field name="VAR" id="var_x">x</field></block></value>
-                <value name="RIGHT"><block type="val_number" id="b8"><field name="NUM">2</field></block></value>
+                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
               </block>
             </value>
-            <value name="RIGHT"><block type="val_number" id="b9"><field name="NUM">0</field></block></value>
+            <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
           </block>
         </value>
       </block>
     </value>
+    <next>
+      <block type="py_print">
+        <value name="VALUE"><block type="val_var"><field name="VAR" id="var_evens">evens</field></block></value>
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="var_big_doubled">big_doubled</field>
+            <value name="VALUE">
+              <block type="py_list_comp_if">
+                <field name="VAR" id="var_n">n</field>
+                <value name="EXPR">
+                  <block type="py_math_op">
+                    <field name="OP">*</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                    <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
+                  </block>
+                </value>
+                <value name="LIST"><block type="val_var"><field name="VAR" id="var_nums">nums</field></block></value>
+                <value name="COND">
+                  <block type="cond_compare">
+                    <field name="OP">&gt;=</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                    <value name="RIGHT"><block type="val_number"><field name="NUM">5</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print">
+                <value name="VALUE"><block type="val_var"><field name="VAR" id="var_big_doubled">big_doubled</field></block></value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
   </block>
 </xml>
