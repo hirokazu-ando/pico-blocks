@@ -5,5 +5,44 @@
     <variable id="vx">x</variable>
     <variable id="vy">y</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vpos">pos</field><value name="VALUE"><block type="py_tuple_literal"><mutation items="2"></mutation><value name="ITEM0"><block type="val_number"><field name="NUM">10</field></block></value><value name="ITEM1"><block type="val_number"><field name="NUM">20</field></block></value></block></value><next><block type="py_custom_stmt"><field name="CODE">x, y = pos</field><next><block type="py_print"><value name="VALUE"><block type="py_fstring"><field name="PRE">x = </field><value name="VAR"><block type="val_var"><field name="VAR" id="vx">x</field></block></value><field name="POST"></field></block></value><next><block type="py_print"><value name="VALUE"><block type="py_fstring"><field name="PRE">y = </field><value name="VAR"><block type="val_var"><field name="VAR" id="vy">y</field></block></value><field name="POST"></field></block></value></block></next></block></next></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vpos">pos</field>
+    <value name="VALUE">
+      <block type="py_tuple_literal">
+        <mutation items="2"/>
+        <field name="COUNT">2</field>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">10</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">20</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="py_tuple_unpack">
+        <field name="VAR_X" id="vx">x</field>
+        <field name="VAR_Y" id="vy">y</field>
+        <field name="SRC" id="vpos">pos</field>
+        <next>
+          <block type="py_print">
+            <value name="VALUE">
+              <block type="py_fstring">
+                <field name="PRE">x = </field>
+                <value name="VAR"><block type="val_var"><field name="VAR" id="vx">x</field></block></value>
+                <field name="POST"></field>
+              </block>
+            </value>
+            <next>
+              <block type="py_print">
+                <value name="VALUE">
+                  <block type="py_fstring">
+                    <field name="PRE">y = </field>
+                    <value name="VAR"><block type="val_var"><field name="VAR" id="vy">y</field></block></value>
+                    <field name="POST"></field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

@@ -4,5 +4,37 @@
     <variable id="vm">multiples_of_3</variable>
     <variable id="vn">n</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vm">multiples_of_3</field><value name="VALUE"><block type="py_list_comp_if"><field name="VAR" id="vn">n</field><value name="EXPR"><block type="val_var"><field name="VAR" id="vn">n</field></block></value><value name="LIST"><block type="py_custom_expr"><field name="CODE">range(1, 21)</field></block></value><value name="COND"><block type="py_custom_expr"><field name="CODE">n % 3 == 0</field></block></value></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vm">multiples_of_3</field></block></value></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vm">multiples_of_3</field>
+    <value name="VALUE">
+      <block type="py_list_comp_if">
+        <field name="VAR" id="vn">n</field>
+        <value name="EXPR"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+        <value name="LIST">
+          <block type="py_range">
+            <field name="START">1</field>
+            <field name="STOP">21</field>
+          </block>
+        </value>
+        <value name="COND">
+          <block type="cond_compare">
+            <field name="OP">==</field>
+            <value name="LEFT">
+              <block type="py_math_op">
+                <field name="OP">%</field>
+                <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                <value name="RIGHT"><block type="val_number"><field name="NUM">3</field></block></value>
+              </block>
+            </value>
+            <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+          </block>
+        </value>
+      </block>
+    </value>
+    <next>
+      <block type="py_print">
+        <value name="VALUE"><block type="val_var"><field name="VAR" id="vm">multiples_of_3</field></block></value>
+      </block>
+    </next>
+  </block>
 </xml>

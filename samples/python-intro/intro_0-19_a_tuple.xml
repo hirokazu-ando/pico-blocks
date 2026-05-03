@@ -3,6 +3,8 @@
   <variables>
     <variable id="var_point">point</variable>
     <variable id="var_color">color</variable>
+    <variable id="var_x">x</variable>
+    <variable id="var_y">y</variable>
   </variables>
   <block type="var_set" x="30" y="30">
     <field name="VAR" id="var_point">point</field>
@@ -29,23 +31,28 @@
         <next>
           <block type="py_print">
             <value name="VALUE">
-              <block type="py_custom_expr">
-                <field name="CODE">point[0]</field>
+              <block type="py_list_get">
+                <field name="LIST" id="var_point">point</field>
+                <value name="INDEX"><block type="val_number"><field name="NUM">0</field></block></value>
               </block>
             </value>
             <next>
               <block type="py_print">
                 <value name="VALUE">
-                  <block type="py_custom_expr">
-                    <field name="CODE">color[1]</field>
+                  <block type="py_list_get">
+                    <field name="LIST" id="var_color">color</field>
+                    <value name="INDEX"><block type="val_number"><field name="NUM">1</field></block></value>
                   </block>
                 </value>
                 <next>
-                  <block type="py_custom_stmt">
-                    <field name="CODE">x, y = point</field>
+                  <block type="py_tuple_unpack">
+                    <field name="VAR_X" id="var_x">x</field>
+                    <field name="VAR_Y" id="var_y">y</field>
+                    <field name="SRC" id="var_point">point</field>
                     <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">print(x, y)</field>
+                      <block type="py_print2">
+                        <field name="VAR_A" id="var_x">x</field>
+                        <field name="VAR_B" id="var_y">y</field>
                       </block>
                     </next>
                   </block>

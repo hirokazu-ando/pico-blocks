@@ -4,6 +4,51 @@
     <variable id="vst">students</variable>
     <variable id="vrk">ranked</variable>
     <variable id="vi">item</variable>
+    <variable id="vn">name</variable>
+    <variable id="vsc">score</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vst">students</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[("田中", 85), ("鈴木", 92), ("山田", 78)]</field></block></value><next><block type="var_set"><field name="VAR" id="vrk">ranked</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">sorted(students, key=lambda s: s[1], reverse=True)</field></block></value><next><block type="py_for_list"><field name="VAR" id="vi">item</field><field name="LIST" id="vrk">ranked</field><statement name="DO"><block type="py_custom_stmt"><field name="CODE">name, score = item</field><next><block type="py_print"><value name="VALUE"><block type="py_custom_expr"><field name="CODE">f"{name} {score}点"</field></block></value></block></next></block></statement></block></next></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vst">students</field>
+    <value name="VALUE">
+      <block type="py_custom_expr">
+        <field name="CODE">[("田中", 85), ("鈴木", 92), ("山田", 78)]</field>
+      </block>
+    </value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vrk">ranked</field>
+        <value name="VALUE">
+          <block type="py_custom_expr">
+            <field name="CODE">sorted(students, key=lambda s: s[1], reverse=True)</field>
+          </block>
+        </value>
+        <next>
+          <block type="py_for_list">
+            <field name="VAR" id="vi">item</field>
+            <field name="LIST" id="vrk">ranked</field>
+            <statement name="DO">
+              <block type="py_tuple_unpack">
+                <field name="VAR_X" id="vn">name</field>
+                <field name="VAR_Y" id="vsc">score</field>
+                <field name="SRC" id="vi">item</field>
+                <next>
+                  <block type="py_print">
+                    <value name="VALUE">
+                      <block type="py_fstring2">
+                        <field name="PRE"></field>
+                        <field name="VAR1" id="vn">name</field>
+                        <field name="MID"> </field>
+                        <field name="VAR2" id="vsc">score</field>
+                        <field name="POST">点</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

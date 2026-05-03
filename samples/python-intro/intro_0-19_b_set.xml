@@ -25,8 +25,9 @@
             <field name="SET" id="var_fruits">fruits</field>
             <value name="VALUE"><block type="val_str"><field name="TEXT">grape</field></block></value>
             <next>
-              <block type="py_custom_stmt">
-                <field name="CODE">fruits.remove("banana")</field>
+              <block type="py_set_discard">
+                <field name="SET" id="var_fruits">fruits</field>
+                <value name="VALUE"><block type="val_str"><field name="TEXT">banana</field></block></value>
                 <next>
                   <block type="py_print">
                     <value name="VALUE"><block type="val_var"><field name="VAR" id="var_fruits">fruits</field></block></value>
@@ -57,14 +58,32 @@
                               </block>
                             </value>
                             <next>
-                              <block type="py_custom_stmt">
-                                <field name="CODE">print(a | b)</field>
+                              <block type="py_print">
+                                <value name="VALUE">
+                                  <block type="py_set_op">
+                                    <field name="SET_A" id="var_a">a</field>
+                                    <field name="OP">|</field>
+                                    <field name="SET_B" id="var_b">b</field>
+                                  </block>
+                                </value>
                                 <next>
-                                  <block type="py_custom_stmt">
-                                    <field name="CODE">print(a &amp; b)</field>
+                                  <block type="py_print">
+                                    <value name="VALUE">
+                                      <block type="py_set_op">
+                                        <field name="SET_A" id="var_a">a</field>
+                                        <field name="OP">&amp;</field>
+                                        <field name="SET_B" id="var_b">b</field>
+                                      </block>
+                                    </value>
                                     <next>
-                                      <block type="py_custom_stmt">
-                                        <field name="CODE">print(a - b)</field>
+                                      <block type="py_print">
+                                        <value name="VALUE">
+                                          <block type="py_set_op">
+                                            <field name="SET_A" id="var_a">a</field>
+                                            <field name="OP">-</field>
+                                            <field name="SET_B" id="var_b">b</field>
+                                          </block>
+                                        </value>
                                       </block>
                                     </next>
                                   </block>

@@ -1267,6 +1267,126 @@ Blockly.Blocks['py_map_call'] = {
 };
 
 // =====================================================
+// 0-19〜0-22: 追加ブロック（range / str_upper / tuple_unpack / print2 / set_op / sorted_set / fstring2）
+// =====================================================
+
+Blockly.Blocks['py_range'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('range(')
+      .appendField(new Blockly.FieldNumber(0, -1000, 100000), 'START')
+      .appendField(',')
+      .appendField(new Blockly.FieldNumber(10, 1, 100000), 'STOP')
+      .appendField(')');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.loops);
+    this.setTooltip('整数の連続（START から STOP-1 まで）を作ります（range(start, stop)）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_str_upper'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('文字列')
+      .appendField(new Blockly.FieldVariable('text'), 'VAR')
+      .appendField('を大文字に変換');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.math);
+    this.setTooltip('文字列を全て大文字に変換します（str.upper()）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_tuple_unpack'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('変数')
+      .appendField(new Blockly.FieldVariable('x'), 'VAR_X')
+      .appendField(',')
+      .appendField(new Blockly.FieldVariable('y'), 'VAR_Y')
+      .appendField('= タプル')
+      .appendField(new Blockly.FieldVariable('point'), 'SRC');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.tuples);
+    this.setTooltip('タプルの値を2つの変数に展開します（x, y = point）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_print2'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('変数')
+      .appendField(new Blockly.FieldVariable('x'), 'VAR_A')
+      .appendField('と')
+      .appendField(new Blockly.FieldVariable('y'), 'VAR_B')
+      .appendField('を表示する');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.display);
+    this.setTooltip('2つの変数を並べて表示します（print(a, b)）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_set_op'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('セット')
+      .appendField(new Blockly.FieldVariable('a'), 'SET_A')
+      .appendField(new Blockly.FieldDropdown([
+        ['| 和集合', '|'],
+        ['& 積集合（共通）', '&'],
+        ['- 差集合', '-'],
+        ['^ 対称差', '^'],
+      ]), 'OP')
+      .appendField('セット')
+      .appendField(new Blockly.FieldVariable('b'), 'SET_B');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.tuples);
+    this.setTooltip('2つのセットに対して集合演算を行います（| 和集合  & 積集合  - 差集合  ^ 対称差）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_sorted_set'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('nums'), 'LIST')
+      .appendField('の重複を除いて昇順に並べる');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('重複を除いてから昇順に並べたリストを返します（sorted(set(list))）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_fstring2'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldTextInput(''), 'PRE')
+      .appendField(new Blockly.FieldVariable('var1'), 'VAR1')
+      .appendField(new Blockly.FieldTextInput(': '), 'MID')
+      .appendField(new Blockly.FieldVariable('var2'), 'VAR2')
+      .appendField(new Blockly.FieldTextInput(''), 'POST');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.math);
+    this.setTooltip('2つの変数を埋め込んだ文字列を作ります（f"{var1}...{var2}..."）');
+    this.setHelpUrl('');
+  }
+};
+
+// =====================================================
 // 0-18: 追加文字列メソッド（join / lstrip / rstrip / find_from）
 // =====================================================
 

@@ -5,5 +5,37 @@
     <variable id="vrk">rank</variable>
     <variable id="vlg">lang</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vl">langs</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["Python", "Java", "C", "Ruby"]</field></block></value><next><block type="py_enumerate_start_for"><field name="START">1</field><field name="IDX" id="vrk">rank</field><field name="VAL" id="vlg">lang</field><field name="LIST" id="vl">langs</field><statement name="DO"><block type="py_print"><value name="VALUE"><block type="py_fstring"><field name="PRE"></field><value name="VAR"><block type="py_custom_expr"><field name="CODE">f"{rank}位: {lang}"</field></block></value><field name="POST"></field></block></value></block></statement></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vl">langs</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="4"/>
+        <value name="ITEM0"><block type="val_str"><field name="TEXT">Python</field></block></value>
+        <value name="ITEM1"><block type="val_str"><field name="TEXT">Java</field></block></value>
+        <value name="ITEM2"><block type="val_str"><field name="TEXT">C</field></block></value>
+        <value name="ITEM3"><block type="val_str"><field name="TEXT">Ruby</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="py_enumerate_start_for">
+        <field name="START">1</field>
+        <field name="IDX" id="vrk">rank</field>
+        <field name="VAL" id="vlg">lang</field>
+        <field name="LIST" id="vl">langs</field>
+        <statement name="DO">
+          <block type="py_print">
+            <value name="VALUE">
+              <block type="py_fstring2">
+                <field name="PRE"></field>
+                <field name="VAR1" id="vrk">rank</field>
+                <field name="MID">位: </field>
+                <field name="VAR2" id="vlg">lang</field>
+                <field name="POST"></field>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
 </xml>

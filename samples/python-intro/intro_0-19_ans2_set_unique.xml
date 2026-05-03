@@ -4,5 +4,37 @@
     <variable id="vn">nums</variable>
     <variable id="vu">unique_sorted</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vn">nums</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[3, 1, 4, 1, 5, 9, 2, 6, 5, 3]</field></block></value><next><block type="var_set"><field name="VAR" id="vu">unique_sorted</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">sorted(set(nums))</field></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vu">unique_sorted</field></block></value></block></next></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vn">nums</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="10"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">3</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">1</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">4</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">1</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">5</field></block></value>
+        <value name="ITEM5"><block type="val_number"><field name="NUM">9</field></block></value>
+        <value name="ITEM6"><block type="val_number"><field name="NUM">2</field></block></value>
+        <value name="ITEM7"><block type="val_number"><field name="NUM">6</field></block></value>
+        <value name="ITEM8"><block type="val_number"><field name="NUM">5</field></block></value>
+        <value name="ITEM9"><block type="val_number"><field name="NUM">3</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vu">unique_sorted</field>
+        <value name="VALUE">
+          <block type="py_sorted_set">
+            <field name="LIST" id="vn">nums</field>
+          </block>
+        </value>
+        <next>
+          <block type="py_print">
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="vu">unique_sorted</field></block></value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

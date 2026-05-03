@@ -478,6 +478,13 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_str_lstrip':    return `文字列「${getVarName(block, 'VAR')}」の左端の空白を取り除く`;
       case 'py_str_rstrip':    return `文字列「${getVarName(block, 'VAR')}」の右端の空白を取り除く`;
       case 'py_str_find_from': return `文字列「${getVarName(block, 'VAR')}」の中で「${block.getFieldValue('SUB')}」を${block.getFieldValue('START')}文字目から探す`;
+      case 'py_range':        return `range(${block.getFieldValue('START')}, ${block.getFieldValue('STOP')})`;
+      case 'py_str_upper':    return `文字列「${getVarName(block, 'VAR')}」を大文字に変換`;
+      case 'py_tuple_unpack': return `${getVarName(block, 'VAR_X')}, ${getVarName(block, 'VAR_Y')} = ${getVarName(block, 'SRC')}`;
+      case 'py_print2':       return `変数「${getVarName(block, 'VAR_A')}」と「${getVarName(block, 'VAR_B')}」を表示`;
+      case 'py_set_op':       return `セット「${getVarName(block, 'SET_A')}」${block.getFieldValue('OP')}「${getVarName(block, 'SET_B')}」`;
+      case 'py_sorted_set':   return `リスト「${getVarName(block, 'LIST')}」の重複を除いて昇順に並べる`;
+      case 'py_fstring2':     return `"${block.getFieldValue('PRE')}{${getVarName(block, 'VAR1')}}${block.getFieldValue('MID')}{${getVarName(block, 'VAR2')}}${block.getFieldValue('POST')}"`;
       case 'py_enumerate_start_for': return `リスト「${getVarName(block, 'LIST')}」を番号（${block.getFieldValue('START')}から）付きで繰り返す`;
       case 'py_map_call':      return `リスト「${getVarName(block, 'LIST')}」を一括変換（map）`;
       case 'py_break':         return 'ループを抜ける（break）';
@@ -826,6 +833,37 @@ document.addEventListener('DOMContentLoaded', function() {
         const findFromSub = block.getFieldValue('SUB') || '';
         const findFromStart = block.getFieldValue('START') || 0;
         return `${findFromVar}.find(${JSON.stringify(findFromSub)}, ${findFromStart})`;
+      }
+      case 'py_range': {
+        const rStart = block.getFieldValue('START') || 0;
+        const rStop  = block.getFieldValue('STOP')  || 10;
+        return `range(${rStart}, ${rStop})`;
+      }
+      case 'py_str_upper': {
+        return `${getVarName(block, 'VAR')}.upper()`;
+      }
+      case 'py_tuple_unpack': {
+        return `${getVarName(block, 'VAR_X')}, ${getVarName(block, 'VAR_Y')} = ${getVarName(block, 'SRC')}`;
+      }
+      case 'py_print2': {
+        return `print(${getVarName(block, 'VAR_A')}, ${getVarName(block, 'VAR_B')})`;
+      }
+      case 'py_set_op': {
+        const setA  = getVarName(block, 'SET_A');
+        const setOp = block.getFieldValue('OP') || '|';
+        const setB  = getVarName(block, 'SET_B');
+        return `${setA} ${setOp} ${setB}`;
+      }
+      case 'py_sorted_set': {
+        return `sorted(set(${getVarName(block, 'LIST')}))`;
+      }
+      case 'py_fstring2': {
+        const f2Pre  = block.getFieldValue('PRE')  || '';
+        const f2V1   = getVarName(block, 'VAR1');
+        const f2Mid  = block.getFieldValue('MID')  || '';
+        const f2V2   = getVarName(block, 'VAR2');
+        const f2Post = block.getFieldValue('POST') || '';
+        return `f"${f2Pre}{${f2V1}}${f2Mid}{${f2V2}}${f2Post}"`;
       }
       case 'py_map_call': {
         const mapList = getVarName(block, 'LIST');

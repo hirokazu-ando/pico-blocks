@@ -20,8 +20,9 @@
           </block>
         </value>
         <value name="LIST">
-          <block type="py_custom_expr">
-            <field name="CODE">range(1, 6)</field>
+          <block type="py_range">
+            <field name="START">1</field>
+            <field name="STOP">6</field>
           </block>
         </value>
       </block>
@@ -31,21 +32,34 @@
         <value name="VALUE"><block type="val_var"><field name="VAR" id="var_squares">squares</field></block></value>
         <next>
           <block type="var_set">
-            <field name="VAR" id="var_upper">upper</field>
+            <field name="VAR" id="var_words">words</field>
             <value name="VALUE">
-              <block type="py_list_comp">
-                <field name="VAR" id="var_w">w</field>
-                <value name="EXPR">
-                  <block type="py_custom_expr">
-                    <field name="CODE">w.upper()</field>
-                  </block>
-                </value>
-                <value name="LIST"><block type="val_var"><field name="VAR" id="var_words">words</field></block></value>
+              <block type="py_list_literal">
+                <mutation items="3"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">hello</field></block></value>
+                <value name="ITEM1"><block type="val_str"><field name="TEXT">world</field></block></value>
+                <value name="ITEM2"><block type="val_str"><field name="TEXT">python</field></block></value>
               </block>
             </value>
             <next>
-              <block type="py_print">
-                <value name="VALUE"><block type="val_var"><field name="VAR" id="var_upper">upper</field></block></value>
+              <block type="var_set">
+                <field name="VAR" id="var_upper">upper</field>
+                <value name="VALUE">
+                  <block type="py_list_comp">
+                    <field name="VAR" id="var_w">w</field>
+                    <value name="EXPR">
+                      <block type="py_str_upper">
+                        <field name="VAR" id="var_w">w</field>
+                      </block>
+                    </value>
+                    <value name="LIST"><block type="val_var"><field name="VAR" id="var_words">words</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_print">
+                    <value name="VALUE"><block type="val_var"><field name="VAR" id="var_upper">upper</field></block></value>
+                  </block>
+                </next>
               </block>
             </next>
           </block>

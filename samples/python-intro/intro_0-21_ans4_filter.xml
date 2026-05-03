@@ -5,5 +5,43 @@
     <variable id="vps">passing</variable>
     <variable id="vs2">s</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vsc">scores</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[45, 72, 58, 88, 61, 34, 95]</field></block></value><next><block type="var_set"><field name="VAR" id="vps">passing</field><value name="VALUE"><block type="py_list_comp_if"><field name="VAR" id="vs2">s</field><value name="EXPR"><block type="val_var"><field name="VAR" id="vs2">s</field></block></value><value name="LIST"><block type="val_var"><field name="VAR" id="vsc">scores</field></block></value><value name="COND"><block type="py_custom_expr"><field name="CODE">s &gt;= 60</field></block></value></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vps">passing</field></block></value></block></next></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vsc">scores</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="7"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">45</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">72</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">58</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">88</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">61</field></block></value>
+        <value name="ITEM5"><block type="val_number"><field name="NUM">34</field></block></value>
+        <value name="ITEM6"><block type="val_number"><field name="NUM">95</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vps">passing</field>
+        <value name="VALUE">
+          <block type="py_list_comp_if">
+            <field name="VAR" id="vs2">s</field>
+            <value name="EXPR"><block type="val_var"><field name="VAR" id="vs2">s</field></block></value>
+            <value name="LIST"><block type="val_var"><field name="VAR" id="vsc">scores</field></block></value>
+            <value name="COND">
+              <block type="cond_compare">
+                <field name="OP">&gt;=</field>
+                <value name="LEFT"><block type="val_var"><field name="VAR" id="vs2">s</field></block></value>
+                <value name="RIGHT"><block type="val_number"><field name="NUM">60</field></block></value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print">
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="vps">passing</field></block></value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

@@ -14,8 +14,12 @@
     <statement name="DO">
       <block type="py_print">
         <value name="VALUE">
-          <block type="py_custom_expr">
-            <field name="CODE">f"{name}: {score}点"</field>
+          <block type="py_fstring2">
+            <field name="PRE"></field>
+            <field name="VAR1" id="var_name">name</field>
+            <field name="MID">: </field>
+            <field name="VAR2" id="var_score">score</field>
+            <field name="POST">点</field>
           </block>
         </value>
       </block>
