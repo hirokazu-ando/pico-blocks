@@ -2,22 +2,85 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="var_fruits">fruits</variable>
+    <variable id="var_a">a</variable>
+    <variable id="var_b">b</variable>
   </variables>
-  <block type="var_set" id="b1" x="30" y="30">
+  <block type="var_set" x="30" y="30">
     <field name="VAR" id="var_fruits">fruits</field>
     <value name="VALUE">
-      <block type="py_set_literal" id="b2">
-        <mutation items="3"/>
-        <field name="COUNT">3</field>
-        <value name="ITEM0"><block type="val_str" id="b3"><field name="TEXT">apple</field></block></value>
-        <value name="ITEM1"><block type="val_str" id="b4"><field name="TEXT">banana</field></block></value>
-        <value name="ITEM2"><block type="val_str" id="b5"><field name="TEXT">apple</field></block></value>
+      <block type="py_set_literal">
+        <mutation items="4"/>
+        <field name="COUNT">4</field>
+        <value name="ITEM0"><block type="val_str"><field name="TEXT">apple</field></block></value>
+        <value name="ITEM1"><block type="val_str"><field name="TEXT">banana</field></block></value>
+        <value name="ITEM2"><block type="val_str"><field name="TEXT">apple</field></block></value>
+        <value name="ITEM3"><block type="val_str"><field name="TEXT">cherry</field></block></value>
       </block>
     </value>
     <next>
-      <block type="py_set_add" id="b6">
-        <field name="SET" id="var_fruits">fruits</field>
-        <value name="VALUE"><block type="val_str" id="b7"><field name="TEXT">cherry</field></block></value>
+      <block type="py_print">
+        <value name="VALUE"><block type="val_var"><field name="VAR" id="var_fruits">fruits</field></block></value>
+        <next>
+          <block type="py_set_add">
+            <field name="SET" id="var_fruits">fruits</field>
+            <value name="VALUE"><block type="val_str"><field name="TEXT">grape</field></block></value>
+            <next>
+              <block type="py_custom_stmt">
+                <field name="CODE">fruits.remove("banana")</field>
+                <next>
+                  <block type="py_print">
+                    <value name="VALUE"><block type="val_var"><field name="VAR" id="var_fruits">fruits</field></block></value>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="var_a">a</field>
+                        <value name="VALUE">
+                          <block type="py_set_literal">
+                            <mutation items="4"/>
+                            <field name="COUNT">4</field>
+                            <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
+                            <value name="ITEM1"><block type="val_number"><field name="NUM">2</field></block></value>
+                            <value name="ITEM2"><block type="val_number"><field name="NUM">3</field></block></value>
+                            <value name="ITEM3"><block type="val_number"><field name="NUM">4</field></block></value>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="var_set">
+                            <field name="VAR" id="var_b">b</field>
+                            <value name="VALUE">
+                              <block type="py_set_literal">
+                                <mutation items="4"/>
+                                <field name="COUNT">4</field>
+                                <value name="ITEM0"><block type="val_number"><field name="NUM">3</field></block></value>
+                                <value name="ITEM1"><block type="val_number"><field name="NUM">4</field></block></value>
+                                <value name="ITEM2"><block type="val_number"><field name="NUM">5</field></block></value>
+                                <value name="ITEM3"><block type="val_number"><field name="NUM">6</field></block></value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="py_custom_stmt">
+                                <field name="CODE">print(a | b)</field>
+                                <next>
+                                  <block type="py_custom_stmt">
+                                    <field name="CODE">print(a &amp; b)</field>
+                                    <next>
+                                      <block type="py_custom_stmt">
+                                        <field name="CODE">print(a - b)</field>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
       </block>
     </next>
   </block>
