@@ -1,4 +1,150 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">def fib_recursive(n):</field><next><block type="py_custom_stmt"><field name="CODE">    if n &lt;= 1:</field><next><block type="py_custom_stmt"><field name="CODE">        return n</field><next><block type="py_custom_stmt"><field name="CODE">    return fib_recursive(n - 1) + fib_recursive(n - 2)</field><next><block type="py_custom_stmt"><field name="CODE">def fib_memo(n, memo={}):</field><next><block type="py_custom_stmt"><field name="CODE">    if n in memo: return memo[n]</field><next><block type="py_custom_stmt"><field name="CODE">    if n &lt;= 1: return n</field><next><block type="py_custom_stmt"><field name="CODE">    memo[n] = fib_memo(n-1, memo) + fib_memo(n-2, memo)</field><next><block type="py_custom_stmt"><field name="CODE">    return memo[n]</field><next><block type="py_custom_stmt"><field name="CODE">print(fib_recursive(30))</field><next><block type="py_custom_stmt"><field name="CODE">print(fib_memo(100))</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <variables>
+    <variable id="var_n">n</variable>
+    <variable id="var_a">a</variable>
+    <variable id="var_b">b</variable>
+    <variable id="var_t">t</variable>
+    <variable id="var__">_</variable>
+  </variables>
+  <!-- fib_recursive 関数 -->
+  <block type="py_def" id="b_fib_rec" x="30" y="30">
+    <field name="NAME">fib_recursive</field>
+    <field name="PARAM" id="var_n">n</field>
+    <statement name="BODY">
+      <block type="controls_if" id="b_if1">
+        <value name="IF0">
+          <block type="cond_compare" id="b_cmp1">
+            <field name="OP">&lt;=</field>
+            <value name="LEFT"><block type="val_var" id="b_vn1"><field name="VAR" id="var_n">n</field></block></value>
+            <value name="RIGHT"><block type="val_number" id="b_1a"><field name="NUM">1</field></block></value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="py_return" id="b_ret1">
+            <value name="VALUE"><block type="val_var" id="b_vn2"><field name="VAR" id="var_n">n</field></block></value>
+          </block>
+        </statement>
+        <next>
+          <block type="py_return" id="b_ret2">
+            <value name="VALUE">
+              <block type="py_math_op" id="b_add1">
+                <field name="OP">+</field>
+                <value name="LEFT">
+                  <block type="py_call_val" id="b_call1">
+                    <field name="NAME">fib_recursive</field>
+                    <value name="ARG">
+                      <block type="py_math_op" id="b_sub1">
+                        <field name="OP">-</field>
+                        <value name="LEFT"><block type="val_var" id="b_vn3"><field name="VAR" id="var_n">n</field></block></value>
+                        <value name="RIGHT"><block type="val_number" id="b_1b"><field name="NUM">1</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="RIGHT">
+                  <block type="py_call_val" id="b_call2">
+                    <field name="NAME">fib_recursive</field>
+                    <value name="ARG">
+                      <block type="py_math_op" id="b_sub2">
+                        <field name="OP">-</field>
+                        <value name="LEFT"><block type="val_var" id="b_vn4"><field name="VAR" id="var_n">n</field></block></value>
+                        <value name="RIGHT"><block type="val_number" id="b_2a"><field name="NUM">2</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <!-- fib_iterative 関数 -->
+      <block type="py_def" id="b_fib_iter" x="30" y="30">
+        <field name="NAME">fib_iterative</field>
+        <field name="PARAM" id="var_n">n</field>
+        <statement name="BODY">
+          <block type="controls_if" id="b_if2">
+            <value name="IF0">
+              <block type="cond_compare" id="b_cmp2">
+                <field name="OP">&lt;=</field>
+                <value name="LEFT"><block type="val_var" id="b_vn5"><field name="VAR" id="var_n">n</field></block></value>
+                <value name="RIGHT"><block type="val_number" id="b_1c"><field name="NUM">1</field></block></value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="py_return" id="b_ret3">
+                <value name="VALUE"><block type="val_var" id="b_vn6"><field name="VAR" id="var_n">n</field></block></value>
+              </block>
+            </statement>
+            <next>
+              <block type="var_set" id="b_seta">
+                <field name="VAR" id="var_a">a</field>
+                <value name="VALUE"><block type="val_number" id="b_0a"><field name="NUM">0</field></block></value>
+                <next>
+                  <block type="var_set" id="b_setb">
+                    <field name="VAR" id="var_b">b</field>
+                    <value name="VALUE"><block type="val_number" id="b_1d"><field name="NUM">1</field></block></value>
+                    <next>
+                      <block type="controls_for" id="b_for1">
+                        <field name="VAR" id="var__">_</field>
+                        <value name="FROM"><block type="val_number"><field name="NUM">0</field></block></value>
+                        <value name="TO">
+                          <block type="py_math_op" id="b_sub3">
+                            <field name="OP">-</field>
+                            <value name="LEFT"><block type="val_var" id="b_vn7"><field name="VAR" id="var_n">n</field></block></value>
+                            <value name="RIGHT"><block type="val_number" id="b_2b"><field name="NUM">2</field></block></value>
+                          </block>
+                        </value>
+                        <value name="BY"><block type="val_number"><field name="NUM">1</field></block></value>
+                        <statement name="DO">
+                          <block type="py_custom_stmt" id="b_swap">
+                            <field name="CODE">a, b = b, a + b</field>
+                          </block>
+                        </statement>
+                        <next>
+                          <block type="py_return" id="b_ret4">
+                            <value name="VALUE"><block type="val_var" id="b_vb"><field name="VAR" id="var_b">b</field></block></value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <next>
+          <block type="py_custom_stmt" id="b_import_time">
+            <field name="CODE">import time</field>
+            <next>
+              <block type="var_set" id="b_sett1">
+                <field name="VAR" id="var_t">t</field>
+                <value name="VALUE"><block type="py_custom_expr"><field name="CODE">time.time()</field></block></value>
+                <next>
+                  <block type="py_custom_stmt" id="b_pr1">
+                    <field name="CODE">print("再帰:", fib_recursive(35), f"({time.time()-t:.3f}秒)")</field>
+                    <next>
+                      <block type="var_set" id="b_sett2">
+                        <field name="VAR" id="var_t">t</field>
+                        <value name="VALUE"><block type="py_custom_expr"><field name="CODE">time.time()</field></block></value>
+                        <next>
+                          <block type="py_custom_stmt" id="b_pr2">
+                            <field name="CODE">print("反復:", fib_iterative(35), f"({time.time()-t:.6f}秒)")</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>
