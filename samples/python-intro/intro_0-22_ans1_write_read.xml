@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_file_write"><field name="FILENAME">greeting.txt</field><value name="CONTENT"><block type="val_str"><field name="TEXT">こんにちは！</field></block></value><next><block type="py_file_read"><field name="FILENAME">greeting.txt</field><field name="VAR">content</field><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR">content</field></block></value></block></next></block></next></block>
+  <variables>
+    <variable id="var_content">content</variable>
+  </variables>
+  <block type="py_file_write"><field name="FILENAME">greeting.txt</field><value name="CONTENT"><block type="val_str"><field name="TEXT">こんにちは！</field></block></value><next><block type="py_file_read"><field name="FILENAME">greeting.txt</field><field name="VAR" id="var_content">content</field><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="var_content">content</field></block></value></block></next></block></next></block>
 </xml>
