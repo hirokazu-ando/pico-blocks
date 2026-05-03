@@ -9,13 +9,29 @@
       <block type="var_set" id="b1">
         <field name="VAR" id="var_temp">temp</field>
         <value name="VALUE">
-          <block type="py_custom_expr" id="bx"><field name="CODE">[18, 20, 25, 28, 30, 27]</field></block>
+          <block type="py_list_literal">
+            <mutation items="6"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">18</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">20</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">25</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">28</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">30</field></block></value>
+            <value name="ITEM5"><block type="val_number"><field name="NUM">27</field></block></value>
+          </block>
         </value>
         <next>
           <block type="var_set" id="b2">
             <field name="VAR" id="var_months">months</field>
             <value name="VALUE">
-              <block type="py_custom_expr" id="by"><field name="CODE">["1月","2月","3月","4月","5月","6月"]</field></block>
+              <block type="py_list_literal">
+                <mutation items="6"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">1月</field></block></value>
+                <value name="ITEM1"><block type="val_str"><field name="TEXT">2月</field></block></value>
+                <value name="ITEM2"><block type="val_str"><field name="TEXT">3月</field></block></value>
+                <value name="ITEM3"><block type="val_str"><field name="TEXT">4月</field></block></value>
+                <value name="ITEM4"><block type="val_str"><field name="TEXT">5月</field></block></value>
+                <value name="ITEM5"><block type="val_str"><field name="TEXT">6月</field></block></value>
+              </block>
             </value>
             <next>
               <block type="py_plt_plot" id="b3">

@@ -42,7 +42,7 @@
                                 <field name="VAR" id="var_pred">pred</field>
                                 <value name="MODEL"><block type="val_var" id="bv4"><field name="VAR" id="var_reg">reg</field></block></value>
                                 <value name="X_TEST">
-                                  <block type="py_custom_expr" id="bte"><field name="CODE">[[11]]</field></block>
+                                  <block type="ml_data_2d"><field name="DATA">[[11]]</field></block>
                                 </value>
                                 <next>
                                   <block type="py_print" id="b7">
