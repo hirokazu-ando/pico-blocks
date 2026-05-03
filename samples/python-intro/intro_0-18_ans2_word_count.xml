@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vs">sentence</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vs">sentence</field><value name="VALUE"><block type="val_str"><field name="TEXT">the quick brown fox jumps over the lazy dog</field></block></value><next><block type="py_custom_stmt"><field name="CODE">words = sentence.split()</field><next><block type="py_custom_stmt"><field name="CODE">print("単語数:", len(words))</field></block></next></block></next></block>
+</xml>

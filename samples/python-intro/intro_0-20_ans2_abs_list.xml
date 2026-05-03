@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vn">nums</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vn">nums</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[-3, 1, -4, 1, 5, -9, 2, -6]</field></block></value><next><block type="py_custom_stmt"><field name="CODE">abs_nums = [abs(n) for n in nums]</field><next><block type="py_custom_stmt"><field name="CODE">print(abs_nums)</field></block></next></block></next></block>
+</xml>

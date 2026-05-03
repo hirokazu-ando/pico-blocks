@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vt">text</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vt">text</field><value name="VALUE"><block type="val_str"><field name="TEXT">そんなことを言うなんてバカじゃないの？</field></block></value><next><block type="py_custom_stmt"><field name="CODE">if text.find("バカ") != -1:</field><next><block type="py_custom_stmt"><field name="CODE">    text = text.replace("バカ", "****")</field><next><block type="py_custom_stmt"><field name="CODE">print(text)</field></block></next></block></next></block></next></block>
+</xml>

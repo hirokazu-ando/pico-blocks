@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vs">scores</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vs">scores</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[45, 72, 58, 88, 61, 34, 95]</field></block></value><next><block type="py_custom_stmt"><field name="CODE">passing = list(filter(lambda s: s &gt;= 60, scores))</field><next><block type="py_custom_stmt"><field name="CODE">print(passing)</field></block></next></block></next></block>
+</xml>

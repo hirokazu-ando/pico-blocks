@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vn">names</variable>
+    <variable id="vs">scores</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vn">names</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["Alice", "Bob", "Carol"]</field></block></value><next><block type="var_set"><field name="VAR" id="vs">scores</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[88, 75, 92]</field></block></value><next><block type="py_custom_stmt"><field name="CODE">for name, score in zip(names, scores):</field><next><block type="py_custom_stmt"><field name="CODE">    print(f"{name}: {score}点")</field></block></next></block></next></block></next></block>
+</xml>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vf">filename</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vf">filename</field><value name="VALUE"><block type="val_str"><field name="TEXT">sample.txt</field></block></value><next><block type="py_custom_stmt"><field name="CODE">try:</field><next><block type="py_custom_stmt"><field name="CODE">    with open(filename, "r", encoding="utf-8") as f:</field><next><block type="py_custom_stmt"><field name="CODE">        lines = f.readlines()</field><next><block type="py_custom_stmt"><field name="CODE">    print(f"行数: {len(lines)}")</field><next><block type="py_custom_stmt"><field name="CODE">except FileNotFoundError:</field><next><block type="py_custom_stmt"><field name="CODE">    print("ファイルが見つかりません")</field></block></next></block></next></block></next></block></next></block></next></block></next></block>
+</xml>

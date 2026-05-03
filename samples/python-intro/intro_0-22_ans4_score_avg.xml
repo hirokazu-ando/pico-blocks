@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt"><field name="CODE">with open("scores.txt", "w", encoding="utf-8") as f:</field><next><block type="py_custom_stmt"><field name="CODE">    f.write("85\n92\n78\n61\n95\n")</field><next><block type="py_custom_stmt"><field name="CODE">with open("scores.txt", "r", encoding="utf-8") as f:</field><next><block type="py_custom_stmt"><field name="CODE">    lines = f.readlines()</field><next><block type="py_custom_stmt"><field name="CODE">nums = [int(line.strip()) for line in lines if line.strip()]</field><next><block type="py_custom_stmt"><field name="CODE">print("平均:", sum(nums) / len(nums))</field></block></next></block></next></block></next></block></next></block></next></block>
+</xml>

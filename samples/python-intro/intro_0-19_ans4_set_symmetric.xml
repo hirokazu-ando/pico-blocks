@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="va">class_a</variable>
+    <variable id="vb">class_b</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="va">class_a</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">{"田中", "鈴木", "山田", "佐藤"}</field></block></value><next><block type="var_set"><field name="VAR" id="vb">class_b</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">{"山田", "伊藤", "田中", "中村"}</field></block></value><next><block type="py_custom_stmt"><field name="CODE">only_one = class_a ^ class_b</field><next><block type="py_custom_stmt"><field name="CODE">print("片方にしかいない生徒:", only_one)</field></block></next></block></next></block></next></block>
+</xml>

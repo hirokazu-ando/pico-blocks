@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vl">langs</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vl">langs</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["Python", "Java", "C", "Ruby"]</field></block></value><next><block type="py_custom_stmt"><field name="CODE">for rank, lang in enumerate(langs, start=1):</field><next><block type="py_custom_stmt"><field name="CODE">    print(f"{rank}位: {lang}")</field></block></next></block></next></block>
+</xml>

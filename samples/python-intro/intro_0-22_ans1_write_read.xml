@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt"><field name="CODE">with open("greeting.txt", "w", encoding="utf-8") as f:</field><next><block type="py_custom_stmt"><field name="CODE">    f.write("こんにちは！")</field><next><block type="py_custom_stmt"><field name="CODE">with open("greeting.txt", "r", encoding="utf-8") as f:</field><next><block type="py_custom_stmt"><field name="CODE">    print(f.read())</field></block></next></block></next></block></next></block>
+</xml>

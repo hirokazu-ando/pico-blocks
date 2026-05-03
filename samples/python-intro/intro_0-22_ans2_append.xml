@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vt">text</variable>
+  </variables>
+  <block type="py_input"><field name="TYPE">str</field><field name="VAR" id="vt">text</field><field name="PROMPT">メモを入力: </field><next><block type="py_custom_stmt"><field name="CODE">with open("memo.txt", "a", encoding="utf-8") as f:</field><next><block type="py_custom_stmt"><field name="CODE">    f.write(text + "\n")</field><next><block type="py_custom_stmt"><field name="CODE">print("メモを保存しました")</field></block></next></block></next></block></next></block>
+</xml>

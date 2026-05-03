@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vsn">str_nums</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vsn">str_nums</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["5", "3", "8", "1", "9"]</field></block></value><next><block type="py_custom_stmt"><field name="CODE">int_nums = list(map(int, str_nums))</field><next><block type="py_custom_stmt"><field name="CODE">print("合計:", sum(int_nums))</field></block></next></block></next></block>
+</xml>

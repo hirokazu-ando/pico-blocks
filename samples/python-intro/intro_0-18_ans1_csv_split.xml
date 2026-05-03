@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vd">data</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vd">data</field><value name="VALUE"><block type="val_str"><field name="TEXT">田中,25,東京</field></block></value><next><block type="py_custom_stmt"><field name="CODE">parts = data.split(",")</field><next><block type="py_custom_stmt"><field name="CODE">print("名前:", parts[0])</field><next><block type="py_custom_stmt"><field name="CODE">print("年齢:", parts[1])</field><next><block type="py_custom_stmt"><field name="CODE">print("都市:", parts[2])</field></block></next></block></next></block></next></block></next></block>
+</xml>

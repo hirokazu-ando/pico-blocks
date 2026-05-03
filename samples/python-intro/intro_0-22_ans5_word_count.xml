@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt"><field name="CODE">with open("text.txt", "w", encoding="utf-8") as f:</field><next><block type="py_custom_stmt"><field name="CODE">    f.write("the cat sat on the mat the cat\n")</field><next><block type="py_custom_stmt"><field name="CODE">counter = {}</field><next><block type="py_custom_stmt"><field name="CODE">with open("text.txt", "r", encoding="utf-8") as f:</field><next><block type="py_custom_stmt"><field name="CODE">    for word in f.read().split():</field><next><block type="py_custom_stmt"><field name="CODE">        counter[word] = counter.get(word, 0) + 1</field><next><block type="py_custom_stmt"><field name="CODE">print(counter)</field></block></next></block></next></block></next></block></next></block></next></block></next></block>
+</xml>
