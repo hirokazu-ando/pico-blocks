@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_data">data</variable>
+    <variable id="var_target">target</variable>
+    <variable id="var_i">i</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_data">data</field>
+    <value name="VALUE">
+      <block type="py_custom_expr" id="b2"><field name="CODE">[4, 2, 7, 2, 9, 2]</field></block>
+    </value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_target">target</field>
+        <value name="VALUE">
+          <block type="val_number" id="b4"><field name="NUM">2</field></block>
+        </value>
+        <next>
+          <block type="pico_for_range" id="b5">
+            <field name="VAR" id="var_i">i</field>
+            <value name="N">
+              <block type="py_list_len" id="b6">
+                <value name="LIST"><block type="val_var" id="b7"><field name="VAR" id="var_data">data</field></block></value>
+              </block>
+            </value>
+            <statement name="DO">
+              <block type="controls_if" id="b8">
+                <value name="IF0">
+                  <block type="logic_compare" id="b9">
+                    <field name="OP">EQ</field>
+                    <value name="A">
+                      <block type="py_list_get" id="b10">
+                        <value name="LIST"><block type="val_var" id="b11"><field name="VAR" id="var_data">data</field></block></value>
+                        <value name="INDEX"><block type="val_var" id="b12"><field name="VAR" id="var_i">i</field></block></value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="val_var" id="b13"><field name="VAR" id="var_target">target</field></block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="py_print" id="b14">
+                    <value name="VALUE">
+                      <block type="val_var" id="b15"><field name="VAR" id="var_i">i</field></block>
+                    </value>
+                    <next>
+                      <block type="py_break" id="b16"/>
+                    </next>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

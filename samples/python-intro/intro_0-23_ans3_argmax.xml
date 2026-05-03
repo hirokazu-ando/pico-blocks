@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_nums">nums</variable>
+    <variable id="var_max_idx">max_idx</variable>
+    <variable id="var_i">i</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_nums">nums</field>
+    <value name="VALUE">
+      <block type="py_custom_expr" id="b2"><field name="CODE">[3, 7, 1, 9, 4]</field></block>
+    </value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_max_idx">max_idx</field>
+        <value name="VALUE">
+          <block type="val_number" id="b4"><field name="NUM">0</field></block>
+        </value>
+        <next>
+          <block type="pico_for_from_to" id="b5">
+            <field name="VAR" id="var_i">i</field>
+            <value name="START">
+              <block type="val_number" id="b6"><field name="NUM">1</field></block>
+            </value>
+            <value name="STOP">
+              <block type="py_list_len" id="b7">
+                <value name="LIST"><block type="val_var" id="b8"><field name="VAR" id="var_nums">nums</field></block></value>
+              </block>
+            </value>
+            <value name="STEP">
+              <block type="val_number" id="b9"><field name="NUM">1</field></block>
+            </value>
+            <statement name="DO">
+              <block type="controls_if" id="b10">
+                <value name="IF0">
+                  <block type="logic_compare" id="b11">
+                    <field name="OP">GT</field>
+                    <value name="A">
+                      <block type="py_list_get" id="b12">
+                        <value name="LIST"><block type="val_var" id="b13"><field name="VAR" id="var_nums">nums</field></block></value>
+                        <value name="INDEX"><block type="val_var" id="b14"><field name="VAR" id="var_i">i</field></block></value>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="py_list_get" id="b15">
+                        <value name="LIST"><block type="val_var" id="b16"><field name="VAR" id="var_nums">nums</field></block></value>
+                        <value name="INDEX"><block type="val_var" id="b17"><field name="VAR" id="var_max_idx">max_idx</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="var_set" id="b18">
+                    <field name="VAR" id="var_max_idx">max_idx</field>
+                    <value name="VALUE">
+                      <block type="val_var" id="b19"><field name="VAR" id="var_i">i</field></block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+            <next>
+              <block type="py_print" id="b20">
+                <value name="VALUE">
+                  <block type="val_var" id="b21"><field name="VAR" id="var_max_idx">max_idx</field></block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

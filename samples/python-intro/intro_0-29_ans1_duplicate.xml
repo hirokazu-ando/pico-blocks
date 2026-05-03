@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_data">data</variable>
+    <variable id="var_dupes">dupes</variable>
+    <variable id="var_item">item</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_data">data</field>
+    <value name="VALUE">
+      <block type="py_custom_expr" id="b2"><field name="CODE">[3, 1, 4, 1, 5, 3, 2]</field></block>
+    </value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_dupes">dupes</field>
+        <value name="VALUE">
+          <block type="py_list_empty" id="b4"/>
+        </value>
+        <next>
+          <block type="py_for_list" id="b5">
+            <field name="VAR" id="var_item">item</field>
+            <value name="LIST">
+              <block type="val_var" id="b6"><field name="VAR" id="var_data">data</field></block>
+            </value>
+            <statement name="DO">
+              <block type="controls_if" id="b7">
+                <value name="IF0">
+                  <block type="py_custom_expr" id="b8">
+                    <field name="CODE">data.count(item) &gt; 1 and item not in dupes</field>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="py_list_append" id="b9">
+                    <value name="ITEM">
+                      <block type="val_var" id="b10"><field name="VAR" id="var_item">item</field></block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+            <next>
+              <block type="py_print" id="b11">
+                <value name="VALUE">
+                  <block type="val_var" id="b12"><field name="VAR" id="var_dupes">dupes</field></block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
