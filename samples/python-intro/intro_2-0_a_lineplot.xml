@@ -9,13 +9,27 @@
       <block type="var_set" id="b2">
         <field name="VAR" id="var_x">x</field>
         <value name="VALUE">
-          <block type="py_custom_expr" id="b3"><field name="CODE">[1, 2, 3, 4, 5]</field></block>
+          <block type="py_list_literal">
+        <mutation items="5"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">2</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">3</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">4</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">5</field></block></value>
+      </block>
         </value>
         <next>
           <block type="var_set" id="b4">
             <field name="VAR" id="var_y">y</field>
             <value name="VALUE">
-              <block type="py_custom_expr" id="b5"><field name="CODE">[1, 4, 9, 16, 25]</field></block>
+              <block type="py_list_literal">
+        <mutation items="5"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">4</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">9</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">16</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">25</field></block></value>
+      </block>
             </value>
             <next>
               <block type="py_plt_plot" id="b6">

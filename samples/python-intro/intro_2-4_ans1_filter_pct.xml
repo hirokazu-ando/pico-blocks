@@ -8,21 +8,33 @@
   <block type="var_set" id="b1" x="30" y="30">
     <field name="VAR" id="var_scores">scores</field>
     <value name="VALUE">
-      <block type="py_custom_expr" id="b2"><field name="CODE">[72, 85, 91, 68, 77, 95, 60, 88, 73, 82]</field></block>
+      <block type="py_list_literal">
+        <mutation items="10"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">72</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">85</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">91</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">68</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">77</field></block></value>
+        <value name="ITEM5"><block type="val_number"><field name="NUM">95</field></block></value>
+        <value name="ITEM6"><block type="val_number"><field name="NUM">60</field></block></value>
+        <value name="ITEM7"><block type="val_number"><field name="NUM">88</field></block></value>
+        <value name="ITEM8"><block type="val_number"><field name="NUM">73</field></block></value>
+        <value name="ITEM9"><block type="val_number"><field name="NUM">82</field></block></value>
+      </block>
     </value>
     <next>
       <block type="var_set" id="b3">
         <field name="VAR" id="var_high">high</field>
         <value name="VALUE">
           <block type="py_list_comp_if" id="b4">
-            <value name="EXPR"><block type="val_var" id="b5"><field name="VAR" id="var_s">s</field></block></value>
             <field name="VAR" id="var_s">s</field>
+            <value name="EXPR"><block type="val_var" id="b5"><field name="VAR" id="var_s">s</field></block></value>
             <value name="LIST"><block type="val_var" id="b6"><field name="VAR" id="var_scores">scores</field></block></value>
             <value name="COND">
-              <block type="logic_compare" id="b7">
-                <field name="OP">GTE</field>
-                <value name="A"><block type="val_var" id="b8"><field name="VAR" id="var_s">s</field></block></value>
-                <value name="B"><block type="val_number" id="b9"><field name="NUM">80</field></block></value>
+              <block type="cond_compare" id="b7">
+                <field name="OP">&gt;=</field>
+                <value name="LEFT"><block type="val_var" id="b8"><field name="VAR" id="var_s">s</field></block></value>
+                <value name="RIGHT"><block type="val_number" id="b9"><field name="NUM">80</field></block></value>
               </block>
             </value>
           </block>

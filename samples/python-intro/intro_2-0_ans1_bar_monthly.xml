@@ -9,13 +9,29 @@
       <block type="var_set" id="b2">
         <field name="VAR" id="var_labels">labels</field>
         <value name="VALUE">
-          <block type="py_custom_expr" id="b3"><field name="CODE">["1月", "2月", "3月", "4月", "5月", "6月"]</field></block>
+          <block type="py_list_literal">
+        <mutation items="6"/>
+        <value name="ITEM0"><block type="val_str"><field name="TEXT">1月</field></block></value>
+        <value name="ITEM1"><block type="val_str"><field name="TEXT">2月</field></block></value>
+        <value name="ITEM2"><block type="val_str"><field name="TEXT">3月</field></block></value>
+        <value name="ITEM3"><block type="val_str"><field name="TEXT">4月</field></block></value>
+        <value name="ITEM4"><block type="val_str"><field name="TEXT">5月</field></block></value>
+        <value name="ITEM5"><block type="val_str"><field name="TEXT">6月</field></block></value>
+      </block>
         </value>
         <next>
           <block type="var_set" id="b4">
             <field name="VAR" id="var_scores">scores</field>
             <value name="VALUE">
-              <block type="py_custom_expr" id="b5"><field name="CODE">[150, 180, 160, 200, 220, 195]</field></block>
+              <block type="py_list_literal">
+        <mutation items="6"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">150</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">180</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">160</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">200</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">220</field></block></value>
+        <value name="ITEM5"><block type="val_number"><field name="NUM">195</field></block></value>
+      </block>
             </value>
             <next>
               <block type="py_plt_bar" id="b6">
