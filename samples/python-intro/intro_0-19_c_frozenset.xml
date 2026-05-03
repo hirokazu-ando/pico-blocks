@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt" x="30" y="30">
+    <field name="CODE">vowels = frozenset("aeiou")</field>
+    <next>
+      <block type="py_custom_stmt">
+        <field name="CODE">print(vowels)            # frozenset({'a', 'e', 'i', 'o', 'u'})</field>
+        <next>
+          <block type="py_custom_stmt">
+            <field name="CODE">print("a" in vowels)     # True</field>
+            <next>
+              <block type="py_custom_stmt">
+                <field name="CODE"># frozenset は変更できない</field>
+                <next>
+                  <block type="py_custom_stmt">
+                    <field name="CODE"># vowels.add("y")  → AttributeError</field>
+                    <next>
+                      <block type="py_custom_stmt">
+                        <field name="CODE">pairs = {frozenset({1, 2}): "pair A", frozenset({3, 4}): "pair B"}</field>
+                        <next>
+                          <block type="py_custom_stmt">
+                            <field name="CODE">print(pairs[frozenset({1, 2})])   # pair A</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

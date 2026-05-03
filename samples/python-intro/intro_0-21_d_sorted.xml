@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt" x="30" y="30">
+    <field name="CODE">words = ["banana", "apple", "cherry", "date"]</field>
+    <next>
+      <block type="py_custom_stmt">
+        <field name="CODE">print(sorted(words))</field>
+        <next>
+          <block type="py_custom_stmt">
+            <field name="CODE">print(sorted(words, key=len))</field>
+            <next>
+              <block type="py_custom_stmt">
+                <field name="CODE">print(sorted(words, reverse=True))</field>
+                <next>
+                  <block type="py_custom_stmt">
+                    <field name="CODE">students = [{"name": "田中", "score": 85}, {"name": "鈴木", "score": 92}, {"name": "山田", "score": 78}]</field>
+                    <next>
+                      <block type="py_custom_stmt">
+                        <field name="CODE">by_score = sorted(students, key=lambda s: s["score"], reverse=True)</field>
+                        <next>
+                          <block type="py_custom_stmt">
+                            <field name="CODE">for s in by_score:</field>
+                            <next>
+                              <block type="py_custom_stmt">
+                                <field name="CODE">    print(s["name"], s["score"])</field>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

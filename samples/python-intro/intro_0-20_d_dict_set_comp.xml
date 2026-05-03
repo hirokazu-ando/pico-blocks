@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt" x="30" y="30">
+    <field name="CODE">words = ["apple", "banana", "cherry"]</field>
+    <next>
+      <block type="py_custom_stmt">
+        <field name="CODE">lengths = {w: len(w) for w in words}</field>
+        <next>
+          <block type="py_custom_stmt">
+            <field name="CODE">print(lengths)   # {'apple': 5, 'banana': 6, 'cherry': 6}</field>
+            <next>
+              <block type="py_custom_stmt">
+                <field name="CODE">nums = [1, 2, 2, 3, 3, 3]</field>
+                <next>
+                  <block type="py_custom_stmt">
+                    <field name="CODE">unique_squares = {n ** 2 for n in nums}</field>
+                    <next>
+                      <block type="py_custom_stmt">
+                        <field name="CODE">print(unique_squares)   # {1, 4, 9}</field>
+                        <next>
+                          <block type="py_custom_stmt">
+                            <field name="CODE">original = {"a": 1, "b": 2, "c": 3}</field>
+                            <next>
+                              <block type="py_custom_stmt">
+                                <field name="CODE">reversed_dict = {v: k for k, v in original.items()}</field>
+                                <next>
+                                  <block type="py_custom_stmt">
+                                    <field name="CODE">print(reversed_dict)   # {1: 'a', 2: 'b', 3: 'c'}</field>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt" x="30" y="30">
+    <field name="CODE">nums = [1, 2, 3, 4, 5]</field>
+    <next>
+      <block type="py_custom_stmt">
+        <field name="CODE">squared = list(map(lambda x: x ** 2, nums))</field>
+        <next>
+          <block type="py_custom_stmt">
+            <field name="CODE">print(squared)   # [1, 4, 9, 16, 25]</field>
+            <next>
+              <block type="py_custom_stmt">
+                <field name="CODE">str_nums = ["10", "20", "30"]</field>
+                <next>
+                  <block type="py_custom_stmt">
+                    <field name="CODE">int_nums = list(map(int, str_nums))</field>
+                    <next>
+                      <block type="py_custom_stmt">
+                        <field name="CODE">print(int_nums)  # [10, 20, 30]</field>
+                        <next>
+                          <block type="py_custom_stmt">
+                            <field name="CODE">evens = list(filter(lambda x: x % 2 == 0, nums))</field>
+                            <next>
+                              <block type="py_custom_stmt">
+                                <field name="CODE">print(evens)     # [2, 4]</field>
+                                <next>
+                                  <block type="py_custom_stmt">
+                                    <field name="CODE">items = ["apple", None, "banana", "", "cherry", None]</field>
+                                    <next>
+                                      <block type="py_custom_stmt">
+                                        <field name="CODE">cleaned = list(filter(None, items))</field>
+                                        <next>
+                                          <block type="py_custom_stmt">
+                                            <field name="CODE">print(cleaned)   # ['apple', 'banana', 'cherry']</field>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt" x="30" y="30">
+    <field name="CODE">with open("sample.txt", "r", encoding="utf-8") as f:</field>
+    <next>
+      <block type="py_custom_stmt">
+        <field name="CODE">    lines = f.readlines()</field>
+        <next>
+          <block type="py_custom_stmt">
+            <field name="CODE">for line in lines:</field>
+            <next>
+              <block type="py_custom_stmt">
+                <field name="CODE">    print(line.strip())   # strip() で末尾の改行を除去</field>
+                <next>
+                  <block type="py_custom_stmt">
+                    <field name="CODE">data = ["apple\n", "banana\n", "cherry\n"]</field>
+                    <next>
+                      <block type="py_custom_stmt">
+                        <field name="CODE">with open("fruits.txt", "w", encoding="utf-8") as f:</field>
+                        <next>
+                          <block type="py_custom_stmt">
+                            <field name="CODE">    f.writelines(data)</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
