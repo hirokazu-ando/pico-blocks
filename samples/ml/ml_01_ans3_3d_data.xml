@@ -9,13 +9,13 @@
       <block type="var_set" id="b1">
         <field name="VAR" id="var_X3">X3</field>
         <value name="VALUE">
-          <block type="py_custom_expr" id="bx"><field name="CODE">[[160,55,20],[175,70,22],[150,48,18],[185,80,25],[162,58,21],[170,65,23]]</field></block>
+          <block type="ml_data_2d"><field name="DATA">[[160,55,20],[175,70,22],[150,48,18],[185,80,25],[162,58,21],[170,65,23]]</field></block>
         </value>
         <next>
           <block type="var_set" id="b2">
             <field name="VAR" id="var_y3">y3</field>
             <value name="VALUE">
-              <block type="py_custom_expr" id="by"><field name="CODE">['A','B','A','B','A','B']</field></block>
+              <block type="ml_label_list"><field name="DATA">['A','B','A','B','A','B']</field></block>
             </value>
             <next>
               <block type="py_print" id="b3">

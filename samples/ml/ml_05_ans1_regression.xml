@@ -12,7 +12,7 @@
           <block type="ml_fit" id="b2">
             <value name="MODEL"><block type="val_var" id="bv1"><field name="VAR" id="var_reg">reg</field></block></value>
             <value name="X_TRAIN">
-              <block type="py_custom_expr" id="bx"><field name="CODE">[[1],[2],[3],[4],[5]]</field></block>
+              <block type="ml_data_2d"><field name="DATA">[[1],[2],[3],[4],[5]]</field></block>
             </value>
             <value name="Y_TRAIN">
               <block type="py_custom_expr" id="by"><field name="CODE">[2,4,6,8,10]</field></block>
@@ -22,7 +22,7 @@
                 <field name="VAR" id="var_pred">pred</field>
                 <value name="MODEL"><block type="val_var" id="bv2"><field name="VAR" id="var_reg">reg</field></block></value>
                 <value name="X_TEST">
-                  <block type="py_custom_expr" id="bt"><field name="CODE">[[6]]</field></block>
+                  <block type="ml_data_2d"><field name="DATA">[[6]]</field></block>
                 </value>
                 <next>
                   <block type="py_print" id="b4">

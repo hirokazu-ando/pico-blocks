@@ -419,4 +419,32 @@
       this.setHelpUrl('');
     }
   };
+
+  Blockly.Blocks['game_import_random'] = {
+    init: function() {
+      this.appendDummyInput()
+        .appendField('random \u30e2\u30b8\u30e5\u30fc\u30eb\u3092\u8aad\u307f\u8fbc\u3080');
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(P.builtins);
+      this.setTooltip('import random');
+      this.setHelpUrl('');
+    }
+  };
+
+  Blockly.Blocks['game_random_int'] = {
+    init: function() {
+      this.appendDummyInput()
+        .appendField('\u30e9\u30f3\u30c0\u30e0\u6574\u6570\uff08')
+        .appendField(new Blockly.FieldNumber(0, -10000, 100000), 'LO')
+        .appendField('\u301c')
+        .appendField(new Blockly.FieldNumber(576, -10000, 100000), 'HI')
+        .appendField('\uff09');
+      this.setOutput(true, null);
+      this.setColour(P.math);
+      this.setTooltip('random.randint(lo, hi)');
+      this.setHelpUrl('');
+    }
+  };
+
 })();

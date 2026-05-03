@@ -148,4 +148,28 @@ Blockly.Blocks['ml_split'] = {
   }
 };
 
+Blockly.Blocks['ml_data_2d'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('特徴量データ')
+      .appendField(new Blockly.FieldTextInput('[[1,1],[2,2]]'), 'DATA');
+    this.setOutput(true, null);
+    this.setColour(P.ml);
+    this.setTooltip('2次元特徴量リスト（例：[[1,1],[2,3],...]）を入力します');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['ml_label_list'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('ラベルデータ')
+      .appendField(new Blockly.FieldTextInput("['A','B']"), 'DATA');
+    this.setOutput(true, null);
+    this.setColour(P.ml);
+    this.setTooltip('ラベルのリスト（例：["A","A","B",...]）を入力します');
+    this.setHelpUrl('');
+  }
+};
+
 })();

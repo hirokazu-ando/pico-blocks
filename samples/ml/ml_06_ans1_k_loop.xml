@@ -13,13 +13,13 @@
       <block type="var_set" id="b1">
         <field name="VAR" id="var_X">X</field>
         <value name="VALUE">
-          <block type="py_custom_expr" id="bx"><field name="CODE">[[1,1],[1,2],[2,3],[3,1],[3,2],[4,3],[2,2],[4,4],[1,4],[3,3]]</field></block>
+          <block type="ml_data_2d"><field name="DATA">[[1,1],[1,2],[2,3],[3,1],[3,2],[4,3],[2,2],[4,4],[1,4],[3,3]]</field></block>
         </value>
         <next>
           <block type="var_set" id="b2">
             <field name="VAR" id="var_y">y</field>
             <value name="VALUE">
-              <block type="py_custom_expr" id="by"><field name="CODE">['A','A','B','A','B','B','A','B','A','B']</field></block>
+              <block type="ml_label_list"><field name="DATA">['A','A','B','A','B','B','A','B','A','B']</field></block>
             </value>
             <next>
               <block type="ml_split" id="b3">

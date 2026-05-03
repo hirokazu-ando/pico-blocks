@@ -14,13 +14,13 @@
       <block type="var_set" id="b1">
         <field name="VAR" id="var_Xf">X_flower</field>
         <value name="VALUE">
-          <block type="py_custom_expr" id="bxf"><field name="CODE">[[3,1],[3,2],[4,1],[5,2],[5,3],[6,3],[2,4],[2,5],[1,4]]</field></block>
+          <block type="ml_data_2d"><field name="DATA">[[3,1],[3,2],[4,1],[5,2],[5,3],[6,3],[2,4],[2,5],[1,4]]</field></block>
         </value>
         <next>
           <block type="var_set" id="b2">
             <field name="VAR" id="var_yf">y_flower</field>
             <value name="VALUE">
-              <block type="py_custom_expr" id="byf"><field name="CODE">['Rose','Rose','Rose','Rose','Rose','Lily','Lily','Lily','Lily']</field></block>
+              <block type="ml_label_list"><field name="DATA">['Rose','Rose','Rose','Rose','Rose','Lily','Lily','Lily','Lily']</field></block>
             </value>
             <next>
               <block type="ml_knn" id="b3">
@@ -35,7 +35,7 @@
                       <block type="var_set" id="b5">
                         <field name="VAR" id="var_rose_X">rose_X</field>
                         <value name="VALUE">
-                          <block type="py_custom_expr" id="brx"><field name="CODE">[[x[0]] for x, lbl in zip(X_flower, y_flower) if lbl == 'Rose']</field></block>
+                          <block type="ml_data_2d"><field name="DATA">[[x[0]] for x, lbl in zip(X_flower, y_flower) if lbl == 'Rose']</field></block>
                         </value>
                         <next>
                           <block type="var_set" id="b6">

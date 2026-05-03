@@ -15,7 +15,7 @@
           <block type="var_set" id="b1">
             <field name="VAR" id="var_X">X</field>
             <value name="VALUE">
-              <block type="py_custom_expr" id="bx"><field name="CODE">[[i] for i in range(1, 11)]</field></block>
+              <block type="ml_data_2d"><field name="DATA">[[i] for i in range(1, 11)]</field></block>
             </value>
             <next>
               <block type="var_set" id="b2">

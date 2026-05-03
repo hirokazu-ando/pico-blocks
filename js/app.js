@@ -573,6 +573,12 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_import_csv':    return 'csv をインポートする';
       case 'py_csv_read_rows': return `CSV「${block.getFieldValue('FILENAME')}」を読み込む`;
       case 'py_csv_get_col':   return `列 ${block.getFieldValue('COL')} を数値リストとして取り出す`;
+      // Part 4 game
+      case 'game_import_random': return 'random モジュールを読み込む';
+      case 'game_random_int':    return `ランダム整数（${block.getFieldValue('LO')}〜${block.getFieldValue('HI')}）`;
+      // Part 5/6 ml
+      case 'ml_data_2d':    return `特徴量データ ${block.getFieldValue('DATA').slice(0, 20)}...`;
+      case 'ml_label_list': return `ラベルデータ ${block.getFieldValue('DATA').slice(0, 20)}...`;
       default:                 return block.type;
     }
   }
@@ -1002,6 +1008,17 @@ document.addEventListener('DOMContentLoaded', function() {
         raw = String(raw).replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n')[0].trim();
         return raw || 'None';
       }
+      case 'game_random_int': {
+        const lo = block.getFieldValue('LO') || '0';
+        const hi = block.getFieldValue('HI') || '576';
+        return `random.randint(${lo}, ${hi})`;
+      }
+      case 'ml_data_2d': {
+        return block.getFieldValue('DATA') || '[]';
+      }
+      case 'ml_label_list': {
+        return block.getFieldValue('DATA') || '[]';
+      }
       default:
         return '0';
     }
@@ -1133,6 +1150,10 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'game_quit': {
         code = appendLocal(code, indent + `pygame.quit()\n`);
+        break;
+      }
+      case 'game_import_random': {
+        code = appendLocal(code, indent + `import random\n`);
         break;
       }
 
