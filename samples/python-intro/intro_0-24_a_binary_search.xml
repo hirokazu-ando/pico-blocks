@@ -7,94 +7,112 @@
     <variable id="var_right">right</variable>
     <variable id="var_mid">mid</variable>
   </variables>
-  <block type="var_set" id="b1" x="30" y="30">
-    <field name="VAR" id="var_data">data</field>
-    <value name="VALUE">
-      <block type="py_list_empty" id="b2">
-        <statement name="ITEMS">
-          <block type="py_list_append" id="b3">
-            <value name="ITEM"><block type="val_number" id="b4"><field name="NUM">1</field></block></value>
+  <block type="py_def_args2" x="30" y="30">
+    <field name="NAME">binary_search</field>
+    <field name="PARAM1">data</field>
+    <field name="PARAM2">target</field>
+    <statement name="BODY">
+      <block type="var_set">
+        <field name="VAR" id="var_left">left</field>
+        <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="var_right">right</field>
+            <value name="VALUE">
+              <block type="py_math_op">
+                <field name="OP">-</field>
+                <value name="LEFT"><block type="py_list_len"><field name="LIST" id="var_data">data</field></block></value>
+                <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+              </block>
+            </value>
             <next>
-              <block type="py_list_append" id="b5">
-                <value name="ITEM"><block type="val_number" id="b6"><field name="NUM">3</field></block></value>
-                <next>
-                  <block type="py_list_append" id="b7">
-                    <value name="ITEM"><block type="val_number" id="b8"><field name="NUM">5</field></block></value>
-                    <next>
-                      <block type="py_list_append" id="b9">
-                        <value name="ITEM"><block type="val_number" id="b10"><field name="NUM">7</field></block></value>
-                        <next>
-                          <block type="py_list_append" id="b11">
-                            <value name="ITEM"><block type="val_number" id="b12"><field name="NUM">9</field></block></value>
+              <block type="py_while">
+                <value name="COND">
+                  <block type="cond_compare">
+                    <field name="OP">&lt;=</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="var_left">left</field></block></value>
+                    <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_right">right</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO">
+                  <block type="var_set">
+                    <field name="VAR" id="var_mid">mid</field>
+                    <value name="VALUE">
+                      <block type="py_math_op">
+                        <field name="OP">//</field>
+                        <value name="LEFT">
+                          <block type="py_math_op">
+                            <field name="OP">+</field>
+                            <value name="LEFT"><block type="val_var"><field name="VAR" id="var_left">left</field></block></value>
+                            <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_right">right</field></block></value>
                           </block>
-                        </next>
+                        </value>
+                        <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="controls_if">
+                        <mutation elseif="1" else="1"></mutation>
+                        <value name="IF0">
+                          <block type="cond_compare">
+                            <field name="OP">==</field>
+                            <value name="LEFT">
+                              <block type="py_list_get">
+                                <field name="LIST" id="var_data">data</field>
+                                <value name="INDEX"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                              </block>
+                            </value>
+                            <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_target">target</field></block></value>
+                          </block>
+                        </value>
+                        <statement name="DO0">
+                          <block type="py_return">
+                            <value name="VALUE"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                          </block>
+                        </statement>
+                        <value name="IF1">
+                          <block type="cond_compare">
+                            <field name="OP">&lt;</field>
+                            <value name="LEFT">
+                              <block type="py_list_get">
+                                <field name="LIST" id="var_data">data</field>
+                                <value name="INDEX"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                              </block>
+                            </value>
+                            <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_target">target</field></block></value>
+                          </block>
+                        </value>
+                        <statement name="DO1">
+                          <block type="var_set">
+                            <field name="VAR" id="var_left">left</field>
+                            <value name="VALUE">
+                              <block type="py_math_op">
+                                <field name="OP">+</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                                <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </statement>
+                        <statement name="ELSE">
+                          <block type="var_set">
+                            <field name="VAR" id="var_right">right</field>
+                            <value name="VALUE">
+                              <block type="py_math_op">
+                                <field name="OP">-</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                                <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </statement>
                       </block>
                     </next>
                   </block>
-                </next>
-              </block>
-            </next>
-          </block>
-        </statement>
-      </block>
-    </value>
-    <next>
-      <block type="var_set" id="b13">
-        <field name="VAR" id="var_target">target</field>
-        <value name="VALUE"><block type="val_number" id="b14"><field name="NUM">7</field></block></value>
-        <next>
-          <block type="var_set" id="b15">
-            <field name="VAR" id="var_left">left</field>
-            <value name="VALUE"><block type="val_number" id="b16"><field name="NUM">0</field></block></value>
-            <next>
-              <block type="var_set" id="b17">
-                <field name="VAR" id="var_right">right</field>
-                <value name="VALUE">
-                  <block type="py_math_op" id="b18">
-                    <field name="OP">-</field>
-                    <value name="LEFT"><block type="py_list_len" id="b19"><value name="LIST"><block type="val_var" id="b20"><field name="VAR" id="var_data">data</field></block></value></block></value>
-                    <value name="RIGHT"><block type="val_number" id="b21"><field name="NUM">1</field></block></value>
-                  </block>
-                </value>
+                </statement>
                 <next>
-                  <block type="py_while" id="b22">
-                    <value name="COND">
-                      <block type="logic_compare" id="b23">
-                        <field name="OP">LTE</field>
-                        <value name="A"><block type="val_var" id="b24"><field name="VAR" id="var_left">left</field></block></value>
-                        <value name="B"><block type="val_var" id="b25"><field name="VAR" id="var_right">right</field></block></value>
-                      </block>
-                    </value>
-                    <statement name="DO">
-                      <block type="var_set" id="b26">
-                        <field name="VAR" id="var_mid">mid</field>
-                        <value name="VALUE">
-                          <block type="py_math_op" id="b27">
-                            <field name="OP">//</field>
-                            <value name="LEFT">
-                              <block type="py_math_op" id="b28">
-                                <field name="OP">+</field>
-                                <value name="LEFT"><block type="val_var" id="b29"><field name="VAR" id="var_left">left</field></block></value>
-                                <value name="RIGHT"><block type="val_var" id="b30"><field name="VAR" id="var_right">right</field></block></value>
-                              </block>
-                            </value>
-                            <value name="RIGHT"><block type="val_number" id="b31"><field name="NUM">2</field></block></value>
-                          </block>
-                        </value>
-                        <next>
-                          <block type="py_print" id="b32">
-                            <value name="VALUE">
-                              <block type="py_fstring" id="b33">
-                                <field name="TEMPLATE">left={} right={} mid={}</field>
-                                <value name="VAL0"><block type="val_var" id="b34"><field name="VAR" id="var_left">left</field></block></value>
-                                <value name="VAL1"><block type="val_var" id="b35"><field name="VAR" id="var_right">right</field></block></value>
-                                <value name="VAL2"><block type="val_var" id="b36"><field name="VAR" id="var_mid">mid</field></block></value>
-                              </block>
-                            </value>
-                          </block>
-                        </next>
-                      </block>
-                    </statement>
+                  <block type="py_return">
+                    <value name="VALUE"><block type="val_number"><field name="NUM">-1</field></block></value>
                   </block>
                 </next>
               </block>
@@ -102,6 +120,6 @@
           </block>
         </next>
       </block>
-    </next>
+    </statement>
   </block>
 </xml>

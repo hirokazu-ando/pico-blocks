@@ -5,7 +5,7 @@
   </variables>
   <block type="py_def" id="b1" x="30" y="30">
     <field name="NAME">factorial</field>
-    <field name="ARG0">n</field>
+    <field name="PARAM" id="var_n">n</field>
     <statement name="BODY">
       <block type="controls_if" id="b2">
         <value name="IF0">
@@ -28,8 +28,8 @@
                 <value name="LEFT"><block type="val_var" id="b10"><field name="VAR" id="var_n">n</field></block></value>
                 <value name="RIGHT">
                   <block type="py_call_val" id="b11">
-                    <field name="METHOD">factorial</field>
-                    <value name="OBJECT">
+                    <field name="NAME">factorial</field>
+                    <value name="ARG">
                       <block type="py_math_op" id="b12">
                         <field name="OP">-</field>
                         <value name="LEFT"><block type="val_var" id="b13"><field name="VAR" id="var_n">n</field></block></value>
