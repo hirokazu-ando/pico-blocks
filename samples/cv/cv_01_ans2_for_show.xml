@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_names">names</variable>
+    <variable id="var_name">name</variable>
+    <variable id="var_img">img</variable>
+  </variables>
+  <block type="cv_import" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_names">names</field>
+        <value name="VALUE">
+          <block type="py_list_empty" id="b_le"></block>
+        </value>
+        <next>
+          <block type="py_list_append" id="b_a1">
+            <field name="LIST" id="var_names">names</field>
+            <value name="VALUE"><block type="val_str" id="vs1"><field name="TEXT">gradient</field></block></value>
+            <next>
+              <block type="py_list_append" id="b_a2">
+                <field name="LIST" id="var_names">names</field>
+                <value name="VALUE"><block type="val_str" id="vs2"><field name="TEXT">checker</field></block></value>
+                <next>
+                  <block type="py_list_append" id="b_a3">
+                    <field name="LIST" id="var_names">names</field>
+                    <value name="VALUE"><block type="val_str" id="vs3"><field name="TEXT">circle</field></block></value>
+                    <next>
+                      <block type="py_list_append" id="b_a4">
+                        <field name="LIST" id="var_names">names</field>
+                        <value name="VALUE"><block type="val_str" id="vs4"><field name="TEXT">stripes</field></block></value>
+                        <next>
+                          <block type="py_for_list" id="b_for">
+                            <field name="VAR" id="var_name">name</field>
+                            <field name="LIST" id="var_names">names</field>
+                            <statement name="DO">
+                              <block type="cv_load" id="b2">
+                                <field name="VAR" id="var_img">img</field>
+                                <field name="SAMPLE">gradient</field>
+                                <next>
+                                  <block type="cv_show" id="b3">
+                                    <value name="IMG">
+                                      <block type="val_var" id="bv1"><field name="VAR" id="var_img">img</field></block>
+                                    </value>
+                                  </block>
+                                </next>
+                              </block>
+                            </statement>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

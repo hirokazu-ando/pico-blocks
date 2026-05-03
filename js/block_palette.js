@@ -28,6 +28,8 @@ window.PycoPalette = {
   modules: '#546E7A',
   chart:   '#1565C0',   // Part 2: matplotlib
   stats:   '#00695C',   // Part 2: statistics / csv
+  ml:      '#283593',   // Part 6: 機械学習
+  cv:      '#1B5E20',   // Part 5: 画像処理
   customPython: '#455A64',
   timing: '#2E7D32',
   polyvia: '#EF5350',

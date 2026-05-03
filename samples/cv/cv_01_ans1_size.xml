@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_img">img</variable>
+  </variables>
+  <block type="cv_import" id="b0" x="30" y="30">
+    <next>
+      <block type="cv_load" id="b1">
+        <field name="VAR" id="var_img">img</field>
+        <field name="SAMPLE">gradient</field>
+        <next>
+          <block type="py_print" id="b2">
+            <value name="VALUE">
+              <block type="cv_width" id="b3">
+                <value name="IMG">
+                  <block type="val_var" id="bv1"><field name="VAR" id="var_img">img</field></block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print" id="b4">
+                <value name="VALUE">
+                  <block type="cv_height" id="b5">
+                    <value name="IMG">
+                      <block type="val_var" id="bv2"><field name="VAR" id="var_img">img</field></block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

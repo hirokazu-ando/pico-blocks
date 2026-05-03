@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_img">img</variable>
+    <variable id="var_small">small</variable>
+    <variable id="var_mosaic">mosaic</variable>
+  </variables>
+  <block type="cv_import" id="b0" x="30" y="30">
+    <next>
+      <block type="cv_load" id="b1">
+        <field name="VAR" id="var_img">img</field>
+        <field name="SAMPLE">circle</field>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_small">small</field>
+            <value name="VALUE">
+              <block type="cv_resize" id="b3">
+                <value name="IMG">
+                  <block type="val_var" id="bv1"><field name="VAR" id="var_img">img</field></block>
+                </value>
+                <value name="W"><block type="val_number" id="n1"><field name="NUM">16</field></block></value>
+                <value name="H"><block type="val_number" id="n2"><field name="NUM">16</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="var_set" id="b4">
+                <field name="VAR" id="var_mosaic">mosaic</field>
+                <value name="VALUE">
+                  <block type="cv_resize" id="b5">
+                    <value name="IMG">
+                      <block type="val_var" id="bv2"><field name="VAR" id="var_small">small</field></block>
+                    </value>
+                    <value name="W"><block type="val_number" id="n3"><field name="NUM">120</field></block></value>
+                    <value name="H"><block type="val_number" id="n4"><field name="NUM">120</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="cv_show" id="b6">
+                    <value name="IMG">
+                      <block type="val_var" id="bv3"><field name="VAR" id="var_mosaic">mosaic</field></block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

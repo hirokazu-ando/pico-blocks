@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_reg">reg</variable>
+    <variable id="var_pred">pred</variable>
+  </variables>
+  <block type="ml_import" id="b0" x="30" y="30">
+    <next>
+      <block type="ml_linreg" id="b1">
+        <field name="VAR" id="var_reg">reg</field>
+        <next>
+          <block type="ml_fit" id="b2">
+            <value name="MODEL"><block type="val_var" id="bv1"><field name="VAR" id="var_reg">reg</field></block></value>
+            <value name="X_TRAIN">
+              <block type="py_custom_expr" id="bx"><field name="CODE">[[1],[2],[3],[4],[5]]</field></block>
+            </value>
+            <value name="Y_TRAIN">
+              <block type="py_custom_expr" id="by"><field name="CODE">[2,4,6,8,10]</field></block>
+            </value>
+            <next>
+              <block type="ml_predict_stmt" id="b3">
+                <field name="VAR" id="var_pred">pred</field>
+                <value name="MODEL"><block type="val_var" id="bv2"><field name="VAR" id="var_reg">reg</field></block></value>
+                <value name="X_TEST">
+                  <block type="py_custom_expr" id="bt"><field name="CODE">[[6]]</field></block>
+                </value>
+                <next>
+                  <block type="py_print" id="b4">
+                    <value name="VALUE"><block type="val_var" id="bv3"><field name="VAR" id="var_pred">pred</field></block></value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

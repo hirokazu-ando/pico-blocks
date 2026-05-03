@@ -1721,6 +1721,186 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
 
+      // ===== Part 6: 機械学習ブロック =====
+      case 'ml_import': {
+        code = appendLocal(code, indent + 'import pyco_ml\n');
+        break;
+      }
+      case 'ml_knn': {
+        const knnVar = getVarName(block, 'VAR');
+        const knnK   = block.getFieldValue('K') || '3';
+        code = appendLocal(code, indent + `${knnVar} = pyco_ml.KNN(${knnK})\n`);
+        break;
+      }
+      case 'ml_linreg': {
+        const lrVar = getVarName(block, 'VAR');
+        code = appendLocal(code, indent + `${lrVar} = pyco_ml.LinearRegression()\n`);
+        break;
+      }
+      case 'ml_fit': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'MODEL', ln);
+        registerExprBlocksAtLineFromInput(block, 'X_TRAIN', ln);
+        registerExprBlocksAtLineFromInput(block, 'Y_TRAIN', ln);
+        const fitMdl = valueToCode(block, 'MODEL', 'clf');
+        const fitXtr = valueToCode(block, 'X_TRAIN', '[]');
+        const fitYtr = valueToCode(block, 'Y_TRAIN', '[]');
+        code = appendLocal(code, indent + `${fitMdl}.fit(${fitXtr}, ${fitYtr})\n`);
+        break;
+      }
+      case 'ml_predict_stmt': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'MODEL', ln);
+        registerExprBlocksAtLineFromInput(block, 'X_TEST', ln);
+        const psVar = getVarName(block, 'VAR');
+        const psMdl = valueToCode(block, 'MODEL', 'clf');
+        const psXte = valueToCode(block, 'X_TEST', '[]');
+        code = appendLocal(code, indent + `${psVar} = ${psMdl}.predict(${psXte})\n`);
+        break;
+      }
+      case 'ml_predict_val': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'MODEL', ln);
+        registerExprBlocksAtLineFromInput(block, 'X_TEST', ln);
+        const pvMdl = valueToCode(block, 'MODEL', 'clf');
+        const pvXte = valueToCode(block, 'X_TEST', '[]');
+        code = appendLocal(code, indent + `${pvMdl}.predict(${pvXte})\n`);
+        break;
+      }
+      case 'ml_accuracy': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'Y_TRUE', ln);
+        registerExprBlocksAtLineFromInput(block, 'Y_PRED', ln);
+        const accYt = valueToCode(block, 'Y_TRUE', '[]');
+        const accYp = valueToCode(block, 'Y_PRED', '[]');
+        code = appendLocal(code, indent + `pyco_ml.accuracy(${accYt}, ${accYp})\n`);
+        break;
+      }
+      case 'ml_split': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'X', ln);
+        registerExprBlocksAtLineFromInput(block, 'Y', ln);
+        const spXtr  = getVarName(block, 'X_TR');
+        const spXte  = getVarName(block, 'X_TE');
+        const spYtr  = getVarName(block, 'Y_TR');
+        const spYte  = getVarName(block, 'Y_TE');
+        const spX    = valueToCode(block, 'X', '[]');
+        const spY    = valueToCode(block, 'Y', '[]');
+        const spRatio = block.getFieldValue('RATIO') || '0.2';
+        code = appendLocal(code, indent + `${spXtr}, ${spXte}, ${spYtr}, ${spYte} = pyco_ml.train_test_split(${spX}, ${spY}, ${spRatio})\n`);
+        break;
+      }
+
+      // ===== Part 5: 画像処理ブロック =====
+      case 'cv_import': {
+        code = appendLocal(code, indent + 'import pyco_cv\n');
+        break;
+      }
+      case 'cv_load': {
+        const cvVar    = getVarName(block, 'VAR');
+        const cvSample = block.getFieldValue('SAMPLE') || 'gradient';
+        code = appendLocal(code, indent + `${cvVar} = pyco_cv.load("${cvSample}")\n`);
+        break;
+      }
+      case 'cv_show': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'IMG', ln);
+        const showImg = valueToCode(block, 'IMG', 'img');
+        code = appendLocal(code, indent + `pyco_cv.show(${showImg})\n`);
+        break;
+      }
+      case 'cv_to_gray': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'IMG', ln);
+        const grayImg = valueToCode(block, 'IMG', 'img');
+        code = appendLocal(code, indent + `pyco_cv.to_gray(${grayImg})\n`);
+        break;
+      }
+      case 'cv_filter_blur': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'IMG', ln);
+        const blurImg = valueToCode(block, 'IMG', 'img');
+        const blurSz  = block.getFieldValue('SIZE') || '3';
+        code = appendLocal(code, indent + `pyco_cv.filter_blur(${blurImg}, ${blurSz})\n`);
+        break;
+      }
+      case 'cv_filter_edge': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'IMG', ln);
+        const edgeImg = valueToCode(block, 'IMG', 'img');
+        code = appendLocal(code, indent + `pyco_cv.filter_edge(${edgeImg})\n`);
+        break;
+      }
+      case 'cv_brightness': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'IMG', ln);
+        const brightImg   = valueToCode(block, 'IMG', 'img');
+        const brightDelta = block.getFieldValue('DELTA') || '50';
+        code = appendLocal(code, indent + `pyco_cv.brightness(${brightImg}, ${brightDelta})\n`);
+        break;
+      }
+      case 'cv_get_pixel': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'IMG', ln);
+        registerExprBlocksAtLineFromInput(block, 'X', ln);
+        registerExprBlocksAtLineFromInput(block, 'Y', ln);
+        const gpImg = valueToCode(block, 'IMG', 'img');
+        const gpX   = valueToCode(block, 'X', '0');
+        const gpY   = valueToCode(block, 'Y', '0');
+        code = appendLocal(code, indent + `pyco_cv.get_pixel(${gpImg}, ${gpX}, ${gpY})\n`);
+        break;
+      }
+      case 'cv_set_pixel': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'IMG', ln);
+        registerExprBlocksAtLineFromInput(block, 'X', ln);
+        registerExprBlocksAtLineFromInput(block, 'Y', ln);
+        registerExprBlocksAtLineFromInput(block, 'R', ln);
+        registerExprBlocksAtLineFromInput(block, 'G', ln);
+        registerExprBlocksAtLineFromInput(block, 'B', ln);
+        const spImg = valueToCode(block, 'IMG', 'img');
+        const spX   = valueToCode(block, 'X', '0');
+        const spY   = valueToCode(block, 'Y', '0');
+        const spR   = valueToCode(block, 'R', '255');
+        const spG   = valueToCode(block, 'G', '0');
+        const spB   = valueToCode(block, 'B', '0');
+        code = appendLocal(code, indent + `pyco_cv.set_pixel(${spImg}, ${spX}, ${spY}, ${spR}, ${spG}, ${spB})\n`);
+        break;
+      }
+      case 'cv_width': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'IMG', ln);
+        const wImg = valueToCode(block, 'IMG', 'img');
+        code = appendLocal(code, indent + `pyco_cv.get_width(${wImg})\n`);
+        break;
+      }
+      case 'cv_height': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'IMG', ln);
+        const hImg = valueToCode(block, 'IMG', 'img');
+        code = appendLocal(code, indent + `pyco_cv.get_height(${hImg})\n`);
+        break;
+      }
+      case 'cv_resize': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'IMG', ln);
+        registerExprBlocksAtLineFromInput(block, 'W', ln);
+        registerExprBlocksAtLineFromInput(block, 'H', ln);
+        const rzImg = valueToCode(block, 'IMG', 'img');
+        const rzW   = valueToCode(block, 'W', '60');
+        const rzH   = valueToCode(block, 'H', '60');
+        code = appendLocal(code, indent + `pyco_cv.resize(${rzImg}, ${rzW}, ${rzH})\n`);
+        break;
+      }
+      case 'cv_copy': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'IMG', ln);
+        const cpVar = getVarName(block, 'VAR');
+        const cpImg = valueToCode(block, 'IMG', 'img');
+        code = appendLocal(code, indent + `${cpVar} = pyco_cv.copy(${cpImg})\n`);
+        break;
+      }
+
       default:
         code = appendLocal(code, indent + `pass  # 未対応ブロック: ${block.type}\n`);
     }
@@ -2713,6 +2893,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return window.PycoPygame.source;
       }
     }
+    // 機械学習モジュール
+    if (window.PycoML && window.PycoML.source && x.includes('pyco_ml')) {
+      return window.PycoML.source;
+    }
+    // 画像処理モジュール
+    if (window.PycoCv && window.PycoCv.source && x.includes('pyco_cv')) {
+      return window.PycoCv.source;
+    }
     // Skulpt 組み込みにフォールバック
     if (Sk.builtinFiles === undefined || Sk.builtinFiles['files'][x] === undefined) {
       throw "File not found: '" + x + "'";
@@ -2759,6 +2947,12 @@ document.addEventListener('DOMContentLoaded', function() {
       plotArea.innerHTML = '';
       plotArea.style.display = 'none';
     }
+    // 画像処理表示エリアをクリア
+    const cvArea = document.getElementById('cv-display-area');
+    if (cvArea) {
+      cvArea.innerHTML = '';
+      cvArea.style.display = 'none';
+    }
     // Skulpt matplotlib の描画先として pyco-plot-area を設定
     Sk.TurtleGraphics = { target: 'pyco-plot-area', width: 600, height: 420 };
 
@@ -2787,6 +2981,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Sk.configure の後に pygame を登録（configure が builtinFiles をリセットするため必ず後に呼ぶ）
     if (currentMode === 'game' && window.PycoPygame && typeof window.PycoPygame.installIntoSkulpt === 'function') {
       try { window.PycoPygame.installIntoSkulpt(Sk); } catch (e) { console.warn('pygame install failed', e); }
+    }
+    // 機械学習モジュール登録
+    if (window.PycoML && typeof window.PycoML.installIntoSkulpt === 'function') {
+      try { window.PycoML.installIntoSkulpt(Sk); } catch (e) { console.warn('pyco_ml install failed', e); }
+    }
+    // 画像処理モジュール登録
+    if (window.PycoCv && typeof window.PycoCv.installIntoSkulpt === 'function') {
+      try { window.PycoCv.installIntoSkulpt(Sk); } catch (e) { console.warn('pyco_cv install failed', e); }
     }
 
     Sk.misceval.asyncToPromise(function() {

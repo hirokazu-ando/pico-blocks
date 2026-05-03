@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_img">img</variable>
+    <variable id="var_blurred">blurred</variable>
+  </variables>
+  <block type="cv_import" id="b0" x="30" y="30">
+    <next>
+      <block type="cv_load" id="b1">
+        <field name="VAR" id="var_img">img</field>
+        <field name="SAMPLE">gradient</field>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_blurred">blurred</field>
+            <value name="VALUE">
+              <block type="cv_filter_blur" id="b3">
+                <value name="IMG">
+                  <block type="val_var" id="bv1"><field name="VAR" id="var_img">img</field></block>
+                </value>
+                <field name="SIZE">9</field>
+              </block>
+            </value>
+            <next>
+              <block type="cv_show" id="b4">
+                <value name="IMG">
+                  <block type="val_var" id="bv2"><field name="VAR" id="var_blurred">blurred</field></block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
