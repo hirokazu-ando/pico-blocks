@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables><variable id="var_a">a</variable><variable id="var_b">b</variable></variables>
-  <block type="py_input" id="b1" x="30" y="30"><field name="TYPE">int</field><field name="VAR" id="var_a">a</field><field name="PROMPT">a</field>
-    <next><block type="py_input" id="b2"><field name="TYPE">int</field><field name="VAR" id="var_b">b</field><field name="PROMPT">b</field>
+  <block type="py_input" id="b1" x="30" y="30"><field name="TYPE">int</field><field name="VAR" id="var_a">a</field><field name="PROMPT">aを入力してください</field>
+    <next><block type="py_input" id="b2"><field name="TYPE">int</field><field name="VAR" id="var_b">b</field><field name="PROMPT">bを入力してください</field>
       <next><block type="pico_if" id="b3"><value name="IF0"><block type="cond_or" id="b4"><value name="A"><block type="cond_compare" id="b5"><field name="OP">==</field><value name="LEFT"><block type="val_var" id="b6"><field name="VAR" id="var_a">a</field></block></value><value name="RIGHT"><block type="val_number" id="b7"><field name="NUM">0</field></block></value></block></value><value name="B"><block type="cond_compare" id="b8"><field name="OP">==</field><value name="LEFT"><block type="val_var" id="b9"><field name="VAR" id="var_b">b</field></block></value><value name="RIGHT"><block type="val_number" id="b10"><field name="NUM">0</field></block></value></block></value></block></value><statement name="DO0"><block type="print_text" id="b11"><field name="TEXT">どちらかが0</field></block></statement></block></next>
     </block></next>
   </block>

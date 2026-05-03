@@ -20,8 +20,9 @@
     <next>
       <block type="py_print">
         <value name="VALUE">
-          <block type="py_custom_expr">
-            <field name="CODE">sorted(words)</field>
+          <block type="py_sorted_call">
+            <field name="LIST" id="var_words">words</field>
+            <field name="REVERSE">False</field>
           </block>
         </value>
         <next>
@@ -34,8 +35,9 @@
             <next>
               <block type="py_print">
                 <value name="VALUE">
-                  <block type="py_custom_expr">
-                    <field name="CODE">sorted(words, reverse=True)</field>
+                  <block type="py_sorted_call">
+                    <field name="LIST" id="var_words">words</field>
+                    <field name="REVERSE">True</field>
                   </block>
                 </value>
                 <next>
