@@ -5,24 +5,37 @@
     <variable id="var_i">i</variable>
     <variable id="var_f">f</variable>
   </variables>
-  <block type="py_enumerate_for" x="30" y="30">
-    <field name="IDX" id="var_i">i</field>
-    <field name="VAL" id="var_f">f</field>
-    <field name="LIST" id="var_fruits">fruits</field>
-    <statement name="DO">
-      <block type="py_print">
-        <value name="VALUE">
-          <block type="py_str_concat">
-            <value name="A">
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="var_fruits">fruits</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="3"/>
+        <value name="ITEM0"><block type="val_str"><field name="TEXT">apple</field></block></value>
+        <value name="ITEM1"><block type="val_str"><field name="TEXT">banana</field></block></value>
+        <value name="ITEM2"><block type="val_str"><field name="TEXT">cherry</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="py_enumerate_for">
+        <field name="IDX" id="var_i">i</field>
+        <field name="VAL" id="var_f">f</field>
+        <field name="LIST" id="var_fruits">fruits</field>
+        <statement name="DO">
+          <block type="py_print">
+            <value name="VALUE">
               <block type="py_str_concat">
-                <value name="A"><block type="val_var"><field name="VAR" id="var_i">i</field></block></value>
-                <value name="B"><block type="val_str"><field name="TEXT">: </field></block></value>
+                <value name="A">
+                  <block type="py_str_concat">
+                    <value name="A"><block type="val_var"><field name="VAR" id="var_i">i</field></block></value>
+                    <value name="B"><block type="val_str"><field name="TEXT">: </field></block></value>
+                  </block>
+                </value>
+                <value name="B"><block type="val_var"><field name="VAR" id="var_f">f</field></block></value>
               </block>
             </value>
-            <value name="B"><block type="val_var"><field name="VAR" id="var_f">f</field></block></value>
           </block>
-        </value>
+        </statement>
       </block>
-    </statement>
+    </next>
   </block>
 </xml>

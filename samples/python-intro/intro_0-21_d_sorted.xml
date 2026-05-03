@@ -1,30 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt" x="30" y="30">
-    <field name="CODE">words = ["banana", "apple", "cherry", "date"]</field>
+  <variables>
+    <variable id="var_words">words</variable>
+    <variable id="var_students">students</variable>
+    <variable id="var_by_score">by_score</variable>
+    <variable id="var_s">s</variable>
+  </variables>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="var_words">words</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="4"/>
+        <value name="ITEM0"><block type="val_str"><field name="TEXT">banana</field></block></value>
+        <value name="ITEM1"><block type="val_str"><field name="TEXT">apple</field></block></value>
+        <value name="ITEM2"><block type="val_str"><field name="TEXT">cherry</field></block></value>
+        <value name="ITEM3"><block type="val_str"><field name="TEXT">date</field></block></value>
+      </block>
+    </value>
     <next>
-      <block type="py_custom_stmt">
-        <field name="CODE">print(sorted(words))</field>
+      <block type="py_print">
+        <value name="VALUE">
+          <block type="py_custom_expr">
+            <field name="CODE">sorted(words)</field>
+          </block>
+        </value>
         <next>
-          <block type="py_custom_stmt">
-            <field name="CODE">print(sorted(words, key=len))</field>
+          <block type="py_print">
+            <value name="VALUE">
+              <block type="py_custom_expr">
+                <field name="CODE">sorted(words, key=len)</field>
+              </block>
+            </value>
             <next>
-              <block type="py_custom_stmt">
-                <field name="CODE">print(sorted(words, reverse=True))</field>
+              <block type="py_print">
+                <value name="VALUE">
+                  <block type="py_custom_expr">
+                    <field name="CODE">sorted(words, reverse=True)</field>
+                  </block>
+                </value>
                 <next>
-                  <block type="py_custom_stmt">
-                    <field name="CODE">students = [{"name": "田中", "score": 85}, {"name": "鈴木", "score": 92}, {"name": "山田", "score": 78}]</field>
+                  <block type="var_set">
+                    <field name="VAR" id="var_students">students</field>
+                    <value name="VALUE">
+                      <block type="py_custom_expr">
+                        <field name="CODE">[{"name": "田中", "score": 85}, {"name": "鈴木", "score": 92}, {"name": "山田", "score": 78}]</field>
+                      </block>
+                    </value>
                     <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">by_score = sorted(students, key=lambda s: s["score"], reverse=True)</field>
+                      <block type="var_set">
+                        <field name="VAR" id="var_by_score">by_score</field>
+                        <value name="VALUE">
+                          <block type="py_custom_expr">
+                            <field name="CODE">sorted(students, key=lambda s: s["score"], reverse=True)</field>
+                          </block>
+                        </value>
                         <next>
-                          <block type="py_custom_stmt">
-                            <field name="CODE">for s in by_score:</field>
-                            <next>
-                              <block type="py_custom_stmt">
-                                <field name="CODE">    print(s["name"], s["score"])</field>
+                          <block type="py_for_list">
+                            <field name="VAR" id="var_s">s</field>
+                            <field name="LIST" id="var_by_score">by_score</field>
+                            <statement name="DO">
+                              <block type="py_print">
+                                <value name="VALUE">
+                                  <block type="py_custom_expr">
+                                    <field name="CODE">f'{s["name"]} {s["score"]}'</field>
+                                  </block>
+                                </value>
                               </block>
-                            </next>
+                            </statement>
                           </block>
                         </next>
                       </block>

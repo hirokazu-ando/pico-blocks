@@ -77,9 +77,39 @@
                 </statement>
               </block>
             </statement>
+            <next>
+              <block type="py_return">
+                <value name="VALUE"><block type="val_var"><field name="VAR" id="var_data">data</field></block></value>
+              </block>
+            </next>
           </block>
         </next>
       </block>
     </statement>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="var_data">data</field>
+        <value name="VALUE">
+          <block type="py_list_literal">
+            <mutation items="5"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">5</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">3</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">8</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">1</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">4</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print">
+            <value name="VALUE">
+              <block type="py_call_val">
+                <field name="NAME">bubble_sort</field>
+                <value name="ARG"><block type="val_var"><field name="VAR" id="var_data">data</field></block></value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </next>
   </block>
 </xml>

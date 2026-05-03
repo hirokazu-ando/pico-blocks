@@ -1,31 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt" x="30" y="30">
-    <field name="CODE">words = ["apple", "banana", "cherry"]</field>
+  <variables>
+    <variable id="var_words">words</variable>
+    <variable id="var_lengths">lengths</variable>
+    <variable id="var_nums">nums</variable>
+    <variable id="var_unique_squares">unique_squares</variable>
+    <variable id="var_original">original</variable>
+    <variable id="var_reversed_dict">reversed_dict</variable>
+  </variables>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="var_words">words</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="3"/>
+        <value name="ITEM0"><block type="val_str"><field name="TEXT">apple</field></block></value>
+        <value name="ITEM1"><block type="val_str"><field name="TEXT">banana</field></block></value>
+        <value name="ITEM2"><block type="val_str"><field name="TEXT">cherry</field></block></value>
+      </block>
+    </value>
     <next>
-      <block type="py_custom_stmt">
-        <field name="CODE">lengths = {w: len(w) for w in words}</field>
+      <block type="var_set">
+        <field name="VAR" id="var_lengths">lengths</field>
+        <value name="VALUE">
+          <block type="py_custom_expr">
+            <field name="CODE">{w: len(w) for w in words}</field>
+          </block>
+        </value>
         <next>
-          <block type="py_custom_stmt">
-            <field name="CODE">print(lengths)   # {'apple': 5, 'banana': 6, 'cherry': 6}</field>
+          <block type="py_print">
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="var_lengths">lengths</field></block></value>
             <next>
-              <block type="py_custom_stmt">
-                <field name="CODE">nums = [1, 2, 2, 3, 3, 3]</field>
+              <block type="var_set">
+                <field name="VAR" id="var_nums">nums</field>
+                <value name="VALUE">
+                  <block type="py_list_literal">
+                    <mutation items="6"/>
+                    <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
+                    <value name="ITEM1"><block type="val_number"><field name="NUM">2</field></block></value>
+                    <value name="ITEM2"><block type="val_number"><field name="NUM">2</field></block></value>
+                    <value name="ITEM3"><block type="val_number"><field name="NUM">3</field></block></value>
+                    <value name="ITEM4"><block type="val_number"><field name="NUM">3</field></block></value>
+                    <value name="ITEM5"><block type="val_number"><field name="NUM">3</field></block></value>
+                  </block>
+                </value>
                 <next>
-                  <block type="py_custom_stmt">
-                    <field name="CODE">unique_squares = {n ** 2 for n in nums}</field>
+                  <block type="var_set">
+                    <field name="VAR" id="var_unique_squares">unique_squares</field>
+                    <value name="VALUE">
+                      <block type="py_custom_expr">
+                        <field name="CODE">{n ** 2 for n in nums}</field>
+                      </block>
+                    </value>
                     <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">print(unique_squares)   # {1, 4, 9}</field>
+                      <block type="py_print">
+                        <value name="VALUE"><block type="val_var"><field name="VAR" id="var_unique_squares">unique_squares</field></block></value>
                         <next>
-                          <block type="py_custom_stmt">
-                            <field name="CODE">original = {"a": 1, "b": 2, "c": 3}</field>
+                          <block type="var_set">
+                            <field name="VAR" id="var_original">original</field>
+                            <value name="VALUE">
+                              <block type="py_custom_expr">
+                                <field name="CODE">{"a": 1, "b": 2, "c": 3}</field>
+                              </block>
+                            </value>
                             <next>
-                              <block type="py_custom_stmt">
-                                <field name="CODE">reversed_dict = {v: k for k, v in original.items()}</field>
+                              <block type="var_set">
+                                <field name="VAR" id="var_reversed_dict">reversed_dict</field>
+                                <value name="VALUE">
+                                  <block type="py_custom_expr">
+                                    <field name="CODE">{v: k for k, v in original.items()}</field>
+                                  </block>
+                                </value>
                                 <next>
-                                  <block type="py_custom_stmt">
-                                    <field name="CODE">print(reversed_dict)   # {1: 'a', 2: 'b', 3: 'c'}</field>
+                                  <block type="py_print">
+                                    <value name="VALUE"><block type="val_var"><field name="VAR" id="var_reversed_dict">reversed_dict</field></block></value>
                                   </block>
                                 </next>
                               </block>

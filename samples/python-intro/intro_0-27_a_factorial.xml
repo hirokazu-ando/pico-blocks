@@ -44,5 +44,15 @@
         </next>
       </block>
     </statement>
+    <next>
+      <block type="py_print">
+        <value name="VALUE">
+          <block type="py_call_val">
+            <field name="NAME">factorial</field>
+            <value name="ARG"><block type="val_number"><field name="NUM">5</field></block></value>
+          </block>
+        </value>
+      </block>
+    </next>
   </block>
 </xml>

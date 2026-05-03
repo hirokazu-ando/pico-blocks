@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt" x="30" y="30">
-    <field name="CODE">with open("log.txt", "a", encoding="utf-8") as f:</field>
+  <variables>
+    <variable id="var_content">content</variable>
+  </variables>
+  <block type="py_file_append" x="30" y="30">
+    <field name="FILENAME">log.txt</field>
+    <value name="CONTENT"><block type="val_str"><field name="TEXT">2026-05-03: アクセスがありました\n</field></block></value>
     <next>
-      <block type="py_custom_stmt">
-        <field name="CODE">    f.write("2026-05-03: アクセスがありました\n")</field>
+      <block type="py_file_read">
+        <field name="FILENAME">log.txt</field>
+        <field name="VAR">content</field>
         <next>
-          <block type="py_custom_stmt">
-            <field name="CODE">with open("log.txt", "r", encoding="utf-8") as f:</field>
-            <next>
-              <block type="py_custom_stmt">
-                <field name="CODE">    content = f.read()</field>
-                <next>
-                  <block type="py_custom_stmt">
-                    <field name="CODE">print(content)</field>
-                  </block>
-                </next>
-              </block>
-            </next>
+          <block type="py_print">
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="var_content">content</field></block></value>
           </block>
         </next>
       </block>

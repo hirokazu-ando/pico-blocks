@@ -1,31 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt" x="30" y="30">
-    <field name="CODE">with open("sample.txt", "r", encoding="utf-8") as f:</field>
+  <variables>
+    <variable id="var_lines">lines</variable>
+    <variable id="var_line">line</variable>
+    <variable id="var_data">data</variable>
+  </variables>
+  <block type="py_file_readlines" x="30" y="30">
+    <field name="FILENAME">sample.txt</field>
+    <field name="VAR">lines</field>
     <next>
-      <block type="py_custom_stmt">
-        <field name="CODE">    lines = f.readlines()</field>
+      <block type="py_for_list">
+        <field name="VAR" id="var_line">line</field>
+        <field name="LIST" id="var_lines">lines</field>
+        <statement name="DO">
+          <block type="py_print">
+            <value name="VALUE">
+              <block type="py_custom_expr">
+                <field name="CODE">line.strip()</field>
+              </block>
+            </value>
+          </block>
+        </statement>
         <next>
-          <block type="py_custom_stmt">
-            <field name="CODE">for line in lines:</field>
+          <block type="var_set">
+            <field name="VAR" id="var_data">data</field>
+            <value name="VALUE">
+              <block type="py_list_literal">
+                <mutation items="3"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">apple\n</field></block></value>
+                <value name="ITEM1"><block type="val_str"><field name="TEXT">banana\n</field></block></value>
+                <value name="ITEM2"><block type="val_str"><field name="TEXT">cherry\n</field></block></value>
+              </block>
+            </value>
             <next>
-              <block type="py_custom_stmt">
-                <field name="CODE">    print(line.strip())   # strip() で末尾の改行を除去</field>
-                <next>
-                  <block type="py_custom_stmt">
-                    <field name="CODE">data = ["apple\n", "banana\n", "cherry\n"]</field>
-                    <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">with open("fruits.txt", "w", encoding="utf-8") as f:</field>
-                        <next>
-                          <block type="py_custom_stmt">
-                            <field name="CODE">    f.writelines(data)</field>
-                          </block>
-                        </next>
-                      </block>
-                    </next>
+              <block type="py_file_write">
+                <field name="FILENAME">fruits.txt</field>
+                <value name="CONTENT">
+                  <block type="py_custom_expr">
+                    <field name="CODE">"".join(data)</field>
                   </block>
-                </next>
+                </value>
               </block>
             </next>
           </block>

@@ -1,37 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt" x="30" y="30">
-    <field name="CODE">nums = [1, 2, 3, 4, 5]</field>
+  <variables>
+    <variable id="var_nums">nums</variable>
+    <variable id="var_squared">squared</variable>
+    <variable id="var_str_nums">str_nums</variable>
+    <variable id="var_int_nums">int_nums</variable>
+    <variable id="var_evens">evens</variable>
+    <variable id="var_items">items</variable>
+    <variable id="var_cleaned">cleaned</variable>
+  </variables>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="var_nums">nums</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="5"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">2</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">3</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">4</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">5</field></block></value>
+      </block>
+    </value>
     <next>
-      <block type="py_custom_stmt">
-        <field name="CODE">squared = list(map(lambda x: x ** 2, nums))</field>
+      <block type="var_set">
+        <field name="VAR" id="var_squared">squared</field>
+        <value name="VALUE">
+          <block type="py_custom_expr">
+            <field name="CODE">list(map(lambda x: x ** 2, nums))</field>
+          </block>
+        </value>
         <next>
-          <block type="py_custom_stmt">
-            <field name="CODE">print(squared)   # [1, 4, 9, 16, 25]</field>
+          <block type="py_print">
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="var_squared">squared</field></block></value>
             <next>
-              <block type="py_custom_stmt">
-                <field name="CODE">str_nums = ["10", "20", "30"]</field>
+              <block type="var_set">
+                <field name="VAR" id="var_str_nums">str_nums</field>
+                <value name="VALUE">
+                  <block type="py_list_literal">
+                    <mutation items="3"/>
+                    <value name="ITEM0"><block type="val_str"><field name="TEXT">10</field></block></value>
+                    <value name="ITEM1"><block type="val_str"><field name="TEXT">20</field></block></value>
+                    <value name="ITEM2"><block type="val_str"><field name="TEXT">30</field></block></value>
+                  </block>
+                </value>
                 <next>
-                  <block type="py_custom_stmt">
-                    <field name="CODE">int_nums = list(map(int, str_nums))</field>
+                  <block type="var_set">
+                    <field name="VAR" id="var_int_nums">int_nums</field>
+                    <value name="VALUE">
+                      <block type="py_map_call">
+                        <field name="LIST" id="var_str_nums">str_nums</field>
+                        <field name="TYPE">int</field>
+                      </block>
+                    </value>
                     <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">print(int_nums)  # [10, 20, 30]</field>
+                      <block type="py_print">
+                        <value name="VALUE"><block type="val_var"><field name="VAR" id="var_int_nums">int_nums</field></block></value>
                         <next>
-                          <block type="py_custom_stmt">
-                            <field name="CODE">evens = list(filter(lambda x: x % 2 == 0, nums))</field>
+                          <block type="var_set">
+                            <field name="VAR" id="var_evens">evens</field>
+                            <value name="VALUE">
+                              <block type="py_custom_expr">
+                                <field name="CODE">list(filter(lambda x: x % 2 == 0, nums))</field>
+                              </block>
+                            </value>
                             <next>
-                              <block type="py_custom_stmt">
-                                <field name="CODE">print(evens)     # [2, 4]</field>
+                              <block type="py_print">
+                                <value name="VALUE"><block type="val_var"><field name="VAR" id="var_evens">evens</field></block></value>
                                 <next>
-                                  <block type="py_custom_stmt">
-                                    <field name="CODE">items = ["apple", None, "banana", "", "cherry", None]</field>
+                                  <block type="var_set">
+                                    <field name="VAR" id="var_items">items</field>
+                                    <value name="VALUE">
+                                      <block type="py_custom_expr">
+                                        <field name="CODE">["apple", None, "banana", "", "cherry", None]</field>
+                                      </block>
+                                    </value>
                                     <next>
-                                      <block type="py_custom_stmt">
-                                        <field name="CODE">cleaned = list(filter(None, items))</field>
+                                      <block type="var_set">
+                                        <field name="VAR" id="var_cleaned">cleaned</field>
+                                        <value name="VALUE">
+                                          <block type="py_custom_expr">
+                                            <field name="CODE">list(filter(None, items))</field>
+                                          </block>
+                                        </value>
                                         <next>
-                                          <block type="py_custom_stmt">
-                                            <field name="CODE">print(cleaned)   # ['apple', 'banana', 'cherry']</field>
+                                          <block type="py_print">
+                                            <value name="VALUE"><block type="val_var"><field name="VAR" id="var_cleaned">cleaned</field></block></value>
                                           </block>
                                         </next>
                                       </block>

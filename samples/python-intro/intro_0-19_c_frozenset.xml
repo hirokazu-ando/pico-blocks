@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt" x="30" y="30">
-    <field name="CODE">vowels = frozenset("aeiou")</field>
+  <variables>
+    <variable id="var_vowels">vowels</variable>
+    <variable id="var_pairs">pairs</variable>
+  </variables>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="var_vowels">vowels</field>
+    <value name="VALUE">
+      <block type="py_custom_expr">
+        <field name="CODE">frozenset("aeiou")</field>
+      </block>
+    </value>
     <next>
-      <block type="py_custom_stmt">
-        <field name="CODE">print(vowels)            # frozenset({'a', 'e', 'i', 'o', 'u'})</field>
+      <block type="py_print">
+        <value name="VALUE"><block type="val_var"><field name="VAR" id="var_vowels">vowels</field></block></value>
         <next>
-          <block type="py_custom_stmt">
-            <field name="CODE">print("a" in vowels)     # True</field>
+          <block type="py_print">
+            <value name="VALUE">
+              <block type="py_custom_expr">
+                <field name="CODE">"a" in vowels</field>
+              </block>
+            </value>
             <next>
               <block type="py_custom_stmt">
                 <field name="CODE"># frozenset は変更できない</field>
@@ -15,11 +28,20 @@
                   <block type="py_custom_stmt">
                     <field name="CODE"># vowels.add("y")  → AttributeError</field>
                     <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">pairs = {frozenset({1, 2}): "pair A", frozenset({3, 4}): "pair B"}</field>
+                      <block type="var_set">
+                        <field name="VAR" id="var_pairs">pairs</field>
+                        <value name="VALUE">
+                          <block type="py_custom_expr">
+                            <field name="CODE">{frozenset({1, 2}): "pair A", frozenset({3, 4}): "pair B"}</field>
+                          </block>
+                        </value>
                         <next>
-                          <block type="py_custom_stmt">
-                            <field name="CODE">print(pairs[frozenset({1, 2})])   # pair A</field>
+                          <block type="py_print">
+                            <value name="VALUE">
+                              <block type="py_custom_expr">
+                                <field name="CODE">pairs[frozenset({1, 2})]</field>
+                              </block>
+                            </value>
                           </block>
                         </next>
                       </block>
