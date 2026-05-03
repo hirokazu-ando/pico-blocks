@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vd">data</variable>
+    <variable id="vp">pos</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vd">data</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[1, 3, 5, 9, 11]</field></block></value><next><block type="var_set"><field name="VAR" id="vp">pos</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">bisect.bisect_left(data, 7)</field></block></value><next><block type="py_custom_stmt"><field name="CODE">import bisect</field><next><block type="py_custom_stmt"><field name="CODE">print(f"挿入位置: {pos}")</field><next><block type="py_custom_stmt"><field name="CODE">data.insert(pos, 7)</field><next><block type="py_custom_stmt"><field name="CODE">print(data)</field></block></next></block></next></block></next></block></next></block></next></block>
+</xml>

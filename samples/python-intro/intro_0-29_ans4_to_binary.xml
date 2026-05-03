@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt"><field name="CODE">def to_binary(n):</field><next><block type="py_custom_stmt"><field name="CODE">    if n == 0: return "0"</field><next><block type="py_custom_stmt"><field name="CODE">    if n == 1: return "1"</field><next><block type="py_custom_stmt"><field name="CODE">    return to_binary(n // 2) + str(n % 2)</field><next><block type="py_custom_stmt"><field name="CODE">print(to_binary(13))</field><next><block type="py_custom_stmt"><field name="CODE">print(to_binary(255))</field><next><block type="py_custom_stmt"><field name="CODE">print(to_binary(1024))</field></block></next></block></next></block></next></block></next></block></next></block></next></block>
+</xml>

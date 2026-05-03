@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt"><field name="CODE">def reverse_str(s):</field><next><block type="py_custom_stmt"><field name="CODE">    if len(s) &lt;= 1:</field><next><block type="py_custom_stmt"><field name="CODE">        return s</field><next><block type="py_custom_stmt"><field name="CODE">    return reverse_str(s[1:]) + s[0]</field><next><block type="py_custom_stmt"><field name="CODE">print(reverse_str("hello"))</field><next><block type="py_custom_stmt"><field name="CODE">print(reverse_str("recursion"))</field></block></next></block></next></block></next></block></next></block></next></block>
+</xml>

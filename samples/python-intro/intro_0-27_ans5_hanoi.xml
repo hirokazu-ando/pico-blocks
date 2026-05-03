@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt"><field name="CODE">def hanoi(n, src, dst, via):</field><next><block type="py_custom_stmt"><field name="CODE">    if n == 1:</field><next><block type="py_custom_stmt"><field name="CODE">        print(f"円盤1を {src} から {dst} へ")</field><next><block type="py_custom_stmt"><field name="CODE">        return</field><next><block type="py_custom_stmt"><field name="CODE">    hanoi(n - 1, src, via, dst)</field><next><block type="py_custom_stmt"><field name="CODE">    print(f"円盤{n}を {src} から {dst} へ")</field><next><block type="py_custom_stmt"><field name="CODE">    hanoi(n - 1, via, dst, src)</field><next><block type="py_custom_stmt"><field name="CODE">hanoi(3, "A", "C", "B")</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+</xml>

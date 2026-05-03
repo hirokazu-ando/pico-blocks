@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vd">data</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vd">data</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[1, 3, 5, 7, 9, 11, 13, 15, 17, 19]</field></block></value><next><block type="py_custom_stmt"><field name="CODE">import bisect</field><next><block type="py_custom_stmt"><field name="CODE">def count_in_range(data, lo, hi):</field><next><block type="py_custom_stmt"><field name="CODE">    left = bisect.bisect_left(data, lo)</field><next><block type="py_custom_stmt"><field name="CODE">    right = bisect.bisect_right(data, hi)</field><next><block type="py_custom_stmt"><field name="CODE">    return right - left</field><next><block type="py_custom_stmt"><field name="CODE">print(count_in_range(data, 6, 14))</field><next><block type="py_custom_stmt"><field name="CODE">print(count_in_range(data, 1, 19))</field><next><block type="py_custom_stmt"><field name="CODE">print(count_in_range(data, 10, 12))</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+</xml>

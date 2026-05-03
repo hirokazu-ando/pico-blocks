@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt"><field name="CODE">def rec_sum(lst):</field><next><block type="py_custom_stmt"><field name="CODE">    if len(lst) == 0:</field><next><block type="py_custom_stmt"><field name="CODE">        return 0</field><next><block type="py_custom_stmt"><field name="CODE">    return lst[0] + rec_sum(lst[1:])</field><next><block type="py_custom_stmt"><field name="CODE">print(rec_sum([1, 2, 3, 4, 5]))</field><next><block type="py_custom_stmt"><field name="CODE">print(rec_sum([]))</field></block></next></block></next></block></next></block></next></block></next></block>
+</xml>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vs">scores</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vs">scores</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[45, 90, 72, 60, 85, 55, 78, 92, 68, 75]</field></block></value><next><block type="py_custom_stmt"><field name="CODE">import bisect</field><next><block type="py_custom_stmt"><field name="CODE">sorted_scores = sorted(scores)</field><next><block type="py_custom_stmt"><field name="CODE">lo, hi = 60, 90</field><next><block type="py_custom_stmt"><field name="CODE">left = bisect.bisect_left(sorted_scores, lo)</field><next><block type="py_custom_stmt"><field name="CODE">right = bisect.bisect_right(sorted_scores, hi)</field><next><block type="py_custom_stmt"><field name="CODE">count = right - left</field><next><block type="py_custom_stmt"><field name="CODE">print(f"整列済み: {sorted_scores}")</field><next><block type="py_custom_stmt"><field name="CODE">print(f"{lo}点以上{hi}点以下: {count}人")</field><next><block type="py_custom_stmt"><field name="CODE">print(f"該当者: {sorted_scores[left:right]}")</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+</xml>

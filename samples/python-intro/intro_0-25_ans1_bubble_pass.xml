@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vd">data</variable>
+    <variable id="vn">n</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vd">data</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[4, 2, 7, 1, 5]</field></block></value><next><block type="var_set"><field name="VAR" id="vn">n</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">len(data)</field></block></value><next><block type="py_custom_stmt"><field name="CODE">for i in range(n - 1):</field><next><block type="py_custom_stmt"><field name="CODE">    swapped = False</field><next><block type="py_custom_stmt"><field name="CODE">    for j in range(n - i - 1):</field><next><block type="py_custom_stmt"><field name="CODE">        if data[j] &gt; data[j + 1]:</field><next><block type="py_custom_stmt"><field name="CODE">            data[j], data[j + 1] = data[j + 1], data[j]</field><next><block type="py_custom_stmt"><field name="CODE">            swapped = True</field><next><block type="py_custom_stmt"><field name="CODE">    print(f"パス{i+1}: {data}")</field><next><block type="py_custom_stmt"><field name="CODE">    if not swapped:</field><next><block type="py_custom_stmt"><field name="CODE">        break</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+</xml>

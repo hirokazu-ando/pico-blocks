@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vst">students</variable>
+    <variable id="vt">target</variable>
+  </variables>
+  <block type="var_set"><field name="VAR" id="vst">students</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[{"name":"田中","score":85},{"name":"鈴木","score":92},{"name":"山田","score":78}]</field></block></value><next><block type="var_set"><field name="VAR" id="vt">target</field><value name="VALUE"><block type="val_str"><field name="TEXT">鈴木</field></block></value><next><block type="py_custom_stmt"><field name="CODE">for s in students:</field><next><block type="py_custom_stmt"><field name="CODE">    if s["name"] == target:</field><next><block type="py_custom_stmt"><field name="CODE">        print(f"{target}の点数: {s['score']}")</field><next><block type="py_custom_stmt"><field name="CODE">        break</field><next><block type="py_custom_stmt"><field name="CODE">else:</field><next><block type="py_custom_stmt"><field name="CODE">    print("見つからなかった")</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+</xml>

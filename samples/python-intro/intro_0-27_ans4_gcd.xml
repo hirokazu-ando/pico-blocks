@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="py_custom_stmt"><field name="CODE">def gcd(a, b):</field><next><block type="py_custom_stmt"><field name="CODE">    if b == 0:</field><next><block type="py_custom_stmt"><field name="CODE">        return a</field><next><block type="py_custom_stmt"><field name="CODE">    return gcd(b, a % b)</field><next><block type="py_custom_stmt"><field name="CODE">print(gcd(48, 18))</field><next><block type="py_custom_stmt"><field name="CODE">print(gcd(100, 75))</field><next><block type="py_custom_stmt"><field name="CODE">print(gcd(7, 13))</field></block></next></block></next></block></next></block></next></block></next></block></next></block>
+</xml>
