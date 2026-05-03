@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vst">stars</variable>
+  </variables>
+  <block type="game_init"><value name="W"><block type="val_number"><field name="NUM">640</field></block></value><value name="H"><block type="val_number"><field name="NUM">400</field></block></value><value name="TITLE"><block type="val_str"><field name="TEXT">Stars</field></block></value><next><block type="py_custom_stmt"><field name="CODE">import random</field><next><block type="var_set"><field name="VAR" id="vst">stars</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[[random.randint(0,640), random.randint(0,400)] for _ in range(50)]</field></block></value><next><block type="game_loop"><statement name="DO"><block type="game_events"><next><block type="game_fill"><value name="COLOR"><block type="colour_picker"><field name="COLOUR">#000020</field></block></value><next><block type="py_custom_stmt"><field name="CODE">for star in stars:</field><next><block type="py_custom_stmt"><field name="CODE">    pyco_game.draw_circle(star[0], star[1], 2, (255, 255, 200))</field><next><block type="game_flip"><value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value></block></next></block></next></block></next></block></next></block></statement><next><block type="game_quit"></block></next></block></next></block></next></block></next></block>
+</xml>
