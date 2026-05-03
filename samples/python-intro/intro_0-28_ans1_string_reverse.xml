@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_s">s</variable>
+    <variable id="var_stack">stack</variable>
+    <variable id="var_result">result</variable>
+    <variable id="var_ch">ch</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_s">s</field>
+    <value name="VALUE">
+      <block type="val_str" id="b2"><field name="TEXT">hello</field></block>
+    </value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_stack">stack</field>
+        <value name="VALUE">
+          <block type="py_list_empty" id="b4"/>
+        </value>
+        <next>
+          <block type="var_set" id="b5">
+            <field name="VAR" id="var_result">result</field>
+            <value name="VALUE">
+              <block type="val_str" id="b6"><field name="TEXT"></field></block>
+            </value>
+            <next>
+              <block type="py_for_list" id="b7">
+                <field name="VAR" id="var_ch">ch</field>
+                <value name="LIST">
+                  <block type="val_var" id="b8"><field name="VAR" id="var_s">s</field></block>
+                </value>
+                <statement name="DO">
+                  <block type="py_list_append" id="b9">
+                    <value name="LIST">
+                      <block type="val_var" id="b10"><field name="VAR" id="var_stack">stack</field></block>
+                    </value>
+                    <value name="ITEM">
+                      <block type="val_var" id="b11"><field name="VAR" id="var_ch">ch</field></block>
+                    </value>
+                  </block>
+                </statement>
+                <next>
+                  <block type="py_custom_stmt" id="b12">
+                    <field name="CODE">while stack:&#10;    result += stack.pop()</field>
+                    <next>
+                      <block type="py_print" id="b13">
+                        <value name="VALUE">
+                          <block type="val_var" id="b14"><field name="VAR" id="var_result">result</field></block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

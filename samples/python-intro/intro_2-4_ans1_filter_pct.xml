@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_scores">scores</variable>
+    <variable id="var_high">high</variable>
+    <variable id="var_s">s</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_scores">scores</field>
+    <value name="VALUE">
+      <block type="py_custom_expr" id="b2"><field name="CODE">[72, 85, 91, 68, 77, 95, 60, 88, 73, 82]</field></block>
+    </value>
+    <next>
+      <block type="var_set" id="b3">
+        <field name="VAR" id="var_high">high</field>
+        <value name="VALUE">
+          <block type="py_list_comp_if" id="b4">
+            <value name="EXPR"><block type="val_var" id="b5"><field name="VAR" id="var_s">s</field></block></value>
+            <field name="VAR" id="var_s">s</field>
+            <value name="LIST"><block type="val_var" id="b6"><field name="VAR" id="var_scores">scores</field></block></value>
+            <value name="COND">
+              <block type="logic_compare" id="b7">
+                <field name="OP">GTE</field>
+                <value name="A"><block type="val_var" id="b8"><field name="VAR" id="var_s">s</field></block></value>
+                <value name="B"><block type="val_number" id="b9"><field name="NUM">80</field></block></value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print" id="b10">
+            <value name="VALUE">
+              <block type="py_list_len" id="b11">
+                <value name="LIST"><block type="val_var" id="b12"><field name="VAR" id="var_high">high</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print" id="b13">
+                <value name="VALUE">
+                  <block type="py_math_op" id="b14">
+                    <field name="OP">*</field>
+                    <value name="LEFT">
+                      <block type="py_math_op" id="b15">
+                        <field name="OP">/</field>
+                        <value name="LEFT">
+                          <block type="py_list_len" id="b16">
+                            <value name="LIST"><block type="val_var" id="b17"><field name="VAR" id="var_high">high</field></block></value>
+                          </block>
+                        </value>
+                        <value name="RIGHT">
+                          <block type="py_list_len" id="b18">
+                            <value name="LIST"><block type="val_var" id="b19"><field name="VAR" id="var_scores">scores</field></block></value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="RIGHT">
+                      <block type="val_number" id="b20"><field name="NUM">100</field></block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
