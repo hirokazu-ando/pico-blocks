@@ -3,25 +3,19 @@
   <variables>
     <variable id="var_names">names</variable>
     <variable id="var_scores">scores</variable>
-    <variable id="var_n">n</variable>
-    <variable id="var_s">s</variable>
+    <variable id="var_name">name</variable>
+    <variable id="var_score">score</variable>
   </variables>
-  <block type="py_zip_for" id="b1" x="30" y="30">
-    <field name="VAR_A" id="var_n">n</field>
-    <field name="VAR_B" id="var_s">s</field>
+  <block type="py_zip_for" x="30" y="30">
+    <field name="VAR_A" id="var_name">name</field>
+    <field name="VAR_B" id="var_score">score</field>
     <field name="LIST_A" id="var_names">names</field>
     <field name="LIST_B" id="var_scores">scores</field>
     <statement name="DO">
-      <block type="py_print" id="b2">
+      <block type="py_print">
         <value name="VALUE">
-          <block type="py_str_concat" id="b3">
-            <value name="LEFT">
-              <block type="py_str_concat" id="b4">
-                <value name="LEFT"><block type="val_var" id="b5"><field name="VAR" id="var_n">n</field></block></value>
-                <value name="RIGHT"><block type="val_str" id="b6"><field name="TEXT">: </field></block></value>
-              </block>
-            </value>
-            <value name="RIGHT"><block type="val_var" id="b7"><field name="VAR" id="var_s">s</field></block></value>
+          <block type="py_custom_expr">
+            <field name="CODE">f"{name}: {score}点"</field>
           </block>
         </value>
       </block>

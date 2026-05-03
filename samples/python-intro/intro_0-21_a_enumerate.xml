@@ -3,23 +3,23 @@
   <variables>
     <variable id="var_fruits">fruits</variable>
     <variable id="var_i">i</variable>
-    <variable id="var_v">v</variable>
+    <variable id="var_f">f</variable>
   </variables>
-  <block type="py_enumerate_for" id="b1" x="30" y="30">
+  <block type="py_enumerate_for" x="30" y="30">
     <field name="IDX" id="var_i">i</field>
-    <field name="VAL" id="var_v">v</field>
+    <field name="VAL" id="var_f">f</field>
     <field name="LIST" id="var_fruits">fruits</field>
     <statement name="DO">
-      <block type="py_print" id="b2">
+      <block type="py_print">
         <value name="VALUE">
-          <block type="py_str_concat" id="b3">
-            <value name="LEFT">
-              <block type="py_str_concat" id="b4">
-                <value name="LEFT"><block type="val_var" id="b5"><field name="VAR" id="var_i">i</field></block></value>
-                <value name="RIGHT"><block type="val_str" id="b6"><field name="TEXT">: </field></block></value>
+          <block type="py_str_concat">
+            <value name="A">
+              <block type="py_str_concat">
+                <value name="A"><block type="val_var"><field name="VAR" id="var_i">i</field></block></value>
+                <value name="B"><block type="val_str"><field name="TEXT">: </field></block></value>
               </block>
             </value>
-            <value name="RIGHT"><block type="val_var" id="b7"><field name="VAR" id="var_v">v</field></block></value>
+            <value name="B"><block type="val_var"><field name="VAR" id="var_f">f</field></block></value>
           </block>
         </value>
       </block>

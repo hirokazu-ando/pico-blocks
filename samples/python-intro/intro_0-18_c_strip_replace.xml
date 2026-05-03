@@ -5,5 +5,30 @@
     <variable id="vs">s</variable>
     <variable id="vns">new_s</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vrw">raw</field><value name="VALUE"><block type="val_str"><field name="TEXT">  hello world  </field></block></value><next><block type="var_set"><field name="VAR" id="vs">s</field><value name="VALUE"><block type="py_str_strip"><field name="VAR" id="vrw">raw</field></block></value><next><block type="var_set"><field name="VAR" id="vns">new_s</field><value name="VALUE"><block type="py_str_replace"><field name="VAR" id="vs">s</field><field name="OLD">world</field><field name="NEW">Python</field></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vns">new_s</field></block></value></block></next></block></next></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vrw">raw</field>
+    <value name="VALUE"><block type="val_str"><field name="TEXT">  hello world  </field></block></value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vs">s</field>
+        <value name="VALUE"><block type="py_str_strip"><field name="VAR" id="vrw">raw</field></block></value>
+        <next>
+          <block type="py_print">
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="vs">s</field></block></value>
+            <next>
+              <block type="var_set">
+                <field name="VAR" id="vns">new_s</field>
+                <value name="VALUE"><block type="py_str_replace"><field name="VAR" id="vs">s</field><field name="OLD">world</field><field name="NEW">Python</field></block></value>
+                <next>
+                  <block type="py_print">
+                    <value name="VALUE"><block type="val_var"><field name="VAR" id="vns">new_s</field></block></value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>
