@@ -461,6 +461,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_set_literal':    return 'セット { ... }';
       case 'py_set_add':        return `セット「${getVarName(block, 'SET')}」に要素を追加`;
       case 'py_set_discard':    return `セット「${getVarName(block, 'SET')}」から要素を削除`;
+      case 'py_list_literal':   return 'リスト [ ... ]';
       case 'py_list_comp':      return 'リスト内包表記 [式 for 変数 in リスト]';
       case 'py_list_comp_if':   return 'リスト内包表記（条件付き）';
       case 'py_enumerate_for':  return `リスト「${getVarName(block, 'LIST')}」を番号付きで繰り返す`;
@@ -754,6 +755,13 @@ document.addEventListener('DOMContentLoaded', function() {
           setItems.push(valueToCode(block, 'ITEM' + i, 'None'));
         }
         return `{${setItems.join(', ')}}`;
+      }
+      case 'py_list_literal': {
+        const listLitItems = [];
+        for (let i = 0; i < (block.itemCount_ || 0); i++) {
+          listLitItems.push(valueToCode(block, 'ITEM' + i, 'None'));
+        }
+        return `[${listLitItems.join(', ')}]`;
       }
       case 'py_list_comp': {
         const lcExpr = valueToCode(block, 'EXPR', 'x');

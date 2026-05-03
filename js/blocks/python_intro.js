@@ -1266,4 +1266,58 @@ Blockly.Blocks['py_map_call'] = {
   }
 };
 
+// =====================================================
+// リストリテラル（＋／－ボタンで要素を増減）
+// =====================================================
+const _LIST_PLUS = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">' +
+  '<circle cx="8" cy="8" r="7.5" fill="#4CAF50"/>' +
+  '<text x="8" y="12.5" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="white">+</text>' +
+  '</svg>'
+);
+const _LIST_MINUS = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">' +
+  '<circle cx="8" cy="8" r="7.5" fill="#F44336"/>' +
+  '<text x="8" y="12.5" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="white">−</text>' +
+  '</svg>'
+);
+
+Blockly.Blocks['py_list_literal'] = {
+  itemCount_: 2,
+  init: function() {
+    this.setColour(P.lists);
+    this.setOutput(true, null);
+    this.setTooltip('リストを作ります。＋で要素を追加、－で削除できます。');
+    this.setHelpUrl('');
+    this.rebuildShape_();
+  },
+  rebuildShape_: function() {
+    let i = 0;
+    while (this.getInput('ITEM' + i)) { this.removeInput('ITEM' + i); i++; }
+    if (this.getInput('BOTTOM')) this.removeInput('BOTTOM');
+    if (!this.getInput('TOP')) {
+      this.appendDummyInput('TOP').appendField('リスト [');
+    }
+    for (let j = 0; j < this.itemCount_; j++) {
+      this.appendValueInput('ITEM' + j)
+        .appendField(j === 0 ? '' : ',');
+    }
+    this.appendDummyInput('BOTTOM')
+      .appendField(']')
+      .appendField(new Blockly.FieldImage(_LIST_PLUS,  16, 16, '+', () => { this.itemCount_++; this.rebuildShape_(); }))
+      .appendField(new Blockly.FieldImage(_LIST_MINUS, 16, 16, '-', () => { if (this.itemCount_ > 0) { this.itemCount_--; this.rebuildShape_(); } }));
+    this.setInputsInline(true);
+  },
+  mutationToDom: function() {
+    const el = document.createElement('mutation');
+    el.setAttribute('items', this.itemCount_);
+    return el;
+  },
+  domToMutation: function(xmlElement) {
+    const n = parseInt(xmlElement.getAttribute('items'), 10);
+    if (!isNaN(n)) this.itemCount_ = n;
+    this.rebuildShape_();
+  }
+};
+
 })();

@@ -22,6 +22,16 @@
                 <next>
                   <block type="py_print">
                     <value name="VALUE"><block type="val_var"><field name="VAR" id="vns">new_s</field></block></value>
+                    <next>
+                      <block type="py_custom_stmt">
+                        <field name="CODE">print("  hi  ".lstrip())</field>
+                        <next>
+                          <block type="py_custom_stmt">
+                            <field name="CODE">print("  hi  ".rstrip())</field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
                   </block>
                 </next>
               </block>

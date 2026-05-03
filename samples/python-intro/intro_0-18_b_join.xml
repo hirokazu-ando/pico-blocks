@@ -8,7 +8,14 @@
   </variables>
   <block type="var_set" x="30" y="30">
     <field name="VAR" id="vc">colors</field>
-    <value name="VALUE"><block type="py_custom_expr"><field name="CODE">["赤", "青", "緑"]</field></block></value>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="3"/>
+        <value name="ITEM0"><block type="val_str"><field name="TEXT">赤</field></block></value>
+        <value name="ITEM1"><block type="val_str"><field name="TEXT">青</field></block></value>
+        <value name="ITEM2"><block type="val_str"><field name="TEXT">緑</field></block></value>
+      </block>
+    </value>
     <next>
       <block type="var_set">
         <field name="VAR" id="vr">result</field>
@@ -19,7 +26,14 @@
             <next>
               <block type="var_set">
                 <field name="VAR" id="vn">nums</field>
-                <value name="VALUE"><block type="py_custom_expr"><field name="CODE">["10", "20", "30"]</field></block></value>
+                <value name="VALUE">
+                  <block type="py_list_literal">
+                    <mutation items="3"/>
+                    <value name="ITEM0"><block type="val_str"><field name="TEXT">10</field></block></value>
+                    <value name="ITEM1"><block type="val_str"><field name="TEXT">20</field></block></value>
+                    <value name="ITEM2"><block type="val_str"><field name="TEXT">30</field></block></value>
+                  </block>
+                </value>
                 <next>
                   <block type="var_set">
                     <field name="VAR" id="vcl">csv_line</field>
