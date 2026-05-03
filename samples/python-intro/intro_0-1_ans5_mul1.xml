@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_i">i</variable>
+  </variables>
+  <block type="pico_for_from_to" id="b0" x="30" y="30">
+    <field name="VAR" id="var_i">i</field>
+    <value name="START"><block type="val_number" id="n1"><field name="NUM">1</field></block></value>
+    <value name="STOP"><block type="val_number" id="n2"><field name="NUM">9</field></block></value>
+    <value name="STEP"><block type="val_number" id="n3"><field name="NUM">1</field></block></value>
+    <statement name="DO">
+      <block type="py_custom_stmt" id="cs1">
+        <field name="CODE">print("1 ×", i, "=", 1 * i)</field>
+      </block>
+    </statement>
+  </block>
+</xml>

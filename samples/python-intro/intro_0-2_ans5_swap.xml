@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_a">a</variable>
+    <variable id="var_b">b</variable>
+    <variable id="var_temp">temp</variable>
+  </variables>
+  <block type="var_set" id="b0" x="30" y="30">
+    <field name="VAR" id="var_a">a</field>
+    <value name="VALUE"><block type="val_number" id="n1"><field name="NUM">5</field></block></value>
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_b">b</field>
+        <value name="VALUE"><block type="val_number" id="n2"><field name="NUM">10</field></block></value>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_temp">temp</field>
+            <value name="VALUE"><block type="val_var" id="bva"><field name="VAR" id="var_a">a</field></block></value>
+            <next>
+              <block type="var_set" id="b3">
+                <field name="VAR" id="var_a">a</field>
+                <value name="VALUE"><block type="val_var" id="bvb"><field name="VAR" id="var_b">b</field></block></value>
+                <next>
+                  <block type="var_set" id="b4">
+                    <field name="VAR" id="var_b">b</field>
+                    <value name="VALUE"><block type="val_var" id="bvt"><field name="VAR" id="var_temp">temp</field></block></value>
+                    <next>
+                      <block type="py_print" id="b5">
+                        <value name="VALUE">
+                          <block type="py_fstring" id="bf1">
+                            <field name="PRE">a: </field>
+                            <value name="VAR"><block type="val_var" id="bva2"><field name="VAR" id="var_a">a</field></block></value>
+                            <field name="POST"></field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_print" id="b6">
+                            <value name="VALUE">
+                              <block type="py_fstring" id="bf2">
+                                <field name="PRE">b: </field>
+                                <value name="VAR"><block type="val_var" id="bvb2"><field name="VAR" id="var_b">b</field></block></value>
+                                <field name="POST"></field>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

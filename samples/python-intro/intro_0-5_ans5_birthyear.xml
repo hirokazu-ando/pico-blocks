@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_by">birth_year</variable>
+    <variable id="var_age">age</variable>
+  </variables>
+  <block type="py_input" id="b0" x="30" y="30">
+    <field name="TYPE">int</field>
+    <field name="VAR" id="var_by">birth_year</field>
+    <field name="PROMPT">生まれた年（西暦4桁）を入力してください</field>
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_age">age</field>
+        <value name="VALUE">
+          <block type="py_math_op" id="bm">
+            <field name="OP">-</field>
+            <value name="LEFT"><block type="val_number" id="n1"><field name="NUM">2026</field></block></value>
+            <value name="RIGHT"><block type="val_var" id="bvby"><field name="VAR" id="var_by">birth_year</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_custom_stmt" id="cs1">
+            <field name="CODE">print(f"生まれた年: {birth_year} → 2026年時点の年齢: {age}歳")</field>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

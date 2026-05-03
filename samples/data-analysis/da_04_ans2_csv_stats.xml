@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_rows">rows</variable>
+    <variable id="var_vs">values_str</variable>
+    <variable id="var_v">values</variable>
+  </variables>
+  <block type="py_import_csv" id="b0" x="30" y="30">
+    <next>
+      <block type="py_import_stats" id="b1">
+        <next>
+          <block type="py_csv_read_rows" id="b2">
+            <field name="VAR" id="var_rows">rows</field>
+            <field name="FILENAME">mydata.csv</field>
+            <next>
+              <block type="py_csv_get_col" id="b3">
+                <field name="VAR" id="var_vs">values_str</field>
+                <field name="ROWS" id="var_rows">rows</field>
+                <field name="COL">1</field>
+                <next>
+                  <block type="py_custom_stmt" id="cs1">
+                    <field name="CODE">values = [float(v) for v in values_str]</field>
+                    <next>
+                      <block type="py_custom_stmt" id="cs2">
+                        <field name="CODE">print("平均:", statistics.mean(values))</field>
+                        <next>
+                          <block type="py_custom_stmt" id="cs3">
+                            <field name="CODE">print("最大:", max(values))</field>
+                            <next>
+                              <block type="py_custom_stmt" id="cs4">
+                                <field name="CODE">print("最小:", min(values))</field>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

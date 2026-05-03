@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_year">year</variable>
+    <variable id="var_leap">is_leap</variable>
+  </variables>
+  <block type="py_input" id="b0" x="30" y="30">
+    <field name="TYPE">int</field>
+    <field name="VAR" id="var_year">year</field>
+    <field name="PROMPT">年号を入力してください</field>
+    <next>
+      <block type="py_custom_stmt" id="cs1">
+        <field name="CODE">is_leap = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)</field>
+        <next>
+          <block type="py_custom_stmt" id="cs2">
+            <field name="CODE">print(f"{year}年は閏年？:", is_leap)</field>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

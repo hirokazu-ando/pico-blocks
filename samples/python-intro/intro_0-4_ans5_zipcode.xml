@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_zip">zipcode</variable>
+    <variable id="var_fmt">formatted</variable>
+  </variables>
+  <block type="var_set" id="b0" x="30" y="30">
+    <field name="VAR" id="var_zip">zipcode</field>
+    <value name="VALUE"><block type="val_str" id="vs1"><field name="TEXT">1234567</field></block></value>
+    <next>
+      <block type="py_custom_stmt" id="cs1">
+        <field name="CODE">formatted = zipcode[:3] + "-" + zipcode[3:]</field>
+        <next>
+          <block type="py_print" id="b1">
+            <value name="VALUE"><block type="val_var" id="bvf"><field name="VAR" id="var_fmt">formatted</field></block></value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

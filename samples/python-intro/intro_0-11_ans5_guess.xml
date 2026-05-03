@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_ans">answer</variable>
+    <variable id="var_guess">guess</variable>
+  </variables>
+  <block type="var_set" id="b0" x="30" y="30">
+    <field name="VAR" id="var_ans">answer</field>
+    <value name="VALUE"><block type="val_number" id="n1"><field name="NUM">7</field></block></value>
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_guess">guess</field>
+        <value name="VALUE"><block type="val_number" id="n2"><field name="NUM">0</field></block></value>
+        <next>
+          <block type="py_custom_stmt" id="cs1">
+            <field name="CODE">while guess != answer:</field>
+            <next>
+              <block type="py_custom_stmt" id="cs2">
+                <field name="CODE">  guess = int(input("1〜10の数字を予想: "))</field>
+                <next>
+                  <block type="py_custom_stmt" id="cs3">
+                    <field name="CODE">  if guess &lt; answer:</field>
+                    <next>
+                      <block type="py_custom_stmt" id="cs4">
+                        <field name="CODE">    print("もっと大きい")</field>
+                        <next>
+                          <block type="py_custom_stmt" id="cs5">
+                            <field name="CODE">  elif guess &gt; answer:</field>
+                            <next>
+                              <block type="py_custom_stmt" id="cs6">
+                                <field name="CODE">    print("もっと小さい")</field>
+                                <next>
+                                  <block type="py_print" id="b2">
+                                    <value name="VALUE"><block type="val_str" id="vs1"><field name="TEXT">正解！</field></block></value>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

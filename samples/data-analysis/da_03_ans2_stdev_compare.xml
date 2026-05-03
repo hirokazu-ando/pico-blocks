@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_a">class_a</variable>
+    <variable id="var_b">class_b</variable>
+  </variables>
+  <block type="py_import_stats" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_a">class_a</field>
+        <value name="VALUE">
+          <block type="py_custom_expr" id="bxa"><field name="CODE">[70, 75, 72, 68, 80, 74, 71]</field></block>
+        </value>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_b">class_b</field>
+            <value name="VALUE">
+              <block type="py_custom_expr" id="bxb"><field name="CODE">[50, 90, 45, 95, 60, 85, 55]</field></block>
+            </value>
+            <next>
+              <block type="py_custom_stmt" id="cs1">
+                <field name="CODE">print("A組 平均:", statistics.mean(class_a), "　標準偏差:", round(statistics.stdev(class_a), 2))</field>
+                <next>
+                  <block type="py_custom_stmt" id="cs2">
+                    <field name="CODE">print("B組 平均:", statistics.mean(class_b), "　標準偏差:", round(statistics.stdev(class_b), 2))</field>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

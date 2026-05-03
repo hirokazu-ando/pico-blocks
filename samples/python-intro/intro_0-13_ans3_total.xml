@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_prices">prices</variable>
+    <variable id="var_total">total</variable>
+    <variable id="var_name">name</variable>
+  </variables>
+  <block type="var_set" id="b0" x="30" y="30">
+    <field name="VAR" id="var_prices">prices</field>
+    <value name="VALUE">
+      <block type="py_dict_literal" id="bdl">
+        <field name="COUNT">3</field>
+        <value name="KEY0"><block type="val_str" id="k1"><field name="TEXT">apple</field></block></value>
+        <value name="VAL0"><block type="val_number" id="v1"><field name="NUM">120</field></block></value>
+        <value name="KEY1"><block type="val_str" id="k2"><field name="TEXT">orange</field></block></value>
+        <value name="VAL1"><block type="val_number" id="v2"><field name="NUM">100</field></block></value>
+        <value name="KEY2"><block type="val_str" id="k3"><field name="TEXT">grape</field></block></value>
+        <value name="VAL2"><block type="val_number" id="v3"><field name="NUM">180</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_total">total</field>
+        <value name="VALUE"><block type="val_number" id="n0"><field name="NUM">0</field></block></value>
+        <next>
+          <block type="py_for_list" id="b2">
+            <field name="VAR" id="var_name">name</field>
+            <field name="LIST" id="var_prices">prices</field>
+            <statement name="DO">
+              <block type="py_custom_stmt" id="cs1">
+                <field name="CODE">total = total + prices[name]</field>
+              </block>
+            </statement>
+            <next>
+              <block type="py_print" id="b3">
+                <value name="VALUE"><block type="val_var" id="bvt"><field name="VAR" id="var_total">total</field></block></value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

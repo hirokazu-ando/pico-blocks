@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_rows">rows</variable>
+    <variable id="var_labels">labels</variable>
+    <variable id="var_vals">values_str</variable>
+    <variable id="var_v">values</variable>
+  </variables>
+  <block type="py_import_plt" id="b0" x="30" y="30">
+    <next>
+      <block type="py_import_csv" id="b1">
+        <next>
+          <block type="py_csv_read_rows" id="b2">
+            <field name="VAR" id="var_rows">rows</field>
+            <field name="FILENAME">mydata.csv</field>
+            <next>
+              <block type="py_csv_get_col" id="b3">
+                <field name="VAR" id="var_labels">labels</field>
+                <field name="ROWS" id="var_rows">rows</field>
+                <field name="COL">0</field>
+                <next>
+                  <block type="py_csv_get_col" id="b4">
+                    <field name="VAR" id="var_vals">values_str</field>
+                    <field name="ROWS" id="var_rows">rows</field>
+                    <field name="COL">1</field>
+                    <next>
+                      <block type="py_custom_stmt" id="cs1">
+                        <field name="CODE">values = [float(v) for v in values_str]</field>
+                        <next>
+                          <block type="py_plt_plot" id="b5">
+                            <value name="X"><block type="val_var" id="bvl"><field name="VAR" id="var_labels">labels</field></block></value>
+                            <value name="Y"><block type="val_var" id="bvv"><field name="VAR" id="var_v">values</field></block></value>
+                            <next>
+                              <block type="py_plt_title" id="b6">
+                                <value name="TEXT"><block type="val_str" id="vs1"><field name="TEXT">自分のデータ</field></block></value>
+                                <next>
+                                  <block type="py_plt_ylabel" id="b7">
+                                    <value name="TEXT"><block type="val_str" id="vs2"><field name="TEXT">値</field></block></value>
+                                    <next>
+                                      <block type="py_plt_show" id="b8"></block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_parts">parts</variable>
+    <variable id="var_name">name</variable>
+  </variables>
+  <block type="var_set" id="b0" x="30" y="30">
+    <field name="VAR" id="var_parts">parts</field>
+    <value name="VALUE">
+      <block type="py_dict_literal" id="bdl">
+        <field name="COUNT">3</field>
+        <value name="KEY0"><block type="val_str" id="k1"><field name="TEXT">LED</field></block></value>
+        <value name="VAL0"><block type="val_number" id="v1"><field name="NUM">10</field></block></value>
+        <value name="KEY1"><block type="val_str" id="k2"><field name="TEXT">motor</field></block></value>
+        <value name="VAL1"><block type="val_number" id="v2"><field name="NUM">1</field></block></value>
+        <value name="KEY2"><block type="val_str" id="k3"><field name="TEXT">sensor</field></block></value>
+        <value name="VAL2"><block type="val_number" id="v3"><field name="NUM">2</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="py_for_list" id="b1">
+        <field name="VAR" id="var_name">name</field>
+        <field name="LIST" id="var_parts">parts</field>
+        <statement name="DO">
+          <block type="pico_if" id="bif">
+            <field name="elseifCount_">0</field>
+            <field name="elseCount_">0</field>
+            <value name="IF0">
+              <block type="cond_compare" id="bcc">
+                <field name="OP">&lt;</field>
+                <value name="LEFT">
+                  <block type="py_dict_get" id="bdg">
+                    <field name="DICT" id="var_parts">parts</field>
+                    <value name="KEY"><block type="val_var" id="bvn"><field name="VAR" id="var_name">name</field></block></value>
+                  </block>
+                </value>
+                <value name="RIGHT"><block type="val_number" id="n3"><field name="NUM">3</field></block></value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="py_print" id="b2">
+                <value name="VALUE"><block type="val_var" id="bvn2"><field name="VAR" id="var_name">name</field></block></value>
+              </block>
+            </statement>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
+</xml>

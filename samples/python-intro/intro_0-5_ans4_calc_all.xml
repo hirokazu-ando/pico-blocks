@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_a">a</variable>
+    <variable id="var_b">b</variable>
+  </variables>
+  <block type="py_input" id="b0" x="30" y="30">
+    <field name="TYPE">int</field>
+    <field name="VAR" id="var_a">a</field>
+    <field name="PROMPT">整数aを入力してください</field>
+    <next>
+      <block type="py_input" id="b1">
+        <field name="TYPE">int</field>
+        <field name="VAR" id="var_b">b</field>
+        <field name="PROMPT">整数bを入力してください</field>
+        <next>
+          <block type="py_custom_stmt" id="cs1">
+            <field name="CODE">print(f"a + b = {a + b}")</field>
+            <next>
+              <block type="py_custom_stmt" id="cs2">
+                <field name="CODE">print(f"a - b = {a - b}")</field>
+                <next>
+                  <block type="py_custom_stmt" id="cs3">
+                    <field name="CODE">print(f"a * b = {a * b}")</field>
+                    <next>
+                      <block type="py_custom_stmt" id="cs4">
+                        <field name="CODE">print(f"a / b = {a / b}")</field>
+                        <next>
+                          <block type="py_custom_stmt" id="cs5">
+                            <field name="CODE">print(f"a // b = {a // b}")</field>
+                            <next>
+                              <block type="py_custom_stmt" id="cs6">
+                                <field name="CODE">print(f"a % b = {a % b}")</field>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

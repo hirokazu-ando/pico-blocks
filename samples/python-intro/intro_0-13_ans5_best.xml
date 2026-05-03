@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_scores">scores</variable>
+    <variable id="var_best_name">best_name</variable>
+    <variable id="var_best_score">best_score</variable>
+    <variable id="var_name">name</variable>
+  </variables>
+  <block type="var_set" id="b0" x="30" y="30">
+    <field name="VAR" id="var_scores">scores</field>
+    <value name="VALUE">
+      <block type="py_dict_literal" id="bdl">
+        <field name="COUNT">3</field>
+        <value name="KEY0"><block type="val_str" id="k1"><field name="TEXT">math</field></block></value>
+        <value name="VAL0"><block type="val_number" id="v1"><field name="NUM">80</field></block></value>
+        <value name="KEY1"><block type="val_str" id="k2"><field name="TEXT">science</field></block></value>
+        <value name="VAL1"><block type="val_number" id="v2"><field name="NUM">90</field></block></value>
+        <value name="KEY2"><block type="val_str" id="k3"><field name="TEXT">english</field></block></value>
+        <value name="VAL2"><block type="val_number" id="v3"><field name="NUM">75</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_best_name">best_name</field>
+        <value name="VALUE"><block type="val_str" id="vs1"><field name="TEXT"></field></block></value>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_best_score">best_score</field>
+            <value name="VALUE"><block type="val_number" id="n0"><field name="NUM">0</field></block></value>
+            <next>
+              <block type="py_for_list" id="b3">
+                <field name="VAR" id="var_name">name</field>
+                <field name="LIST" id="var_scores">scores</field>
+                <statement name="DO">
+                  <block type="pico_if" id="bif">
+                    <field name="elseifCount_">0</field>
+                    <field name="elseCount_">0</field>
+                    <value name="IF0">
+                      <block type="cond_compare" id="bcc">
+                        <field name="OP">&gt;</field>
+                        <value name="LEFT">
+                          <block type="py_dict_get" id="bdg">
+                            <field name="DICT" id="var_scores">scores</field>
+                            <value name="KEY"><block type="val_var" id="bvn"><field name="VAR" id="var_name">name</field></block></value>
+                          </block>
+                        </value>
+                        <value name="RIGHT"><block type="val_var" id="bvbs"><field name="VAR" id="var_best_score">best_score</field></block></value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="var_set" id="b4">
+                        <field name="VAR" id="var_best_name">best_name</field>
+                        <value name="VALUE"><block type="val_var" id="bvn2"><field name="VAR" id="var_name">name</field></block></value>
+                        <next>
+                          <block type="var_set" id="b5">
+                            <field name="VAR" id="var_best_score">best_score</field>
+                            <value name="VALUE">
+                              <block type="py_dict_get" id="bdg2">
+                                <field name="DICT" id="var_scores">scores</field>
+                                <value name="KEY"><block type="val_var" id="bvn3"><field name="VAR" id="var_name">name</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </statement>
+                  </block>
+                </statement>
+                <next>
+                  <block type="py_print" id="b6">
+                    <value name="VALUE"><block type="val_var" id="bvbn"><field name="VAR" id="var_best_name">best_name</field></block></value>
+                    <next>
+                      <block type="py_print" id="b7">
+                        <value name="VALUE"><block type="val_var" id="bvbsc"><field name="VAR" id="var_best_score">best_score</field></block></value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

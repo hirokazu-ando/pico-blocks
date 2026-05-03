@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_temp">temp</variable>
+    <variable id="var_months">months</variable>
+  </variables>
+  <block type="py_import_plt" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_temp">temp</field>
+        <value name="VALUE">
+          <block type="py_custom_expr" id="bx"><field name="CODE">[18, 20, 25, 28, 30, 27]</field></block>
+        </value>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_months">months</field>
+            <value name="VALUE">
+              <block type="py_custom_expr" id="by"><field name="CODE">["1月","2月","3月","4月","5月","6月"]</field></block>
+            </value>
+            <next>
+              <block type="py_plt_plot" id="b3">
+                <value name="X"><block type="val_var" id="bvm"><field name="VAR" id="var_months">months</field></block></value>
+                <value name="Y"><block type="val_var" id="bvt"><field name="VAR" id="var_temp">temp</field></block></value>
+                <next>
+                  <block type="py_plt_title" id="b4">
+                    <value name="TEXT"><block type="val_str" id="vs1"><field name="TEXT">月別気温（折れ線）</field></block></value>
+                    <next>
+                      <block type="py_plt_ylabel" id="b5">
+                        <value name="TEXT"><block type="val_str" id="vs2"><field name="TEXT">℃</field></block></value>
+                        <next>
+                          <block type="py_plt_show" id="b6">
+                            <next>
+                              <block type="py_plt_bar" id="b7">
+                                <value name="X"><block type="val_var" id="bvm2"><field name="VAR" id="var_months">months</field></block></value>
+                                <value name="Y"><block type="val_var" id="bvt2"><field name="VAR" id="var_temp">temp</field></block></value>
+                                <next>
+                                  <block type="py_plt_title" id="b8">
+                                    <value name="TEXT"><block type="val_str" id="vs3"><field name="TEXT">月別気温（棒グラフ）</field></block></value>
+                                    <next>
+                                      <block type="py_plt_ylabel" id="b9">
+                                        <value name="TEXT"><block type="val_str" id="vs4"><field name="TEXT">℃</field></block></value>
+                                        <next>
+                                          <block type="py_plt_show" id="b10"></block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_rows">rows</variable>
+    <variable id="var_ts">temps_str</variable>
+    <variable id="var_t">temps</variable>
+    <variable id="var_h">hot_days</variable>
+  </variables>
+  <block type="py_import_plt" id="b0" x="30" y="30">
+    <next>
+      <block type="py_import_csv" id="b1">
+        <next>
+          <block type="py_import_stats" id="b2">
+            <next>
+              <block type="py_csv_read_rows" id="b3">
+                <field name="VAR" id="var_rows">rows</field>
+                <field name="FILENAME">temp.csv</field>
+                <next>
+                  <block type="py_csv_get_col" id="b4">
+                    <field name="VAR" id="var_ts">temps_str</field>
+                    <field name="ROWS" id="var_rows">rows</field>
+                    <field name="COL">1</field>
+                    <next>
+                      <block type="py_custom_stmt" id="cs1">
+                        <field name="CODE">temps = [float(t) for t in temps_str]</field>
+                        <next>
+                          <block type="py_custom_stmt" id="cs2">
+                            <field name="CODE">hot_days = [t for t in temps if t &gt;= 30]</field>
+                            <next>
+                              <block type="py_custom_stmt" id="cs3">
+                                <field name="CODE">print("30℃以上の日数:", len(hot_days))</field>
+                                <next>
+                                  <block type="py_custom_stmt" id="cs4">
+                                    <field name="CODE">print("最高:", max(temps), "最低:", min(temps), "平均:", round(statistics.mean(temps), 1))</field>
+                                    <next>
+                                      <block type="py_plt_hist" id="b5">
+                                        <value name="DATA"><block type="val_var" id="bvt"><field name="VAR" id="var_t">temps</field></block></value>
+                                        <field name="BINS">5</field>
+                                        <next>
+                                          <block type="py_plt_title" id="b6">
+                                            <value name="TEXT"><block type="val_str" id="vs1"><field name="TEXT">気温の分布</field></block></value>
+                                            <next>
+                                              <block type="py_plt_xlabel" id="b7">
+                                                <value name="TEXT"><block type="val_str" id="vs2"><field name="TEXT">気温(℃)</field></block></value>
+                                                <next>
+                                                  <block type="py_plt_ylabel" id="b8">
+                                                    <value name="TEXT"><block type="val_str" id="vs3"><field name="TEXT">日数</field></block></value>
+                                                    <next>
+                                                      <block type="py_plt_show" id="b9"></block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
