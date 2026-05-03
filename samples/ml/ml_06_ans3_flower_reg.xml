@@ -41,7 +41,7 @@
                           <block type="var_set" id="b6">
                             <field name="VAR" id="var_rose_y">rose_y</field>
                             <value name="VALUE">
-                              <block type="py_custom_expr" id="bry"><field name="CODE">[5, 6, 7, 8, 10]</field></block>
+                              <block type="ml_label_list"><field name="DATA">[5, 6, 7, 8, 10]</field></block>
                             </value>
                             <next>
                               <block type="ml_linreg" id="b7">
@@ -56,7 +56,7 @@
                                         <field name="VAR" id="var_pred">pred</field>
                                         <value name="MODEL"><block type="val_var" id="bv7"><field name="VAR" id="var_reg">reg</field></block></value>
                                         <value name="X_TEST">
-                                          <block type="py_custom_expr" id="bte"><field name="CODE">[[7]]</field></block>
+                                          <block type="ml_data_2d"><field name="DATA">[[7]]</field></block>
                                         </value>
                                         <next>
                                           <block type="py_print" id="b10">

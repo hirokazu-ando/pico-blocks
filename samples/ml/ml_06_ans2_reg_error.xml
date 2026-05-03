@@ -17,7 +17,7 @@
           <block type="var_set" id="b2">
             <field name="VAR" id="var_y">y</field>
             <value name="VALUE">
-              <block type="py_custom_expr" id="by"><field name="CODE">[2,4,6,8,10,12,14,16,18,20]</field></block>
+              <block type="ml_label_list"><field name="DATA">[2,4,6,8,10,12,14,16,18,20]</field></block>
             </value>
             <next>
               <block type="ml_linreg" id="b3">
