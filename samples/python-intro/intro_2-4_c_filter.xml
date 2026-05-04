@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_scores">scores</variable>
+    <variable id="var_high">high</variable>
+    <variable id="var_low">low</variable>
+    <variable id="var_s">s</variable>
+  </variables>
+  <block type="var_set" id="b1" x="30" y="30">
+    <field name="VAR" id="var_scores">scores</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="8"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">78</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">92</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">65</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">88</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">70</field></block></value>
+        <value name="ITEM5"><block type="val_number"><field name="NUM">55</field></block></value>
+        <value name="ITEM6"><block type="val_number"><field name="NUM">98</field></block></value>
+        <value name="ITEM7"><block type="val_number"><field name="NUM">61</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="var_set" id="b2">
+        <field name="VAR" id="var_high">high</field>
+        <value name="VALUE">
+          <block type="py_list_comp_if">
+            <field name="VAR" id="var_s">s</field>
+            <value name="EXPR"><block type="val_var"><field name="VAR" id="var_s">s</field></block></value>
+            <value name="LIST"><block type="val_var"><field name="VAR" id="var_scores">scores</field></block></value>
+            <value name="COND">
+              <block type="cond_compare">
+                <field name="OP">&gt;=</field>
+                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_s">s</field></block></value>
+                <value name="RIGHT"><block type="val_number"><field name="NUM">70</field></block></value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="var_set" id="b3">
+            <field name="VAR" id="var_low">low</field>
+            <value name="VALUE">
+              <block type="py_list_comp_if">
+                <field name="VAR" id="var_s">s</field>
+                <value name="EXPR"><block type="val_var"><field name="VAR" id="var_s">s</field></block></value>
+                <value name="LIST"><block type="val_var"><field name="VAR" id="var_scores">scores</field></block></value>
+                <value name="COND">
+                  <block type="cond_compare">
+                    <field name="OP">&lt;</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="var_s">s</field></block></value>
+                    <value name="RIGHT"><block type="val_number"><field name="NUM">70</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print_multi" id="p1">
+                <mutation items="2"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">合格者:</field></block></value>
+                <value name="ITEM1"><block type="val_var"><field name="VAR" id="var_high">high</field></block></value>
+                <next>
+                  <block type="py_print_multi" id="p2">
+                    <mutation items="2"/>
+                    <value name="ITEM0"><block type="val_str"><field name="TEXT">合格者数:</field></block></value>
+                    <value name="ITEM1">
+                      <block type="py_list_len">
+                        <field name="LIST" id="var_high">high</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_print_multi" id="p3">
+                        <mutation items="2"/>
+                        <value name="ITEM0"><block type="val_str"><field name="TEXT">不合格者数:</field></block></value>
+                        <value name="ITEM1">
+                          <block type="py_list_len">
+                            <field name="LIST" id="var_low">low</field>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
