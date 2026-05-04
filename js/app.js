@@ -497,6 +497,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_sorted_set':   return `リスト「${getVarName(block, 'LIST')}」の重複を除いて昇順に並べる`;
       case 'py_dict_val_literal': return '辞書 {キー: 値, キー: 値}（キーに任意の値）';
       case 'py_frozenset':    return 'frozenset（変更不可のセット）を作成';
+      case 'py_type_of':      return `変数「${getVarName(block, 'VAR')}」の型を取得（type）`;
       case 'py_sorted_tuple_idx': return `リスト「${getVarName(block, 'LIST')}」を${block.getFieldValue('IDX')}番目の要素で${block.getFieldValue('REV') === 'True' ? '降順' : '昇順'}ソート`;
       case 'py_fstring2':     return `"${block.getFieldValue('PRE')}{${getVarName(block, 'VAR1')}}${block.getFieldValue('MID')}{${getVarName(block, 'VAR2')}}${block.getFieldValue('POST')}"`;
       case 'py_list_pop':     return `リスト「${getVarName(block, 'LIST')}」の末尾を取り出す（pop）`;
@@ -937,6 +938,9 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_frozenset': {
         const fsVal = valueToCode(block, 'VALUE', '[]');
         return `frozenset(${fsVal})`;
+      }
+      case 'py_type_of': {
+        return `type(${getVarName(block, 'VAR')})`;
       }
       case 'py_sorted_tuple_idx': {
         const stiList = getVarName(block, 'LIST');

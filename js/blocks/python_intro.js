@@ -725,6 +725,20 @@ Blockly.Blocks['py_type_cast'] = {
   }
 };
 
+Blockly.Blocks['py_type_of'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('type(')
+      .appendField(new Blockly.FieldVariable('x'), 'VAR')
+      .appendField(')');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('変数の型を調べます（type(var)）');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['py_abs'] = {
   init: function() {
     this.appendValueInput('VALUE').setCheck('Number');

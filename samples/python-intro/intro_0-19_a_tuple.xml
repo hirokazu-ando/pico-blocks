@@ -5,6 +5,7 @@
     <variable id="var_color">color</variable>
     <variable id="var_x">x</variable>
     <variable id="var_y">y</variable>
+    <variable id="var_single">single</variable>
   </variables>
   <block type="var_set" x="30" y="30">
     <field name="VAR" id="var_point">point</field>
@@ -53,6 +54,27 @@
                       <block type="py_print2">
                         <field name="VAR_A" id="var_x">x</field>
                         <field name="VAR_B" id="var_y">y</field>
+                        <next>
+                          <block type="var_set">
+                            <field name="VAR" id="var_single">single</field>
+                            <value name="VALUE">
+                              <block type="py_tuple_literal">
+                                <mutation items="1"/>
+                                <field name="COUNT">1</field>
+                                <value name="ITEM0"><block type="val_number"><field name="NUM">42</field></block></value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="py_print">
+                                <value name="VALUE">
+                                  <block type="py_type_of">
+                                    <field name="VAR" id="var_single">single</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
                       </block>
                     </next>
                   </block>
