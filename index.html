@@ -362,6 +362,7 @@
       <block type="py_fstring" gap="8"></block>
       <block type="py_fstring2" gap="8"></block>
       <block type="py_fstring2_expr" gap="8"></block>
+      <block type="py_fstring3" gap="8"></block>
       <block type="py_fstring_fmt" gap="8"></block>
       <block type="py_ternary" gap="8"></block>
     </category>
@@ -466,10 +467,24 @@
           <shadow type="val_number"><field name="NUM">0</field></shadow>
         </value>
       </block>
+      <block type="py_list_pop_val" gap="8"></block>
       <block type="py_list_range" gap="8">
         <field name="N">10</field>
       </block>
       <block type="py_list_contains" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_list_slice" gap="8">
+        <value name="START"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+        <value name="STOP"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+      </block>
+      <block type="py_list_get_negative" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_bisect_left" gap="8">
+        <value name="VALUE"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+      </block>
+      <block type="py_bisect_right" gap="8">
+        <value name="VALUE"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+      </block>
     </category>
     <!-- 0-13: 辞書 -->
     <category name="辞書" colour="#6D4C41">
@@ -525,9 +540,11 @@
       <block type="py_call_stmt" gap="8"></block>
       <block type="py_call_val" gap="8"></block>
       <block type="py_call_val2" gap="8"></block>
+      <block type="py_call_val3" gap="8"></block>
     </category>
     <!-- 0-15: モジュール呼び出し -->
     <category name="モジュール" colour="#546E7A">
+      <block type="py_import_module" gap="8"></block>
       <block type="py_module_call_stmt" gap="8"></block>
       <block type="py_module_call_val" gap="8"></block>
     </category>
@@ -570,6 +587,7 @@
         <mutation items="2"/>
         <field name="COUNT">2</field>
       </block>
+      <block type="py_set_empty" gap="8"></block>
       <sep gap="20"></sep>
       <block type="py_set_add" gap="8">
         <value name="VALUE">
@@ -591,6 +609,14 @@
       <block type="py_sorted_set" gap="8"></block>
       <sep gap="20"></sep>
       <block type="py_tuple_unpack" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_deque_init" gap="8">
+        <value name="VALUE"><shadow type="py_list_empty"></shadow></value>
+      </block>
+      <block type="py_deque_popleft" gap="8"></block>
+      <block type="py_deque_append" gap="8">
+        <value name="VALUE"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+      </block>
     </category>
     <!-- 0-18: 文字列メソッド -->
     <category name="文字列メソッド" colour="#FB8C00">
@@ -607,6 +633,7 @@
       </block>
       <block type="py_str_upper" gap="8"></block>
       <block type="py_str_join" gap="8"></block>
+      <block type="py_str_isdigit" gap="8"></block>
     </category>
     <!-- 0-21: 組み込み関数 -->
     <category name="組み込み関数" colour="#00796B">

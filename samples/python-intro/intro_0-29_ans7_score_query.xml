@@ -2,6 +2,133 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="vs">scores</variable>
+    <variable id="vss">sorted_scores</variable>
+    <variable id="vlo">lo</variable>
+    <variable id="vhi">hi</variable>
+    <variable id="vleft">left</variable>
+    <variable id="vright">right</variable>
+    <variable id="vcount">count</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vs">scores</field><value name="VALUE"><block type="py_list_literal"><mutation items="10"/><value name="ITEM0"><block type="val_number"><field name="NUM">45</field></block></value><value name="ITEM1"><block type="val_number"><field name="NUM">90</field></block></value><value name="ITEM2"><block type="val_number"><field name="NUM">72</field></block></value><value name="ITEM3"><block type="val_number"><field name="NUM">60</field></block></value><value name="ITEM4"><block type="val_number"><field name="NUM">85</field></block></value><value name="ITEM5"><block type="val_number"><field name="NUM">55</field></block></value><value name="ITEM6"><block type="val_number"><field name="NUM">78</field></block></value><value name="ITEM7"><block type="val_number"><field name="NUM">92</field></block></value><value name="ITEM8"><block type="val_number"><field name="NUM">68</field></block></value><value name="ITEM9"><block type="val_number"><field name="NUM">75</field></block></value></block></value><next><block type="py_custom_stmt"><field name="CODE">import bisect</field><next><block type="py_custom_stmt"><field name="CODE">sorted_scores = sorted(scores)</field><next><block type="py_custom_stmt"><field name="CODE">lo, hi = 60, 90</field><next><block type="py_custom_stmt"><field name="CODE">left = bisect.bisect_left(sorted_scores, lo)</field><next><block type="py_custom_stmt"><field name="CODE">right = bisect.bisect_right(sorted_scores, hi)</field><next><block type="py_custom_stmt"><field name="CODE">count = right - left</field><next><block type="py_custom_stmt"><field name="CODE">print(f"整列済み: {sorted_scores}")</field><next><block type="py_custom_stmt"><field name="CODE">print(f"{lo}点以上{hi}点以下: {count}人")</field><next><block type="py_custom_stmt"><field name="CODE">print(f"該当者: {sorted_scores[left:right]}")</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vs">scores</field>
+    <value name="VALUE">
+      <block type="py_list_literal"><mutation items="10"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">45</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">90</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">72</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">60</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">85</field></block></value>
+        <value name="ITEM5"><block type="val_number"><field name="NUM">55</field></block></value>
+        <value name="ITEM6"><block type="val_number"><field name="NUM">78</field></block></value>
+        <value name="ITEM7"><block type="val_number"><field name="NUM">92</field></block></value>
+        <value name="ITEM8"><block type="val_number"><field name="NUM">68</field></block></value>
+        <value name="ITEM9"><block type="val_number"><field name="NUM">75</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="py_import_module">
+        <field name="MODULE">bisect</field>
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="vss">sorted_scores</field>
+            <value name="VALUE">
+              <block type="py_sorted_call">
+                <field name="LIST" id="vs">scores</field>
+                <field name="REVERSE">False</field>
+              </block>
+            </value>
+            <next>
+              <block type="var_set">
+                <field name="VAR" id="vlo">lo</field>
+                <value name="VALUE"><block type="val_number"><field name="NUM">60</field></block></value>
+                <next>
+                  <block type="var_set">
+                    <field name="VAR" id="vhi">hi</field>
+                    <value name="VALUE"><block type="val_number"><field name="NUM">90</field></block></value>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="vleft">left</field>
+                        <value name="VALUE">
+                          <block type="py_bisect_left">
+                            <field name="LIST" id="vss">sorted_scores</field>
+                            <value name="VALUE"><block type="val_var"><field name="VAR" id="vlo">lo</field></block></value>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="var_set">
+                            <field name="VAR" id="vright">right</field>
+                            <value name="VALUE">
+                              <block type="py_bisect_right">
+                                <field name="LIST" id="vss">sorted_scores</field>
+                                <value name="VALUE"><block type="val_var"><field name="VAR" id="vhi">hi</field></block></value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="var_set">
+                                <field name="VAR" id="vcount">count</field>
+                                <value name="VALUE">
+                                  <block type="py_math_op">
+                                    <field name="OP">-</field>
+                                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vright">right</field></block></value>
+                                    <value name="RIGHT"><block type="val_var"><field name="VAR" id="vleft">left</field></block></value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="py_print">
+                                    <value name="VALUE">
+                                      <block type="py_fstring">
+                                        <field name="PRE">整列済み: </field>
+                                        <field name="POST"></field>
+                                        <value name="VAR"><block type="val_var"><field name="VAR" id="vss">sorted_scores</field></block></value>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="py_print">
+                                        <value name="VALUE">
+                                          <block type="py_fstring3">
+                                            <field name="PRE"></field>
+                                            <field name="MID1">点以上</field>
+                                            <field name="MID2">点以下: </field>
+                                            <field name="POST">人</field>
+                                            <value name="VAR1"><block type="val_var"><field name="VAR" id="vlo">lo</field></block></value>
+                                            <value name="VAR2"><block type="val_var"><field name="VAR" id="vhi">hi</field></block></value>
+                                            <value name="VAR3"><block type="val_var"><field name="VAR" id="vcount">count</field></block></value>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="py_print">
+                                            <value name="VALUE">
+                                              <block type="py_fstring">
+                                                <field name="PRE">該当者: </field>
+                                                <field name="POST"></field>
+                                                <value name="VAR">
+                                                  <block type="py_list_slice">
+                                                    <field name="LIST" id="vss">sorted_scores</field>
+                                                    <value name="START"><block type="val_var"><field name="VAR" id="vleft">left</field></block></value>
+                                                    <value name="STOP"><block type="val_var"><field name="VAR" id="vright">right</field></block></value>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

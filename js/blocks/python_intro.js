@@ -1984,4 +1984,231 @@ Blockly.Blocks['py_list_pop'] = {
   }
 };
 
+// =====================================================
+// 0-29: アルゴリズムまとめ演習 追加ブロック
+// =====================================================
+
+// 空のセット set()
+Blockly.Blocks['py_set_empty'] = {
+  init: function() {
+    this.appendDummyInput().appendField('空のセット set()');
+    this.setOutput(true, null);
+    this.setColour(P.tuples);
+    this.setTooltip('要素のないセットを作ります（set()）。{} は辞書になるので set() を使います。');
+    this.setHelpUrl('');
+  }
+};
+
+// import 文
+Blockly.Blocks['py_import_module'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('モジュール')
+      .appendField(new Blockly.FieldTextInput('bisect'), 'MODULE')
+      .appendField('を読み込む（import）');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.modules);
+    this.setTooltip('標準ライブラリなどのモジュールを読み込みます（import モジュール名）');
+    this.setHelpUrl('');
+  }
+};
+
+// bisect.bisect_left
+Blockly.Blocks['py_bisect_left'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('整列済みリスト')
+      .appendField(new Blockly.FieldVariable('data'), 'LIST')
+      .appendField('で値');
+    this.appendValueInput('VALUE').setCheck(null);
+    this.appendDummyInput().appendField('が入る左端の位置（bisect_left）');
+    this.setInputsInline(true);
+    this.setOutput(true, 'Number');
+    this.setColour(P.lists);
+    this.setTooltip('整列済みリストで、値以上が始まる左端のインデックスを返します（bisect.bisect_left）。事前に import bisect が必要です。');
+    this.setHelpUrl('');
+  }
+};
+
+// bisect.bisect_right
+Blockly.Blocks['py_bisect_right'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('整列済みリスト')
+      .appendField(new Blockly.FieldVariable('data'), 'LIST')
+      .appendField('で値');
+    this.appendValueInput('VALUE').setCheck(null);
+    this.appendDummyInput().appendField('が入る右端の位置（bisect_right）');
+    this.setInputsInline(true);
+    this.setOutput(true, 'Number');
+    this.setColour(P.lists);
+    this.setTooltip('整列済みリストで、値より大きい要素が始まるインデックスを返します（bisect.bisect_right）。事前に import bisect が必要です。');
+    this.setHelpUrl('');
+  }
+};
+
+// str.isdigit()
+Blockly.Blocks['py_str_isdigit'] = {
+  init: function() {
+    this.appendValueInput('VALUE').setCheck(null);
+    this.appendDummyInput().appendField('が数字だけか（isdigit）');
+    this.setInputsInline(true);
+    this.setOutput(true, 'Boolean');
+    this.setColour(P.math);
+    this.setTooltip('文字列が数字のみで構成されているか調べます（str.isdigit()）');
+    this.setHelpUrl('');
+  }
+};
+
+// list slice list[start:stop]
+Blockly.Blocks['py_list_slice'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('data'), 'LIST')
+      .appendField('の');
+    this.appendValueInput('START').setCheck(null);
+    this.appendDummyInput().appendField('〜');
+    this.appendValueInput('STOP').setCheck(null);
+    this.appendDummyInput().appendField('の範囲を取り出す（slice）');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.lists);
+    this.setTooltip('リストの一部分を取り出します（list[start:stop]）。空欄にすると先頭または末尾になります。');
+    this.setHelpUrl('');
+  }
+};
+
+// list[-1] last element
+Blockly.Blocks['py_list_get_negative'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('data'), 'LIST')
+      .appendField('の末尾から')
+      .appendField(new Blockly.FieldNumber(1, 1, 1000, 1), 'OFFSET')
+      .appendField('番目');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.lists);
+    this.setTooltip('リストの末尾から数えた要素を取得します（list[-n]）。1なら最後の要素です。');
+    this.setHelpUrl('');
+  }
+};
+
+// 3-arg function call
+Blockly.Blocks['py_call_val3'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('関数')
+      .appendField(new Blockly.FieldTextInput('my_func'), 'NAME')
+      .appendField('（引数1:');
+    this.appendValueInput('ARG1').setCheck(null);
+    this.appendDummyInput().appendField(',  引数2:');
+    this.appendValueInput('ARG2').setCheck(null);
+    this.appendDummyInput().appendField(',  引数3:');
+    this.appendValueInput('ARG3').setCheck(null);
+    this.appendDummyInput().appendField('）の結果');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.functions);
+    this.setTooltip('3つの引数を渡して関数を呼び出し、戻り値を取得します');
+    this.setHelpUrl('');
+  }
+};
+
+// 3-variable f-string
+Blockly.Blocks['py_fstring3'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('f"')
+      .appendField(new Blockly.FieldTextInput(''), 'PRE')
+      .appendField('{');
+    this.appendValueInput('VAR1').setCheck(null);
+    this.appendDummyInput()
+      .appendField('}')
+      .appendField(new Blockly.FieldTextInput(''), 'MID1')
+      .appendField('{');
+    this.appendValueInput('VAR2').setCheck(null);
+    this.appendDummyInput()
+      .appendField('}')
+      .appendField(new Blockly.FieldTextInput(''), 'MID2')
+      .appendField('{');
+    this.appendValueInput('VAR3').setCheck(null);
+    this.appendDummyInput()
+      .appendField('}')
+      .appendField(new Blockly.FieldTextInput(''), 'POST')
+      .appendField('"');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.literals);
+    this.setTooltip('3つの式を埋め込んだ f文字列を作ります');
+    this.setHelpUrl('');
+  }
+};
+
+// deque(iterable)
+Blockly.Blocks['py_deque_init'] = {
+  init: function() {
+    this.appendValueInput('VALUE').setCheck(null)
+      .appendField('deque（両端キュー）');
+    this.appendDummyInput().appendField('を作る');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.tuples);
+    this.setTooltip('リストなどから両端キュー（deque）を作ります。事前に from collections import deque が必要です。');
+    this.setHelpUrl('');
+  }
+};
+
+// deque.popleft()
+Blockly.Blocks['py_deque_popleft'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('deque')
+      .appendField(new Blockly.FieldVariable('queue'), 'DEQUE')
+      .appendField('の先頭を取り出す（popleft）');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.tuples);
+    this.setTooltip('dequeの先頭要素を取り出して返します（deque.popleft()）');
+    this.setHelpUrl('');
+  }
+};
+
+// list.pop() value form (returns popped element)
+Blockly.Blocks['py_list_pop_val'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('data'), 'LIST')
+      .appendField('の末尾を取り出した値（pop）');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.lists);
+    this.setTooltip('リストの末尾要素を取り出して値を返します（list.pop()）');
+    this.setHelpUrl('');
+  }
+};
+
+// deque.append(x)
+Blockly.Blocks['py_deque_append'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('deque')
+      .appendField(new Blockly.FieldVariable('queue'), 'DEQUE')
+      .appendField('の末尾に');
+    this.appendValueInput('VALUE').setCheck(null);
+    this.appendDummyInput().appendField('を追加（append）');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.tuples);
+    this.setTooltip('dequeの末尾に要素を追加します（deque.append(x)）');
+    this.setHelpUrl('');
+  }
+};
+
 })();

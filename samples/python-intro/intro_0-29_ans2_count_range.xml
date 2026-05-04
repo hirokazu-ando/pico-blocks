@@ -2,6 +2,108 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="vd">data</variable>
+    <variable id="vlo">lo</variable>
+    <variable id="vhi">hi</variable>
+    <variable id="vleft">left</variable>
+    <variable id="vright">right</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vd">data</field><value name="VALUE"><block type="py_list_literal"><mutation items="10"/><value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value><value name="ITEM1"><block type="val_number"><field name="NUM">3</field></block></value><value name="ITEM2"><block type="val_number"><field name="NUM">5</field></block></value><value name="ITEM3"><block type="val_number"><field name="NUM">7</field></block></value><value name="ITEM4"><block type="val_number"><field name="NUM">9</field></block></value><value name="ITEM5"><block type="val_number"><field name="NUM">11</field></block></value><value name="ITEM6"><block type="val_number"><field name="NUM">13</field></block></value><value name="ITEM7"><block type="val_number"><field name="NUM">15</field></block></value><value name="ITEM8"><block type="val_number"><field name="NUM">17</field></block></value><value name="ITEM9"><block type="val_number"><field name="NUM">19</field></block></value></block></value><next><block type="py_custom_stmt"><field name="CODE">import bisect</field><next><block type="py_custom_stmt"><field name="CODE">def count_in_range(data, lo, hi):</field><next><block type="py_custom_stmt"><field name="CODE">    left = bisect.bisect_left(data, lo)</field><next><block type="py_custom_stmt"><field name="CODE">    right = bisect.bisect_right(data, hi)</field><next><block type="py_custom_stmt"><field name="CODE">    return right - left</field><next><block type="py_custom_stmt"><field name="CODE">print(count_in_range(data, 6, 14))</field><next><block type="py_custom_stmt"><field name="CODE">print(count_in_range(data, 1, 19))</field><next><block type="py_custom_stmt"><field name="CODE">print(count_in_range(data, 10, 12))</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <block type="py_import_module" x="30" y="30">
+    <field name="MODULE">bisect</field>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vd">data</field>
+        <value name="VALUE">
+          <block type="py_list_literal"><mutation items="10"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">3</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">5</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">7</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">9</field></block></value>
+            <value name="ITEM5"><block type="val_number"><field name="NUM">11</field></block></value>
+            <value name="ITEM6"><block type="val_number"><field name="NUM">13</field></block></value>
+            <value name="ITEM7"><block type="val_number"><field name="NUM">15</field></block></value>
+            <value name="ITEM8"><block type="val_number"><field name="NUM">17</field></block></value>
+            <value name="ITEM9"><block type="val_number"><field name="NUM">19</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_def_args3">
+            <field name="NAME">count_in_range</field>
+            <field name="PARAM1">data</field>
+            <field name="PARAM2">lo</field>
+            <field name="PARAM3">hi</field>
+            <statement name="BODY">
+              <block type="var_set">
+                <field name="VAR" id="vleft">left</field>
+                <value name="VALUE">
+                  <block type="py_bisect_left">
+                    <field name="LIST" id="vd">data</field>
+                    <value name="VALUE"><block type="val_var"><field name="VAR" id="vlo">lo</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="var_set">
+                    <field name="VAR" id="vright">right</field>
+                    <value name="VALUE">
+                      <block type="py_bisect_right">
+                        <field name="LIST" id="vd">data</field>
+                        <value name="VALUE"><block type="val_var"><field name="VAR" id="vhi">hi</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_return">
+                        <value name="VALUE">
+                          <block type="py_math_op">
+                            <field name="OP">-</field>
+                            <value name="LEFT"><block type="val_var"><field name="VAR" id="vright">right</field></block></value>
+                            <value name="RIGHT"><block type="val_var"><field name="VAR" id="vleft">left</field></block></value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <next>
+              <block type="py_print">
+                <value name="VALUE">
+                  <block type="py_call_val3">
+                    <field name="NAME">count_in_range</field>
+                    <value name="ARG1"><block type="val_var"><field name="VAR" id="vd">data</field></block></value>
+                    <value name="ARG2"><block type="val_number"><field name="NUM">6</field></block></value>
+                    <value name="ARG3"><block type="val_number"><field name="NUM">14</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_print">
+                    <value name="VALUE">
+                      <block type="py_call_val3">
+                        <field name="NAME">count_in_range</field>
+                        <value name="ARG1"><block type="val_var"><field name="VAR" id="vd">data</field></block></value>
+                        <value name="ARG2"><block type="val_number"><field name="NUM">1</field></block></value>
+                        <value name="ARG3"><block type="val_number"><field name="NUM">19</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_print">
+                        <value name="VALUE">
+                          <block type="py_call_val3">
+                            <field name="NAME">count_in_range</field>
+                            <value name="ARG1"><block type="val_var"><field name="VAR" id="vd">data</field></block></value>
+                            <value name="ARG2"><block type="val_number"><field name="NUM">10</field></block></value>
+                            <value name="ARG3"><block type="val_number"><field name="NUM">12</field></block></value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

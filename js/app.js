@@ -521,6 +521,19 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_type_cast':     return `型変換（${block.getFieldValue('TYPE')}）`;
       case 'py_abs':           return '絶対値（abs）';
       case 'py_round':         return '四捨五入（round）';
+      case 'py_set_empty':     return '空のセット set()';
+      case 'py_import_module': return `モジュール「${block.getFieldValue('MODULE')}」を読み込む（import）`;
+      case 'py_bisect_left':   return `整列済みリスト「${getVarName(block, 'LIST')}」で値が入る左端の位置（bisect_left）`;
+      case 'py_bisect_right':  return `整列済みリスト「${getVarName(block, 'LIST')}」で値が入る右端の位置（bisect_right）`;
+      case 'py_str_isdigit':   return '文字列が数字だけか（isdigit）';
+      case 'py_list_slice':    return `リスト「${getVarName(block, 'LIST')}」の範囲を取り出す（slice）`;
+      case 'py_list_get_negative': return `リスト「${getVarName(block, 'LIST')}」の末尾から${block.getFieldValue('OFFSET')}番目`;
+      case 'py_call_val3':     return `関数「${block.getFieldValue('NAME')}」（3引数）の結果`;
+      case 'py_fstring3':      return 'f文字列（3式埋め込み）';
+      case 'py_deque_init':    return 'deque（両端キュー）を作る';
+      case 'py_deque_popleft': return `deque「${getVarName(block, 'DEQUE')}」の先頭を取り出す（popleft）`;
+      case 'py_deque_append':  return `deque「${getVarName(block, 'DEQUE')}」の末尾に追加（append）`;
+      case 'py_list_pop_val':  return `リスト「${getVarName(block, 'LIST')}」の末尾を取り出した値（pop）`;
       case 'game_color': {
         const cnames = {'#EF4444':'赤','#F97316':'橙','#FACC15':'黄','#84CC16':'黄緑','#22C55E':'緑','#38BDF8':'水色','#3B82F6':'青','#A855F7':'紫','#EC4899':'ピンク','#F8FAFC':'白','#64748B':'灰','#1E293B':'黒','#FFD700':'金','#0F172A':'暗い青'};
         return '色: ' + (cnames[block.getFieldValue('COLOR')] || block.getFieldValue('COLOR'));
@@ -966,6 +979,64 @@ document.addEventListener('DOMContentLoaded', function() {
         const mapList = getVarName(block, 'LIST');
         const mapType = block.getFieldValue('TYPE') || 'int';
         return `list(map(${mapType}, ${mapList}))`;
+      }
+
+      // ===== 0-29: アルゴリズムまとめ演習 追加ブロック =====
+      case 'py_set_empty': {
+        return 'set()';
+      }
+      case 'py_bisect_left': {
+        const blList = getVarName(block, 'LIST');
+        const blVal  = valueToCode(block, 'VALUE', '0');
+        return `bisect.bisect_left(${blList}, ${blVal})`;
+      }
+      case 'py_bisect_right': {
+        const brList = getVarName(block, 'LIST');
+        const brVal  = valueToCode(block, 'VALUE', '0');
+        return `bisect.bisect_right(${brList}, ${brVal})`;
+      }
+      case 'py_str_isdigit': {
+        const isdigVal = valueToCode(block, 'VALUE', '""');
+        return `${isdigVal}.isdigit()`;
+      }
+      case 'py_list_slice': {
+        const lsList  = getVarName(block, 'LIST');
+        const lsStart = valueToCode(block, 'START', '');
+        const lsStop  = valueToCode(block, 'STOP',  '');
+        return `${lsList}[${lsStart}:${lsStop}]`;
+      }
+      case 'py_list_get_negative': {
+        const lgnList   = getVarName(block, 'LIST');
+        const lgnOffset = block.getFieldValue('OFFSET') || '1';
+        return `${lgnList}[-${lgnOffset}]`;
+      }
+      case 'py_call_val3': {
+        const cv3Name = block.getFieldValue('NAME');
+        const cv3A1   = valueToCode(block, 'ARG1', '');
+        const cv3A2   = valueToCode(block, 'ARG2', '');
+        const cv3A3   = valueToCode(block, 'ARG3', '');
+        return `${cv3Name}(${cv3A1}, ${cv3A2}, ${cv3A3})`;
+      }
+      case 'py_fstring3': {
+        const f3Pre  = block.getFieldValue('PRE')  || '';
+        const f3M1   = block.getFieldValue('MID1') || '';
+        const f3M2   = block.getFieldValue('MID2') || '';
+        const f3Post = block.getFieldValue('POST') || '';
+        const f3V1   = valueToCode(block, 'VAR1', '""');
+        const f3V2   = valueToCode(block, 'VAR2', '""');
+        const f3V3   = valueToCode(block, 'VAR3', '""');
+        function escSQf3(s) { return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'"); }
+        return `f'${escSQf3(f3Pre)}{${f3V1}}${escSQf3(f3M1)}{${f3V2}}${escSQf3(f3M2)}{${f3V3}}${escSQf3(f3Post)}'`;
+      }
+      case 'py_deque_init': {
+        const dqInit = valueToCode(block, 'VALUE', '[]');
+        return `deque(${dqInit})`;
+      }
+      case 'py_deque_popleft': {
+        return `${getVarName(block, 'DEQUE')}.popleft()`;
+      }
+      case 'py_list_pop_val': {
+        return `${getVarName(block, 'LIST')}.pop()`;
       }
 
       // ===== Part 2: statistics value ブロック =====
@@ -1515,9 +1586,11 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_round':
       case 'py_call_val':
       case 'py_call_val2':
+      case 'py_call_val3':
       case 'py_fstring':
       case 'py_fstring_fmt':
       case 'py_fstring2_expr':
+      case 'py_fstring3':
       case 'py_list_range':
       case 'py_dict_new':
       case 'py_dict_literal':
@@ -1529,7 +1602,27 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_set_comp':
       case 'py_sorted_key_func':
       case 'py_sorted_dict_two_keys':
+      case 'py_set_empty':
+      case 'py_bisect_left':
+      case 'py_bisect_right':
+      case 'py_str_isdigit':
+      case 'py_list_slice':
+      case 'py_list_get_negative':
+      case 'py_deque_init':
+      case 'py_deque_popleft':
+      case 'py_list_pop_val':
         break;
+      case 'py_import_module': {
+        const impMod = block.getFieldValue('MODULE') || '';
+        code = appendLocal(code, indent + `import ${impMod}\n`);
+        break;
+      }
+      case 'py_deque_append': {
+        const dqAppDeque = getVarName(block, 'DEQUE');
+        const dqAppVal   = valueToCode(block, 'VALUE', '0');
+        code = appendLocal(code, indent + `${dqAppDeque}.append(${dqAppVal})\n`);
+        break;
+      }
       case 'pico_for_range': {
         const v      = getVarName(block, 'VAR');
         const lnForN = _emitCtx.line;
