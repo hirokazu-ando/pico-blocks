@@ -899,7 +899,7 @@ Blockly.Blocks['py_for_dict_items_sorted'] = {
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(P.dict);
+    this.setColour(P.loops);
     this.setTooltip('辞書のキーと値をソートして順に取り出します（for k, v in sorted(dict.items())）');
     this.setHelpUrl('');
   }
@@ -1165,7 +1165,7 @@ Blockly.Blocks['py_ternary'] = {
     this.appendValueInput('ELSE').setCheck(null);
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour(P.logic);
+    this.setColour(P.literals);
     this.setTooltip('条件式: 条件が真なら THEN、偽なら ELSE の値を返します（値 if 条件 else 値）');
     this.setHelpUrl('');
   }
@@ -1203,7 +1203,7 @@ Blockly.Blocks['py_set_comp'] = {
     this.appendDummyInput().appendField('}');
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour(P.lists);
+    this.setColour(P.tuples);
     this.setTooltip('{式 for 変数 in リスト} の形でセットを作ります（セット内包表記）');
     this.setHelpUrl('');
   }
@@ -1625,7 +1625,7 @@ Blockly.Blocks['py_sorted_set'] = {
       .appendField('の重複を除いて昇順に並べる');
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour(P.builtins);
+    this.setColour(P.tuples);
     this.setTooltip('重複を除いてから昇順に並べたリストを返します（sorted(set(list))）');
     this.setHelpUrl('');
   }
@@ -1641,7 +1641,7 @@ Blockly.Blocks['py_fstring2'] = {
       .appendField(new Blockly.FieldTextInput(''), 'POST');
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour(P.math);
+    this.setColour(P.literals);
     this.setTooltip('2つの変数を埋め込んだ文字列を作ります（f"{var1}...{var2}..."）');
     this.setHelpUrl('');
   }
@@ -1864,7 +1864,7 @@ Blockly.Blocks['py_sorted_set'] = {
       .appendField('の重複を除いて昇順に並べる');
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour(P.builtins);
+    this.setColour(P.tuples);
     this.setTooltip('重複を除いてから昇順に並べたリストを返します（sorted(set(list))）');
     this.setHelpUrl('');
   }
@@ -1880,7 +1880,7 @@ Blockly.Blocks['py_fstring2'] = {
       .appendField(new Blockly.FieldTextInput(''), 'POST');
     this.setInputsInline(true);
     this.setOutput(true, null);
-    this.setColour(P.math);
+    this.setColour(P.literals);
     this.setTooltip('2つの変数を埋め込んだ文字列を作ります（f"{var1}...{var2}..."）');
     this.setHelpUrl('');
   }
