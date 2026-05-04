@@ -464,6 +464,9 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_list_literal':   return 'リスト [ ... ]';
       case 'py_list_comp':      return 'リスト内包表記 [式 for 変数 in リスト]';
       case 'py_list_comp_if':   return 'リスト内包表記（条件付き）';
+      case 'py_ternary':        return '条件式 (値 if 条件 else 値)';
+      case 'py_dict_comp':      return '辞書内包表記 {キー: 値 for 変数 in リスト}';
+      case 'py_set_comp':       return 'セット内包表記 {式 for 変数 in リスト}';
       case 'py_enumerate_for':  return `リスト「${getVarName(block, 'LIST')}」を番号付きで繰り返す`;
       case 'py_zip_for':        return `リスト「${getVarName(block, 'LIST_A')}」と「${getVarName(block, 'LIST_B')}」を同時に繰り返す`;
       case 'py_sorted_call':    return `リスト「${getVarName(block, 'LIST')}」を並び替え`;
@@ -793,6 +796,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const lciList = valueToCode(block, 'LIST', '[]');
         const lciCond = valueToCode(block, 'COND', 'True');
         return `[${lciExpr} for ${lciVar} in ${lciList} if ${lciCond}]`;
+      }
+      case 'py_ternary': {
+        const thenVal = valueToCode(block, 'THEN', 'None');
+        const condVal = valueToCode(block, 'COND', 'True');
+        const elseVal = valueToCode(block, 'ELSE', 'None');
+        return `${thenVal} if ${condVal} else ${elseVal}`;
+      }
+      case 'py_dict_comp': {
+        const dcKey  = valueToCode(block, 'KEY', 'k');
+        const dcVal  = valueToCode(block, 'VALUE', 'v');
+        const dcVar  = getVarName(block, 'VAR');
+        const dcList = valueToCode(block, 'LIST', '[]');
+        return `{${dcKey}: ${dcVal} for ${dcVar} in ${dcList}}`;
+      }
+      case 'py_set_comp': {
+        const scExpr = valueToCode(block, 'EXPR', 'x');
+        const scVar  = getVarName(block, 'VAR');
+        const scList = valueToCode(block, 'LIST', '[]');
+        return `{${scExpr} for ${scVar} in ${scList}}`;
       }
       case 'py_sorted_call': {
         const sortList    = getVarName(block, 'LIST');
@@ -1406,6 +1428,9 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_dict_literal':
       case 'py_dict_get':
       case 'py_dict_keys':
+      case 'py_ternary':
+      case 'py_dict_comp':
+      case 'py_set_comp':
         break;
       case 'pico_for_range': {
         const v      = getVarName(block, 'VAR');

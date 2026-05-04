@@ -2,7 +2,42 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="vl">langs</variable>
+    <variable id="vlang">lang</variable>
     <variable id="vld">length_dict</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vl">langs</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">["Python", "Java", "C", "Ruby", "Go"]</field></block></value><next><block type="var_set"><field name="VAR" id="vld">length_dict</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">{lang: len(lang) for lang in langs}</field></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vld">length_dict</field></block></value></block></next></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vl">langs</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="5"/>
+        <value name="ITEM0"><block type="val_str"><field name="TEXT">Python</field></block></value>
+        <value name="ITEM1"><block type="val_str"><field name="TEXT">Java</field></block></value>
+        <value name="ITEM2"><block type="val_str"><field name="TEXT">C</field></block></value>
+        <value name="ITEM3"><block type="val_str"><field name="TEXT">Ruby</field></block></value>
+        <value name="ITEM4"><block type="val_str"><field name="TEXT">Go</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vld">length_dict</field>
+        <value name="VALUE">
+          <block type="py_dict_comp">
+            <field name="VAR" id="vlang">lang</field>
+            <value name="KEY"><block type="val_var"><field name="VAR" id="vlang">lang</field></block></value>
+            <value name="VALUE">
+              <block type="py_list_len">
+                <field name="LIST" id="vlang">lang</field>
+              </block>
+            </value>
+            <value name="LIST"><block type="val_var"><field name="VAR" id="vl">langs</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print">
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="vld">length_dict</field></block></value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

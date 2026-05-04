@@ -1041,6 +1041,59 @@ Blockly.Blocks['py_list_comp_if'] = {
   }
 };
 
+Blockly.Blocks['py_ternary'] = {
+  init: function() {
+    this.appendValueInput('THEN').setCheck(null);
+    this.appendDummyInput().appendField('if');
+    this.appendValueInput('COND').setCheck(null);
+    this.appendDummyInput().appendField('else');
+    this.appendValueInput('ELSE').setCheck(null);
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.logic);
+    this.setTooltip('条件式: 条件が真なら THEN、偽なら ELSE の値を返します（値 if 条件 else 値）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_dict_comp'] = {
+  init: function() {
+    this.appendDummyInput().appendField('{');
+    this.appendValueInput('KEY').setCheck(null);
+    this.appendDummyInput().appendField(':');
+    this.appendValueInput('VALUE').setCheck(null);
+    this.appendDummyInput()
+      .appendField('for')
+      .appendField(new Blockly.FieldVariable('k'), 'VAR')
+      .appendField('in');
+    this.appendValueInput('LIST').setCheck(null);
+    this.appendDummyInput().appendField('}');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.dict);
+    this.setTooltip('{キー: 値 for 変数 in リスト} の形で辞書を作ります（辞書内包表記）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_set_comp'] = {
+  init: function() {
+    this.appendDummyInput().appendField('{');
+    this.appendValueInput('EXPR').setCheck(null);
+    this.appendDummyInput()
+      .appendField('for')
+      .appendField(new Blockly.FieldVariable('x'), 'VAR')
+      .appendField('in');
+    this.appendValueInput('LIST').setCheck(null);
+    this.appendDummyInput().appendField('}');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.lists);
+    this.setTooltip('{式 for 変数 in リスト} の形でセットを作ります（セット内包表記）');
+    this.setHelpUrl('');
+  }
+};
+
 // =====================================================
 // 0-21: 組み込み関数
 // =====================================================

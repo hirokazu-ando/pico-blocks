@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
+    <variable id="var_n">n</variable>
     <variable id="var_nums">nums</variable>
     <variable id="var_clipped">clipped</variable>
     <variable id="var_labels">labels</variable>
@@ -22,8 +23,22 @@
       <block type="var_set">
         <field name="VAR" id="var_clipped">clipped</field>
         <value name="VALUE">
-          <block type="py_custom_expr">
-            <field name="CODE">[n if n &gt;= 0 else 0 for n in nums]</field>
+          <block type="py_list_comp">
+            <field name="VAR" id="var_n">n</field>
+            <value name="EXPR">
+              <block type="py_ternary">
+                <value name="THEN"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                <value name="COND">
+                  <block type="cond_compare">
+                    <field name="OP">&gt;=</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                    <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+                  </block>
+                </value>
+                <value name="ELSE"><block type="val_number"><field name="NUM">0</field></block></value>
+              </block>
+            </value>
+            <value name="LIST"><block type="val_var"><field name="VAR" id="var_nums">nums</field></block></value>
           </block>
         </value>
         <next>
@@ -33,8 +48,33 @@
               <block type="var_set">
                 <field name="VAR" id="var_labels">labels</field>
                 <value name="VALUE">
-                  <block type="py_custom_expr">
-                    <field name="CODE">["偶" if n % 2 == 0 else "奇" for n in range(1, 7)]</field>
+                  <block type="py_list_comp">
+                    <field name="VAR" id="var_n">n</field>
+                    <value name="EXPR">
+                      <block type="py_ternary">
+                        <value name="THEN"><block type="val_str"><field name="TEXT">偶</field></block></value>
+                        <value name="COND">
+                          <block type="cond_compare">
+                            <field name="OP">==</field>
+                            <value name="LEFT">
+                              <block type="py_math_op">
+                                <field name="OP">%</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                                <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
+                              </block>
+                            </value>
+                            <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+                          </block>
+                        </value>
+                        <value name="ELSE"><block type="val_str"><field name="TEXT">奇</field></block></value>
+                      </block>
+                    </value>
+                    <value name="LIST">
+                      <block type="py_range">
+                        <field name="START">1</field>
+                        <field name="STOP">7</field>
+                      </block>
+                    </value>
                   </block>
                 </value>
                 <next>

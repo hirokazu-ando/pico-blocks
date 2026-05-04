@@ -5,6 +5,9 @@
     <variable id="var_nums">nums</variable>
     <variable id="var_evens">evens</variable>
     <variable id="var_big_doubled">big_doubled</variable>
+    <variable id="var_x">x</variable>
+    <variable id="var_items">items</variable>
+    <variable id="var_cleaned">cleaned</variable>
   </variables>
   <block type="var_set" x="30" y="30">
     <field name="VAR" id="var_nums">nums</field>
@@ -75,6 +78,45 @@
                 <next>
                   <block type="py_print">
                     <value name="VALUE"><block type="val_var"><field name="VAR" id="var_big_doubled">big_doubled</field></block></value>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="var_items">items</field>
+                        <value name="VALUE">
+                          <block type="py_list_literal">
+                            <mutation items="5"/>
+                            <value name="ITEM0"><block type="val_str"><field name="TEXT">apple</field></block></value>
+                            <value name="ITEM1"><block type="val_str"><field name="TEXT"></field></block></value>
+                            <value name="ITEM2"><block type="val_str"><field name="TEXT">banana</field></block></value>
+                            <value name="ITEM3"><block type="val_str"><field name="TEXT"></field></block></value>
+                            <value name="ITEM4"><block type="val_str"><field name="TEXT">cherry</field></block></value>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="var_set">
+                            <field name="VAR" id="var_cleaned">cleaned</field>
+                            <value name="VALUE">
+                              <block type="py_list_comp_if">
+                                <field name="VAR" id="var_x">x</field>
+                                <value name="EXPR"><block type="val_var"><field name="VAR" id="var_x">x</field></block></value>
+                                <value name="LIST"><block type="val_var"><field name="VAR" id="var_items">items</field></block></value>
+                                <value name="COND">
+                                  <block type="cond_compare">
+                                    <field name="OP">!=</field>
+                                    <value name="LEFT"><block type="val_var"><field name="VAR" id="var_x">x</field></block></value>
+                                    <value name="RIGHT"><block type="val_str"><field name="TEXT"></field></block></value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="py_print">
+                                <value name="VALUE"><block type="val_var"><field name="VAR" id="var_cleaned">cleaned</field></block></value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
                   </block>
                 </next>
               </block>

@@ -4,5 +4,78 @@
     <variable id="vr">result</variable>
     <variable id="vn">n</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vr">result</field><value name="VALUE"><block type="py_list_comp"><field name="VAR" id="vn">n</field><value name="EXPR"><block type="py_custom_expr"><field name="CODE">"FizzBuzz" if n % 15 == 0 else "Fizz" if n % 3 == 0 else "Buzz" if n % 5 == 0 else n</field></block></value><value name="LIST"><block type="py_custom_expr"><field name="CODE">range(1, 16)</field></block></value></block></value><next><block type="py_print"><value name="VALUE"><block type="val_var"><field name="VAR" id="vr">result</field></block></value></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vr">result</field>
+    <value name="VALUE">
+      <block type="py_list_comp">
+        <field name="VAR" id="vn">n</field>
+        <value name="EXPR">
+          <block type="py_ternary">
+            <value name="THEN"><block type="val_str"><field name="TEXT">FizzBuzz</field></block></value>
+            <value name="COND">
+              <block type="cond_compare">
+                <field name="OP">==</field>
+                <value name="LEFT">
+                  <block type="py_math_op">
+                    <field name="OP">%</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                    <value name="RIGHT"><block type="val_number"><field name="NUM">15</field></block></value>
+                  </block>
+                </value>
+                <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+              </block>
+            </value>
+            <value name="ELSE">
+              <block type="py_ternary">
+                <value name="THEN"><block type="val_str"><field name="TEXT">Fizz</field></block></value>
+                <value name="COND">
+                  <block type="cond_compare">
+                    <field name="OP">==</field>
+                    <value name="LEFT">
+                      <block type="py_math_op">
+                        <field name="OP">%</field>
+                        <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                        <value name="RIGHT"><block type="val_number"><field name="NUM">3</field></block></value>
+                      </block>
+                    </value>
+                    <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+                  </block>
+                </value>
+                <value name="ELSE">
+                  <block type="py_ternary">
+                    <value name="THEN"><block type="val_str"><field name="TEXT">Buzz</field></block></value>
+                    <value name="COND">
+                      <block type="cond_compare">
+                        <field name="OP">==</field>
+                        <value name="LEFT">
+                          <block type="py_math_op">
+                            <field name="OP">%</field>
+                            <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                            <value name="RIGHT"><block type="val_number"><field name="NUM">5</field></block></value>
+                          </block>
+                        </value>
+                        <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+                      </block>
+                    </value>
+                    <value name="ELSE"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="LIST">
+          <block type="py_range">
+            <field name="START">1</field>
+            <field name="STOP">16</field>
+          </block>
+        </value>
+      </block>
+    </value>
+    <next>
+      <block type="py_print">
+        <value name="VALUE"><block type="val_var"><field name="VAR" id="vr">result</field></block></value>
+      </block>
+    </next>
+  </block>
 </xml>

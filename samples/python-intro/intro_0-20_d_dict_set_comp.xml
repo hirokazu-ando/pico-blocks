@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
+    <variable id="var_w">w</variable>
     <variable id="var_words">words</variable>
     <variable id="var_lengths">lengths</variable>
+    <variable id="var_n">n</variable>
     <variable id="var_nums">nums</variable>
     <variable id="var_unique_squares">unique_squares</variable>
+    <variable id="var_k">k</variable>
     <variable id="var_original">original</variable>
     <variable id="var_reversed_dict">reversed_dict</variable>
   </variables>
@@ -22,8 +25,15 @@
       <block type="var_set">
         <field name="VAR" id="var_lengths">lengths</field>
         <value name="VALUE">
-          <block type="py_custom_expr">
-            <field name="CODE">{w: len(w) for w in words}</field>
+          <block type="py_dict_comp">
+            <field name="VAR" id="var_w">w</field>
+            <value name="KEY"><block type="val_var"><field name="VAR" id="var_w">w</field></block></value>
+            <value name="VALUE">
+              <block type="py_list_len">
+                <field name="LIST" id="var_w">w</field>
+              </block>
+            </value>
+            <value name="LIST"><block type="val_var"><field name="VAR" id="var_words">words</field></block></value>
           </block>
         </value>
         <next>
@@ -47,8 +57,16 @@
                   <block type="var_set">
                     <field name="VAR" id="var_unique_squares">unique_squares</field>
                     <value name="VALUE">
-                      <block type="py_custom_expr">
-                        <field name="CODE">{n ** 2 for n in nums}</field>
+                      <block type="py_set_comp">
+                        <field name="VAR" id="var_n">n</field>
+                        <value name="EXPR">
+                          <block type="py_math_op">
+                            <field name="OP">**</field>
+                            <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                            <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
+                          </block>
+                        </value>
+                        <value name="LIST"><block type="val_var"><field name="VAR" id="var_nums">nums</field></block></value>
                       </block>
                     </value>
                     <next>
@@ -58,16 +76,31 @@
                           <block type="var_set">
                             <field name="VAR" id="var_original">original</field>
                             <value name="VALUE">
-                              <block type="py_custom_expr">
-                                <field name="CODE">{"a": 1, "b": 2, "c": 3}</field>
+                              <block type="py_dict_literal">
+                                <mutation items="3"/>
+                                <field name="COUNT">3</field>
+                                <field name="KEY0">a</field>
+                                <value name="PAIR0"><block type="val_number"><field name="NUM">1</field></block></value>
+                                <field name="KEY1">b</field>
+                                <value name="PAIR1"><block type="val_number"><field name="NUM">2</field></block></value>
+                                <field name="KEY2">c</field>
+                                <value name="PAIR2"><block type="val_number"><field name="NUM">3</field></block></value>
                               </block>
                             </value>
                             <next>
                               <block type="var_set">
                                 <field name="VAR" id="var_reversed_dict">reversed_dict</field>
                                 <value name="VALUE">
-                                  <block type="py_custom_expr">
-                                    <field name="CODE">{v: k for k, v in original.items()}</field>
+                                  <block type="py_dict_comp">
+                                    <field name="VAR" id="var_k">k</field>
+                                    <value name="KEY">
+                                      <block type="py_dict_get">
+                                        <field name="DICT" id="var_original">original</field>
+                                        <value name="KEY"><block type="val_var"><field name="VAR" id="var_k">k</field></block></value>
+                                      </block>
+                                    </value>
+                                    <value name="VALUE"><block type="val_var"><field name="VAR" id="var_k">k</field></block></value>
+                                    <value name="LIST"><block type="val_var"><field name="VAR" id="var_original">original</field></block></value>
                                   </block>
                                 </value>
                                 <next>
