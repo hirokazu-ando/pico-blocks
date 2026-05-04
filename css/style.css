@@ -720,6 +720,23 @@ h1 {
   background: var(--accent-cyan);
 }
 
+.plot-resize-handle {
+  height: 6px;
+  cursor: row-resize;
+  background: var(--border-dim);
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.plot-resize-handle:hover,
+.plot-resize-handle.dragging {
+  background: var(--accent-cyan);
+}
+
+#pyco-plot-area {
+  flex-shrink: 0;
+}
+
 .game-resize-handle {
   height: 6px;
   cursor: row-resize;

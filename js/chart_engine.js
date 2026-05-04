@@ -160,6 +160,13 @@
     area.innerHTML = '';
     area.style.display = 'block';
 
+    // 初回表示時に高さを設定
+    if (!area.style.height) area.style.height = '300px';
+
+    // リサイズハンドルを表示
+    var handle = document.getElementById('plot-resize-handle');
+    if (handle) handle.style.display = 'block';
+
     if (typeof Chart === 'undefined') {
       area.innerHTML = '<p style="color:red;padding:12px;">Chart.js が読み込まれていません</p>';
       return;
@@ -169,7 +176,8 @@
     if (datasets.length === 0) return;
 
     var canvas = document.createElement('canvas');
-    canvas.style.maxWidth = '100%';
+    canvas.style.width  = '100%';
+    canvas.style.height = '100%';
     area.appendChild(canvas);
 
     var type = spec.chartType || 'line';
@@ -182,7 +190,7 @@
 
     var options = {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
       plugins: {
         title: {
           display: !!spec.title,

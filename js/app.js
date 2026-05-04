@@ -3237,6 +3237,8 @@ document.addEventListener('DOMContentLoaded', function() {
       plotArea.innerHTML = '';
       plotArea.style.display = 'none';
     }
+    const plotHandle = document.getElementById('plot-resize-handle');
+    if (plotHandle) plotHandle.style.display = 'none';
     // 画像処理表示エリアをクリア
     const cvArea = document.getElementById('cv-display-area');
     if (cvArea) {
@@ -3720,6 +3722,46 @@ document.addEventListener('DOMContentLoaded', function() {
       if (currentMode === 'game') {
         requestAnimationFrame(() => Blockly.svgResize(workspace));
       }
+    }
+
+    handle.addEventListener('mousedown', e => { document.body.style.cursor = 'row-resize'; startDrag(e.clientY); });
+    handle.addEventListener('touchstart', e => { e.preventDefault(); startDrag(e.touches[0].clientY); }, { passive: false });
+    document.addEventListener('mousemove', e => onMove(e.clientY));
+    document.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); onMove(e.touches[0].clientY); } }, { passive: false });
+    document.addEventListener('mouseup', () => { document.body.style.cursor = ''; endDrag(); });
+    document.addEventListener('touchend', endDrag);
+  })();
+
+  // 上下リサイズ（シェル出力 ↔ グラフエリア）
+  (function() {
+    const handle   = document.getElementById('plot-resize-handle');
+    const plotArea = document.getElementById('pyco-plot-area');
+    if (!handle || !plotArea) return;
+
+    let dragging = false, startY = 0, startH = 0;
+
+    function startDrag(clientY) {
+      dragging = true;
+      startY   = clientY;
+      startH   = plotArea.getBoundingClientRect().height;
+      handle.classList.add('dragging');
+      document.body.style.userSelect = 'none';
+    }
+    function onMove(clientY) {
+      if (!dragging) return;
+      const newH = Math.max(80, startH - (clientY - startY));
+      plotArea.style.height = newH + 'px';
+      // Chart.js にリサイズを通知
+      if (window.Chart) {
+        const chart = Chart.getChart(plotArea.querySelector('canvas'));
+        if (chart) chart.resize();
+      }
+    }
+    function endDrag() {
+      if (!dragging) return;
+      dragging = false;
+      handle.classList.remove('dragging');
+      document.body.style.userSelect = '';
     }
 
     handle.addEventListener('mousedown', e => { document.body.style.cursor = 'row-resize'; startDrag(e.clientY); });
