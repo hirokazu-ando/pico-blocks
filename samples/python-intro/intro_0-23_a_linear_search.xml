@@ -3,6 +3,7 @@
   <variables>
     <variable id="var_data">data</variable>
     <variable id="var_target">target</variable>
+    <variable id="var_idx">idx</variable>
     <variable id="var_i">i</variable>
   </variables>
   <block type="py_def_args2" x="30" y="30">
@@ -10,19 +11,11 @@
     <field name="PARAM1">data</field>
     <field name="PARAM2">target</field>
     <statement name="BODY">
-      <block type="controls_for">
+      <block type="pico_for_range">
         <field name="VAR" id="var_i">i</field>
-        <value name="FROM"><block type="val_number"><field name="NUM">0</field></block></value>
-        <value name="TO">
-          <block type="py_math_op">
-            <field name="OP">-</field>
-            <value name="LEFT"><block type="py_list_len"><field name="LIST" id="var_data">data</field></block></value>
-            <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
-          </block>
-        </value>
-        <value name="BY"><block type="val_number"><field name="NUM">1</field></block></value>
+        <value name="N"><block type="py_list_len"><field name="LIST" id="var_data">data</field></block></value>
         <statement name="DO">
-          <block type="controls_if">
+          <block type="pico_if">
             <value name="IF0">
               <block type="cond_compare">
                 <field name="OP">==</field>
@@ -64,17 +57,40 @@
         </value>
         <next>
           <block type="var_set">
-            <field name="VAR" id="var_target">target</field>
-            <value name="VALUE"><block type="val_number"><field name="NUM">9</field></block></value>
+            <field name="VAR" id="var_idx">idx</field>
+            <value name="VALUE">
+              <block type="py_call_val2">
+                <field name="NAME">linear_search</field>
+                <value name="ARG1"><block type="val_var"><field name="VAR" id="var_data">data</field></block></value>
+                <value name="ARG2"><block type="val_number"><field name="NUM">9</field></block></value>
+              </block>
+            </value>
             <next>
-              <block type="py_print">
-                <value name="VALUE">
-                  <block type="py_call_val2">
-                    <field name="NAME">linear_search</field>
-                    <value name="ARG1"><block type="val_var"><field name="VAR" id="var_data">data</field></block></value>
-                    <value name="ARG2"><block type="val_var"><field name="VAR" id="var_target">target</field></block></value>
+              <block type="pico_if">
+                <mutation else="1"/>
+                <value name="IF0">
+                  <block type="cond_compare">
+                    <field name="OP">!=</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="var_idx">idx</field></block></value>
+                    <value name="RIGHT"><block type="val_number"><field name="NUM">-1</field></block></value>
                   </block>
                 </value>
+                <statement name="DO0">
+                  <block type="py_print">
+                    <value name="VALUE">
+                      <block type="py_fstring">
+                        <field name="PRE">インデックス </field>
+                        <value name="VAR"><block type="val_var"><field name="VAR" id="var_idx">idx</field></block></value>
+                        <field name="POST"> で見つかった</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="py_print">
+                    <value name="VALUE"><block type="val_str"><field name="TEXT">見つからなかった</field></block></value>
+                  </block>
+                </statement>
               </block>
             </next>
           </block>

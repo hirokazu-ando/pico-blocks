@@ -6,6 +6,7 @@
     <variable id="vc">count</variable>
     <variable id="vv">v</variable>
     <variable id="vs">small</variable>
+    <variable id="vbig">big</variable>
   </variables>
   <block type="py_def_args2" x="30" y="30">
     <field name="NAME">linear_search</field>
@@ -36,7 +37,7 @@
                   </block>
                 </value>
                 <next>
-                  <block type="controls_if">
+                  <block  type="pico_if">
                     <value name="IF0">
                       <block type="cond_compare">
                         <field name="OP">==</field>
@@ -58,15 +59,15 @@
                   </block>
                 </next>
               </block>
+            </statement>
+            <next>
+              <block type="py_return">
+                <value name="VALUE">
+                  <block type="val_var"><field name="VAR" id="vc">count</field></block>
+                </value>
+              </block>
             </next>
           </block>
-          <next>
-            <block type="py_return">
-              <value name="VALUE">
-                <block type="val_var"><field name="VAR" id="vc">count</field></block>
-              </value>
-            </block>
-          </next>
         </next>
       </block>
     </statement>
@@ -98,6 +99,38 @@
             <value name="ITEM2">
               <block type="val_str"><field name="TEXT">回</field></block>
             </value>
+            <next>
+              <block type="var_set">
+                <field name="VAR" id="vbig">big</field>
+                <value name="VALUE">
+                  <block type="py_list_range">
+                    <field name="N">10000</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_print_multi">
+                    <mutation items="3"/>
+                    <value name="ITEM0">
+                      <block type="val_str"><field name="TEXT">10000件、最後の要素:</field></block>
+                    </value>
+                    <value name="ITEM1">
+                      <block type="py_call_val2">
+                        <field name="NAME">linear_search</field>
+                        <value name="ARG1">
+                          <block type="val_var"><field name="VAR" id="vbig">big</field></block>
+                        </value>
+                        <value name="ARG2">
+                          <block type="val_number"><field name="NUM">9999</field></block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="ITEM2">
+                      <block type="val_str"><field name="TEXT">回</field></block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
           </block>
         </next>
       </block>

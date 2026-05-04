@@ -25,7 +25,7 @@
           <block type="val_number"><field name="NUM">9</field></block>
         </value>
         <next>
-          <block type="controls_if">
+          <block  type="pico_if">
             <value name="IF0">
               <block type="py_list_contains">
                 <field name="LIST" id="vd">data</field>
@@ -53,7 +53,7 @@
                 <field name="VAL" id="vv">v</field>
                 <field name="LIST" id="vd">data</field>
                 <statement name="DO">
-                  <block type="controls_if">
+                  <block  type="pico_if">
                     <value name="IF0">
                       <block type="cond_compare">
                         <field name="OP">==</field>

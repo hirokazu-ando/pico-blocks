@@ -18,7 +18,7 @@
           </block>
         </value>
         <statement name="DO">
-          <block type="controls_if">
+          <block  type="pico_if">
             <value name="IF0">
               <block type="cond_compare">
                 <field name="OP">==</field>

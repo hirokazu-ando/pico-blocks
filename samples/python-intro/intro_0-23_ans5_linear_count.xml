@@ -19,7 +19,7 @@
         <field name="VAL" id="vv">v</field>
         <field name="LIST" id="vd">data</field>
         <statement name="DO">
-          <block type="controls_if">
+          <block  type="pico_if">
             <value name="IF0">
               <block type="cond_compare">
                 <field name="OP">==</field>
@@ -103,7 +103,7 @@
                 <field name="VAR_Y" id="vf">found</field>
                 <field name="SRC" id="vr">result</field>
                 <next>
-                  <block type="controls_if">
+                  <block  type="pico_if">
                     <mutation else="1"/>
                     <value name="IF0">
                       <block type="val_var"><field name="VAR" id="vf">found</field></block>
@@ -154,7 +154,7 @@
                             <field name="VAR_Y" id="vf">found</field>
                             <field name="SRC" id="vr">result</field>
                             <next>
-                              <block type="controls_if">
+                              <block  type="pico_if">
                                 <mutation else="1"/>
                                 <value name="IF0">
                                   <block type="val_var"><field name="VAR" id="vf">found</field></block>

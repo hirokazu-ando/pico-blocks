@@ -52,7 +52,7 @@
                       <block type="py_list_pop">
                         <field name="LIST" id="var_data">data</field>
                         <next>
-                          <block type="controls_if">
+                          <block  type="pico_if">
                             <value name="IF0">
                               <block type="cond_compare">
                                 <field name="OP">&lt;</field>

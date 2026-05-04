@@ -57,7 +57,7 @@
                 <field name="VAR" id="vs">s</field>
                 <field name="LIST" id="vst">students</field>
                 <statement name="DO">
-                  <block type="controls_if">
+                  <block  type="pico_if">
                     <value name="IF0">
                       <block type="cond_compare">
                         <field name="OP">==</field>
@@ -110,7 +110,7 @@
                   </block>
                 </statement>
                 <next>
-                  <block type="controls_if">
+                  <block  type="pico_if">
                     <value name="IF0">
                       <block type="cond_compare">
                         <field name="OP">==</field>
