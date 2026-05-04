@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_rows">rows</variable>
+    <variable id="var_month">month</variable>
+    <variable id="var_steps">steps</variable>
+  </variables>
+  <block type="py_import_csv" id="b1" x="30" y="30">
+    <next>
+      <block type="py_import_plt" id="b2">
+        <next>
+          <block type="py_csv_read_rows" id="b3">
+            <field name="VAR" id="var_rows">rows</field>
+            <field name="FILENAME">mydata.csv</field>
+            <next>
+              <block type="py_csv_get_col" id="b4">
+                <field name="VAR" id="var_month">month</field>
+                <field name="ROWS" id="var_rows">rows</field>
+                <field name="COL">0</field>
+                <next>
+                  <block type="py_csv_get_col" id="b5">
+                    <field name="VAR" id="var_steps">steps</field>
+                    <field name="ROWS" id="var_rows">rows</field>
+                    <field name="COL">1</field>
+                    <next>
+                      <block type="py_plt_plot" id="b6">
+                        <value name="X"><block type="val_var"><field name="VAR" id="var_month">month</field></block></value>
+                        <value name="Y"><block type="val_var"><field name="VAR" id="var_steps">steps</field></block></value>
+                        <next>
+                          <block type="py_plt_title" id="b7">
+                            <value name="TEXT"><block type="val_str"><field name="TEXT">自分のデータ</field></block></value>
+                            <next>
+                              <block type="py_plt_ylabel" id="b8">
+                                <value name="TEXT"><block type="val_str"><field name="TEXT">値</field></block></value>
+                                <next>
+                                  <block type="py_plt_show" id="b9"></block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
