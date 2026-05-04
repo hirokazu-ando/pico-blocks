@@ -741,6 +741,25 @@ Blockly.Blocks['py_fstring'] = {
   }
 };
 
+Blockly.Blocks['py_fstring_fmt'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('f"')
+      .appendField(new Blockly.FieldTextInput(''), 'PRE')
+      .appendField('{');
+    this.appendValueInput('VAR').setCheck(null);
+    this.appendDummyInput()
+      .appendField(':')
+      .appendField(new Blockly.FieldTextInput('.1f'), 'FMT')
+      .appendField('}"');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.literals);
+    this.setTooltip('f文字列：式にフォーマット指定を付けて埋め込みます（例: f"平均: {val:.1f}"）');
+    this.setHelpUrl('');
+  }
+};
+
 // =====================================================
 // 辞書（dict）ブロック
 // =====================================================
@@ -804,6 +823,28 @@ Blockly.Blocks['py_dict_get_default'] = {
     this.setOutput(true, null);
     this.setColour(P.dict);
     this.setTooltip('辞書.get(キー, デフォルト値) を返します。キーがなければデフォルト値を返します。');
+  }
+};
+
+Blockly.Blocks['py_for_dict_items_sorted'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('辞書')
+      .appendField(new Blockly.FieldVariable('my_dict'), 'DICT')
+      .appendField('を');
+    this.appendDummyInput()
+      .appendField('ソートして')
+      .appendField(new Blockly.FieldVariable('key'), 'KEY_VAR')
+      .appendField(',')
+      .appendField(new Blockly.FieldVariable('value'), 'VAL_VAR')
+      .appendField('に取り出す');
+    this.appendStatementInput('DO').setCheck(null);
+    this.setInputsInline(false);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.dict);
+    this.setTooltip('辞書のキーと値をソートして順に取り出します（for k, v in sorted(dict.items())）');
+    this.setHelpUrl('');
   }
 };
 

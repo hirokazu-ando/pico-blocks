@@ -455,12 +455,14 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_list_len':      return `リスト「${getVarName(block, 'LIST')}」の長さ`;
       case 'py_for_list':      return `リスト「${getVarName(block, 'LIST')}」を順に繰り返す`;
       case 'py_fstring':       return 'f文字列';
+      case 'py_fstring_fmt':   return 'f文字列（フォーマット付き）';
       case 'py_dict_new':      return '空の辞書 {}';
       case 'py_dict_literal':  return '辞書リテラル { キー: 値, ... }';
       case 'py_dict_set':      return `辞書「${getVarName(block, 'DICT')}」にキーと値をセット`;
       case 'py_dict_get':         return `辞書「${getVarName(block, 'DICT')}」からキーで取得`;
       case 'py_dict_get_default': return `辞書「${getVarName(block, 'DICT')}」からキーで取得（なければデフォルト値）`;
       case 'py_dict_keys':     return `辞書「${getVarName(block, 'DICT')}」のキー一覧`;
+      case 'py_for_dict_items_sorted': return `辞書「${getVarName(block, 'DICT')}」をソートして繰り返す`;
       case 'py_tuple_literal':  return 'タプル ( ... )';
       case 'py_set_literal':    return 'セット { ... }';
       case 'py_set_add':        return `セット「${getVarName(block, 'SET')}」に要素を追加`;
@@ -765,6 +767,13 @@ document.addEventListener('DOMContentLoaded', function() {
           return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
         }
         return `f'${escSingleQuotedChunk(pre)}{${val}}${escSingleQuotedChunk(post)}'`;
+      }
+      case 'py_fstring_fmt': {
+        const fmtPre = block.getFieldValue('PRE') || '';
+        const fmtFmt = block.getFieldValue('FMT') || '';
+        const fmtVal = valueToCode(block, 'VAR', '""');
+        function escSQ(s) { return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'"); }
+        return `f'${escSQ(fmtPre)}{${fmtVal}:${fmtFmt}}'`;
       }
       case 'py_tuple_literal': {
         const tupleItems = [];
@@ -1449,6 +1458,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_round':
       case 'py_call_val':
       case 'py_fstring':
+      case 'py_fstring_fmt':
       case 'py_dict_new':
       case 'py_dict_literal':
       case 'py_dict_get':
@@ -1665,6 +1675,15 @@ document.addEventListener('DOMContentLoaded', function() {
         code = appendLocal(code, indent + `for ${itemVar} in ${listName}:\n`);
         const inner = statementToCode(block, 'DO', indent + '    ');
         code = appendChildBody(code, inner, indent + '    pass\n');
+        break;
+      }
+      case 'py_for_dict_items_sorted': {
+        const fdiDict   = getVarName(block, 'DICT');
+        const fdiKeyVar = getVarName(block, 'KEY_VAR');
+        const fdiValVar = getVarName(block, 'VAL_VAR');
+        code = appendLocal(code, indent + `for ${fdiKeyVar}, ${fdiValVar} in sorted(${fdiDict}.items()):\n`);
+        const fdiInner = statementToCode(block, 'DO', indent + '    ');
+        code = appendChildBody(code, fdiInner, indent + '    pass\n');
         break;
       }
 

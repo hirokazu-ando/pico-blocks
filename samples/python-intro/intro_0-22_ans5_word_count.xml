@@ -5,6 +5,7 @@
     <variable id="vw">words</variable>
     <variable id="vwd">word</variable>
     <variable id="vcnt">content</variable>
+    <variable id="vcnt2">count</variable>
   </variables>
   <block type="py_file_write" x="30" y="30">
     <field name="FILENAME">text.txt</field>
@@ -62,8 +63,23 @@
                       </block>
                     </statement>
                     <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">for word, count in sorted(counter.items()): print(f"{word}: {count}回")</field>
+                      <block type="py_for_dict_items_sorted">
+                        <field name="DICT" id="vc">counter</field>
+                        <field name="KEY_VAR" id="vwd">word</field>
+                        <field name="VAL_VAR" id="vcnt2">count</field>
+                        <statement name="DO">
+                          <block type="py_print">
+                            <value name="VALUE">
+                              <block type="py_fstring2">
+                                <field name="PRE"></field>
+                                <field name="VAR1" id="vwd">word</field>
+                                <field name="MID">: </field>
+                                <field name="VAR2" id="vcnt2">count</field>
+                                <field name="POST">回</field>
+                              </block>
+                            </value>
+                          </block>
+                        </statement>
                       </block>
                     </next>
                   </block>
