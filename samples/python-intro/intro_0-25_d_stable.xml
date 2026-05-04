@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vd">data</variable>
+    <variable id="vasc">asc</variable>
+    <variable id="vdesc">desc</variable>
+  </variables>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vd">data</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="6"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">5</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">3</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">8</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">1</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">4</field></block></value>
+        <value name="ITEM5"><block type="val_number"><field name="NUM">7</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vasc">asc</field>
+        <value name="VALUE">
+          <block type="py_sorted_call">
+            <field name="LIST" id="vd">data</field>
+            <field name="REVERSE">False</field>
+          </block>
+        </value>
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="vdesc">desc</field>
+            <value name="VALUE">
+              <block type="py_sorted_call">
+                <field name="LIST" id="vd">data</field>
+                <field name="REVERSE">True</field>
+              </block>
+            </value>
+            <next>
+              <block type="py_print">
+                <value name="VALUE"><block type="val_var"><field name="VAR" id="vasc">asc</field></block></value>
+                <next>
+                  <block type="py_print">
+                    <value name="VALUE"><block type="val_var"><field name="VAR" id="vdesc">desc</field></block></value>
+                    <next>
+                      <block type="py_print">
+                        <value name="VALUE"><block type="val_var"><field name="VAR" id="vd">data</field></block></value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
