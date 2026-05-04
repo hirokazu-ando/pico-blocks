@@ -15,8 +15,8 @@
         <statement name="DO">
           <block type="py_print">
             <value name="VALUE">
-              <block type="py_custom_expr">
-                <field name="CODE">line.strip()</field>
+              <block type="py_str_strip">
+                <field name="VAR" id="var_line">line</field>
               </block>
             </value>
           </block>
@@ -36,8 +36,9 @@
               <block type="py_file_write">
                 <field name="FILENAME">fruits.txt</field>
                 <value name="CONTENT">
-                  <block type="py_custom_expr">
-                    <field name="CODE">"".join(data)</field>
+                  <block type="py_str_join">
+                    <field name="SEP"></field>
+                    <field name="LIST" id="var_data">data</field>
                   </block>
                 </value>
               </block>

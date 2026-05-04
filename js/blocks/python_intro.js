@@ -790,6 +790,23 @@ Blockly.Blocks['py_dict_get'] = {
   }
 };
 
+Blockly.Blocks['py_dict_get_default'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('辞書')
+      .appendField(new Blockly.FieldVariable('my_dict'), 'DICT')
+      .appendField('の');
+    this.appendValueInput('KEY').setCheck(null);
+    this.appendDummyInput().appendField('の値（なければ');
+    this.appendValueInput('DEFAULT').setCheck(null);
+    this.appendDummyInput().appendField('）');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.dict);
+    this.setTooltip('辞書.get(キー, デフォルト値) を返します。キーがなければデフォルト値を返します。');
+  }
+};
+
 Blockly.Blocks['py_dict_keys'] = {
   init: function() {
     this.appendDummyInput()

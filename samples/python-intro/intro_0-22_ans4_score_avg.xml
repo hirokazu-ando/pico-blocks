@@ -1,7 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
+    <variable id="vln">lines</variable>
+    <variable id="vli">line</variable>
+    <variable id="vsp">stripped</variable>
     <variable id="vsc">scores</variable>
   </variables>
-  <block type="py_file_write"><field name="FILENAME">scores.txt</field><value name="CONTENT"><block type="val_str"><field name="TEXT">85\n92\n78\n61\n95\n</field></block></value><next><block type="py_file_readlines"><field name="FILENAME">scores.txt</field><field name="VAR">lines</field><next><block type="var_set"><field name="VAR" id="vsc">scores</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[int(line.strip()) for line in lines if line.strip()]</field></block></value><next><block type="py_print"><value name="VALUE"><block type="py_custom_expr"><field name="CODE">f"平均: {sum(scores) / len(scores):.1f}"</field></block></value></block></next></block></next></block></next></block>
+  <block type="py_file_write" x="30" y="30">
+    <field name="FILENAME">scores.txt</field>
+    <value name="CONTENT">
+      <block type="val_str"><field name="TEXT">85\n92\n78\n61\n95\n</field></block>
+    </value>
+    <next>
+      <block type="py_file_readlines">
+        <field name="FILENAME">scores.txt</field>
+        <field name="VAR">lines</field>
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="vsp">stripped</field>
+            <value name="VALUE">
+              <block type="py_list_comp_if">
+                <field name="VAR" id="vli">line</field>
+                <value name="EXPR">
+                  <block type="py_str_strip">
+                    <field name="VAR" id="vli">line</field>
+                  </block>
+                </value>
+                <value name="LIST">
+                  <block type="val_var"><field name="VAR" id="vln">lines</field></block>
+                </value>
+                <value name="COND">
+                  <block type="cond_compare">
+                    <field name="OP">!=</field>
+                    <value name="LEFT">
+                      <block type="py_str_strip">
+                        <field name="VAR" id="vli">line</field>
+                      </block>
+                    </value>
+                    <value name="RIGHT">
+                      <block type="val_str"><field name="TEXT"></field></block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="var_set">
+                <field name="VAR" id="vsc">scores</field>
+                <value name="VALUE">
+                  <block type="py_map_call">
+                    <field name="LIST" id="vsp">stripped</field>
+                    <field name="TYPE">int</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_custom_stmt">
+                    <field name="CODE">print(f"平均: {sum(scores) / len(scores):.1f}")</field>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

@@ -455,7 +455,8 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_dict_new':      return '空の辞書 {}';
       case 'py_dict_literal':  return '辞書リテラル { キー: 値, ... }';
       case 'py_dict_set':      return `辞書「${getVarName(block, 'DICT')}」にキーと値をセット`;
-      case 'py_dict_get':      return `辞書「${getVarName(block, 'DICT')}」からキーで取得`;
+      case 'py_dict_get':         return `辞書「${getVarName(block, 'DICT')}」からキーで取得`;
+      case 'py_dict_get_default': return `辞書「${getVarName(block, 'DICT')}」からキーで取得（なければデフォルト値）`;
       case 'py_dict_keys':     return `辞書「${getVarName(block, 'DICT')}」のキー一覧`;
       case 'py_tuple_literal':  return 'タプル ( ... )';
       case 'py_set_literal':    return 'セット { ... }';
@@ -928,6 +929,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const dictName = getVarName(block, 'DICT');
         const key = valueToCode(block, 'KEY', '""');
         return `${dictName}[${key}]`;
+      }
+      case 'py_dict_get_default': {
+        const dgdDict = getVarName(block, 'DICT');
+        const dgdKey = valueToCode(block, 'KEY', '""');
+        const dgdDefault = valueToCode(block, 'DEFAULT', '0');
+        return `${dgdDict}.get(${dgdKey}, ${dgdDefault})`;
       }
       case 'py_dict_keys': {
         const dictName = getVarName(block, 'DICT');
@@ -1427,6 +1434,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_dict_new':
       case 'py_dict_literal':
       case 'py_dict_get':
+      case 'py_dict_get_default':
       case 'py_dict_keys':
       case 'py_ternary':
       case 'py_dict_comp':
