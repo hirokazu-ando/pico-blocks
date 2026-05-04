@@ -14,22 +14,22 @@
         <field name="VAR" id="var_n">n</field>
         <value name="VALUE"><block type="py_list_len"><field name="LIST" id="var_data">data</field></block></value>
         <next>
-          <block type="controls_for">
+          <block  type="pico_for_from_to">
             <field name="VAR" id="var_i">i</field>
-            <value name="FROM"><block type="val_number"><field name="NUM">0</field></block></value>
-            <value name="TO">
+            <value name="START"><block type="val_number"><field name="NUM">0</field></block></value>
+            <value name="STOP">
               <block type="py_math_op">
                 <field name="OP">-</field>
                 <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
                 <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
               </block>
             </value>
-            <value name="BY"><block type="val_number"><field name="NUM">1</field></block></value>
+            <value name="STEP"><block type="val_number"><field name="NUM">1</field></block></value>
             <statement name="DO">
-              <block type="controls_for">
+              <block  type="pico_for_from_to">
                 <field name="VAR" id="var_j">j</field>
-                <value name="FROM"><block type="val_number"><field name="NUM">0</field></block></value>
-                <value name="TO">
+                <value name="START"><block type="val_number"><field name="NUM">0</field></block></value>
+                <value name="STOP">
                   <block type="py_math_op">
                     <field name="OP">-</field>
                     <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
@@ -42,9 +42,9 @@
                     </value>
                   </block>
                 </value>
-                <value name="BY"><block type="val_number"><field name="NUM">1</field></block></value>
+                <value name="STEP"><block type="val_number"><field name="NUM">1</field></block></value>
                 <statement name="DO">
-                  <block type="controls_if">
+                  <block  type="pico_if">
                     <value name="IF0">
                       <block type="cond_compare">
                         <field name="OP">&gt;</field>
