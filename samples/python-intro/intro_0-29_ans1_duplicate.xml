@@ -41,18 +41,21 @@
                   <block type="pico_if" id="b8">
                     <mutation elseif="0" else="0"/>
                     <value name="IF0">
-                      <block type="py_custom_expr" id="b9">
-                        <field name="CODE">v in seen</field>
+                      <block type="py_list_contains">
+                        <field name="LIST" id="var_seen">seen</field>
+                        <value name="ITEM"><block type="val_var"><field name="VAR" id="var_v">v</field></block></value>
                       </block>
                     </value>
                     <statement name="DO0">
-                      <block type="py_custom_stmt" id="b10">
-                        <field name="CODE">duplicates.add(v)</field>
+                      <block type="py_set_add">
+                        <field name="SET" id="var_dupes">duplicates</field>
+                        <value name="VALUE"><block type="val_var"><field name="VAR" id="var_v">v</field></block></value>
                       </block>
                     </statement>
                     <next>
-                      <block type="py_custom_stmt" id="b11">
-                        <field name="CODE">seen.add(v)</field>
+                      <block type="py_set_add">
+                        <field name="SET" id="var_seen">seen</field>
+                        <value name="VALUE"><block type="val_var"><field name="VAR" id="var_v">v</field></block></value>
                       </block>
                     </next>
                   </block>
@@ -61,15 +64,18 @@
                   <block type="var_set" id="b12">
                     <field name="VAR" id="var_result">result</field>
                     <value name="VALUE">
-                      <block type="py_custom_expr" id="b13">
-                        <field name="CODE">sorted(duplicates)</field>
+                      <block type="py_sorted_call">
+                        <field name="LIST" id="var_dupes">duplicates</field>
+                        <field name="REVERSE">False</field>
                       </block>
                     </value>
                     <next>
                       <block type="py_print" id="b14">
                         <value name="VALUE">
-                          <block type="py_custom_expr" id="b15">
-                            <field name="CODE">f"重複している値: {result}"</field>
+                          <block type="py_fstring">
+                            <field name="PRE">重複している値: </field>
+                            <field name="POST"></field>
+                            <value name="VAR"><block type="val_var"><field name="VAR" id="var_result">result</field></block></value>
                           </block>
                         </value>
                       </block>
