@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_answers">answers</variable>
+    <variable id="var_mode">mode</variable>
+  </variables>
+  <block type="py_import_stats" id="b1" x="30" y="30">
+    <next>
+      <block type="var_set" id="b2">
+        <field name="VAR" id="var_answers">answers</field>
+        <value name="VALUE">
+          <block type="py_list_literal">
+            <mutation items="10"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">2</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">3</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">1</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">2</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">4</field></block></value>
+            <value name="ITEM5"><block type="val_number"><field name="NUM">2</field></block></value>
+            <value name="ITEM6"><block type="val_number"><field name="NUM">3</field></block></value>
+            <value name="ITEM7"><block type="val_number"><field name="NUM">2</field></block></value>
+            <value name="ITEM8"><block type="val_number"><field name="NUM">1</field></block></value>
+            <value name="ITEM9"><block type="val_number"><field name="NUM">3</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="var_set" id="b3">
+            <field name="VAR" id="var_mode">mode</field>
+            <value name="VALUE">
+              <block type="py_stats_mode">
+                <value name="DATA"><block type="val_var"><field name="VAR" id="var_answers">answers</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print_multi" id="p1">
+                <mutation items="2"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">最頻値（最も多い回答）:</field></block></value>
+                <value name="ITEM1"><block type="val_var"><field name="VAR" id="var_mode">mode</field></block></value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
