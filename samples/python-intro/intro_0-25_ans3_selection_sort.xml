@@ -6,6 +6,7 @@
     <variable id="vi">i</variable>
     <variable id="vj">j</variable>
     <variable id="vmin">min_idx</variable>
+      <variable id="var_tmp">tmp</variable>
   </variables>
   <block type="var_set" x="30" y="30">
     <field name="VAR" id="vd">data</field>
@@ -86,9 +87,30 @@
                       </block>
                     </statement>
                     <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">data[i], data[min_idx] = data[min_idx], data[i]</field>
-                        <next>
+                      <block type="var_set">
+  <field name="VAR" id="var_tmp">tmp</field>
+  <value name="VALUE">
+    <block type="py_list_get">
+      <field name="LIST" id="vd">data</field>
+      <value name="INDEX"><block type="val_var"><field name="VAR" id="vi">i</field></block></value>
+    </block>
+  </value>
+  <next>
+    <block type="py_list_set">
+      <field name="LIST" id="vd">data</field>
+      <value name="INDEX"><block type="val_var"><field name="VAR" id="vi">i</field></block></value>
+      <value name="VALUE">
+        <block type="py_list_get">
+          <field name="LIST" id="vd">data</field>
+          <value name="INDEX"><block type="val_var"><field name="VAR" id="vmin">min_idx</field></block></value>
+        </block>
+      </value>
+      <next>
+        <block type="py_list_set">
+          <field name="LIST" id="vd">data</field>
+          <value name="INDEX"><block type="val_var"><field name="VAR" id="vmin">min_idx</field></block></value>
+          <value name="VALUE"><block type="val_var"><field name="VAR" id="var_tmp">tmp</field></block></value>
+          <next>
                           <block type="py_print_multi">
                             <mutation items="2"/>
                             <value name="ITEM0">
@@ -107,7 +129,11 @@
                             <value name="ITEM1"><block type="val_var"><field name="VAR" id="vd">data</field></block></value>
                           </block>
                         </next>
-                      </block>
+        </block>
+      </next>
+    </block>
+  </next>
+</block>
                     </next>
                   </block>
                 </next>

@@ -8,13 +8,22 @@
     <variable id="vj">j</variable>
     <variable id="vmin">min_idx</variable>
     <variable id="vo">original</variable>
+    <variable id="var_tmp">tmp</variable>
+    <variable id="var_v">v</variable>
   </variables>
   <block type="py_def" x="30" y="30">
     <field name="NAME">bubble_sort_count</field>
     <field name="PARAM" id="vd">data</field>
     <statement name="BODY">
-      <block type="py_custom_stmt">
-        <field name="CODE">data = data[:]</field>
+      <block type="var_set">
+        <field name="VAR" id="vd">data</field>
+        <value name="VALUE">
+          <block type="py_list_comp">
+            <field name="VAR" id="var_v">v</field>
+            <value name="EXPR"><block type="val_var"><field name="VAR" id="var_v">v</field></block></value>
+            <value name="LIST"><block type="val_var"><field name="VAR" id="vd">data</field></block></value>
+          </block>
+        </value>
         <next>
           <block type="var_set">
             <field name="VAR" id="vn">n</field>
@@ -79,9 +88,38 @@
                               </block>
                             </value>
                             <statement name="DO0">
-                              <block type="py_custom_stmt">
-                                <field name="CODE">data[j], data[j+1] = data[j+1], data[j]</field>
-                                <next>
+                              <block type="var_set">
+  <field name="VAR" id="var_tmp">tmp</field>
+  <value name="VALUE">
+    <block type="py_list_get">
+      <field name="LIST" id="vd">data</field>
+      <value name="INDEX"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+    </block>
+  </value>
+  <next>
+    <block type="py_list_set">
+      <field name="LIST" id="vd">data</field>
+      <value name="INDEX"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+      <value name="VALUE">
+        <block type="py_list_get">
+          <field name="LIST" id="vd">data</field>
+          <value name="INDEX"><block type="py_math_op">
+  <field name="OP">+</field>
+  <value name="LEFT"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+  <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+</block></value>
+        </block>
+      </value>
+      <next>
+        <block type="py_list_set">
+          <field name="LIST" id="vd">data</field>
+          <value name="INDEX"><block type="py_math_op">
+  <field name="OP">+</field>
+  <value name="LEFT"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+  <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+</block></value>
+          <value name="VALUE"><block type="val_var"><field name="VAR" id="var_tmp">tmp</field></block></value>
+          <next>
                                   <block type="var_set">
                                     <field name="VAR" id="vc">count</field>
                                     <value name="VALUE">
@@ -93,7 +131,11 @@
                                     </value>
                                   </block>
                                 </next>
-                              </block>
+        </block>
+      </next>
+    </block>
+  </next>
+</block>
                             </statement>
                           </block>
                         </statement>
@@ -117,8 +159,15 @@
         <field name="NAME">selection_sort_count</field>
         <field name="PARAM" id="vd">data</field>
         <statement name="BODY">
-          <block type="py_custom_stmt">
-            <field name="CODE">data = data[:]</field>
+          <block type="var_set">
+            <field name="VAR" id="vd">data</field>
+            <value name="VALUE">
+              <block type="py_list_comp">
+                <field name="VAR" id="var_v">v</field>
+                <value name="EXPR"><block type="val_var"><field name="VAR" id="var_v">v</field></block></value>
+                <value name="LIST"><block type="val_var"><field name="VAR" id="vd">data</field></block></value>
+              </block>
+            </value>
             <next>
               <block type="var_set">
                 <field name="VAR" id="vn">n</field>
@@ -198,9 +247,30 @@
                                       </block>
                                     </value>
                                     <statement name="DO0">
-                                      <block type="py_custom_stmt">
-                                        <field name="CODE">data[i], data[min_idx] = data[min_idx], data[i]</field>
-                                        <next>
+                                      <block type="var_set">
+  <field name="VAR" id="var_tmp">tmp</field>
+  <value name="VALUE">
+    <block type="py_list_get">
+      <field name="LIST" id="vd">data</field>
+      <value name="INDEX"><block type="val_var"><field name="VAR" id="vi">i</field></block></value>
+    </block>
+  </value>
+  <next>
+    <block type="py_list_set">
+      <field name="LIST" id="vd">data</field>
+      <value name="INDEX"><block type="val_var"><field name="VAR" id="vi">i</field></block></value>
+      <value name="VALUE">
+        <block type="py_list_get">
+          <field name="LIST" id="vd">data</field>
+          <value name="INDEX"><block type="val_var"><field name="VAR" id="vmin">min_idx</field></block></value>
+        </block>
+      </value>
+      <next>
+        <block type="py_list_set">
+          <field name="LIST" id="vd">data</field>
+          <value name="INDEX"><block type="val_var"><field name="VAR" id="vmin">min_idx</field></block></value>
+          <value name="VALUE"><block type="val_var"><field name="VAR" id="var_tmp">tmp</field></block></value>
+          <next>
                                           <block type="var_set">
                                             <field name="VAR" id="vc">count</field>
                                             <value name="VALUE">
@@ -212,7 +282,11 @@
                                             </value>
                                           </block>
                                         </next>
-                                      </block>
+        </block>
+      </next>
+    </block>
+  </next>
+</block>
                                     </statement>
                                   </block>
                                 </next>

@@ -9,6 +9,7 @@
     <variable id="var_count">count</variable>
     <variable id="var_idx">idx</variable>
     <variable id="var_n">n</variable>
+    <variable id="var_res">result</variable>
   </variables>
   <block type="var_set" x="30" y="30">
     <field name="VAR" id="var_data">data</field>
@@ -177,11 +178,33 @@
               </block>
             </statement>
             <next>
-              <block type="py_custom_stmt">
-                <field name="CODE">idx, n = binary_search(data, 23)</field>
+              <block type="var_set">
+                <field name="VAR" id="var_res">result</field>
+                <value name="VALUE">
+                  <block type="py_call_val2">
+                    <field name="NAME">binary_search</field>
+                    <value name="ARG1"><block type="val_var"><field name="VAR" id="var_data">data</field></block></value>
+                    <value name="ARG2"><block type="val_var"><field name="VAR" id="var_target">target</field></block></value>
+                  </block>
+                </value>
                 <next>
-                  <block type="py_custom_stmt">
-                    <field name="CODE">print(f"インデックス{idx}で発見（{n}回の比較）")</field>
+                  <block type="py_tuple_unpack">
+                    <field name="VAR_X" id="var_idx">idx</field>
+                    <field name="VAR_Y" id="var_n">n</field>
+                    <field name="SRC" id="var_res">result</field>
+                    <next>
+                      <block type="py_print">
+                        <value name="VALUE">
+                          <block type="py_fstring2_expr">
+                            <field name="PRE">インデックス</field>
+                            <value name="VAR1"><block type="val_var"><field name="VAR" id="var_idx">idx</field></block></value>
+                            <field name="MID">で発見（</field>
+                            <value name="VAR2"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                            <field name="POST">回の比較）</field>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
                   </block>
                 </next>
               </block>
