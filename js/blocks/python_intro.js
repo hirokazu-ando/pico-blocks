@@ -1318,6 +1318,23 @@ Blockly.Blocks['py_sorted_dict_two_keys'] = {
   }
 };
 
+Blockly.Blocks['py_dict_val_literal'] = {
+  init: function() {
+    this.appendDummyInput().appendField('{');
+    this.appendValueInput('KEY0').setCheck(null);
+    this.appendValueInput('VAL0').setCheck(null).appendField(':');
+    this.appendDummyInput().appendField(',');
+    this.appendValueInput('KEY1').setCheck(null);
+    this.appendValueInput('VAL1').setCheck(null).appendField(':');
+    this.appendDummyInput().appendField('}');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.dict);
+    this.setTooltip('キーに任意の値（frozensetなど）を使った辞書を作ります（{キー: 値, キー: 値}）');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['py_frozenset'] = {
   init: function() {
     this.appendValueInput('VALUE').setCheck(null)

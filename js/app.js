@@ -495,6 +495,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_set_op':       return `セット「${getVarName(block, 'SET_A')}」${block.getFieldValue('OP')}「${getVarName(block, 'SET_B')}」`;
       case 'py_list_dedup':   return `リスト「${getVarName(block, 'LIST')}」の重複を除く`;
       case 'py_sorted_set':   return `リスト「${getVarName(block, 'LIST')}」の重複を除いて昇順に並べる`;
+      case 'py_dict_val_literal': return '辞書 {キー: 値, キー: 値}（キーに任意の値）';
       case 'py_frozenset':    return 'frozenset（変更不可のセット）を作成';
       case 'py_sorted_tuple_idx': return `リスト「${getVarName(block, 'LIST')}」を${block.getFieldValue('IDX')}番目の要素で${block.getFieldValue('REV') === 'True' ? '降順' : '昇順'}ソート`;
       case 'py_fstring2':     return `"${block.getFieldValue('PRE')}{${getVarName(block, 'VAR1')}}${block.getFieldValue('MID')}{${getVarName(block, 'VAR2')}}${block.getFieldValue('POST')}"`;
@@ -925,6 +926,13 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'py_list_dedup': {
         return `list(set(${getVarName(block, 'LIST')}))`;
+      }
+      case 'py_dict_val_literal': {
+        const dvk0 = valueToCode(block, 'KEY0', 'None');
+        const dvv0 = valueToCode(block, 'VAL0', 'None');
+        const dvk1 = valueToCode(block, 'KEY1', 'None');
+        const dvv1 = valueToCode(block, 'VAL1', 'None');
+        return `{${dvk0}: ${dvv0}, ${dvk1}: ${dvv1}}`;
       }
       case 'py_frozenset': {
         const fsVal = valueToCode(block, 'VALUE', '[]');

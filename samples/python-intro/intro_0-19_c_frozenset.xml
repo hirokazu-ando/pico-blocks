@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable id="var_vowels">vowels</variable>
+    <variable id="vow">vowels</variable>
+    <variable id="vpr">pairs</variable>
   </variables>
   <block type="var_set" x="30" y="30">
-    <field name="VAR" id="var_vowels">vowels</field>
+    <field name="VAR" id="vow">vowels</field>
     <value name="VALUE">
       <block type="py_frozenset">
         <value name="VALUE">
@@ -15,7 +16,7 @@
     <next>
       <block type="py_print">
         <value name="VALUE">
-          <block type="val_var"><field name="VAR" id="var_vowels">vowels</field></block>
+          <block type="val_var"><field name="VAR" id="vow">vowels</field></block>
         </value>
         <next>
           <block type="py_print">
@@ -24,9 +25,69 @@
                 <value name="ITEM">
                   <block type="val_str"><field name="TEXT">a</field></block>
                 </value>
-                <field name="LIST" id="var_vowels">vowels</field>
+                <field name="LIST" id="vow">vowels</field>
               </block>
             </value>
+            <next>
+              <block type="var_set">
+                <field name="VAR" id="vpr">pairs</field>
+                <value name="VALUE">
+                  <block type="py_dict_val_literal">
+                    <value name="KEY0">
+                      <block type="py_frozenset">
+                        <value name="VALUE">
+                          <block type="py_set_literal">
+                            <mutation items="2"/>
+                            <field name="COUNT">2</field>
+                            <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
+                            <value name="ITEM1"><block type="val_number"><field name="NUM">2</field></block></value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="VAL0">
+                      <block type="val_str"><field name="TEXT">pair A</field></block>
+                    </value>
+                    <value name="KEY1">
+                      <block type="py_frozenset">
+                        <value name="VALUE">
+                          <block type="py_set_literal">
+                            <mutation items="2"/>
+                            <field name="COUNT">2</field>
+                            <value name="ITEM0"><block type="val_number"><field name="NUM">3</field></block></value>
+                            <value name="ITEM1"><block type="val_number"><field name="NUM">4</field></block></value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="VAL1">
+                      <block type="val_str"><field name="TEXT">pair B</field></block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_print">
+                    <value name="VALUE">
+                      <block type="py_dict_get">
+                        <field name="DICT" id="vpr">pairs</field>
+                        <value name="KEY">
+                          <block type="py_frozenset">
+                            <value name="VALUE">
+                              <block type="py_set_literal">
+                                <mutation items="2"/>
+                                <field name="COUNT">2</field>
+                                <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
+                                <value name="ITEM1"><block type="val_number"><field name="NUM">2</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
           </block>
         </next>
       </block>
