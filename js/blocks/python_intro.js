@@ -1318,6 +1318,40 @@ Blockly.Blocks['py_sorted_dict_two_keys'] = {
   }
 };
 
+Blockly.Blocks['py_frozenset'] = {
+  init: function() {
+    this.appendValueInput('VALUE').setCheck(null)
+      .appendField('frozenset(');
+    this.appendDummyInput().appendField(')');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.tuples);
+    this.setTooltip('変更不可のセット（frozenset）を作ります（frozenset(値)）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_sorted_tuple_idx'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('students'), 'LIST')
+      .appendField('の')
+      .appendField(new Blockly.FieldNumber(1, 0, 10, 1), 'IDX')
+      .appendField('番目の要素で')
+      .appendField(new Blockly.FieldDropdown([
+        ['昇順', 'False'],
+        ['降順', 'True'],
+      ]), 'REV')
+      .appendField('ソート');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('タプルのリストをN番目の要素でソートします（sorted(list, key=lambda x: x[N], reverse=...)）');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['py_print_multi'] = {
   itemCount_: 2,
   init: function() {

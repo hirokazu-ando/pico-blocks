@@ -495,6 +495,8 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_set_op':       return `セット「${getVarName(block, 'SET_A')}」${block.getFieldValue('OP')}「${getVarName(block, 'SET_B')}」`;
       case 'py_list_dedup':   return `リスト「${getVarName(block, 'LIST')}」の重複を除く`;
       case 'py_sorted_set':   return `リスト「${getVarName(block, 'LIST')}」の重複を除いて昇順に並べる`;
+      case 'py_frozenset':    return 'frozenset（変更不可のセット）を作成';
+      case 'py_sorted_tuple_idx': return `リスト「${getVarName(block, 'LIST')}」を${block.getFieldValue('IDX')}番目の要素で${block.getFieldValue('REV') === 'True' ? '降順' : '昇順'}ソート`;
       case 'py_fstring2':     return `"${block.getFieldValue('PRE')}{${getVarName(block, 'VAR1')}}${block.getFieldValue('MID')}{${getVarName(block, 'VAR2')}}${block.getFieldValue('POST')}"`;
       case 'py_list_pop':     return `リスト「${getVarName(block, 'LIST')}」の末尾を取り出す（pop）`;
       case 'py_enumerate_start_for': return `リスト「${getVarName(block, 'LIST')}」を番号（${block.getFieldValue('START')}から）付きで繰り返す`;
@@ -923,6 +925,16 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'py_list_dedup': {
         return `list(set(${getVarName(block, 'LIST')}))`;
+      }
+      case 'py_frozenset': {
+        const fsVal = valueToCode(block, 'VALUE', '[]');
+        return `frozenset(${fsVal})`;
+      }
+      case 'py_sorted_tuple_idx': {
+        const stiList = getVarName(block, 'LIST');
+        const stiIdx  = block.getFieldValue('IDX') || '1';
+        const stiRev  = block.getFieldValue('REV') || 'False';
+        return `sorted(${stiList}, key=lambda x: x[${stiIdx}], reverse=${stiRev})`;
       }
       case 'py_sorted_set': {
         return `sorted(set(${getVarName(block, 'LIST')}))`;

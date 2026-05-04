@@ -10,16 +10,43 @@
   <block type="var_set" x="30" y="30">
     <field name="VAR" id="vst">students</field>
     <value name="VALUE">
-      <block type="py_custom_expr">
-        <field name="CODE">[("田中", 85), ("鈴木", 92), ("山田", 78)]</field>
+      <block type="py_list_literal">
+        <mutation items="3"/>
+        <field name="COUNT">3</field>
+        <value name="ITEM0">
+          <block type="py_tuple_literal">
+            <mutation items="2"/>
+            <field name="COUNT">2</field>
+            <value name="ITEM0"><block type="val_str"><field name="TEXT">田中</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">85</field></block></value>
+          </block>
+        </value>
+        <value name="ITEM1">
+          <block type="py_tuple_literal">
+            <mutation items="2"/>
+            <field name="COUNT">2</field>
+            <value name="ITEM0"><block type="val_str"><field name="TEXT">鈴木</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">92</field></block></value>
+          </block>
+        </value>
+        <value name="ITEM2">
+          <block type="py_tuple_literal">
+            <mutation items="2"/>
+            <field name="COUNT">2</field>
+            <value name="ITEM0"><block type="val_str"><field name="TEXT">山田</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">78</field></block></value>
+          </block>
+        </value>
       </block>
     </value>
     <next>
       <block type="var_set">
         <field name="VAR" id="vrk">ranked</field>
         <value name="VALUE">
-          <block type="py_custom_expr">
-            <field name="CODE">sorted(students, key=lambda s: s[1], reverse=True)</field>
+          <block type="py_sorted_tuple_idx">
+            <field name="LIST" id="vst">students</field>
+            <field name="IDX">1</field>
+            <field name="REV">True</field>
           </block>
         </value>
         <next>
@@ -32,16 +59,9 @@
                 <field name="VAR_Y" id="vsc">score</field>
                 <field name="SRC" id="vi">item</field>
                 <next>
-                  <block type="py_print">
-                    <value name="VALUE">
-                      <block type="py_fstring2">
-                        <field name="PRE"></field>
-                        <field name="VAR1" id="vn">name</field>
-                        <field name="MID"> </field>
-                        <field name="VAR2" id="vsc">score</field>
-                        <field name="POST">点</field>
-                      </block>
-                    </value>
+                  <block type="py_print2">
+                    <field name="VAR_A" id="vn">name</field>
+                    <field name="VAR_B" id="vsc">score</field>
                   </block>
                 </next>
               </block>
