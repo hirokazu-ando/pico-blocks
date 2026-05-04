@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vrows">rows</variable>
+    <variable id="vmath">math</variable>
+    <variable id="veng">english</variable>
+    <variable id="vsci">science</variable>
+    <variable id="vsub">subjects</variable>
+    <variable id="vavgm">avg_math</variable>
+    <variable id="vavge">avg_eng</variable>
+    <variable id="vavgs">avg_sci</variable>
+    <variable id="vmeans">means</variable>
+  </variables>
+  <block type="py_import_csv" x="30" y="30"><next>
+  <block type="py_import_stats"><next>
+  <block type="py_import_plt"><next>
+  <block type="py_csv_read_rows">
+    <field name="VAR" id="vrows">rows</field>
+    <field name="FILENAME">scores.csv</field>
+    <next>
+  <block type="py_csv_get_col">
+    <field name="VAR" id="vmath">math</field>
+    <field name="ROWS" id="vrows">rows</field>
+    <field name="COL">1</field>
+    <next>
+  <block type="py_csv_get_col">
+    <field name="VAR" id="veng">english</field>
+    <field name="ROWS" id="vrows">rows</field>
+    <field name="COL">2</field>
+    <next>
+  <block type="py_csv_get_col">
+    <field name="VAR" id="vsci">science</field>
+    <field name="ROWS" id="vrows">rows</field>
+    <field name="COL">3</field>
+    <next>
+  <block type="var_set">
+    <field name="VAR" id="vsub">subjects</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="3"/>
+        <value name="ITEM0"><block type="val_str"><field name="TEXT">数学</field></block></value>
+        <value name="ITEM1"><block type="val_str"><field name="TEXT">英語</field></block></value>
+        <value name="ITEM2"><block type="val_str"><field name="TEXT">理科</field></block></value>
+      </block>
+    </value>
+    <next>
+  <block type="var_set">
+    <field name="VAR" id="vavgm">avg_math</field>
+    <value name="VALUE">
+      <block type="py_stats_mean">
+        <value name="DATA"><block type="val_var"><field name="VAR" id="vmath">math</field></block></value>
+      </block>
+    </value>
+    <next>
+  <block type="var_set">
+    <field name="VAR" id="vavge">avg_eng</field>
+    <value name="VALUE">
+      <block type="py_stats_mean">
+        <value name="DATA"><block type="val_var"><field name="VAR" id="veng">english</field></block></value>
+      </block>
+    </value>
+    <next>
+  <block type="var_set">
+    <field name="VAR" id="vavgs">avg_sci</field>
+    <value name="VALUE">
+      <block type="py_stats_mean">
+        <value name="DATA"><block type="val_var"><field name="VAR" id="vsci">science</field></block></value>
+      </block>
+    </value>
+    <next>
+  <block type="var_set">
+    <field name="VAR" id="vmeans">means</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="3"/>
+        <value name="ITEM0"><block type="val_var"><field name="VAR" id="vavgm">avg_math</field></block></value>
+        <value name="ITEM1"><block type="val_var"><field name="VAR" id="vavge">avg_eng</field></block></value>
+        <value name="ITEM2"><block type="val_var"><field name="VAR" id="vavgs">avg_sci</field></block></value>
+      </block>
+    </value>
+    <next>
+  <block type="py_plt_bar">
+    <value name="X"><block type="val_var"><field name="VAR" id="vsub">subjects</field></block></value>
+    <value name="Y"><block type="val_var"><field name="VAR" id="vmeans">means</field></block></value>
+    <next>
+  <block type="py_plt_title">
+    <value name="TEXT"><block type="val_str"><field name="TEXT">教科別平均点</field></block></value>
+    <next>
+  <block type="py_plt_ylabel">
+    <value name="TEXT"><block type="val_str"><field name="TEXT">平均点</field></block></value>
+    <next>
+  <block type="py_plt_show"></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+</xml>

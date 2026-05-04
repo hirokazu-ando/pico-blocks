@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vrows">rows</variable>
+    <variable id="vmt">max_temp</variable>
+    <variable id="vmn">min_temp</variable>
+    <variable id="vrn">rain</variable>
+    <variable id="vavg">avg_max</variable>
+    <variable id="vsd">rain_sd</variable>
+    <variable id="vhot">hot_months</variable>
+  </variables>
+  <block type="py_import_csv" x="30" y="30"><next>
+  <block type="py_import_stats"><next>
+  <block type="py_import_plt"><next>
+  <block type="py_csv_read_rows">
+    <field name="VAR" id="vrows">rows</field>
+    <field name="FILENAME">weather.csv</field>
+    <next>
+  <block type="py_custom_stmt"><field name="CODE">month = [int(r[0]) for r in rows if len(r) &gt; 0]</field><next>
+  <block type="py_csv_get_col">
+    <field name="VAR" id="vmt">max_temp</field>
+    <field name="ROWS" id="vrows">rows</field>
+    <field name="COL">1</field>
+    <next>
+  <block type="py_csv_get_col">
+    <field name="VAR" id="vmn">min_temp</field>
+    <field name="ROWS" id="vrows">rows</field>
+    <field name="COL">2</field>
+    <next>
+  <block type="py_csv_get_col">
+    <field name="VAR" id="vrn">rain</field>
+    <field name="ROWS" id="vrows">rows</field>
+    <field name="COL">3</field>
+    <next>
+  <block type="var_set">
+    <field name="VAR" id="vhot">hot_months</field>
+    <value name="VALUE">
+      <block type="py_custom_expr"><field name="CODE">[month[i] for i in range(len(max_temp)) if max_temp[i] &gt;= 25]</field></block>
+    </value>
+    <next>
+  <block type="py_print">
+    <value name="VALUE">
+      <block type="py_fstring">
+        <field name="PRE">真夏日（最高25℃以上）の月: </field>
+        <value name="VAR"><block type="val_var"><field name="VAR" id="vhot">hot_months</field></block></value>
+        <field name="POST"></field>
+      </block>
+    </value>
+    <next>
+  <block type="var_set">
+    <field name="VAR" id="vavg">avg_max</field>
+    <value name="VALUE">
+      <block type="py_stats_mean">
+        <value name="DATA"><block type="val_var"><field name="VAR" id="vmt">max_temp</field></block></value>
+      </block>
+    </value>
+    <next>
+  <block type="py_print">
+    <value name="VALUE">
+      <block type="py_fstring">
+        <field name="PRE">最高気温 平均: </field>
+        <value name="VAR"><block type="val_var"><field name="VAR" id="vavg">avg_max</field></block></value>
+        <field name="POST"></field>
+      </block>
+    </value>
+    <next>
+  <block type="var_set">
+    <field name="VAR" id="vsd">rain_sd</field>
+    <value name="VALUE">
+      <block type="py_stats_stdev">
+        <value name="DATA"><block type="val_var"><field name="VAR" id="vrn">rain</field></block></value>
+      </block>
+    </value>
+    <next>
+  <block type="py_print">
+    <value name="VALUE">
+      <block type="py_fstring">
+        <field name="PRE">降水量 標準偏差: </field>
+        <value name="VAR"><block type="val_var"><field name="VAR" id="vsd">rain_sd</field></block></value>
+        <field name="POST"></field>
+      </block>
+    </value>
+    <next>
+  <block type="py_plt_plot">
+    <value name="X"><block type="val_var"><field name="VAR">month</field></block></value>
+    <value name="Y"><block type="val_var"><field name="VAR" id="vmt">max_temp</field></block></value>
+    <next>
+  <block type="py_plt_plot">
+    <value name="X"><block type="val_var"><field name="VAR">month</field></block></value>
+    <value name="Y"><block type="val_var"><field name="VAR" id="vmn">min_temp</field></block></value>
+    <next>
+  <block type="py_plt_title">
+    <value name="TEXT"><block type="val_str"><field name="TEXT">月別気温（最高・最低）</field></block></value>
+    <next>
+  <block type="py_plt_xlabel">
+    <value name="TEXT"><block type="val_str"><field name="TEXT">月</field></block></value>
+    <next>
+  <block type="py_plt_ylabel">
+    <value name="TEXT"><block type="val_str"><field name="TEXT">気温（℃）</field></block></value>
+    <next>
+  <block type="py_plt_show"></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+  </next></block>
+</xml>
