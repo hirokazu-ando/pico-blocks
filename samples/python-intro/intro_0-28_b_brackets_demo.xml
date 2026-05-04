@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vtext">text</variable>
+    <variable id="vstack">stack</variable>
+    <variable id="vch">ch</variable>
+  </variables>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vtext">text</field>
+    <value name="VALUE"><block type="val_str"><field name="TEXT">(())()</field></block></value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vstack">stack</field>
+        <value name="VALUE"><block type="py_list_empty"/></value>
+        <next>
+          <block type="py_for_list">
+            <field name="VAR" id="vch">ch</field>
+            <field name="LIST" id="vtext">text</field>
+            <statement name="DO">
+              <block type="pico_if">
+                <mutation elseif="1" else="0"/>
+                <value name="IF0">
+                  <block type="cond_compare">
+                    <field name="OP">==</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vch">ch</field></block></value>
+                    <value name="RIGHT"><block type="val_str"><field name="TEXT">(</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="py_list_append">
+                    <field name="LIST" id="vstack">stack</field>
+                    <value name="VALUE"><block type="val_var"><field name="VAR" id="vch">ch</field></block></value>
+                  </block>
+                </statement>
+                <value name="IF1">
+                  <block type="cond_compare">
+                    <field name="OP">==</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vch">ch</field></block></value>
+                    <value name="RIGHT"><block type="val_str"><field name="TEXT">)</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO1">
+                  <block type="py_list_pop">
+                    <field name="LIST" id="vstack">stack</field>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+            <next>
+              <block type="py_print">
+                <value name="VALUE">
+                  <block type="cond_compare">
+                    <field name="OP">==</field>
+                    <value name="LEFT"><block type="py_list_len"><field name="LIST" id="vstack">stack</field></block></value>
+                    <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

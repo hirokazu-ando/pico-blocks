@@ -30,8 +30,12 @@
                 <next>
                   <block type="py_print" id="b7">
                     <value name="VALUE">
-                      <block type="py_custom_expr" id="b8">
-                        <field name="CODE">f"{customer}さんを対応中（残り{len(queue)}人）"</field>
+                      <block type="py_fstring2_expr">
+                        <field name="PRE"></field>
+                        <field name="MID">さんを対応中（残り</field>
+                        <field name="POST">人）</field>
+                        <value name="VAR1"><block type="val_var"><field name="VAR" id="vc">customer</field></block></value>
+                        <value name="VAR2"><block type="py_list_len"><field name="LIST" id="vq">queue</field></block></value>
                       </block>
                     </value>
                   </block>

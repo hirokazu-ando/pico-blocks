@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vq">queue</variable>
+  </variables>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vq">queue</field>
+    <value name="VALUE"><block type="py_list_empty"/></value>
+    <next>
+      <block type="py_list_append">
+        <field name="LIST" id="vq">queue</field>
+        <value name="VALUE"><block type="val_str"><field name="TEXT">田中</field></block></value>
+        <next>
+          <block type="py_list_append">
+            <field name="LIST" id="vq">queue</field>
+            <value name="VALUE"><block type="val_str"><field name="TEXT">鈴木</field></block></value>
+            <next>
+              <block type="py_list_append">
+                <field name="LIST" id="vq">queue</field>
+                <value name="VALUE"><block type="val_str"><field name="TEXT">山田</field></block></value>
+                <next>
+                  <block type="py_print">
+                    <value name="VALUE"><block type="val_var"><field name="VAR" id="vq">queue</field></block></value>
+                    <next>
+                      <block type="py_print">
+                        <value name="VALUE">
+                          <block type="py_list_get">
+                            <field name="LIST" id="vq">queue</field>
+                            <value name="INDEX"><block type="val_number"><field name="NUM">0</field></block></value>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_print">
+                            <value name="VALUE"><block type="py_list_len"><field name="LIST" id="vq">queue</field></block></value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

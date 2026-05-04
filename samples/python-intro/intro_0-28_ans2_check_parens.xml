@@ -64,8 +64,8 @@
                       </block>
                     </statement>
                     <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">stack.pop()</field>
+                      <block type="py_list_pop">
+                        <field name="LIST" id="vstk">stack</field>
                       </block>
                     </next>
                   </block>
