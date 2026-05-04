@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_x">x</variable>
+    <variable id="var_y">y</variable>
+  </variables>
+  <block type="py_import_plt" id="b1" x="30" y="30">
+    <next>
+      <block type="var_set" id="b2">
+        <field name="VAR" id="var_x">x</field>
+        <value name="VALUE">
+          <block type="py_list_literal">
+            <mutation items="7"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">0</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">1</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">2</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">3</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">4</field></block></value>
+            <value name="ITEM5"><block type="val_number"><field name="NUM">5</field></block></value>
+            <value name="ITEM6"><block type="val_number"><field name="NUM">6</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="var_set" id="b3">
+            <field name="VAR" id="var_y">y</field>
+            <value name="VALUE">
+              <block type="py_list_literal">
+                <mutation items="7"/>
+                <value name="ITEM0"><block type="val_number"><field name="NUM">20</field></block></value>
+                <value name="ITEM1"><block type="val_number"><field name="NUM">22</field></block></value>
+                <value name="ITEM2"><block type="val_number"><field name="NUM">25</field></block></value>
+                <value name="ITEM3"><block type="val_number"><field name="NUM">30</field></block></value>
+                <value name="ITEM4"><block type="val_number"><field name="NUM">28</field></block></value>
+                <value name="ITEM5"><block type="val_number"><field name="NUM">24</field></block></value>
+                <value name="ITEM6"><block type="val_number"><field name="NUM">21</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_plt_plot" id="b4">
+                <value name="X"><block type="val_var" id="b5"><field name="VAR" id="var_x">x</field></block></value>
+                <value name="Y"><block type="val_var" id="b6"><field name="VAR" id="var_y">y</field></block></value>
+                <next>
+                  <block type="py_plt_title" id="b7">
+                    <value name="TEXT"><block type="val_str" id="b8"><field name="TEXT">曜日別気温</field></block></value>
+                    <next>
+                      <block type="py_plt_xlabel" id="b9">
+                        <value name="TEXT"><block type="val_str" id="b10"><field name="TEXT">曜日（月〜日）</field></block></value>
+                        <next>
+                          <block type="py_plt_ylabel" id="b11">
+                            <value name="TEXT"><block type="val_str" id="b12"><field name="TEXT">気温（℃）</field></block></value>
+                            <next>
+                              <block type="py_plt_show" id="b13"></block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
