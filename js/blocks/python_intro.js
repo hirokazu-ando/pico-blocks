@@ -377,6 +377,24 @@ Blockly.Blocks['py_call_val'] = {
   }
 };
 
+Blockly.Blocks['py_call_val2'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('関数')
+      .appendField(new Blockly.FieldTextInput('my_func'), 'NAME')
+      .appendField('（引数1:');
+    this.appendValueInput('ARG1').setCheck(null);
+    this.appendDummyInput().appendField(',  引数2:');
+    this.appendValueInput('ARG2').setCheck(null);
+    this.appendDummyInput().appendField('）の結果');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.functions);
+    this.setTooltip('2つの引数を渡して関数を呼び出し、戻り値を取得します');
+    this.setHelpUrl('');
+  }
+};
+
 // ===== 自作モジュール呼び出しブロック（文） =====
 function _moduleOptions() {
   if (typeof window.getPyModuleOptions === 'function') return window.getPyModuleOptions();
@@ -756,6 +774,30 @@ Blockly.Blocks['py_fstring_fmt'] = {
     this.setOutput(true, null);
     this.setColour(P.literals);
     this.setTooltip('f文字列：式にフォーマット指定を付けて埋め込みます（例: f"平均: {val:.1f}"）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_fstring2_expr'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('f"')
+      .appendField(new Blockly.FieldTextInput(''), 'PRE')
+      .appendField('{');
+    this.appendValueInput('VAR1').setCheck(null);
+    this.appendDummyInput()
+      .appendField('}')
+      .appendField(new Blockly.FieldTextInput('の点数: '), 'MID')
+      .appendField('{');
+    this.appendValueInput('VAR2').setCheck(null);
+    this.appendDummyInput()
+      .appendField('}')
+      .appendField(new Blockly.FieldTextInput(''), 'POST')
+      .appendField('"');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.literals);
+    this.setTooltip('f文字列：2つの式を埋め込んだ文字列を作ります（例: f"{name}の点数: {score}"）');
     this.setHelpUrl('');
   }
 };
@@ -1472,6 +1514,20 @@ Blockly.Blocks['py_range'] = {
     this.setOutput(true, null);
     this.setColour(P.loops);
     this.setTooltip('整数の連続（START から STOP-1 まで）を作ります（range(start, stop)）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_list_range'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('0 から')
+      .appendField(new Blockly.FieldNumber(10, 1, 1000000), 'N')
+      .appendField('個の整数リスト');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.lists);
+    this.setTooltip('0 から N-1 までの整数リストを作ります（list(range(N))）');
     this.setHelpUrl('');
   }
 };

@@ -1,4 +1,203 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">def linear_count(data, target):</field><next><block type="py_custom_stmt"><field name="CODE">    for i, v in enumerate(data):</field><next><block type="py_custom_stmt"><field name="CODE">        if v == target:</field><next><block type="py_custom_stmt"><field name="CODE">            return i + 1, True</field><next><block type="py_custom_stmt"><field name="CODE">    return len(data), False</field><next><block type="py_custom_stmt"><field name="CODE">data = list(range(1000))</field><next><block type="py_custom_stmt"><field name="CODE">count, found = linear_count(data, 777)</field><next><block type="py_custom_stmt"><field name="CODE">print(f"777: {count}回目で{'発見' if found else '未発見'}")</field><next><block type="py_custom_stmt"><field name="CODE">count, found = linear_count(data, 1500)</field><next><block type="py_custom_stmt"><field name="CODE">print(f"1500: {count}回目で{'発見' if found else '未発見'}")</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <variables>
+    <variable id="vd">data</variable>
+    <variable id="vt">target</variable>
+    <variable id="vi">i</variable>
+    <variable id="vv">v</variable>
+    <variable id="vr">result</variable>
+    <variable id="vc">count</variable>
+    <variable id="vf">found</variable>
+  </variables>
+  <block type="py_def_args2" x="30" y="30">
+    <field name="NAME">linear_count</field>
+    <field name="PARAM1">data</field>
+    <field name="PARAM2">target</field>
+    <statement name="BODY">
+      <block type="py_enumerate_for">
+        <field name="IDX" id="vi">i</field>
+        <field name="VAL" id="vv">v</field>
+        <field name="LIST" id="vd">data</field>
+        <statement name="DO">
+          <block type="controls_if">
+            <value name="IF0">
+              <block type="cond_compare">
+                <field name="OP">==</field>
+                <value name="LEFT">
+                  <block type="val_var"><field name="VAR" id="vv">v</field></block>
+                </value>
+                <value name="RIGHT">
+                  <block type="val_var"><field name="VAR" id="vt">target</field></block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="py_return">
+                <value name="VALUE">
+                  <block type="py_tuple_literal">
+                    <mutation items="2"/>
+                    <value name="ITEM0">
+                      <block type="py_math_op">
+                        <field name="OP">+</field>
+                        <value name="LEFT">
+                          <block type="val_var"><field name="VAR" id="vi">i</field></block>
+                        </value>
+                        <value name="RIGHT">
+                          <block type="val_number"><field name="NUM">1</field></block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="ITEM1">
+                      <block type="val_bool"><field name="BOOL">True</field></block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </statement>
+          </block>
+        </statement>
+        <next>
+          <block type="py_return">
+            <value name="VALUE">
+              <block type="py_tuple_literal">
+                <mutation items="2"/>
+                <value name="ITEM0">
+                  <block type="py_list_len">
+                    <field name="LIST" id="vd">data</field>
+                  </block>
+                </value>
+                <value name="ITEM1">
+                  <block type="val_bool"><field name="BOOL">False</field></block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vd">data</field>
+        <value name="VALUE">
+          <block type="py_list_range">
+            <field name="N">1000</field>
+          </block>
+        </value>
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="vr">result</field>
+            <value name="VALUE">
+              <block type="py_call_val2">
+                <field name="NAME">linear_count</field>
+                <value name="ARG1">
+                  <block type="val_var"><field name="VAR" id="vd">data</field></block>
+                </value>
+                <value name="ARG2">
+                  <block type="val_number"><field name="NUM">777</field></block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="py_tuple_unpack">
+                <field name="VAR_X" id="vc">count</field>
+                <field name="VAR_Y" id="vf">found</field>
+                <field name="SRC" id="vr">result</field>
+                <next>
+                  <block type="controls_if">
+                    <mutation else="1"/>
+                    <value name="IF0">
+                      <block type="val_var"><field name="VAR" id="vf">found</field></block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="py_print">
+                        <value name="VALUE">
+                          <block type="py_fstring">
+                            <field name="PRE">777: </field>
+                            <value name="VAR">
+                              <block type="val_var"><field name="VAR" id="vc">count</field></block>
+                            </value>
+                            <field name="POST">回目で発見</field>
+                          </block>
+                        </value>
+                      </block>
+                    </statement>
+                    <statement name="ELSE">
+                      <block type="py_print">
+                        <value name="VALUE">
+                          <block type="py_fstring">
+                            <field name="PRE">777: </field>
+                            <value name="VAR">
+                              <block type="val_var"><field name="VAR" id="vc">count</field></block>
+                            </value>
+                            <field name="POST">回目で未発見</field>
+                          </block>
+                        </value>
+                      </block>
+                    </statement>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="vr">result</field>
+                        <value name="VALUE">
+                          <block type="py_call_val2">
+                            <field name="NAME">linear_count</field>
+                            <value name="ARG1">
+                              <block type="val_var"><field name="VAR" id="vd">data</field></block>
+                            </value>
+                            <value name="ARG2">
+                              <block type="val_number"><field name="NUM">1500</field></block>
+                            </value>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_tuple_unpack">
+                            <field name="VAR_X" id="vc">count</field>
+                            <field name="VAR_Y" id="vf">found</field>
+                            <field name="SRC" id="vr">result</field>
+                            <next>
+                              <block type="controls_if">
+                                <mutation else="1"/>
+                                <value name="IF0">
+                                  <block type="val_var"><field name="VAR" id="vf">found</field></block>
+                                </value>
+                                <statement name="DO0">
+                                  <block type="py_print">
+                                    <value name="VALUE">
+                                      <block type="py_fstring">
+                                        <field name="PRE">1500: </field>
+                                        <value name="VAR">
+                                          <block type="val_var"><field name="VAR" id="vc">count</field></block>
+                                        </value>
+                                        <field name="POST">回目で発見</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </statement>
+                                <statement name="ELSE">
+                                  <block type="py_print">
+                                    <value name="VALUE">
+                                      <block type="py_fstring">
+                                        <field name="PRE">1500: </field>
+                                        <value name="VAR">
+                                          <block type="val_var"><field name="VAR" id="vc">count</field></block>
+                                        </value>
+                                        <field name="POST">回目で未発見</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </statement>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

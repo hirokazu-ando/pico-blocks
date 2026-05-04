@@ -506,6 +506,9 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_return':     return '戻り値を返す（return）';
       case 'py_call_stmt':        return `関数「${block.getFieldValue('NAME')}」を呼び出す`;
       case 'py_call_val':         return `関数「${block.getFieldValue('NAME')}」の結果`;
+      case 'py_call_val2':        return `関数「${block.getFieldValue('NAME')}」（2引数）の結果`;
+      case 'py_fstring2_expr':    return 'f文字列（2式埋め込み）';
+      case 'py_list_range':       return `0 から ${block.getFieldValue('N')} 個の整数リスト`;
       case 'py_module_call_stmt': return `モジュール「${block.getFieldValue('MODULE')}」の「${block.getFieldValue('FUNC')}」を呼び出す`;
       case 'py_module_call_val':  return `モジュール「${block.getFieldValue('MODULE')}」の「${block.getFieldValue('FUNC')}」の結果`;
       case 'py_random_int':    return 'ランダムな整数';
@@ -991,6 +994,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const arg  = valueToCode(block, 'ARG', '');
         return `${name}(${arg})`;
       }
+      case 'py_call_val2': {
+        const cv2Name = block.getFieldValue('NAME');
+        const cv2Arg1 = valueToCode(block, 'ARG1', '');
+        const cv2Arg2 = valueToCode(block, 'ARG2', '');
+        return `${cv2Name}(${cv2Arg1}, ${cv2Arg2})`;
+      }
+      case 'py_fstring2_expr': {
+        const f2ePre  = block.getFieldValue('PRE')  || '';
+        const f2eMid  = block.getFieldValue('MID')  || '';
+        const f2ePost = block.getFieldValue('POST') || '';
+        const f2eV1   = valueToCode(block, 'VAR1', '""');
+        const f2eV2   = valueToCode(block, 'VAR2', '""');
+        function escSQf2(s) { return String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'"); }
+        return `f'${escSQf2(f2ePre)}{${f2eV1}}${escSQf2(f2eMid)}{${f2eV2}}${escSQf2(f2ePost)}'`;
+      }
+      case 'py_list_range': {
+        const lrN = block.getFieldValue('N') || '10';
+        return `list(range(${lrN}))`;
+      }
       case 'py_module_call_val': {
         const mod  = block.getFieldValue('MODULE');
         const func = block.getFieldValue('FUNC');
@@ -1457,8 +1479,11 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_abs':
       case 'py_round':
       case 'py_call_val':
+      case 'py_call_val2':
       case 'py_fstring':
       case 'py_fstring_fmt':
+      case 'py_fstring2_expr':
+      case 'py_list_range':
       case 'py_dict_new':
       case 'py_dict_literal':
       case 'py_dict_get':

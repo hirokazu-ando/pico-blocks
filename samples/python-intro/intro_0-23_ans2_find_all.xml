@@ -64,14 +64,23 @@
       </block>
     </statement>
     <next>
-      <block type="py_print" id="b15">
+      <block type="py_print">
         <value name="VALUE">
-          <block type="py_call_val" id="b16">
+          <block type="py_call_val2">
             <field name="NAME">find_all</field>
-            <value name="ARG">
-              <block type="py_custom_expr" id="b17">
-                <field name="CODE">[4, 2, 7, 2, 9, 2], 2</field>
+            <value name="ARG1">
+              <block type="py_list_literal">
+                <mutation items="6"/>
+                <value name="ITEM0"><block type="val_number"><field name="NUM">4</field></block></value>
+                <value name="ITEM1"><block type="val_number"><field name="NUM">2</field></block></value>
+                <value name="ITEM2"><block type="val_number"><field name="NUM">7</field></block></value>
+                <value name="ITEM3"><block type="val_number"><field name="NUM">2</field></block></value>
+                <value name="ITEM4"><block type="val_number"><field name="NUM">9</field></block></value>
+                <value name="ITEM5"><block type="val_number"><field name="NUM">2</field></block></value>
               </block>
+            </value>
+            <value name="ARG2">
+              <block type="val_number"><field name="NUM">2</field></block>
             </value>
           </block>
         </value>
