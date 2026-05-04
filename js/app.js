@@ -3280,6 +3280,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.PycoCv && typeof window.PycoCv.installIntoSkulpt === 'function') {
       try { window.PycoCv.installIntoSkulpt(Sk); } catch (e) { console.warn('pyco_cv install failed', e); }
     }
+    // matplotlib グラフモジュール登録
+    if (window.PycoChart && typeof window.PycoChart.installIntoSkulpt === 'function') {
+      try { window.PycoChart.installIntoSkulpt(Sk); } catch (e) { console.warn('matplotlib install failed', e); }
+    }
 
     Sk.misceval.asyncToPromise(function() {
       return Sk.importMainWithBody('<stdin>', false, code, true);
