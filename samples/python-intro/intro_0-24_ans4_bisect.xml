@@ -28,8 +28,16 @@
               </block>
             </value>
             <next>
-              <block type="py_custom_stmt">
-                <field name="CODE">print(f"挿入位置: {pos}")</field>
+              <block type="py_print">
+                <value name="VALUE">
+                  <block type="py_fstring">
+                    <field name="PRE">挿入位置: </field>
+                    <field name="POST"></field>
+                    <value name="VAR">
+                      <block type="val_var"><field name="VAR" id="vp">pos</field></block>
+                    </value>
+                  </block>
+                </value>
                 <next>
                   <block type="py_custom_stmt">
                     <field name="CODE">data.insert(pos, 7)</field>

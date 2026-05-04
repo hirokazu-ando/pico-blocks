@@ -1,78 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt" x="30" y="30">
-    <field name="CODE">def isqrt(n):</field>
-    <next>
-      <block type="py_custom_stmt">
-        <field name="CODE">    left, right = 0, n</field>
+  <variables>
+    <variable id="var_n">n</variable>
+    <variable id="var_left">left</variable>
+    <variable id="var_right">right</variable>
+    <variable id="var_mid">mid</variable>
+  </variables>
+  <block type="py_def" x="30" y="30">
+    <field name="NAME">isqrt</field>
+    <field name="PARAM" id="var_n">n</field>
+    <statement name="BODY">
+      <block type="var_set">
+        <field name="VAR" id="var_left">left</field>
+        <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
         <next>
-          <block type="py_custom_stmt">
-            <field name="CODE">    while left &lt;= right:</field>
+          <block type="var_set">
+            <field name="VAR" id="var_right">right</field>
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
             <next>
-              <block type="py_custom_stmt">
-                <field name="CODE">        mid = (left + right) // 2</field>
-                <next>
-                  <block type="py_custom_stmt">
-                    <field name="CODE">        if mid * mid == n:</field>
-                    <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">            return mid</field>
-                        <next>
-                          <block type="py_custom_stmt">
-                            <field name="CODE">        elif mid * mid &lt; n:</field>
-                            <next>
-                              <block type="py_custom_stmt">
-                                <field name="CODE">            left = mid + 1</field>
-                                <next>
-                                  <block type="py_custom_stmt">
-                                    <field name="CODE">        else:</field>
-                                    <next>
-                                      <block type="py_custom_stmt">
-                                        <field name="CODE">            right = mid - 1</field>
-                                        <next>
-                                          <block type="py_custom_stmt">
-                                            <field name="CODE">    return right</field>
-                                            <next>
-                                              <block type="py_print">
-                                                <value name="VALUE">
-                                                  <block type="py_custom_expr">
-                                                    <field name="CODE">isqrt(25)</field>
-                                                  </block>
-                                                </value>
-                                                <next>
-                                                  <block type="py_print">
-                                                    <value name="VALUE">
-                                                      <block type="py_custom_expr">
-                                                        <field name="CODE">isqrt(30)</field>
-                                                      </block>
-                                                    </value>
-                                                    <next>
-                                                      <block type="py_print">
-                                                        <value name="VALUE">
-                                                          <block type="py_custom_expr">
-                                                            <field name="CODE">isqrt(144)</field>
-                                                          </block>
-                                                        </value>
-                                                      </block>
-                                                    </next>
-                                                  </block>
-                                                </next>
-                                              </block>
-                                            </next>
-                                          </block>
-                                        </next>
-                                      </block>
-                                    </next>
-                                  </block>
-                                </next>
-                              </block>
-                            </next>
+              <block type="py_while">
+                <value name="COND">
+                  <block type="cond_compare">
+                    <field name="OP">&lt;=</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="var_left">left</field></block></value>
+                    <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_right">right</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO">
+                  <block type="var_set">
+                    <field name="VAR" id="var_mid">mid</field>
+                    <value name="VALUE">
+                      <block type="py_math_op">
+                        <field name="OP">//</field>
+                        <value name="LEFT">
+                          <block type="py_math_op">
+                            <field name="OP">+</field>
+                            <value name="LEFT"><block type="val_var"><field name="VAR" id="var_left">left</field></block></value>
+                            <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_right">right</field></block></value>
                           </block>
-                        </next>
+                        </value>
+                        <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="pico_if">
+                        <mutation elseif="1" else="1"></mutation>
+                        <value name="IF0">
+                          <block type="cond_compare">
+                            <field name="OP">==</field>
+                            <value name="LEFT">
+                              <block type="py_math_op">
+                                <field name="OP">*</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                                <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                              </block>
+                            </value>
+                            <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                          </block>
+                        </value>
+                        <statement name="DO0">
+                          <block type="py_return">
+                            <value name="VALUE"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                          </block>
+                        </statement>
+                        <value name="IF1">
+                          <block type="cond_compare">
+                            <field name="OP">&lt;</field>
+                            <value name="LEFT">
+                              <block type="py_math_op">
+                                <field name="OP">*</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                                <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                              </block>
+                            </value>
+                            <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                          </block>
+                        </value>
+                        <statement name="DO1">
+                          <block type="var_set">
+                            <field name="VAR" id="var_left">left</field>
+                            <value name="VALUE">
+                              <block type="py_math_op">
+                                <field name="OP">+</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                                <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </statement>
+                        <statement name="ELSE">
+                          <block type="var_set">
+                            <field name="VAR" id="var_right">right</field>
+                            <value name="VALUE">
+                              <block type="py_math_op">
+                                <field name="OP">-</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                                <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </statement>
                       </block>
                     </next>
                   </block>
+                </statement>
+                <next>
+                  <block type="py_return">
+                    <value name="VALUE"><block type="val_var"><field name="VAR" id="var_right">right</field></block></value>
+                  </block>
                 </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="py_print">
+        <value name="VALUE">
+          <block type="py_call_val">
+            <field name="NAME">isqrt</field>
+            <value name="ARG"><block type="val_number"><field name="NUM">25</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print">
+            <value name="VALUE">
+              <block type="py_call_val">
+                <field name="NAME">isqrt</field>
+                <value name="ARG"><block type="val_number"><field name="NUM">30</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print">
+                <value name="VALUE">
+                  <block type="py_call_val">
+                    <field name="NAME">isqrt</field>
+                    <value name="ARG"><block type="val_number"><field name="NUM">144</field></block></value>
+                  </block>
+                </value>
               </block>
             </next>
           </block>

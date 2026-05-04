@@ -1,8 +1,194 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable id="vd">data</variable>
-    <variable id="vt">target</variable>
+    <variable id="var_data">data</variable>
+    <variable id="var_target">target</variable>
+    <variable id="var_left">left</variable>
+    <variable id="var_right">right</variable>
+    <variable id="var_mid">mid</variable>
+    <variable id="var_count">count</variable>
+    <variable id="var_idx">idx</variable>
+    <variable id="var_n">n</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vd">data</field><value name="VALUE"><block type="py_list_literal"><mutation items="10"/><value name="ITEM0"><block type="val_number"><field name="NUM">2</field></block></value><value name="ITEM1"><block type="val_number"><field name="NUM">5</field></block></value><value name="ITEM2"><block type="val_number"><field name="NUM">8</field></block></value><value name="ITEM3"><block type="val_number"><field name="NUM">12</field></block></value><value name="ITEM4"><block type="val_number"><field name="NUM">16</field></block></value><value name="ITEM5"><block type="val_number"><field name="NUM">23</field></block></value><value name="ITEM6"><block type="val_number"><field name="NUM">38</field></block></value><value name="ITEM7"><block type="val_number"><field name="NUM">56</field></block></value><value name="ITEM8"><block type="val_number"><field name="NUM">72</field></block></value><value name="ITEM9"><block type="val_number"><field name="NUM">91</field></block></value></block></value><next><block type="var_set"><field name="VAR" id="vt">target</field><value name="VALUE"><block type="val_number"><field name="NUM">23</field></block></value><next><block type="py_custom_stmt"><field name="CODE">def binary_search(data, target):</field><next><block type="py_custom_stmt"><field name="CODE">    left, right, count = 0, len(data) - 1, 0</field><next><block type="py_custom_stmt"><field name="CODE">    while left &lt;= right:</field><next><block type="py_custom_stmt"><field name="CODE">        mid = (left + right) // 2</field><next><block type="py_custom_stmt"><field name="CODE">        count += 1</field><next><block type="py_custom_stmt"><field name="CODE">        if data[mid] == target:</field><next><block type="py_custom_stmt"><field name="CODE">            return mid, count</field><next><block type="py_custom_stmt"><field name="CODE">        elif data[mid] &lt; target:</field><next><block type="py_custom_stmt"><field name="CODE">            left = mid + 1</field><next><block type="py_custom_stmt"><field name="CODE">        else:</field><next><block type="py_custom_stmt"><field name="CODE">            right = mid - 1</field><next><block type="py_custom_stmt"><field name="CODE">    return -1, count</field><next><block type="py_custom_stmt"><field name="CODE">idx, cnt = binary_search(data, target)</field><next><block type="py_custom_stmt"><field name="CODE">print(f"{target}は{cnt}回で発見（index {idx}）")</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="var_data">data</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="10"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">2</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">5</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">8</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">12</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">16</field></block></value>
+        <value name="ITEM5"><block type="val_number"><field name="NUM">23</field></block></value>
+        <value name="ITEM6"><block type="val_number"><field name="NUM">38</field></block></value>
+        <value name="ITEM7"><block type="val_number"><field name="NUM">56</field></block></value>
+        <value name="ITEM8"><block type="val_number"><field name="NUM">72</field></block></value>
+        <value name="ITEM9"><block type="val_number"><field name="NUM">91</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="var_target">target</field>
+        <value name="VALUE"><block type="val_number"><field name="NUM">23</field></block></value>
+        <next>
+          <block type="py_def_args2">
+            <field name="NAME">binary_search</field>
+            <field name="PARAM1">data</field>
+            <field name="PARAM2">target</field>
+            <statement name="BODY">
+              <block type="var_set">
+                <field name="VAR" id="var_left">left</field>
+                <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+                <next>
+                  <block type="var_set">
+                    <field name="VAR" id="var_right">right</field>
+                    <value name="VALUE">
+                      <block type="py_math_op">
+                        <field name="OP">-</field>
+                        <value name="LEFT"><block type="py_list_len"><field name="LIST" id="var_data">data</field></block></value>
+                        <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="var_count">count</field>
+                        <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+                        <next>
+                          <block type="py_while">
+                            <value name="COND">
+                              <block type="cond_compare">
+                                <field name="OP">&lt;=</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_left">left</field></block></value>
+                                <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_right">right</field></block></value>
+                              </block>
+                            </value>
+                            <statement name="DO">
+                              <block type="var_set">
+                                <field name="VAR" id="var_mid">mid</field>
+                                <value name="VALUE">
+                                  <block type="py_math_op">
+                                    <field name="OP">//</field>
+                                    <value name="LEFT">
+                                      <block type="py_math_op">
+                                        <field name="OP">+</field>
+                                        <value name="LEFT"><block type="val_var"><field name="VAR" id="var_left">left</field></block></value>
+                                        <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_right">right</field></block></value>
+                                      </block>
+                                    </value>
+                                    <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="var_set">
+                                    <field name="VAR" id="var_count">count</field>
+                                    <value name="VALUE">
+                                      <block type="py_math_op">
+                                        <field name="OP">+</field>
+                                        <value name="LEFT"><block type="val_var"><field name="VAR" id="var_count">count</field></block></value>
+                                        <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="pico_if">
+                                        <mutation elseif="1" else="1"></mutation>
+                                        <value name="IF0">
+                                          <block type="cond_compare">
+                                            <field name="OP">==</field>
+                                            <value name="LEFT">
+                                              <block type="py_list_get">
+                                                <field name="LIST" id="var_data">data</field>
+                                                <value name="INDEX"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                                              </block>
+                                            </value>
+                                            <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_target">target</field></block></value>
+                                          </block>
+                                        </value>
+                                        <statement name="DO0">
+                                          <block type="py_return">
+                                            <value name="VALUE">
+                                              <block type="py_tuple_literal">
+                                                <mutation items="2"/>
+                                                <value name="ITEM0"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                                                <value name="ITEM1"><block type="val_var"><field name="VAR" id="var_count">count</field></block></value>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </statement>
+                                        <value name="IF1">
+                                          <block type="cond_compare">
+                                            <field name="OP">&lt;</field>
+                                            <value name="LEFT">
+                                              <block type="py_list_get">
+                                                <field name="LIST" id="var_data">data</field>
+                                                <value name="INDEX"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                                              </block>
+                                            </value>
+                                            <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_target">target</field></block></value>
+                                          </block>
+                                        </value>
+                                        <statement name="DO1">
+                                          <block type="var_set">
+                                            <field name="VAR" id="var_left">left</field>
+                                            <value name="VALUE">
+                                              <block type="py_math_op">
+                                                <field name="OP">+</field>
+                                                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                                                <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </statement>
+                                        <statement name="ELSE">
+                                          <block type="var_set">
+                                            <field name="VAR" id="var_right">right</field>
+                                            <value name="VALUE">
+                                              <block type="py_math_op">
+                                                <field name="OP">-</field>
+                                                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_mid">mid</field></block></value>
+                                                <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </statement>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </statement>
+                            <next>
+                              <block type="py_return">
+                                <value name="VALUE">
+                                  <block type="py_tuple_literal">
+                                    <mutation items="2"/>
+                                    <value name="ITEM0"><block type="val_number"><field name="NUM">-1</field></block></value>
+                                    <value name="ITEM1"><block type="val_var"><field name="VAR" id="var_count">count</field></block></value>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <next>
+              <block type="py_custom_stmt">
+                <field name="CODE">idx, n = binary_search(data, 23)</field>
+                <next>
+                  <block type="py_custom_stmt">
+                    <field name="CODE">print(f"インデックス{idx}で発見（{n}回の比較）")</field>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>
