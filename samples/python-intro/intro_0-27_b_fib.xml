@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vn">n</variable>
+    <variable id="vi">i</variable>
+  </variables>
+  <block type="py_def" x="30" y="30">
+    <field name="NAME">fib</field>
+    <field name="PARAM" id="vn">n</field>
+    <statement name="BODY">
+      <block type="pico_if">
+        <mutation elseif="0" else="0"/>
+        <value name="IF0">
+          <block type="cond_compare">
+            <field name="OP">&lt;=</field>
+            <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+            <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="py_return">
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+          </block>
+        </statement>
+        <next>
+          <block type="py_return">
+            <value name="VALUE">
+              <block type="py_math_op">
+                <field name="OP">+</field>
+                <value name="LEFT">
+                  <block type="py_call_val">
+                    <field name="NAME">fib</field>
+                    <value name="ARG">
+                      <block type="py_math_op">
+                        <field name="OP">-</field>
+                        <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                        <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="RIGHT">
+                  <block type="py_call_val">
+                    <field name="NAME">fib</field>
+                    <value name="ARG">
+                      <block type="py_math_op">
+                        <field name="OP">-</field>
+                        <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                        <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="pico_for_from_to">
+        <field name="VAR" id="vi">i</field>
+        <value name="START"><block type="val_number"><field name="NUM">0</field></block></value>
+        <value name="STOP"><block type="val_number"><field name="NUM">9</field></block></value>
+        <value name="STEP"><block type="val_number"><field name="NUM">1</field></block></value>
+        <statement name="DO">
+          <block type="py_print">
+            <value name="VALUE">
+              <block type="py_call_val">
+                <field name="NAME">fib</field>
+                <value name="ARG"><block type="val_var"><field name="VAR" id="vi">i</field></block></value>
+              </block>
+            </value>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
+</xml>
