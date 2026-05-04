@@ -1,4 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">def reverse_str(s):</field><next><block type="py_custom_stmt"><field name="CODE">    if len(s) &lt;= 1:</field><next><block type="py_custom_stmt"><field name="CODE">        return s</field><next><block type="py_custom_stmt"><field name="CODE">    return reverse_str(s[1:]) + s[0]</field><next><block type="py_custom_stmt"><field name="CODE">print(reverse_str("hello"))</field><next><block type="py_custom_stmt"><field name="CODE">print(reverse_str("Python"))</field></block></next></block></next></block></next></block></next></block></next></block>
+  <variables>
+    <variable id="vs">s</variable>
+  </variables>
+  <block type="py_def" x="30" y="30">
+    <field name="NAME">reverse_str</field>
+    <field name="PARAM" id="vs">s</field>
+    <statement name="BODY">
+      <block type="pico_if">
+        <mutation elseif="0" else="0"/>
+        <value name="IF0">
+          <block type="cond_compare">
+            <field name="OP">&lt;=</field>
+            <value name="LEFT"><block type="py_custom_expr"><field name="CODE">len(s)</field></block></value>
+            <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="py_return">
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="vs">s</field></block></value>
+          </block>
+        </statement>
+        <next>
+          <block type="py_return">
+            <value name="VALUE">
+              <block type="py_math_op">
+                <field name="OP">+</field>
+                <value name="LEFT">
+                  <block type="py_call_val">
+                    <field name="NAME">reverse_str</field>
+                    <value name="ARG"><block type="py_custom_expr"><field name="CODE">s[1:]</field></block></value>
+                  </block>
+                </value>
+                <value name="RIGHT"><block type="py_custom_expr"><field name="CODE">s[0]</field></block></value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="py_print">
+        <value name="VALUE">
+          <block type="py_call_val">
+            <field name="NAME">reverse_str</field>
+            <value name="ARG"><block type="val_str"><field name="TEXT">hello</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print">
+            <value name="VALUE">
+              <block type="py_call_val">
+                <field name="NAME">reverse_str</field>
+                <value name="ARG"><block type="val_str"><field name="TEXT">Python</field></block></value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

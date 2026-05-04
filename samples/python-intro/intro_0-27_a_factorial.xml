@@ -7,12 +7,13 @@
     <field name="NAME">factorial</field>
     <field name="PARAM" id="var_n">n</field>
     <statement name="BODY">
-      <block type="controls_if" id="b2">
+      <block type="pico_if" id="b2">
+        <mutation elseif="0" else="0"/>
         <value name="IF0">
-          <block type="logic_compare" id="b3">
-            <field name="OP">LTE</field>
-            <value name="A"><block type="val_var" id="b4"><field name="VAR" id="var_n">n</field></block></value>
-            <value name="B"><block type="val_number" id="b5"><field name="NUM">1</field></block></value>
+          <block type="cond_compare" id="b3">
+            <field name="OP">&lt;=</field>
+            <value name="LEFT"><block type="val_var" id="b4"><field name="VAR" id="var_n">n</field></block></value>
+            <value name="RIGHT"><block type="val_number" id="b5"><field name="NUM">1</field></block></value>
           </block>
         </value>
         <statement name="DO0">

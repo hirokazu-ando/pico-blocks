@@ -1,4 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">def rec_sum(lst):</field><next><block type="py_custom_stmt"><field name="CODE">    if len(lst) == 0:</field><next><block type="py_custom_stmt"><field name="CODE">        return 0</field><next><block type="py_custom_stmt"><field name="CODE">    return lst[0] + rec_sum(lst[1:])</field><next><block type="py_custom_stmt"><field name="CODE">print(rec_sum([1, 2, 3, 4, 5]))</field><next><block type="py_custom_stmt"><field name="CODE">print(rec_sum([]))</field></block></next></block></next></block></next></block></next></block></next></block>
+  <variables>
+    <variable id="vlst">lst</variable>
+  </variables>
+  <block type="py_def" x="30" y="30">
+    <field name="NAME">rec_sum</field>
+    <field name="PARAM" id="vlst">lst</field>
+    <statement name="BODY">
+      <block type="pico_if">
+        <mutation elseif="0" else="0"/>
+        <value name="IF0">
+          <block type="cond_compare">
+            <field name="OP">==</field>
+            <value name="LEFT"><block type="py_list_len"><field name="LIST" id="vlst">lst</field></block></value>
+            <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="py_return">
+            <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+          </block>
+        </statement>
+        <next>
+          <block type="py_return">
+            <value name="VALUE">
+              <block type="py_math_op">
+                <field name="OP">+</field>
+                <value name="LEFT">
+                  <block type="py_list_get">
+                    <field name="LIST" id="vlst">lst</field>
+                    <value name="INDEX"><block type="val_number"><field name="NUM">0</field></block></value>
+                  </block>
+                </value>
+                <value name="RIGHT">
+                  <block type="py_call_val">
+                    <field name="NAME">rec_sum</field>
+                    <value name="ARG"><block type="py_custom_expr"><field name="CODE">lst[1:]</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="py_print">
+        <value name="VALUE">
+          <block type="py_call_val">
+            <field name="NAME">rec_sum</field>
+            <value name="ARG">
+              <block type="py_list_literal">
+                <mutation items="5"/>
+                <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
+                <value name="ITEM1"><block type="val_number"><field name="NUM">2</field></block></value>
+                <value name="ITEM2"><block type="val_number"><field name="NUM">3</field></block></value>
+                <value name="ITEM3"><block type="val_number"><field name="NUM">4</field></block></value>
+                <value name="ITEM4"><block type="val_number"><field name="NUM">5</field></block></value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print">
+            <value name="VALUE">
+              <block type="py_call_val">
+                <field name="NAME">rec_sum</field>
+                <value name="ARG"><block type="py_list_empty"/></value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

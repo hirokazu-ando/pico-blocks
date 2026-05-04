@@ -7,49 +7,49 @@
     <variable id="var_t">t</variable>
     <variable id="var__">_</variable>
   </variables>
-  <!-- fib_recursive 関数 -->
-  <block type="py_def" id="b_fib_rec" x="30" y="30">
+  <block type="py_def" x="30" y="30">
     <field name="NAME">fib_recursive</field>
     <field name="PARAM" id="var_n">n</field>
     <statement name="BODY">
-      <block type="controls_if" id="b_if1">
+      <block type="pico_if">
+        <mutation elseif="0" else="0"/>
         <value name="IF0">
-          <block type="cond_compare" id="b_cmp1">
+          <block type="cond_compare">
             <field name="OP">&lt;=</field>
-            <value name="LEFT"><block type="val_var" id="b_vn1"><field name="VAR" id="var_n">n</field></block></value>
-            <value name="RIGHT"><block type="val_number" id="b_1a"><field name="NUM">1</field></block></value>
+            <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+            <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
           </block>
         </value>
         <statement name="DO0">
-          <block type="py_return" id="b_ret1">
-            <value name="VALUE"><block type="val_var" id="b_vn2"><field name="VAR" id="var_n">n</field></block></value>
+          <block type="py_return">
+            <value name="VALUE"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
           </block>
         </statement>
         <next>
-          <block type="py_return" id="b_ret2">
+          <block type="py_return">
             <value name="VALUE">
-              <block type="py_math_op" id="b_add1">
+              <block type="py_math_op">
                 <field name="OP">+</field>
                 <value name="LEFT">
-                  <block type="py_call_val" id="b_call1">
+                  <block type="py_call_val">
                     <field name="NAME">fib_recursive</field>
                     <value name="ARG">
-                      <block type="py_math_op" id="b_sub1">
+                      <block type="py_math_op">
                         <field name="OP">-</field>
-                        <value name="LEFT"><block type="val_var" id="b_vn3"><field name="VAR" id="var_n">n</field></block></value>
-                        <value name="RIGHT"><block type="val_number" id="b_1b"><field name="NUM">1</field></block></value>
+                        <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                        <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
                       </block>
                     </value>
                   </block>
                 </value>
                 <value name="RIGHT">
-                  <block type="py_call_val" id="b_call2">
+                  <block type="py_call_val">
                     <field name="NAME">fib_recursive</field>
                     <value name="ARG">
-                      <block type="py_math_op" id="b_sub2">
+                      <block type="py_math_op">
                         <field name="OP">-</field>
-                        <value name="LEFT"><block type="val_var" id="b_vn4"><field name="VAR" id="var_n">n</field></block></value>
-                        <value name="RIGHT"><block type="val_number" id="b_2a"><field name="NUM">2</field></block></value>
+                        <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                        <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
                       </block>
                     </value>
                   </block>
@@ -61,52 +61,52 @@
       </block>
     </statement>
     <next>
-      <!-- fib_iterative 関数 -->
-      <block type="py_def" id="b_fib_iter" x="30" y="30">
+      <block type="py_def">
         <field name="NAME">fib_iterative</field>
         <field name="PARAM" id="var_n">n</field>
         <statement name="BODY">
-          <block type="controls_if" id="b_if2">
+          <block type="pico_if">
+            <mutation elseif="0" else="0"/>
             <value name="IF0">
-              <block type="cond_compare" id="b_cmp2">
+              <block type="cond_compare">
                 <field name="OP">&lt;=</field>
-                <value name="LEFT"><block type="val_var" id="b_vn5"><field name="VAR" id="var_n">n</field></block></value>
-                <value name="RIGHT"><block type="val_number" id="b_1c"><field name="NUM">1</field></block></value>
+                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
               </block>
             </value>
             <statement name="DO0">
-              <block type="py_return" id="b_ret3">
-                <value name="VALUE"><block type="val_var" id="b_vn6"><field name="VAR" id="var_n">n</field></block></value>
+              <block type="py_return">
+                <value name="VALUE"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
               </block>
             </statement>
             <next>
-              <block type="var_set" id="b_seta">
+              <block type="var_set">
                 <field name="VAR" id="var_a">a</field>
-                <value name="VALUE"><block type="val_number" id="b_0a"><field name="NUM">0</field></block></value>
+                <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
                 <next>
-                  <block type="var_set" id="b_setb">
+                  <block type="var_set">
                     <field name="VAR" id="var_b">b</field>
-                    <value name="VALUE"><block type="val_number" id="b_1d"><field name="NUM">1</field></block></value>
+                    <value name="VALUE"><block type="val_number"><field name="NUM">1</field></block></value>
                     <next>
-                      <block type="controls_for" id="b_for1">
+                      <block type="pico_for_from_to">
                         <field name="VAR" id="var__">_</field>
-                        <value name="FROM"><block type="val_number"><field name="NUM">0</field></block></value>
-                        <value name="TO">
-                          <block type="py_math_op" id="b_sub3">
+                        <value name="START"><block type="val_number"><field name="NUM">0</field></block></value>
+                        <value name="STOP">
+                          <block type="py_math_op">
                             <field name="OP">-</field>
-                            <value name="LEFT"><block type="val_var" id="b_vn7"><field name="VAR" id="var_n">n</field></block></value>
-                            <value name="RIGHT"><block type="val_number" id="b_2b"><field name="NUM">2</field></block></value>
+                            <value name="LEFT"><block type="val_var"><field name="VAR" id="var_n">n</field></block></value>
+                            <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
                           </block>
                         </value>
-                        <value name="BY"><block type="val_number"><field name="NUM">1</field></block></value>
+                        <value name="STEP"><block type="val_number"><field name="NUM">1</field></block></value>
                         <statement name="DO">
-                          <block type="py_custom_stmt" id="b_swap">
+                          <block type="py_custom_stmt">
                             <field name="CODE">a, b = b, a + b</field>
                           </block>
                         </statement>
                         <next>
-                          <block type="py_return" id="b_ret4">
-                            <value name="VALUE"><block type="val_var" id="b_vb"><field name="VAR" id="var_b">b</field></block></value>
+                          <block type="py_return">
+                            <value name="VALUE"><block type="val_var"><field name="VAR" id="var_b">b</field></block></value>
                           </block>
                         </next>
                       </block>
@@ -118,21 +118,21 @@
           </block>
         </statement>
         <next>
-          <block type="py_custom_stmt" id="b_import_time">
+          <block type="py_custom_stmt">
             <field name="CODE">import time</field>
             <next>
-              <block type="var_set" id="b_sett1">
+              <block type="var_set">
                 <field name="VAR" id="var_t">t</field>
                 <value name="VALUE"><block type="py_custom_expr"><field name="CODE">time.time()</field></block></value>
                 <next>
-                  <block type="py_custom_stmt" id="b_pr1">
+                  <block type="py_custom_stmt">
                     <field name="CODE">print("再帰:", fib_recursive(35), f"({time.time()-t:.3f}秒)")</field>
                     <next>
-                      <block type="var_set" id="b_sett2">
+                      <block type="var_set">
                         <field name="VAR" id="var_t">t</field>
                         <value name="VALUE"><block type="py_custom_expr"><field name="CODE">time.time()</field></block></value>
                         <next>
-                          <block type="py_custom_stmt" id="b_pr2">
+                          <block type="py_custom_stmt">
                             <field name="CODE">print("反復:", fib_iterative(35), f"({time.time()-t:.6f}秒)")</field>
                           </block>
                         </next>
