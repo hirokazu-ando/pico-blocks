@@ -1,4 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">def check_parens(s):</field><next><block type="py_custom_stmt"><field name="CODE">    stack = []</field><next><block type="py_custom_stmt"><field name="CODE">    for ch in s:</field><next><block type="py_custom_stmt"><field name="CODE">        if ch == "(":</field><next><block type="py_custom_stmt"><field name="CODE">            stack.append(ch)</field><next><block type="py_custom_stmt"><field name="CODE">        elif ch == ")":</field><next><block type="py_custom_stmt"><field name="CODE">            if not stack:</field><next><block type="py_custom_stmt"><field name="CODE">                return False</field><next><block type="py_custom_stmt"><field name="CODE">            stack.pop()</field><next><block type="py_custom_stmt"><field name="CODE">    return len(stack) == 0</field><next><block type="py_custom_stmt"><field name="CODE">print(check_parens("(a + (b * c))"))</field><next><block type="py_custom_stmt"><field name="CODE">print(check_parens("(a + b))"))</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <variables>
+    <variable id="vs">s</variable>
+    <variable id="vstk">stack</variable>
+    <variable id="vch">ch</variable>
+  </variables>
+  <block type="py_def" x="30" y="30">
+    <field name="NAME">check_parens</field>
+    <field name="PARAM" id="vs">s</field>
+    <statement name="BODY">
+      <block type="var_set">
+        <field name="VAR" id="vstk">stack</field>
+        <value name="VALUE"><block type="py_list_empty"/></value>
+        <next>
+          <block type="py_for_list">
+            <field name="VAR" id="vch">ch</field>
+            <field name="LIST" id="vs">s</field>
+            <next>
+              <block type="py_return">
+                <value name="VALUE">
+                  <block type="cond_compare">
+                    <field name="OP">==</field>
+                    <value name="LEFT"><block type="py_list_len"><field name="LIST" id="vstk">stack</field></block></value>
+                    <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </next>
+            <statement name="DO">
+              <block type="pico_if">
+                <mutation elseif="1" else="0"/>
+                <value name="IF0">
+                  <block type="cond_compare">
+                    <field name="OP">==</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vch">ch</field></block></value>
+                    <value name="RIGHT"><block type="val_str"><field name="TEXT">(</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="py_list_append">
+                    <field name="LIST" id="vstk">stack</field>
+                    <value name="VALUE"><block type="val_var"><field name="VAR" id="vch">ch</field></block></value>
+                  </block>
+                </statement>
+                <value name="IF1">
+                  <block type="cond_compare">
+                    <field name="OP">==</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vch">ch</field></block></value>
+                    <value name="RIGHT"><block type="val_str"><field name="TEXT">)</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO1">
+                  <block type="pico_if">
+                    <mutation elseif="0" else="0"/>
+                    <value name="IF0">
+                      <block type="cond_not">
+                        <value name="A"><block type="val_var"><field name="VAR" id="vstk">stack</field></block></value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="py_return">
+                        <value name="VALUE"><block type="val_bool"><field name="BOOL">False</field></block></value>
+                      </block>
+                    </statement>
+                    <next>
+                      <block type="py_custom_stmt">
+                        <field name="CODE">stack.pop()</field>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="py_print">
+        <value name="VALUE">
+          <block type="py_call_val">
+            <field name="NAME">check_parens</field>
+            <value name="ARG"><block type="val_str"><field name="TEXT">(a + (b * c))</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print">
+            <value name="VALUE">
+              <block type="py_call_val">
+                <field name="NAME">check_parens</field>
+                <value name="ARG"><block type="val_str"><field name="TEXT">(a + b))</field></block></value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

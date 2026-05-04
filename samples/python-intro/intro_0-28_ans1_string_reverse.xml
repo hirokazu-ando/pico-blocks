@@ -26,9 +26,7 @@
             <next>
               <block type="py_for_list" id="b7">
                 <field name="VAR" id="var_ch">ch</field>
-                <value name="LIST">
-                  <block type="val_var" id="b8"><field name="VAR" id="var_s">s</field></block>
-                </value>
+                <field name="LIST" id="var_s">s</field>
                 <statement name="DO">
                   <block type="py_list_append" id="b9">
                     <field name="LIST" id="var_stack">stack</field>
