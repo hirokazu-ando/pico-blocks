@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vd">data</variable>
+    <variable id="vt">target</variable>
+    <variable id="vi">i</variable>
+    <variable id="vv">v</variable>
+  </variables>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vd">data</field>
+    <value name="VALUE">
+      <block type="py_list_literal">
+        <mutation items="5"/>
+        <value name="ITEM0"><block type="val_number"><field name="NUM">5</field></block></value>
+        <value name="ITEM1"><block type="val_number"><field name="NUM">3</field></block></value>
+        <value name="ITEM2"><block type="val_number"><field name="NUM">9</field></block></value>
+        <value name="ITEM3"><block type="val_number"><field name="NUM">1</field></block></value>
+        <value name="ITEM4"><block type="val_number"><field name="NUM">7</field></block></value>
+      </block>
+    </value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vt">target</field>
+        <value name="VALUE">
+          <block type="val_number"><field name="NUM">9</field></block>
+        </value>
+        <next>
+          <block type="controls_if">
+            <value name="IF0">
+              <block type="py_list_contains">
+                <field name="LIST" id="vd">data</field>
+                <value name="ITEM">
+                  <block type="val_var"><field name="VAR" id="vt">target</field></block>
+                </value>
+              </block>
+            </value>
+            <statement name="DO0">
+              <block type="py_print">
+                <value name="VALUE">
+                  <block type="py_fstring">
+                    <field name="PRE"></field>
+                    <value name="VAR">
+                      <block type="val_var"><field name="VAR" id="vt">target</field></block>
+                    </value>
+                    <field name="POST"> は含まれている</field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <next>
+              <block type="py_enumerate_for">
+                <field name="IDX" id="vi">i</field>
+                <field name="VAL" id="vv">v</field>
+                <field name="LIST" id="vd">data</field>
+                <statement name="DO">
+                  <block type="controls_if">
+                    <value name="IF0">
+                      <block type="cond_compare">
+                        <field name="OP">==</field>
+                        <value name="LEFT">
+                          <block type="val_var"><field name="VAR" id="vv">v</field></block>
+                        </value>
+                        <value name="RIGHT">
+                          <block type="val_var"><field name="VAR" id="vt">target</field></block>
+                        </value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="py_print">
+                        <value name="VALUE">
+                          <block type="py_fstring">
+                            <field name="PRE">インデックス </field>
+                            <value name="VAR">
+                              <block type="val_var"><field name="VAR" id="vi">i</field></block>
+                            </value>
+                            <field name="POST"> で発見</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_break"></block>
+                        </next>
+                      </block>
+                    </statement>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

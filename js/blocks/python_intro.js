@@ -196,6 +196,21 @@ Blockly.Blocks['py_list_set'] = {
   }
 };
 
+Blockly.Blocks['py_list_contains'] = {
+  init: function() {
+    this.appendValueInput('ITEM').setCheck(null);
+    this.appendDummyInput()
+      .appendField('が リスト')
+      .appendField(new Blockly.FieldVariable('my_list'), 'LIST')
+      .appendField('に含まれる');
+    this.setInputsInline(true);
+    this.setOutput(true, 'Boolean');
+    this.setColour(P.lists);
+    this.setTooltip('値がリストに含まれているか調べます（item in list）');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['py_list_len'] = {
   init: function() {
     this.appendDummyInput()

@@ -453,6 +453,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_list_get':      return `リスト「${getVarName(block, 'LIST')}」の要素取得`;
       case 'py_list_set':      return `リスト「${getVarName(block, 'LIST')}」の要素変更`;
       case 'py_list_len':      return `リスト「${getVarName(block, 'LIST')}」の長さ`;
+      case 'py_list_contains': return `リスト「${getVarName(block, 'LIST')}」に含まれるか`;
       case 'py_for_list':      return `リスト「${getVarName(block, 'LIST')}」を順に繰り返す`;
       case 'py_fstring':       return 'f文字列';
       case 'py_fstring_fmt':   return 'f文字列（フォーマット付き）';
@@ -759,6 +760,11 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_list_len': {
         const listName = getVarName(block, 'LIST');
         return `len(${listName})`;
+      }
+      case 'py_list_contains': {
+        const lcList = getVarName(block, 'LIST');
+        const lcItem = valueToCode(block, 'ITEM', 'None');
+        return `${lcItem} in ${lcList}`;
       }
       case 'py_fstring': {
         const pre  = block.getFieldValue('PRE') || '';
@@ -1474,6 +1480,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_list_empty':
       case 'py_list_get':
       case 'py_list_len':
+      case 'py_list_contains':
       case 'py_random_int':
       case 'py_type_cast':
       case 'py_abs':
