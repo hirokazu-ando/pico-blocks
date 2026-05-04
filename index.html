@@ -291,6 +291,8 @@
     <!-- 0-0/0-1: print文 -->
     <category name="表示" colour="#00ACC1">
       <block type="py_print" gap="8"></block>
+      <block type="py_print2" gap="8"></block>
+      <block type="py_print_multi" gap="8"><mutation items="2"/></block>
       <block type="print_text" gap="8"></block>
       <block type="print_var_label" gap="8"></block>
       <block type="print_separator" gap="8"></block>
@@ -356,6 +358,10 @@
       <block type="val_bool" gap="8"></block>
       <sep gap="20"></sep>
       <block type="py_fstring" gap="8"></block>
+      <block type="py_fstring2" gap="8"></block>
+      <block type="py_fstring2_expr" gap="8"></block>
+      <block type="py_fstring_fmt" gap="8"></block>
+      <block type="py_ternary" gap="8"></block>
     </category>
     <!-- 0-5: input -->
     <category name="入力" colour="#00897B">
@@ -408,6 +414,13 @@
       </block>
       <block type="py_while" gap="8"></block>
       <block type="py_for_list" gap="8"></block>
+      <block type="py_for_dict_items_sorted" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_range" gap="8">
+        <value name="N">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+      </block>
       <sep gap="20"></sep>
       <block type="py_break" gap="8"></block>
       <block type="py_continue" gap="8"></block>
@@ -444,6 +457,17 @@
         <value name="EXPR"><shadow type="val_var"></shadow></value>
         <value name="LIST"><shadow type="py_list_empty"></shadow></value>
       </block>
+      <sep gap="20"></sep>
+      <block type="py_list_literal" gap="8"><mutation items="3"/></block>
+      <block type="py_list_pop" gap="8">
+        <value name="INDEX">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="py_list_range" gap="8">
+        <field name="N">10</field>
+      </block>
+      <block type="py_list_contains" gap="8"></block>
     </category>
     <!-- 0-13: 辞書 -->
     <category name="辞書" colour="#6D4C41">
@@ -475,7 +499,17 @@
           <shadow type="val_str"><field name="TEXT">キー</field></shadow>
         </value>
       </block>
+      <block type="py_dict_get_default" gap="8">
+        <value name="KEY">
+          <shadow type="val_str"><field name="TEXT">キー</field></shadow>
+        </value>
+        <value name="DEFAULT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
       <block type="py_dict_keys" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_dict_comp" gap="8"></block>
     </category>
     <!-- 0-14: 関数定義・呼び出し -->
     <category name="関数" colour="#FF7043">
@@ -487,6 +521,7 @@
       <sep gap="20"></sep>
       <block type="py_call_stmt" gap="8"></block>
       <block type="py_call_val" gap="8"></block>
+      <block type="py_call_val2" gap="8"></block>
     </category>
     <!-- 0-15: モジュール呼び出し -->
     <category name="モジュール" colour="#546E7A">
@@ -544,14 +579,27 @@
         </value>
       </block>
       <sep gap="20"></sep>
+      <block type="py_set_comp" gap="8"></block>
+      <block type="py_set_op" gap="8"></block>
+      <block type="py_sorted_set" gap="8"></block>
+      <sep gap="20"></sep>
       <block type="py_tuple_unpack" gap="8"></block>
     </category>
     <!-- 0-18: 文字列メソッド -->
     <category name="文字列メソッド" colour="#FB8C00">
       <block type="py_str_split" gap="8"></block>
       <block type="py_str_strip" gap="8"></block>
+      <block type="py_str_lstrip" gap="8"></block>
+      <block type="py_str_rstrip" gap="8"></block>
       <block type="py_str_replace" gap="8"></block>
       <block type="py_str_find" gap="8"></block>
+      <block type="py_str_find_from" gap="8">
+        <value name="START">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="py_str_upper" gap="8"></block>
+      <block type="py_str_join" gap="8"></block>
     </category>
     <!-- 0-21: 組み込み関数 -->
     <category name="組み込み関数" colour="#00796B">
@@ -564,6 +612,9 @@
       <block type="py_max_call" gap="8"></block>
       <block type="py_sum_call" gap="8"></block>
       <block type="py_map_call" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_sorted_key_func" gap="8"></block>
+      <block type="py_sorted_dict_two_keys" gap="8"></block>
     </category>
     <category name="ファイル" colour="#0e7490">
       <block type="py_file_write"></block>
