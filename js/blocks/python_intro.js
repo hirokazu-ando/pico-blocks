@@ -1617,6 +1617,20 @@ Blockly.Blocks['py_set_op'] = {
   }
 };
 
+Blockly.Blocks['py_list_dedup'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('scores'), 'LIST')
+      .appendField('の重複を除く');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.tuples);
+    this.setTooltip('リストから重複を取り除いたリストを返します（順序は不定）（list(set(list))）');
+    this.setHelpUrl('');
+  }
+};
+
 Blockly.Blocks['py_sorted_set'] = {
   init: function() {
     this.appendDummyInput()

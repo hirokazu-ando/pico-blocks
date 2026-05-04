@@ -493,6 +493,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_tuple_unpack': return `${getVarName(block, 'VAR_X')}, ${getVarName(block, 'VAR_Y')} = ${getVarName(block, 'SRC')}`;
       case 'py_print2':       return `変数「${getVarName(block, 'VAR_A')}」と「${getVarName(block, 'VAR_B')}」を表示`;
       case 'py_set_op':       return `セット「${getVarName(block, 'SET_A')}」${block.getFieldValue('OP')}「${getVarName(block, 'SET_B')}」`;
+      case 'py_list_dedup':   return `リスト「${getVarName(block, 'LIST')}」の重複を除く`;
       case 'py_sorted_set':   return `リスト「${getVarName(block, 'LIST')}」の重複を除いて昇順に並べる`;
       case 'py_fstring2':     return `"${block.getFieldValue('PRE')}{${getVarName(block, 'VAR1')}}${block.getFieldValue('MID')}{${getVarName(block, 'VAR2')}}${block.getFieldValue('POST')}"`;
       case 'py_list_pop':     return `リスト「${getVarName(block, 'LIST')}」の末尾を取り出す（pop）`;
@@ -919,6 +920,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const setOp = block.getFieldValue('OP') || '|';
         const setB  = getVarName(block, 'SET_B');
         return `${setA} ${setOp} ${setB}`;
+      }
+      case 'py_list_dedup': {
+        return `list(set(${getVarName(block, 'LIST')}))`;
       }
       case 'py_sorted_set': {
         return `sorted(set(${getVarName(block, 'LIST')}))`;
