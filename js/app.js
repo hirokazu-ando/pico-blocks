@@ -2145,6 +2145,24 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
 
+      case 'py_tuple_unpack': {
+        const tpX   = getVarName(block, 'VAR_X');
+        const tpY   = getVarName(block, 'VAR_Y');
+        const tpSrc = getVarName(block, 'SRC');
+        code = appendLocal(code, indent + `${tpX}, ${tpY} = ${tpSrc}\n`);
+        break;
+      }
+      case 'py_print2': {
+        const p2A = getVarName(block, 'VAR_A');
+        const p2B = getVarName(block, 'VAR_B');
+        code = appendLocal(code, indent + `print(${p2A}, ${p2B})\n`);
+        break;
+      }
+      case 'py_list_pop': {
+        code = appendLocal(code, indent + `${getVarName(block, 'LIST')}.pop()\n`);
+        break;
+      }
+
       default:
         code = appendLocal(code, indent + `pass  # 未対応ブロック: ${block.type}\n`);
     }
