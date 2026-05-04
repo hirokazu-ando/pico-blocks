@@ -441,6 +441,9 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_str_concat':  return '文字列連結';
       case 'py_while':       return 'while ループ';
       case 'py_print':       return '値を表示する';
+      case 'py_print_multi': return '複数の値をスペース区切りで表示';
+      case 'py_sorted_key_func':      return `リスト「${getVarName(block, 'LIST')}」を${block.getFieldValue('KEY')}順に並び替え`;
+      case 'py_sorted_dict_two_keys': return `辞書リスト「${getVarName(block, 'LIST')}」を2キーでソート`;
       case 'py_input': {
         const typeLabel = { str: 'テキスト', int: '数値（整数）', float: '数値（小数）' }[block.getFieldValue('TYPE')] || 'テキスト';
         return `キーボード入力（${typeLabel}）→ 変数「${getVarName(block, 'VAR')}」`;
@@ -821,6 +824,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const sortList    = getVarName(block, 'LIST');
         const sortReverse = block.getFieldValue('REVERSE') || 'False';
         return `sorted(${sortList}, reverse=${sortReverse})`;
+      }
+      case 'py_sorted_key_func': {
+        const skList = getVarName(block, 'LIST');
+        const skKey  = block.getFieldValue('KEY') || 'len';
+        return `sorted(${skList}, key=${skKey})`;
+      }
+      case 'py_sorted_dict_two_keys': {
+        const sdList = getVarName(block, 'LIST');
+        const sdKey1 = block.getFieldValue('KEY1') || 'key1';
+        const sdRev1 = block.getFieldValue('REV1');
+        const sdKey2 = block.getFieldValue('KEY2') || 'key2';
+        const sdRev2 = block.getFieldValue('REV2');
+        const expr1 = sdRev1 === 'desc' ? `-_s["${sdKey1}"]` : `_s["${sdKey1}"]`;
+        const expr2 = sdRev2 === 'desc' ? `-_s["${sdKey2}"]` : `_s["${sdKey2}"]`;
+        return `sorted(${sdList}, key=lambda _s: (${expr1}, ${expr2}))`;
       }
       case 'py_min_call':
         return `min(${getVarName(block, 'LIST')})`;
@@ -1439,6 +1457,8 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_ternary':
       case 'py_dict_comp':
       case 'py_set_comp':
+      case 'py_sorted_key_func':
+      case 'py_sorted_dict_two_keys':
         break;
       case 'pico_for_range': {
         const v      = getVarName(block, 'VAR');
@@ -1530,6 +1550,14 @@ document.addEventListener('DOMContentLoaded', function() {
         registerExprBlocksAtLineFromInput(block, 'VALUE', lnPrint);
         const val = valueToCode(block, 'VALUE', '""');
         code = appendLocal(code, indent + `print(${val})\n`);
+        break;
+      }
+      case 'py_print_multi': {
+        const pmItems = [];
+        for (let i = 0; i < (block.itemCount_ || 2); i++) {
+          pmItems.push(valueToCode(block, 'ITEM' + i, '""'));
+        }
+        code = appendLocal(code, indent + `print(${pmItems.join(', ')})\n`);
         break;
       }
       case 'py_set_add': {

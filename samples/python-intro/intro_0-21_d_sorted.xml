@@ -25,8 +25,9 @@
         <next>
           <block type="py_print">
             <value name="VALUE">
-              <block type="py_custom_expr">
-                <field name="CODE">sorted(words, key=len)</field>
+              <block type="py_sorted_key_func">
+                <field name="LIST" id="var_words">words</field>
+                <field name="KEY">len</field>
               </block>
             </value>
             <next>

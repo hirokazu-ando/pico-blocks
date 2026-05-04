@@ -1177,6 +1177,85 @@ Blockly.Blocks['py_sorted_call'] = {
   }
 };
 
+Blockly.Blocks['py_sorted_key_func'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('リスト')
+      .appendField(new Blockly.FieldVariable('my_list'), 'LIST')
+      .appendField('を')
+      .appendField(new Blockly.FieldDropdown([
+        ['文字数（len）順', 'len'],
+        ['文字列（str）順', 'str'],
+        ['整数値（int）順', 'int'],
+        ['絶対値（abs）順', 'abs'],
+      ]), 'KEY')
+      .appendField('に並び替え');
+    this.setInputsInline(true);
+    this.setOutput(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('sorted(list, key=func) でリストをキー関数の順に並び替えます');
+  }
+};
+
+Blockly.Blocks['py_sorted_dict_two_keys'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('辞書リスト')
+      .appendField(new Blockly.FieldVariable('students'), 'LIST');
+    this.appendDummyInput()
+      .appendField('をキー1「')
+      .appendField(new Blockly.FieldTextInput('key1'), 'KEY1')
+      .appendField('」')
+      .appendField(new Blockly.FieldDropdown([['昇順', 'asc'], ['降順', 'desc']]), 'REV1');
+    this.appendDummyInput()
+      .appendField('キー2「')
+      .appendField(new Blockly.FieldTextInput('key2'), 'KEY2')
+      .appendField('」')
+      .appendField(new Blockly.FieldDropdown([['昇順', 'asc'], ['降順（数値）', 'desc']]), 'REV2');
+    this.appendDummyInput().appendField('でソート');
+    this.setInputsInline(false);
+    this.setOutput(true, null);
+    this.setColour(P.builtins);
+    this.setTooltip('辞書リストを2つのキーでソートします。キー2の降順は数値のみ有効です。');
+  }
+};
+
+Blockly.Blocks['py_print_multi'] = {
+  itemCount_: 2,
+  init: function() {
+    this.setColour(P.display);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('複数の値をスペース区切りで表示します（print(a, b, ...)）');
+    this.rebuildShape_();
+  },
+  rebuildShape_: function() {
+    let i = 0;
+    while (this.getInput('ITEM' + i)) { this.removeInput('ITEM' + i); i++; }
+    if (this.getInput('BOTTOM')) this.removeInput('BOTTOM');
+    if (!this.getInput('TOP')) {
+      this.appendDummyInput('TOP').appendField('表示（複数）');
+    }
+    for (let j = 0; j < this.itemCount_; j++) {
+      this.appendValueInput('ITEM' + j).appendField(j === 0 ? '' : ',');
+    }
+    this.appendDummyInput('BOTTOM')
+      .appendField(new Blockly.FieldImage(_LIST_PLUS,  16, 16, '+', () => { this.itemCount_++; this.rebuildShape_(); }))
+      .appendField(new Blockly.FieldImage(_LIST_MINUS, 16, 16, '-', () => { if (this.itemCount_ > 1) { this.itemCount_--; this.rebuildShape_(); } }));
+    this.setInputsInline(true);
+  },
+  mutationToDom: function() {
+    const el = document.createElement('mutation');
+    el.setAttribute('items', this.itemCount_);
+    return el;
+  },
+  domToMutation: function(xmlElement) {
+    const n = parseInt(xmlElement.getAttribute('items'), 10);
+    if (!isNaN(n)) this.itemCount_ = n;
+    this.rebuildShape_();
+  }
+};
+
 Blockly.Blocks['py_min_call'] = {
   init: function() {
     this.appendDummyInput()
