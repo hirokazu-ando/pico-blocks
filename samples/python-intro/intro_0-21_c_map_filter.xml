@@ -2,12 +2,11 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="var_nums">nums</variable>
+    <variable id="var_x">x</variable>
     <variable id="var_squared">squared</variable>
     <variable id="var_str_nums">str_nums</variable>
     <variable id="var_int_nums">int_nums</variable>
     <variable id="var_evens">evens</variable>
-    <variable id="var_items">items</variable>
-    <variable id="var_cleaned">cleaned</variable>
   </variables>
   <block type="var_set" x="30" y="30">
     <field name="VAR" id="var_nums">nums</field>
@@ -25,8 +24,16 @@
       <block type="var_set">
         <field name="VAR" id="var_squared">squared</field>
         <value name="VALUE">
-          <block type="py_custom_expr">
-            <field name="CODE">list(map(lambda x: x ** 2, nums))</field>
+          <block type="py_list_comp">
+            <field name="VAR" id="var_x">x</field>
+            <value name="EXPR">
+              <block type="py_math_op">
+                <field name="OP">**</field>
+                <value name="LEFT"><block type="val_var"><field name="VAR" id="var_x">x</field></block></value>
+                <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
+              </block>
+            </value>
+            <value name="LIST"><block type="val_var"><field name="VAR" id="var_nums">nums</field></block></value>
           </block>
         </value>
         <next>
@@ -59,38 +66,28 @@
                           <block type="var_set">
                             <field name="VAR" id="var_evens">evens</field>
                             <value name="VALUE">
-                              <block type="py_custom_expr">
-                                <field name="CODE">list(filter(lambda x: x % 2 == 0, nums))</field>
+                              <block type="py_list_comp_if">
+                                <field name="VAR" id="var_x">x</field>
+                                <value name="EXPR"><block type="val_var"><field name="VAR" id="var_x">x</field></block></value>
+                                <value name="LIST"><block type="val_var"><field name="VAR" id="var_nums">nums</field></block></value>
+                                <value name="COND">
+                                  <block type="cond_compare">
+                                    <field name="OP">==</field>
+                                    <value name="LEFT">
+                                      <block type="py_math_op">
+                                        <field name="OP">%</field>
+                                        <value name="LEFT"><block type="val_var"><field name="VAR" id="var_x">x</field></block></value>
+                                        <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
+                                      </block>
+                                    </value>
+                                    <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+                                  </block>
+                                </value>
                               </block>
                             </value>
                             <next>
                               <block type="py_print">
                                 <value name="VALUE"><block type="val_var"><field name="VAR" id="var_evens">evens</field></block></value>
-                                <next>
-                                  <block type="var_set">
-                                    <field name="VAR" id="var_items">items</field>
-                                    <value name="VALUE">
-                                      <block type="py_custom_expr">
-                                        <field name="CODE">["apple", None, "banana", "", "cherry", None]</field>
-                                      </block>
-                                    </value>
-                                    <next>
-                                      <block type="var_set">
-                                        <field name="VAR" id="var_cleaned">cleaned</field>
-                                        <value name="VALUE">
-                                          <block type="py_custom_expr">
-                                            <field name="CODE">list(filter(None, items))</field>
-                                          </block>
-                                        </value>
-                                        <next>
-                                          <block type="py_print">
-                                            <value name="VALUE"><block type="val_var"><field name="VAR" id="var_cleaned">cleaned</field></block></value>
-                                          </block>
-                                        </next>
-                                      </block>
-                                    </next>
-                                  </block>
-                                </next>
                               </block>
                             </next>
                           </block>

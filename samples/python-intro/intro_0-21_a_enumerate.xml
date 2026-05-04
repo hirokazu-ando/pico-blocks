@@ -33,6 +33,27 @@
             </value>
           </block>
         </statement>
+        <next>
+          <block type="py_enumerate_start_for">
+            <field name="START">1</field>
+            <field name="IDX" id="var_i">i</field>
+            <field name="VAL" id="var_f">f</field>
+            <field name="LIST" id="var_fruits">fruits</field>
+            <statement name="DO">
+              <block type="py_print">
+                <value name="VALUE">
+                  <block type="py_fstring2">
+                    <field name="PRE"></field>
+                    <field name="VAR1" id="var_i">i</field>
+                    <field name="MID">番目: </field>
+                    <field name="VAR2" id="var_f">f</field>
+                    <field name="POST"></field>
+                  </block>
+                </value>
+              </block>
+            </statement>
+          </block>
+        </next>
       </block>
     </next>
   </block>

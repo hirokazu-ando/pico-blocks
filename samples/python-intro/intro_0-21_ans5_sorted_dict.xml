@@ -5,5 +5,23 @@
     <variable id="vrs">result</variable>
     <variable id="vs3">s</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vst">students</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[{"name":"田中","class":"A","score":85},{"name":"鈴木","class":"B","score":92},{"name":"山田","class":"A","score":78},{"name":"伊藤","class":"B","score":88}]</field></block></value><next><block type="var_set"><field name="VAR" id="vrs">result</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">sorted(students, key=lambda s: (s["class"], -s["score"]))</field></block></value><next><block type="py_for_list"><field name="VAR" id="vs3">s</field><field name="LIST" id="vrs">result</field><statement name="DO"><block type="py_print"><value name="VALUE"><block type="py_custom_expr"><field name="CODE">f'{s["class"]} {s["name"]} {s["score"]}点'</field></block></value></block></statement></block></next></block></next></block>
+  <block type="py_custom_stmt" x="30" y="30">
+    <field name="CODE">students = [{"name": "田中", "class": "A", "score": 85}, {"name": "鈴木", "class": "B", "score": 92}, {"name": "山田", "class": "A", "score": 78}, {"name": "伊藤", "class": "B", "score": 88}]</field>
+    <next>
+      <block type="py_custom_stmt">
+        <field name="CODE">result = sorted(students, key=lambda s: (s["class"], -s["score"]))</field>
+        <next>
+          <block type="py_for_list">
+            <field name="VAR" id="vs3">s</field>
+            <field name="LIST" id="vrs">result</field>
+            <statement name="DO">
+              <block type="py_custom_stmt">
+                <field name="CODE">    print(s["class"], s["name"], s["score"], "点")</field>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>
