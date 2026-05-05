@@ -252,7 +252,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     const fileObj = new Sk.builtin.object();
-    fileObj.tp$getattr = function(name) {
+    fileObj.tp$getattr = function(pyName) {
+      const name = (pyName && typeof pyName.$jsstr === 'function') ? pyName.$jsstr()
+                 : (pyName && pyName.v !== undefined) ? pyName.v
+                 : String(pyName);
       if (name === '__enter__') {
         return new Sk.builtin.func(function() { return fileObj; });
       }
@@ -296,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (name === 'close') {
         return new Sk.builtin.func(function() { return Sk.builtin.none.none$; });
       }
-      return Sk.builtin.none.none$;
+      return undefined;
     };
     return fileObj;
   }
