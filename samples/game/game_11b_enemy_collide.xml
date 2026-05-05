@@ -4,6 +4,276 @@
     <variable id="vpx">px</variable>
     <variable id="ven">enemies</variable>
     <variable id="vs">score</variable>
+    <variable id="vit">e</variable>
   </variables>
-  <block type="game_init"><value name="W"><block type="val_number"><field name="NUM">640</field></block></value><value name="H"><block type="val_number"><field name="NUM">400</field></block></value><value name="TITLE"><block type="val_str"><field name="TEXT">Enemy Collide</field></block></value><next><block type="game_import_random"><next><block type="var_set"><field name="VAR" id="vpx">px</field><value name="VALUE"><block type="val_number"><field name="NUM">300</field></block></value><next><block type="var_set"><field name="VAR" id="ven">enemies</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[[random.randint(0,576), -48] for _ in range(3)]</field></block></value><next><block type="var_set"><field name="VAR" id="vs">score</field><value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value><next><block type="game_loop"><statement name="DO"><block type="game_events"><next><block type="game_fill"><value name="COLOR"><block type="colour_picker"><field name="COLOUR">#0a0a2e</field></block></value><next><block type="pico_if"><field name="elseifCount_">0</field><field name="elseCount_">0</field><value name="IF0"><block type="game_key_pressed"><field name="KEY">K_RIGHT</field></block></value><statement name="DO0"><block type="var_change"><field name="VAR" id="vpx">px</field><value name="DELTA"><block type="val_number"><field name="NUM">4</field></block></value></block></statement><next><block type="pico_if"><field name="elseifCount_">0</field><field name="elseCount_">0</field><value name="IF0"><block type="game_key_pressed"><field name="KEY">K_LEFT</field></block></value><statement name="DO0"><block type="var_change"><field name="VAR" id="vpx">px</field><value name="DELTA"><block type="val_number"><field name="NUM">-4</field></block></value></block></statement><next><block type="py_custom_stmt"><field name="CODE">for e in enemies:</field><next><block type="py_custom_stmt"><field name="CODE">    e[1] += 3</field><next><block type="py_custom_stmt"><field name="CODE">    if e[1] &gt; 400: e[1] = -48; e[0] = random.randint(0,576); score += 1</field><next><block type="py_custom_stmt"><field name="CODE">    if abs(px - e[0]) &lt; 40 and abs(330 - e[1]) &lt; 40: score -= 1; e[1] = -48</field><next><block type="py_custom_stmt"><field name="CODE">    pyco_game.draw_image("assets/game-icons/enemy_bug.svg", e[0], e[1], 48)</field><next><block type="game_draw_image"><value name="URL"><block type="game_image_preset"><field name="IMG">assets/game-icons/player_ship.svg</field></block></value><value name="X"><block type="val_var"><field name="VAR" id="vpx">px</field></block></value><value name="Y"><block type="val_number"><field name="NUM">330</field></block></value><value name="W"><block type="val_number"><field name="NUM">48</field></block></value><next><block type="game_draw_text"><value name="TEXT"><block type="val_var"><field name="VAR" id="vs">score</field></block></value><value name="X"><block type="val_number"><field name="NUM">10</field></block></value><value name="Y"><block type="val_number"><field name="NUM">10</field></block></value><value name="SIZE"><block type="val_number"><field name="NUM">28</field></block></value><value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ffffff</field></block></value><next><block type="game_flip"><value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></statement><next><block type="game_quit"></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <block type="game_init" x="20" y="20">
+    <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
+    <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
+    <value name="TITLE"><block type="val_str"><field name="TEXT">Enemy Collide</field></block></value>
+    <next>
+      <block type="game_import_random">
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="vpx">px</field>
+            <value name="VALUE"><block type="val_number"><field name="NUM">300</field></block></value>
+            <next>
+              <block type="var_set">
+                <field name="VAR" id="ven">enemies</field>
+                <value name="VALUE"><block type="py_list_empty"></block></value>
+                <next>
+                  <block type="py_list_append">
+                    <field name="LIST" id="ven">enemies</field>
+                    <value name="VALUE">
+                      <block type="py_list_literal">
+                        <mutation items="2"></mutation>
+                        <value name="ITEM0"><block type="game_random_int"><field name="LO">0</field><field name="HI">576</field></block></value>
+                        <value name="ITEM1"><block type="val_number"><field name="NUM">-48</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_list_append">
+                        <field name="LIST" id="ven">enemies</field>
+                        <value name="VALUE">
+                          <block type="py_list_literal">
+                            <mutation items="2"></mutation>
+                            <value name="ITEM0"><block type="game_random_int"><field name="LO">0</field><field name="HI">576</field></block></value>
+                            <value name="ITEM1"><block type="val_number"><field name="NUM">-96</field></block></value>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_list_append">
+                            <field name="LIST" id="ven">enemies</field>
+                            <value name="VALUE">
+                              <block type="py_list_literal">
+                                <mutation items="2"></mutation>
+                                <value name="ITEM0"><block type="game_random_int"><field name="LO">0</field><field name="HI">576</field></block></value>
+                                <value name="ITEM1"><block type="val_number"><field name="NUM">-144</field></block></value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="var_set">
+                                <field name="VAR" id="vs">score</field>
+                                <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+                                <next>
+                                  <block type="game_loop">
+                                    <statement name="DO">
+                                      <block type="game_events">
+                                        <next>
+                                          <block type="game_fill">
+                                            <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#0a0a2e</field></block></value>
+                                            <next>
+                                              <block type="pico_if">
+                                                <mutation elseif="0" else="0"></mutation>
+                                                <value name="IF0"><block type="game_key_pressed"><field name="KEY">K_RIGHT</field></block></value>
+                                                <statement name="DO0">
+                                                  <block type="var_change">
+                                                    <field name="VAR" id="vpx">px</field>
+                                                    <value name="DELTA"><block type="val_number"><field name="NUM">4</field></block></value>
+                                                  </block>
+                                                </statement>
+                                                <next>
+                                                  <block type="pico_if">
+                                                    <mutation elseif="0" else="0"></mutation>
+                                                    <value name="IF0"><block type="game_key_pressed"><field name="KEY">K_LEFT</field></block></value>
+                                                    <statement name="DO0">
+                                                      <block type="var_change">
+                                                        <field name="VAR" id="vpx">px</field>
+                                                        <value name="DELTA"><block type="val_number"><field name="NUM">-4</field></block></value>
+                                                      </block>
+                                                    </statement>
+                                                    <next>
+                                                      <block type="py_for_list">
+                                                        <field name="VAR" id="vit">e</field>
+                                                        <field name="LIST" id="ven">enemies</field>
+                                                        <statement name="DO">
+                                                          <block type="py_list_set">
+                                                            <field name="LIST" id="vit">e</field>
+                                                            <value name="INDEX"><block type="val_number"><field name="NUM">1</field></block></value>
+                                                            <value name="VALUE">
+                                                              <block type="py_math_op">
+                                                                <field name="OP">+</field>
+                                                                <value name="LEFT">
+                                                                  <block type="py_list_get">
+                                                                    <field name="LIST" id="vit">e</field>
+                                                                    <value name="INDEX"><block type="val_number"><field name="NUM">1</field></block></value>
+                                                                  </block>
+                                                                </value>
+                                                                <value name="RIGHT"><block type="val_number"><field name="NUM">3</field></block></value>
+                                                              </block>
+                                                            </value>
+                                                            <next>
+                                                              <block type="pico_if">
+                                                                <mutation elseif="0" else="0"></mutation>
+                                                                <value name="IF0">
+                                                                  <block type="cond_compare">
+                                                                    <field name="OP">&gt;</field>
+                                                                    <value name="LEFT">
+                                                                      <block type="py_list_get">
+                                                                        <field name="LIST" id="vit">e</field>
+                                                                        <value name="INDEX"><block type="val_number"><field name="NUM">1</field></block></value>
+                                                                      </block>
+                                                                    </value>
+                                                                    <value name="RIGHT"><block type="val_number"><field name="NUM">400</field></block></value>
+                                                                  </block>
+                                                                </value>
+                                                                <statement name="DO0">
+                                                                  <block type="py_list_set">
+                                                                    <field name="LIST" id="vit">e</field>
+                                                                    <value name="INDEX"><block type="val_number"><field name="NUM">1</field></block></value>
+                                                                    <value name="VALUE"><block type="val_number"><field name="NUM">-48</field></block></value>
+                                                                    <next>
+                                                                      <block type="py_list_set">
+                                                                        <field name="LIST" id="vit">e</field>
+                                                                        <value name="INDEX"><block type="val_number"><field name="NUM">0</field></block></value>
+                                                                        <value name="VALUE"><block type="game_random_int"><field name="LO">0</field><field name="HI">576</field></block></value>
+                                                                        <next>
+                                                                          <block type="var_change">
+                                                                            <field name="VAR" id="vs">score</field>
+                                                                            <value name="DELTA"><block type="val_number"><field name="NUM">1</field></block></value>
+                                                                          </block>
+                                                                        </next>
+                                                                      </block>
+                                                                    </next>
+                                                                  </block>
+                                                                </statement>
+                                                                <next>
+                                                                  <block type="pico_if">
+                                                                    <mutation elseif="0" else="0"></mutation>
+                                                                    <value name="IF0">
+                                                                      <block type="cond_and">
+                                                                        <value name="A">
+                                                                          <block type="cond_compare">
+                                                                            <field name="OP">&lt;</field>
+                                                                            <value name="LEFT">
+                                                                              <block type="py_abs">
+                                                                                <value name="VALUE">
+                                                                                  <block type="py_math_op">
+                                                                                    <field name="OP">-</field>
+                                                                                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vpx">px</field></block></value>
+                                                                                    <value name="RIGHT">
+                                                                                      <block type="py_list_get">
+                                                                                        <field name="LIST" id="vit">e</field>
+                                                                                        <value name="INDEX"><block type="val_number"><field name="NUM">0</field></block></value>
+                                                                                      </block>
+                                                                                    </value>
+                                                                                  </block>
+                                                                                </value>
+                                                                              </block>
+                                                                            </value>
+                                                                            <value name="RIGHT"><block type="val_number"><field name="NUM">40</field></block></value>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="B">
+                                                                          <block type="cond_compare">
+                                                                            <field name="OP">&lt;</field>
+                                                                            <value name="LEFT">
+                                                                              <block type="py_abs">
+                                                                                <value name="VALUE">
+                                                                                  <block type="py_math_op">
+                                                                                    <field name="OP">-</field>
+                                                                                    <value name="LEFT"><block type="val_number"><field name="NUM">330</field></block></value>
+                                                                                    <value name="RIGHT">
+                                                                                      <block type="py_list_get">
+                                                                                        <field name="LIST" id="vit">e</field>
+                                                                                        <value name="INDEX"><block type="val_number"><field name="NUM">1</field></block></value>
+                                                                                      </block>
+                                                                                    </value>
+                                                                                  </block>
+                                                                                </value>
+                                                                              </block>
+                                                                            </value>
+                                                                            <value name="RIGHT"><block type="val_number"><field name="NUM">40</field></block></value>
+                                                                          </block>
+                                                                        </value>
+                                                                      </block>
+                                                                    </value>
+                                                                    <statement name="DO0">
+                                                                      <block type="var_change">
+                                                                        <field name="VAR" id="vs">score</field>
+                                                                        <value name="DELTA"><block type="val_number"><field name="NUM">-1</field></block></value>
+                                                                        <next>
+                                                                          <block type="py_list_set">
+                                                                            <field name="LIST" id="vit">e</field>
+                                                                            <value name="INDEX"><block type="val_number"><field name="NUM">1</field></block></value>
+                                                                            <value name="VALUE"><block type="val_number"><field name="NUM">-48</field></block></value>
+                                                                          </block>
+                                                                        </next>
+                                                                      </block>
+                                                                    </statement>
+                                                                    <next>
+                                                                      <block type="game_draw_image">
+                                                                        <value name="URL"><block type="game_image_preset"><field name="IMG">assets/game-icons/enemy_bug.svg</field></block></value>
+                                                                        <value name="X">
+                                                                          <block type="py_list_get">
+                                                                            <field name="LIST" id="vit">e</field>
+                                                                            <value name="INDEX"><block type="val_number"><field name="NUM">0</field></block></value>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="Y">
+                                                                          <block type="py_list_get">
+                                                                            <field name="LIST" id="vit">e</field>
+                                                                            <value name="INDEX"><block type="val_number"><field name="NUM">1</field></block></value>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
+                                                                      </block>
+                                                                    </next>
+                                                                  </block>
+                                                                </next>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </statement>
+                                                        <next>
+                                                          <block type="game_draw_image">
+                                                            <value name="URL"><block type="game_image_preset"><field name="IMG">assets/game-icons/player_ship.svg</field></block></value>
+                                                            <value name="X"><block type="val_var"><field name="VAR" id="vpx">px</field></block></value>
+                                                            <value name="Y"><block type="val_number"><field name="NUM">330</field></block></value>
+                                                            <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
+                                                            <next>
+                                                              <block type="game_draw_text">
+                                                                <value name="TEXT"><block type="val_var"><field name="VAR" id="vs">score</field></block></value>
+                                                                <value name="X"><block type="val_number"><field name="NUM">10</field></block></value>
+                                                                <value name="Y"><block type="val_number"><field name="NUM">10</field></block></value>
+                                                                <value name="SIZE"><block type="val_number"><field name="NUM">28</field></block></value>
+                                                                <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ffffff</field></block></value>
+                                                                <next>
+                                                                  <block type="game_flip">
+                                                                    <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
+                                                                  </block>
+                                                                </next>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </statement>
+                                    <next>
+                                      <block type="game_quit"></block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>
