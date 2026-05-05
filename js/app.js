@@ -3357,11 +3357,22 @@ document.addEventListener('DOMContentLoaded', function() {
       __future__: Sk.python3,
     });
 
-    Sk.builtins['open'] = new Sk.builtin.func(function(filename, mode) {
-      const fname = Sk.ffi.remapToJs(filename);
-      const m = mode ? Sk.ffi.remapToJs(mode) : 'r';
+    const _pycoOpenFn = function(file, mode, buffering, encoding, errors, newline, closefd, opener) {
+      const fname = Sk.ffi.remapToJs(file);
+      const m = (mode && mode !== Sk.builtin.none.none$) ? Sk.ffi.remapToJs(mode) : 'r';
       return makePycoFileObj(fname, m);
-    });
+    };
+    _pycoOpenFn.co_varnames = ['file', 'mode', 'buffering', 'encoding', 'errors', 'newline', 'closefd', 'opener'];
+    _pycoOpenFn.$defaults = [
+      new Sk.builtin.str('r'),
+      new Sk.builtin.int_(-1),
+      Sk.builtin.none.none$,
+      Sk.builtin.none.none$,
+      Sk.builtin.none.none$,
+      Sk.builtin.bool.true$,
+      Sk.builtin.none.none$,
+    ];
+    Sk.builtins['open'] = new Sk.builtin.func(_pycoOpenFn);
 
     // Sk.configure の後に pygame を登録（configure が builtinFiles をリセットするため必ず後に呼ぶ）
     if (currentMode === 'game' && window.PycoPygame && typeof window.PycoPygame.installIntoSkulpt === 'function') {
