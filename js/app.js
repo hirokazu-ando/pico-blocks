@@ -226,6 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const existing = pyFiles.find(f => f.name === fname);
     if (existing) {
       existing.content = append ? (existing.content + content) : content;
+      existing.isData = true;
       if (pyFiles[activeFileIdx].name === fname) {
         if (typeof pyEditor !== 'undefined' && pyEditor) {
           pyEditor.setValue(existing.content);
@@ -234,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
     } else {
-      pyFiles.push({ name: fname, content: content, blockXml: null });
+      pyFiles.push({ name: fname, content: content, blockXml: null, isData: true });
     }
     renderFileTabs();
   }
@@ -263,7 +264,6 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         __exit__: {
           $meth: function(_t, _v, _tb) {
-            try { console.log('[PycoFile] __exit__', this.fname, 'mode=', this.mode, 'buf.len=', (this.writeBuffer || '').length, 'buf=', JSON.stringify(this.writeBuffer)); } catch(e) {}
             if (this.mode === 'w') pycoFlushToTab(this.fname, this.writeBuffer, false);
             if (this.mode === 'a') pycoFlushToTab(this.fname, this.writeBuffer, true);
             return Sk.builtin.bool.false$;
@@ -273,7 +273,6 @@ document.addEventListener('DOMContentLoaded', function() {
         write: {
           $meth: function(data) {
             const s = Sk.ffi.remapToJs(data);
-            try { console.log('[PycoFile] write', this.fname, 'data=', JSON.stringify(s), 'thisHasBuffer=', typeof this.writeBuffer); } catch(e) {}
             this.writeBuffer = (this.writeBuffer || '') + s;
             return Sk.builtin.none.none$;
           },
@@ -2335,6 +2334,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // コード生成メイン
   function generateCode() {
     if (fileMode) return;
+    // データファイル（open() の書き込みで生成されたタブ）は Blockly のコード生成対象外
+    if (pyFiles[activeFileIdx] && pyFiles[activeFileIdx].isData) return;
 
     // ワークスペース内の全ブロックタイプを収集
     const allBlocks = workspace.getAllBlocks(false);
