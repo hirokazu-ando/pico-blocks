@@ -4,8 +4,9 @@
     <variable id="vq">queue</variable>
     <variable id="vc">customer</variable>
   </variables>
-  <block type="py_custom_stmt" x="30" y="30">
-    <field name="CODE">from collections import deque</field>
+  <block type="py_from_import" x="30" y="30">
+    <field name="MODULE">collections</field>
+    <field name="NAMES">deque</field>
     <next>
       <block type="var_set">
         <field name="VAR" id="vq">queue</field>
