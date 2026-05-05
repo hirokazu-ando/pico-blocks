@@ -1,4 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">def hanoi(n, src, dst, via):</field><next><block type="py_custom_stmt"><field name="CODE">    if n == 1:</field><next><block type="py_custom_stmt"><field name="CODE">        print(f"円盤1を {src} から {dst} へ")</field><next><block type="py_custom_stmt"><field name="CODE">        return</field><next><block type="py_custom_stmt"><field name="CODE">    hanoi(n - 1, src, via, dst)</field><next><block type="py_custom_stmt"><field name="CODE">    print(f"円盤{n}を {src} から {dst} へ")</field><next><block type="py_custom_stmt"><field name="CODE">    hanoi(n - 1, via, dst, src)</field><next><block type="py_custom_stmt"><field name="CODE">hanoi(3, "A", "C", "B")</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <variables>
+    <variable id="vn">n</variable>
+  </variables>
+  <block type="py_def" x="30" y="30">
+    <field name="NAME">hanoi_moves</field>
+    <field name="PARAM" id="vn">n</field>
+    <statement name="BODY">
+      <block type="pico_if">
+        <mutation elseif="0" else="0"/>
+        <value name="IF0">
+          <block type="cond_compare">
+            <field name="OP">==</field>
+            <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+            <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="py_return">
+            <value name="VALUE"><block type="val_number"><field name="NUM">1</field></block></value>
+          </block>
+        </statement>
+        <next>
+          <block type="py_return">
+            <value name="VALUE">
+              <block type="py_math_op">
+                <field name="OP">+</field>
+                <value name="LEFT">
+                  <block type="py_math_op">
+                    <field name="OP">*</field>
+                    <value name="LEFT"><block type="val_number"><field name="NUM">2</field></block></value>
+                    <value name="RIGHT">
+                      <block type="py_call_val">
+                        <field name="NAME">hanoi_moves</field>
+                        <value name="ARG">
+                          <block type="py_math_op">
+                            <field name="OP">-</field>
+                            <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                            <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="py_print">
+        <value name="VALUE">
+          <block type="py_fstring">
+            <field name="PRE">3枚のときの手数: </field>
+            <value name="VAR">
+              <block type="py_call_val">
+                <field name="NAME">hanoi_moves</field>
+                <value name="ARG"><block type="val_number"><field name="NUM">3</field></block></value>
+              </block>
+            </value>
+            <field name="POST"></field>
+          </block>
+        </value>
+        <next>
+          <block type="py_print">
+            <value name="VALUE">
+              <block type="py_fstring">
+                <field name="PRE">10枚のときの手数: </field>
+                <value name="VAR">
+                  <block type="py_call_val">
+                    <field name="NAME">hanoi_moves</field>
+                    <value name="ARG"><block type="val_number"><field name="NUM">10</field></block></value>
+                  </block>
+                </value>
+                <field name="POST"></field>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>
