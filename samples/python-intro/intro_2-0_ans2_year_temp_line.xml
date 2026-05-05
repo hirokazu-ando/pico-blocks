@@ -10,7 +10,7 @@
         <field name="VAR" id="var_months">months</field>
         <value name="VALUE">
           <block type="py_list_literal" id="b3">
-            <mutation items="12"/>
+            <mutation items="12" vertical="true"/>
             <value name="ITEM0"><block type="val_str"><field name="TEXT">1月</field></block></value>
             <value name="ITEM1"><block type="val_str"><field name="TEXT">2月</field></block></value>
             <value name="ITEM2"><block type="val_str"><field name="TEXT">3月</field></block></value>
@@ -30,7 +30,7 @@
             <field name="VAR" id="var_temps">temps</field>
             <value name="VALUE">
               <block type="py_list_literal" id="b5">
-                <mutation items="12"/>
+                <mutation items="12" vertical="true"/>
                 <value name="ITEM0"><block type="val_number"><field name="NUM">6</field></block></value>
                 <value name="ITEM1"><block type="val_number"><field name="NUM">7</field></block></value>
                 <value name="ITEM2"><block type="val_number"><field name="NUM">10</field></block></value>
