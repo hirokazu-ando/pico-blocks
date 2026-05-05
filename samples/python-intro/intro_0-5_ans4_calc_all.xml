@@ -14,23 +14,95 @@
         <field name="VAR" id="var_b">b</field>
         <field name="PROMPT">整数bを入力してください</field>
         <next>
-          <block type="py_custom_stmt" id="cs1">
-            <field name="CODE">print(f"a + b = {a + b}")</field>
+          <block type="py_print" id="bp1">
+            <value name="VALUE">
+              <block type="py_fstring" id="bf1">
+                <field name="PRE">a + b = </field>
+                <field name="POST"></field>
+                <value name="VAR">
+                  <block type="py_math_op" id="bm1">
+                    <field name="OP">+</field>
+                    <value name="LEFT"><block type="val_var" id="va1"><field name="VAR" id="var_a">a</field></block></value>
+                    <value name="RIGHT"><block type="val_var" id="vb1"><field name="VAR" id="var_b">b</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </value>
             <next>
-              <block type="py_custom_stmt" id="cs2">
-                <field name="CODE">print(f"a - b = {a - b}")</field>
+              <block type="py_print" id="bp2">
+                <value name="VALUE">
+                  <block type="py_fstring" id="bf2">
+                    <field name="PRE">a - b = </field>
+                    <field name="POST"></field>
+                    <value name="VAR">
+                      <block type="py_math_op" id="bm2">
+                        <field name="OP">-</field>
+                        <value name="LEFT"><block type="val_var" id="va2"><field name="VAR" id="var_a">a</field></block></value>
+                        <value name="RIGHT"><block type="val_var" id="vb2"><field name="VAR" id="var_b">b</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
                 <next>
-                  <block type="py_custom_stmt" id="cs3">
-                    <field name="CODE">print(f"a * b = {a * b}")</field>
+                  <block type="py_print" id="bp3">
+                    <value name="VALUE">
+                      <block type="py_fstring" id="bf3">
+                        <field name="PRE">a * b = </field>
+                        <field name="POST"></field>
+                        <value name="VAR">
+                          <block type="py_math_op" id="bm3">
+                            <field name="OP">*</field>
+                            <value name="LEFT"><block type="val_var" id="va3"><field name="VAR" id="var_a">a</field></block></value>
+                            <value name="RIGHT"><block type="val_var" id="vb3"><field name="VAR" id="var_b">b</field></block></value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
                     <next>
-                      <block type="py_custom_stmt" id="cs4">
-                        <field name="CODE">print(f"a / b = {a / b}")</field>
+                      <block type="py_print" id="bp4">
+                        <value name="VALUE">
+                          <block type="py_fstring" id="bf4">
+                            <field name="PRE">a / b = </field>
+                            <field name="POST"></field>
+                            <value name="VAR">
+                              <block type="py_math_op" id="bm4">
+                                <field name="OP">/</field>
+                                <value name="LEFT"><block type="val_var" id="va4"><field name="VAR" id="var_a">a</field></block></value>
+                                <value name="RIGHT"><block type="val_var" id="vb4"><field name="VAR" id="var_b">b</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
                         <next>
-                          <block type="py_custom_stmt" id="cs5">
-                            <field name="CODE">print(f"a // b = {a // b}")</field>
+                          <block type="py_print" id="bp5">
+                            <value name="VALUE">
+                              <block type="py_fstring" id="bf5">
+                                <field name="PRE">a // b = </field>
+                                <field name="POST"></field>
+                                <value name="VAR">
+                                  <block type="py_math_op" id="bm5">
+                                    <field name="OP">//</field>
+                                    <value name="LEFT"><block type="val_var" id="va5"><field name="VAR" id="var_a">a</field></block></value>
+                                    <value name="RIGHT"><block type="val_var" id="vb5"><field name="VAR" id="var_b">b</field></block></value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
                             <next>
-                              <block type="py_custom_stmt" id="cs6">
-                                <field name="CODE">print(f"a % b = {a % b}")</field>
+                              <block type="py_print" id="bp6">
+                                <value name="VALUE">
+                                  <block type="py_fstring" id="bf6">
+                                    <field name="PRE">a % b = </field>
+                                    <field name="POST"></field>
+                                    <value name="VAR">
+                                      <block type="py_math_op" id="bm6">
+                                        <field name="OP">%</field>
+                                        <value name="LEFT"><block type="val_var" id="va6"><field name="VAR" id="var_a">a</field></block></value>
+                                        <value name="RIGHT"><block type="val_var" id="vb6"><field name="VAR" id="var_b">b</field></block></value>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
                               </block>
                             </next>
                           </block>

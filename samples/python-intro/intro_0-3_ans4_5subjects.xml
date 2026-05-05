@@ -32,26 +32,63 @@
                       <block type="var_set" id="b5">
                         <field name="VAR" id="var_tot">total</field>
                         <value name="VALUE">
-                          <block type="py_custom_expr" id="bce">
-                            <field name="CODE">kokugo + math + english + rika + shakai</field>
+                          <block type="py_math_op" id="bm4">
+                            <field name="OP">+</field>
+                            <value name="LEFT">
+                              <block type="py_math_op" id="bm3">
+                                <field name="OP">+</field>
+                                <value name="LEFT">
+                                  <block type="py_math_op" id="bm2">
+                                    <field name="OP">+</field>
+                                    <value name="LEFT">
+                                      <block type="py_math_op" id="bm1">
+                                        <field name="OP">+</field>
+                                        <value name="LEFT"><block type="val_var" id="bv1"><field name="VAR" id="var_kok">kokugo</field></block></value>
+                                        <value name="RIGHT"><block type="val_var" id="bv2"><field name="VAR" id="var_mat">math</field></block></value>
+                                      </block>
+                                    </value>
+                                    <value name="RIGHT"><block type="val_var" id="bv3"><field name="VAR" id="var_eng">english</field></block></value>
+                                  </block>
+                                </value>
+                                <value name="RIGHT"><block type="val_var" id="bv4"><field name="VAR" id="var_rik">rika</field></block></value>
+                              </block>
+                            </value>
+                            <value name="RIGHT"><block type="val_var" id="bv5"><field name="VAR" id="var_sha">shakai</field></block></value>
                           </block>
                         </value>
                         <next>
                           <block type="var_set" id="b6">
                             <field name="VAR" id="var_avg">average</field>
                             <value name="VALUE">
-                              <block type="py_math_op" id="bm">
+                              <block type="py_math_op" id="bm5">
                                 <field name="OP">/</field>
                                 <value name="LEFT"><block type="val_var" id="bvt"><field name="VAR" id="var_tot">total</field></block></value>
                                 <value name="RIGHT"><block type="val_number" id="n6"><field name="NUM">5</field></block></value>
                               </block>
                             </value>
                             <next>
-                              <block type="py_custom_stmt" id="cs1">
-                                <field name="CODE">print(f"合計: {total}点")</field>
+                              <block type="py_print" id="bp1">
+                                <value name="VALUE">
+                                  <block type="py_fstring" id="bfs1">
+                                    <field name="PRE">合計: </field>
+                                    <field name="POST">点</field>
+                                    <value name="VAR"><block type="val_var" id="bvtot"><field name="VAR" id="var_tot">total</field></block></value>
+                                  </block>
+                                </value>
                                 <next>
-                                  <block type="py_custom_stmt" id="cs2">
-                                    <field name="CODE">print(f"平均: {average:.1f}点")</field>
+                                  <block type="py_print" id="bp2">
+                                    <value name="VALUE">
+                                      <block type="py_str_concat" id="bsc">
+                                        <value name="A">
+                                          <block type="py_fstring_fmt" id="bff">
+                                            <field name="PRE">平均: </field>
+                                            <field name="FMT">.1f</field>
+                                            <value name="VAR"><block type="val_var" id="bvavg"><field name="VAR" id="var_avg">average</field></block></value>
+                                          </block>
+                                        </value>
+                                        <value name="B"><block type="val_str" id="vs2"><field name="TEXT">点</field></block></value>
+                                      </block>
+                                    </value>
                                   </block>
                                 </next>
                               </block>

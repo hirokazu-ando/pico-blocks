@@ -7,16 +7,37 @@
     <field name="VAR" id="var_text">text</field>
     <value name="VALUE"><block type="val_str" id="vs1"><field name="TEXT">Pythonはむずかしい。Pythonがきらいだ。</field></block></value>
     <next>
-      <block type="py_custom_stmt" id="cs1">
-        <field name="CODE">text = text.replace("Python", "PycoBlocks")</field>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_text">text</field>
+        <value name="VALUE">
+          <block type="py_str_replace" id="rp1">
+            <field name="VAR" id="var_text">text</field>
+            <field name="OLD">Python</field>
+            <field name="NEW">PycoBlocks</field>
+          </block>
+        </value>
         <next>
-          <block type="py_custom_stmt" id="cs2">
-            <field name="CODE">text = text.replace("むずかしい", "たのしい")</field>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_text">text</field>
+            <value name="VALUE">
+              <block type="py_str_replace" id="rp2">
+                <field name="VAR" id="var_text">text</field>
+                <field name="OLD">むずかしい</field>
+                <field name="NEW">たのしい</field>
+              </block>
+            </value>
             <next>
-              <block type="py_custom_stmt" id="cs3">
-                <field name="CODE">text = text.replace("きらい", "すき")</field>
+              <block type="var_set" id="b3">
+                <field name="VAR" id="var_text">text</field>
+                <value name="VALUE">
+                  <block type="py_str_replace" id="rp3">
+                    <field name="VAR" id="var_text">text</field>
+                    <field name="OLD">きらい</field>
+                    <field name="NEW">すき</field>
+                  </block>
+                </value>
                 <next>
-                  <block type="py_print" id="b1">
+                  <block type="py_print" id="bp">
                     <value name="VALUE"><block type="val_var" id="bvt"><field name="VAR" id="var_text">text</field></block></value>
                   </block>
                 </next>

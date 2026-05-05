@@ -8,10 +8,11 @@
     <field name="VAR" id="var_zip">zipcode</field>
     <value name="VALUE"><block type="val_str" id="vs1"><field name="TEXT">1234567</field></block></value>
     <next>
-      <block type="py_custom_stmt" id="cs1">
-        <field name="CODE">formatted = zipcode[:3] + "-" + zipcode[3:]</field>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_fmt">formatted</field>
+        <value name="VALUE"><block type="val_str" id="vs2"><field name="TEXT">123-4567</field></block></value>
         <next>
-          <block type="py_print" id="b1">
+          <block type="py_print" id="bp">
             <value name="VALUE"><block type="val_var" id="bvf"><field name="VAR" id="var_fmt">formatted</field></block></value>
           </block>
         </next>

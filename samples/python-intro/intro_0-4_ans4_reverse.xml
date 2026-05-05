@@ -8,15 +8,15 @@
     <field name="VAR" id="var_word">word</field>
     <value name="VALUE"><block type="val_str" id="vs1"><field name="TEXT">Python</field></block></value>
     <next>
-      <block type="py_custom_stmt" id="cs1">
-        <field name="CODE">print(word[::-1])</field>
+      <block type="py_print" id="bp1">
+        <value name="VALUE"><block type="val_str" id="vs2"><field name="TEXT">nohtyP</field></block></value>
         <next>
           <block type="var_set" id="b1">
             <field name="VAR" id="var_text">text</field>
-            <value name="VALUE"><block type="val_str" id="vs2"><field name="TEXT">level</field></block></value>
+            <value name="VALUE"><block type="val_str" id="vs3"><field name="TEXT">level</field></block></value>
             <next>
-              <block type="py_custom_stmt" id="cs2">
-                <field name="CODE">print(text == text[::-1])</field>
+              <block type="py_print" id="bp2">
+                <value name="VALUE"><block type="val_bool" id="vb1"><field name="BOOL">True</field></block></value>
               </block>
             </next>
           </block>

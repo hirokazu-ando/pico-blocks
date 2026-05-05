@@ -29,8 +29,18 @@
               </block>
             </value>
             <next>
-              <block type="py_custom_stmt" id="cs1">
-                <field name="CODE">print(f"{total}秒 = {minutes}分{seconds}秒")</field>
+              <block type="py_print" id="bp">
+                <value name="VALUE">
+                  <block type="py_fstring3" id="bfs">
+                    <field name="PRE"></field>
+                    <field name="MID1">秒 = </field>
+                    <field name="MID2">分</field>
+                    <field name="POST">秒</field>
+                    <value name="VAR1"><block type="val_var" id="bv3"><field name="VAR" id="var_total">total</field></block></value>
+                    <value name="VAR2"><block type="val_var" id="bv4"><field name="VAR" id="var_min">minutes</field></block></value>
+                    <value name="VAR3"><block type="val_var" id="bv5"><field name="VAR" id="var_sec">seconds</field></block></value>
+                  </block>
+                </value>
               </block>
             </next>
           </block>
