@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_study">study</variable>
+    <variable id="var_score">score</variable>
+  </variables>
+  <block type="py_import_plt" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_study">study</field>
+        <value name="VALUE">
+          <block type="py_list_literal">
+            <mutation items="8"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">2</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">3</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">4</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">5</field></block></value>
+            <value name="ITEM5"><block type="val_number"><field name="NUM">6</field></block></value>
+            <value name="ITEM6"><block type="val_number"><field name="NUM">7</field></block></value>
+            <value name="ITEM7"><block type="val_number"><field name="NUM">8</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_score">score</field>
+            <value name="VALUE">
+              <block type="py_list_literal">
+                <mutation items="8"/>
+                <value name="ITEM0"><block type="val_number"><field name="NUM">55</field></block></value>
+                <value name="ITEM1"><block type="val_number"><field name="NUM">62</field></block></value>
+                <value name="ITEM2"><block type="val_number"><field name="NUM">68</field></block></value>
+                <value name="ITEM3"><block type="val_number"><field name="NUM">74</field></block></value>
+                <value name="ITEM4"><block type="val_number"><field name="NUM">80</field></block></value>
+                <value name="ITEM5"><block type="val_number"><field name="NUM">85</field></block></value>
+                <value name="ITEM6"><block type="val_number"><field name="NUM">92</field></block></value>
+                <value name="ITEM7"><block type="val_number"><field name="NUM">95</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_plt_scatter" id="b3">
+                <value name="X"><block type="val_var"><field name="VAR" id="var_study">study</field></block></value>
+                <value name="Y"><block type="val_var"><field name="VAR" id="var_score">score</field></block></value>
+                <next>
+                  <block type="py_plt_title" id="b4">
+                    <value name="TEXT"><block type="val_str"><field name="TEXT">勉強時間と得点の関係</field></block></value>
+                    <next>
+                      <block type="py_plt_xlabel" id="b5">
+                        <value name="TEXT"><block type="val_str"><field name="TEXT">勉強時間（h）</field></block></value>
+                        <next>
+                          <block type="py_plt_ylabel" id="b6">
+                            <value name="TEXT"><block type="val_str"><field name="TEXT">得点</field></block></value>
+                            <next>
+                              <block type="py_plt_show" id="b7"></block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
