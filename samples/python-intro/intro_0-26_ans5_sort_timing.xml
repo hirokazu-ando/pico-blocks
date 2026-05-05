@@ -7,6 +7,9 @@
     <variable id="vj">j</variable>
     <variable id="vk">key</variable>
     <variable id="vt">tmp</variable>
+    <variable id="vtm">t</variable>
+    <variable id="ve">elapsed</variable>
+    <variable id="vu">_</variable>
   </variables>
   <block type="py_def" x="30" y="30">
     <field name="NAME">bubble_sort</field>
@@ -239,29 +242,150 @@
           </block>
         </statement>
         <next>
-          <block type="py_custom_stmt">
-            <field name="CODE">import time, random</field>
+          <block type="py_import_module">
+            <field name="MODULE">time</field>
             <next>
-              <block type="py_custom_stmt">
-                <field name="CODE">data = [random.randint(1, 10000) for _ in range(2000)]</field>
+              <block type="py_import_module">
+                <field name="MODULE">random</field>
                 <next>
-                  <block type="py_custom_stmt">
-                    <field name="CODE">t = time.time(); bubble_sort(data[:])</field>
+                  <block type="var_set">
+                    <field name="VAR" id="vd">data</field>
+                    <value name="VALUE"><block type="py_list_empty"/></value>
                     <next>
-                      <block type="py_custom_stmt">
-                        <field name="CODE">print(f"バブル: {time.time()-t:.3f}秒")</field>
+                      <block type="pico_for_range">
+                        <field name="VAR" id="vu">_</field>
+                        <value name="N"><block type="val_number"><field name="NUM">2000</field></block></value>
+                        <statement name="DO">
+                          <block type="py_list_append">
+                            <field name="LIST" id="vd">data</field>
+                            <value name="VALUE">
+                              <block type="py_random_int">
+                                <value name="FROM"><block type="val_number"><field name="NUM">1</field></block></value>
+                                <value name="TO"><block type="val_number"><field name="NUM">10000</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </statement>
                         <next>
-                          <block type="py_custom_stmt">
-                            <field name="CODE">t = time.time(); insertion_sort(data[:])</field>
+                          <block type="var_set">
+                            <field name="VAR" id="vtm">t</field>
+                            <value name="VALUE"><block type="py_call_val"><field name="NAME">time.time</field></block></value>
                             <next>
-                              <block type="py_custom_stmt">
-                                <field name="CODE">print(f"挿入: {time.time()-t:.3f}秒")</field>
+                              <block type="py_call_stmt">
+                                <field name="NAME">bubble_sort</field>
+                                <value name="ARG">
+                                  <block type="py_list_slice">
+                                    <field name="LIST" id="vd">data</field>
+                                  </block>
+                                </value>
                                 <next>
-                                  <block type="py_custom_stmt">
-                                    <field name="CODE">t = time.time(); sorted(data)</field>
+                                  <block type="var_set">
+                                    <field name="VAR" id="ve">elapsed</field>
+                                    <value name="VALUE">
+                                      <block type="py_round">
+                                        <value name="VALUE">
+                                          <block type="py_math_op">
+                                            <field name="OP">-</field>
+                                            <value name="LEFT"><block type="py_call_val"><field name="NAME">time.time</field></block></value>
+                                            <value name="RIGHT"><block type="val_var"><field name="VAR" id="vtm">t</field></block></value>
+                                          </block>
+                                        </value>
+                                        <value name="DIGITS"><block type="val_number"><field name="NUM">3</field></block></value>
+                                      </block>
+                                    </value>
                                     <next>
-                                      <block type="py_custom_stmt">
-                                        <field name="CODE">print(f"Python sorted: {time.time()-t:.6f}秒")</field>
+                                      <block type="py_print">
+                                        <value name="VALUE">
+                                          <block type="py_fstring">
+                                            <field name="PRE">バブルソート: </field>
+                                            <value name="VAR"><block type="val_var"><field name="VAR" id="ve">elapsed</field></block></value>
+                                            <field name="POST">秒</field>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="var_set">
+                                            <field name="VAR" id="vtm">t</field>
+                                            <value name="VALUE"><block type="py_call_val"><field name="NAME">time.time</field></block></value>
+                                            <next>
+                                              <block type="py_call_stmt">
+                                                <field name="NAME">insertion_sort</field>
+                                                <value name="ARG">
+                                                  <block type="py_list_slice">
+                                                    <field name="LIST" id="vd">data</field>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="var_set">
+                                                    <field name="VAR" id="ve">elapsed</field>
+                                                    <value name="VALUE">
+                                                      <block type="py_round">
+                                                        <value name="VALUE">
+                                                          <block type="py_math_op">
+                                                            <field name="OP">-</field>
+                                                            <value name="LEFT"><block type="py_call_val"><field name="NAME">time.time</field></block></value>
+                                                            <value name="RIGHT"><block type="val_var"><field name="VAR" id="vtm">t</field></block></value>
+                                                          </block>
+                                                        </value>
+                                                        <value name="DIGITS"><block type="val_number"><field name="NUM">3</field></block></value>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <block type="py_print">
+                                                        <value name="VALUE">
+                                                          <block type="py_fstring">
+                                                            <field name="PRE">挿入ソート: </field>
+                                                            <value name="VAR"><block type="val_var"><field name="VAR" id="ve">elapsed</field></block></value>
+                                                            <field name="POST">秒</field>
+                                                          </block>
+                                                        </value>
+                                                        <next>
+                                                          <block type="var_set">
+                                                            <field name="VAR" id="vtm">t</field>
+                                                            <value name="VALUE"><block type="py_call_val"><field name="NAME">time.time</field></block></value>
+                                                            <next>
+                                                              <block type="py_call_stmt">
+                                                                <field name="NAME">sorted</field>
+                                                                <value name="ARG"><block type="val_var"><field name="VAR" id="vd">data</field></block></value>
+                                                                <next>
+                                                                  <block type="var_set">
+                                                                    <field name="VAR" id="ve">elapsed</field>
+                                                                    <value name="VALUE">
+                                                                      <block type="py_round">
+                                                                        <value name="VALUE">
+                                                                          <block type="py_math_op">
+                                                                            <field name="OP">-</field>
+                                                                            <value name="LEFT"><block type="py_call_val"><field name="NAME">time.time</field></block></value>
+                                                                            <value name="RIGHT"><block type="val_var"><field name="VAR" id="vtm">t</field></block></value>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="DIGITS"><block type="val_number"><field name="NUM">6</field></block></value>
+                                                                      </block>
+                                                                    </value>
+                                                                    <next>
+                                                                      <block type="py_print">
+                                                                        <value name="VALUE">
+                                                                          <block type="py_fstring">
+                                                                            <field name="PRE">Python sorted: </field>
+                                                                            <value name="VAR"><block type="val_var"><field name="VAR" id="ve">elapsed</field></block></value>
+                                                                            <field name="POST">秒</field>
+                                                                          </block>
+                                                                        </value>
+                                                                      </block>
+                                                                    </next>
+                                                                  </block>
+                                                                </next>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
                                       </block>
                                     </next>
                                   </block>
