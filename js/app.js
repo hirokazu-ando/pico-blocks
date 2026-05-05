@@ -211,14 +211,17 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function addNewFile() {
-    const raw = prompt('ファイル名を入力してください（例: mymodule.py）');
+    const raw = prompt('ファイル名を入力してください（例: mymodule.py / data.txt）');
     if (!raw || !raw.trim()) return;
-    const fname = raw.trim().endsWith('.py') ? raw.trim() : raw.trim() + '.py';
+    const trimmed = raw.trim();
+    const hasExt = /\.(py|txt|csv|json|md)$/i.test(trimmed);
+    const fname = hasExt ? trimmed : trimmed + '.py';
     if (pyFiles.find(function(f) { return f.name === fname; })) {
       alert(fname + ' はすでに存在します');
       return;
     }
-    pyFiles.push({ name: fname, content: '', blockXml: null });
+    const isData = !/\.py$/i.test(fname);
+    pyFiles.push({ name: fname, content: '', blockXml: null, isData: isData });
     switchFile(pyFiles.length - 1);
   }
 
