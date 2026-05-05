@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_terms">terms</variable>
+    <variable id="var_math">math</variable>
+    <variable id="var_eng">english</variable>
+  </variables>
+  <block type="py_import_plt" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_terms">terms</field>
+        <value name="VALUE">
+          <block type="py_list_literal">
+            <mutation items="5"/>
+            <value name="ITEM0"><block type="val_str"><field name="TEXT">1学期</field></block></value>
+            <value name="ITEM1"><block type="val_str"><field name="TEXT">2学期</field></block></value>
+            <value name="ITEM2"><block type="val_str"><field name="TEXT">3学期</field></block></value>
+            <value name="ITEM3"><block type="val_str"><field name="TEXT">4学期</field></block></value>
+            <value name="ITEM4"><block type="val_str"><field name="TEXT">5学期</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_math">math</field>
+            <value name="VALUE">
+              <block type="py_list_literal">
+                <mutation items="5"/>
+                <value name="ITEM0"><block type="val_number"><field name="NUM">62</field></block></value>
+                <value name="ITEM1"><block type="val_number"><field name="NUM">70</field></block></value>
+                <value name="ITEM2"><block type="val_number"><field name="NUM">68</field></block></value>
+                <value name="ITEM3"><block type="val_number"><field name="NUM">78</field></block></value>
+                <value name="ITEM4"><block type="val_number"><field name="NUM">85</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="var_set" id="b3">
+                <field name="VAR" id="var_eng">english</field>
+                <value name="VALUE">
+                  <block type="py_list_literal">
+                    <mutation items="5"/>
+                    <value name="ITEM0"><block type="val_number"><field name="NUM">75</field></block></value>
+                    <value name="ITEM1"><block type="val_number"><field name="NUM">72</field></block></value>
+                    <value name="ITEM2"><block type="val_number"><field name="NUM">80</field></block></value>
+                    <value name="ITEM3"><block type="val_number"><field name="NUM">76</field></block></value>
+                    <value name="ITEM4"><block type="val_number"><field name="NUM">82</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_plt_plot" id="b4">
+                    <value name="X"><block type="val_var"><field name="VAR" id="var_terms">terms</field></block></value>
+                    <value name="Y"><block type="val_var"><field name="VAR" id="var_math">math</field></block></value>
+                    <next>
+                      <block type="py_plt_plot" id="b5">
+                        <value name="X"><block type="val_var"><field name="VAR" id="var_terms">terms</field></block></value>
+                        <value name="Y"><block type="val_var"><field name="VAR" id="var_eng">english</field></block></value>
+                        <next>
+                          <block type="py_plt_title" id="b6">
+                            <value name="TEXT"><block type="val_str"><field name="TEXT">学期別の点数推移（数学・英語）</field></block></value>
+                            <next>
+                              <block type="py_plt_xlabel" id="b7">
+                                <value name="TEXT"><block type="val_str"><field name="TEXT">学期</field></block></value>
+                                <next>
+                                  <block type="py_plt_ylabel" id="b8">
+                                    <value name="TEXT"><block type="val_str"><field name="TEXT">点数</field></block></value>
+                                    <next>
+                                      <block type="py_plt_show" id="b9"></block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
