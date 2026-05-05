@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_data">data</variable>
+  </variables>
+  <block type="py_import_stats" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_data">data</field>
+        <value name="VALUE">
+          <block type="py_list_literal">
+            <mutation items="7"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">70</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">72</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">68</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">71</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">73</field></block></value>
+            <value name="ITEM5"><block type="val_number"><field name="NUM">99</field></block></value>
+            <value name="ITEM6"><block type="val_number"><field name="NUM">70</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print_multi" id="p1">
+            <mutation items="2"/>
+            <value name="ITEM0"><block type="val_str"><field name="TEXT">平均:</field></block></value>
+            <value name="ITEM1">
+              <block type="py_round">
+                <value name="VALUE">
+                  <block type="py_stats_mean">
+                    <value name="DATA"><block type="val_var"><field name="VAR" id="var_data">data</field></block></value>
+                  </block>
+                </value>
+                <value name="DIGITS"><block type="val_number"><field name="NUM">2</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print_multi" id="p2">
+                <mutation items="2"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">中央値:</field></block></value>
+                <value name="ITEM1">
+                  <block type="py_stats_median">
+                    <value name="DATA"><block type="val_var"><field name="VAR" id="var_data">data</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

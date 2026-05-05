@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_data">data</variable>
+  </variables>
+  <block type="py_import_plt" id="b1" x="30" y="30">
+    <next>
+      <block type="var_set" id="b2">
+        <field name="VAR" id="var_data">data</field>
+        <value name="VALUE">
+          <block type="py_list_literal">
+            <mutation items="15"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">42</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">55</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">61</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">63</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">68</field></block></value>
+            <value name="ITEM5"><block type="val_number"><field name="NUM">70</field></block></value>
+            <value name="ITEM6"><block type="val_number"><field name="NUM">72</field></block></value>
+            <value name="ITEM7"><block type="val_number"><field name="NUM">75</field></block></value>
+            <value name="ITEM8"><block type="val_number"><field name="NUM">76</field></block></value>
+            <value name="ITEM9"><block type="val_number"><field name="NUM">78</field></block></value>
+            <value name="ITEM10"><block type="val_number"><field name="NUM">82</field></block></value>
+            <value name="ITEM11"><block type="val_number"><field name="NUM">85</field></block></value>
+            <value name="ITEM12"><block type="val_number"><field name="NUM">88</field></block></value>
+            <value name="ITEM13"><block type="val_number"><field name="NUM">92</field></block></value>
+            <value name="ITEM14"><block type="val_number"><field name="NUM">96</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_plt_hist" id="b3">
+            <value name="DATA"><block type="val_var"><field name="VAR" id="var_data">data</field></block></value>
+            <field name="BINS">5</field>
+            <next>
+              <block type="py_plt_title" id="b4">
+                <value name="TEXT"><block type="val_str"><field name="TEXT">点数の分布（bins=5）</field></block></value>
+                <next>
+                  <block type="py_plt_xlabel" id="b5">
+                    <value name="TEXT"><block type="val_str"><field name="TEXT">点数</field></block></value>
+                    <next>
+                      <block type="py_plt_ylabel" id="b6">
+                        <value name="TEXT"><block type="val_str"><field name="TEXT">人数</field></block></value>
+                        <next>
+                          <block type="py_plt_show" id="b7">
+                            <next>
+                              <block type="py_plt_hist" id="b8">
+                                <value name="DATA"><block type="val_var"><field name="VAR" id="var_data">data</field></block></value>
+                                <field name="BINS">20</field>
+                                <next>
+                                  <block type="py_plt_title" id="b9">
+                                    <value name="TEXT"><block type="val_str"><field name="TEXT">点数の分布（bins=20）</field></block></value>
+                                    <next>
+                                      <block type="py_plt_xlabel" id="b10">
+                                        <value name="TEXT"><block type="val_str"><field name="TEXT">点数</field></block></value>
+                                        <next>
+                                          <block type="py_plt_ylabel" id="b11">
+                                            <value name="TEXT"><block type="val_str"><field name="TEXT">人数</field></block></value>
+                                            <next>
+                                              <block type="py_plt_show" id="b12"></block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

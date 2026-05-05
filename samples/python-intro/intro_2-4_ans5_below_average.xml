@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_scores">scores</variable>
+    <variable id="var_avg">average</variable>
+    <variable id="var_low">low</variable>
+    <variable id="var_s">s</variable>
+  </variables>
+  <block type="py_import_stats" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_scores">scores</field>
+        <value name="VALUE">
+          <block type="py_list_literal">
+            <mutation items="7"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">72</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">85</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">91</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">68</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">95</field></block></value>
+            <value name="ITEM5"><block type="val_number"><field name="NUM">60</field></block></value>
+            <value name="ITEM6"><block type="val_number"><field name="NUM">82</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="var_set" id="b2">
+            <field name="VAR" id="var_avg">average</field>
+            <value name="VALUE">
+              <block type="py_stats_mean">
+                <value name="DATA"><block type="val_var"><field name="VAR" id="var_scores">scores</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="var_set" id="b3">
+                <field name="VAR" id="var_low">low</field>
+                <value name="VALUE">
+                  <block type="py_list_comp_if">
+                    <field name="VAR" id="var_s">s</field>
+                    <value name="EXPR"><block type="val_var"><field name="VAR" id="var_s">s</field></block></value>
+                    <value name="LIST"><block type="val_var"><field name="VAR" id="var_scores">scores</field></block></value>
+                    <value name="COND">
+                      <block type="cond_compare">
+                        <field name="OP">&lt;</field>
+                        <value name="LEFT"><block type="val_var"><field name="VAR" id="var_s">s</field></block></value>
+                        <value name="RIGHT"><block type="val_var"><field name="VAR" id="var_avg">average</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_print_multi" id="p1">
+                    <mutation items="2"/>
+                    <value name="ITEM0"><block type="val_str"><field name="TEXT">平均点:</field></block></value>
+                    <value name="ITEM1"><block type="val_var"><field name="VAR" id="var_avg">average</field></block></value>
+                    <next>
+                      <block type="py_print_multi" id="p2">
+                        <mutation items="2"/>
+                        <value name="ITEM0"><block type="val_str"><field name="TEXT">平均未満:</field></block></value>
+                        <value name="ITEM1"><block type="val_var"><field name="VAR" id="var_low">low</field></block></value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

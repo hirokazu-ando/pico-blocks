@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_study">study</variable>
+    <variable id="var_score">score</variable>
+  </variables>
+  <block type="py_import_plt" id="b1" x="30" y="30">
+    <next>
+      <block type="var_set" id="b2">
+        <field name="VAR" id="var_study">study</field>
+        <value name="VALUE">
+          <block type="py_list_literal">
+            <mutation items="7"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">2</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">3</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">4</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">5</field></block></value>
+            <value name="ITEM5"><block type="val_number"><field name="NUM">6</field></block></value>
+            <value name="ITEM6"><block type="val_number"><field name="NUM">7</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="var_set" id="b3">
+            <field name="VAR" id="var_score">score</field>
+            <value name="VALUE">
+              <block type="py_list_literal">
+                <mutation items="7"/>
+                <value name="ITEM0"><block type="val_number"><field name="NUM">55</field></block></value>
+                <value name="ITEM1"><block type="val_number"><field name="NUM">62</field></block></value>
+                <value name="ITEM2"><block type="val_number"><field name="NUM">68</field></block></value>
+                <value name="ITEM3"><block type="val_number"><field name="NUM">75</field></block></value>
+                <value name="ITEM4"><block type="val_number"><field name="NUM">80</field></block></value>
+                <value name="ITEM5"><block type="val_number"><field name="NUM">85</field></block></value>
+                <value name="ITEM6"><block type="val_number"><field name="NUM">92</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_plt_hist" id="b4">
+                <value name="DATA"><block type="val_var"><field name="VAR" id="var_score">score</field></block></value>
+                <field name="BINS">5</field>
+                <next>
+                  <block type="py_plt_title" id="b5">
+                    <value name="TEXT"><block type="val_str"><field name="TEXT">点数の分布</field></block></value>
+                    <next>
+                      <block type="py_plt_xlabel" id="b6">
+                        <value name="TEXT"><block type="val_str"><field name="TEXT">点数</field></block></value>
+                        <next>
+                          <block type="py_plt_ylabel" id="b7">
+                            <value name="TEXT"><block type="val_str"><field name="TEXT">人数</field></block></value>
+                            <next>
+                              <block type="py_plt_show" id="b8">
+                                <next>
+                                  <block type="py_plt_scatter" id="b9">
+                                    <value name="X"><block type="val_var"><field name="VAR" id="var_study">study</field></block></value>
+                                    <value name="Y"><block type="val_var"><field name="VAR" id="var_score">score</field></block></value>
+                                    <next>
+                                      <block type="py_plt_title" id="b10">
+                                        <value name="TEXT"><block type="val_str"><field name="TEXT">勉強時間と点数</field></block></value>
+                                        <next>
+                                          <block type="py_plt_xlabel" id="b11">
+                                            <value name="TEXT"><block type="val_str"><field name="TEXT">勉強時間(h)</field></block></value>
+                                            <next>
+                                              <block type="py_plt_ylabel" id="b12">
+                                                <value name="TEXT"><block type="val_str"><field name="TEXT">点数</field></block></value>
+                                                <next>
+                                                  <block type="py_plt_show" id="b13"></block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

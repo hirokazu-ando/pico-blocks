@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_votes">votes</variable>
+  </variables>
+  <block type="py_import_stats" id="b0" x="30" y="30">
+    <next>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_votes">votes</field>
+        <value name="VALUE">
+          <block type="py_list_literal">
+            <mutation items="10"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">3</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">5</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">4</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">3</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">5</field></block></value>
+            <value name="ITEM5"><block type="val_number"><field name="NUM">5</field></block></value>
+            <value name="ITEM6"><block type="val_number"><field name="NUM">4</field></block></value>
+            <value name="ITEM7"><block type="val_number"><field name="NUM">3</field></block></value>
+            <value name="ITEM8"><block type="val_number"><field name="NUM">5</field></block></value>
+            <value name="ITEM9"><block type="val_number"><field name="NUM">2</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_print_multi" id="p1">
+            <mutation items="2"/>
+            <value name="ITEM0"><block type="val_str"><field name="TEXT">最頻値:</field></block></value>
+            <value name="ITEM1">
+              <block type="py_stats_mode">
+                <value name="DATA"><block type="val_var"><field name="VAR" id="var_votes">votes</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print_multi" id="p2">
+                <mutation items="2"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">平均:</field></block></value>
+                <value name="ITEM1">
+                  <block type="py_round">
+                    <value name="VALUE">
+                      <block type="py_stats_mean">
+                        <value name="DATA"><block type="val_var"><field name="VAR" id="var_votes">votes</field></block></value>
+                      </block>
+                    </value>
+                    <value name="DIGITS"><block type="val_number"><field name="NUM">2</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
