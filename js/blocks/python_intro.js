@@ -2025,6 +2025,24 @@ Blockly.Blocks['py_import_module'] = {
   }
 };
 
+// from モジュール import 名前 文
+Blockly.Blocks['py_from_import'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField('モジュール')
+      .appendField(new Blockly.FieldTextInput('collections'), 'MODULE')
+      .appendField('から')
+      .appendField(new Blockly.FieldTextInput('deque'), 'NAMES')
+      .appendField('を読み込む（from import）');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(P.modules);
+    this.setTooltip('モジュール内の特定の名前を読み込みます（from モジュール import 名前）');
+    this.setHelpUrl('');
+  }
+};
+
 // bisect.bisect_left
 Blockly.Blocks['py_bisect_left'] = {
   init: function() {

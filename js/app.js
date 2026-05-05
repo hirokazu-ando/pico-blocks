@@ -545,6 +545,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_round':         return '四捨五入（round）';
       case 'py_set_empty':     return '空のセット set()';
       case 'py_import_module': return `モジュール「${block.getFieldValue('MODULE')}」を読み込む（import）`;
+      case 'py_from_import':   return `モジュール「${block.getFieldValue('MODULE')}」から「${block.getFieldValue('NAMES')}」を読み込む（from import）`;
       case 'py_bisect_left':   return `整列済みリスト「${getVarName(block, 'LIST')}」で値が入る左端の位置（bisect_left）`;
       case 'py_bisect_right':  return `整列済みリスト「${getVarName(block, 'LIST')}」で値が入る右端の位置（bisect_right）`;
       case 'py_str_isdigit':   return '文字列が数字だけか（isdigit）';
@@ -1637,6 +1638,12 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_import_module': {
         const impMod = block.getFieldValue('MODULE') || '';
         code = appendLocal(code, indent + `import ${impMod}\n`);
+        break;
+      }
+      case 'py_from_import': {
+        const fiMod   = block.getFieldValue('MODULE') || '';
+        const fiNames = block.getFieldValue('NAMES')  || '';
+        code = appendLocal(code, indent + `from ${fiMod} import ${fiNames}\n`);
         break;
       }
       case 'py_deque_append': {
