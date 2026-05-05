@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vn">n</variable>
+    <variable id="vc">count</variable>
+  </variables>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vn">n</field>
+    <value name="VALUE"><block type="val_number"><field name="NUM">1000000</field></block></value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vc">count</field>
+        <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+        <next>
+          <block type="py_while">
+            <value name="COND">
+              <block type="cond_compare">
+                <field name="OP">&gt;</field>
+                <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+              </block>
+            </value>
+            <statement name="DO">
+              <block type="var_set">
+                <field name="VAR" id="vn">n</field>
+                <value name="VALUE">
+                  <block type="py_math_op">
+                    <field name="OP">//</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                    <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="var_set">
+                    <field name="VAR" id="vc">count</field>
+                    <value name="VALUE">
+                      <block type="py_math_op">
+                        <field name="OP">+</field>
+                        <value name="LEFT"><block type="val_var"><field name="VAR" id="vc">count</field></block></value>
+                        <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </statement>
+            <next>
+              <block type="py_print">
+                <value name="VALUE">
+                  <block type="py_fstring">
+                    <field name="PRE">100万件は最大 </field>
+                    <value name="VAR"><block type="val_var"><field name="VAR" id="vc">count</field></block></value>
+                    <field name="POST"> 回で 1 件まで絞れる</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

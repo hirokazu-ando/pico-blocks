@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vd">data</variable>
+    <variable id="vp">pos</variable>
+  </variables>
+  <block type="py_import_module" x="30" y="30">
+    <field name="MODULE">bisect</field>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vd">data</field>
+        <value name="VALUE">
+          <block type="py_list_literal">
+            <mutation items="6"/>
+            <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">3</field></block></value>
+            <value name="ITEM2"><block type="val_number"><field name="NUM">5</field></block></value>
+            <value name="ITEM3"><block type="val_number"><field name="NUM">7</field></block></value>
+            <value name="ITEM4"><block type="val_number"><field name="NUM">9</field></block></value>
+            <value name="ITEM5"><block type="val_number"><field name="NUM">11</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="vp">pos</field>
+            <value name="VALUE">
+              <block type="py_bisect_left">
+                <field name="LIST" id="vd">data</field>
+                <value name="VALUE"><block type="val_number"><field name="NUM">7</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_print">
+                <value name="VALUE"><block type="val_var"><field name="VAR" id="vp">pos</field></block></value>
+                <next>
+                  <block type="py_print">
+                    <value name="VALUE">
+                      <block type="py_list_get">
+                        <field name="LIST" id="vd">data</field>
+                        <value name="INDEX"><block type="val_var"><field name="VAR" id="vp">pos</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
