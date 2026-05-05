@@ -21,7 +21,7 @@
                     <next>
                       <block type="var_change">
                         <field name="VAR" id="vs">score</field>
-                        <value name="DELTA"><block type="val_number"><field name="NUM">1</field></block></value>
+                        <value name="AMOUNT"><block type="val_number"><field name="NUM">1</field></block></value>
                         <next>
                           <block type="game_draw_text">
                             <value name="TEXT">

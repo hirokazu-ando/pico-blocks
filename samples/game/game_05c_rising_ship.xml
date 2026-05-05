@@ -26,7 +26,7 @@
                         <next>
                           <block type="var_change">
                             <field name="VAR" id="vsy">ship_y</field>
-                            <value name="DELTA"><block type="val_number"><field name="NUM">-2</field></block></value>
+                            <value name="AMOUNT"><block type="val_number"><field name="NUM">-2</field></block></value>
                             <next>
                               <block type="pico_if">
                                 <value name="IF0">

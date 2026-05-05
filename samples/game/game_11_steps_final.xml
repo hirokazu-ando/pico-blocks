@@ -37,7 +37,7 @@
                                 <next>
                                   <block type="var_change">
                                     <field name="VAR" id="vey">ey</field>
-                                    <value name="DELTA"><block type="val_number"><field name="NUM">3</field></block></value>
+                                    <value name="AMOUNT"><block type="val_number"><field name="NUM">3</field></block></value>
                                     <next>
                                       <block type="var_set">
                                         <field name="VAR" id="vpr">player_rect</field>

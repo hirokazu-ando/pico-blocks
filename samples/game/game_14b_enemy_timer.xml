@@ -54,7 +54,7 @@
                                             <statement name="DO0">
                                               <block type="var_change">
                                                 <field name="VAR" id="vpx">px</field>
-                                                <value name="DELTA"><block type="val_number"><field name="NUM">4</field></block></value>
+                                                <value name="AMOUNT"><block type="val_number"><field name="NUM">4</field></block></value>
                                               </block>
                                             </statement>
                                             <next>
@@ -64,7 +64,7 @@
                                                 <statement name="DO0">
                                                   <block type="var_change">
                                                     <field name="VAR" id="vpx">px</field>
-                                                    <value name="DELTA"><block type="val_number"><field name="NUM">-4</field></block></value>
+                                                    <value name="AMOUNT"><block type="val_number"><field name="NUM">-4</field></block></value>
                                                   </block>
                                                 </statement>
                                                 <next>
@@ -102,7 +102,7 @@
                                                         <next>
                                                           <block type="var_change">
                                                             <field name="VAR" id="vne">next_spawn</field>
-                                                            <value name="DELTA"><block type="val_number"><field name="NUM">5000</field></block></value>
+                                                            <value name="AMOUNT"><block type="val_number"><field name="NUM">5000</field></block></value>
                                                           </block>
                                                         </next>
                                                       </block>
@@ -160,7 +160,7 @@
                                                                         <next>
                                                                           <block type="var_change">
                                                                             <field name="VAR" id="vs">score</field>
-                                                                            <value name="DELTA"><block type="val_number"><field name="NUM">1</field></block></value>
+                                                                            <value name="AMOUNT"><block type="val_number"><field name="NUM">1</field></block></value>
                                                                           </block>
                                                                         </next>
                                                                       </block>

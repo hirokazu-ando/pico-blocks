@@ -138,7 +138,7 @@
                                                                                 <statement name="DO0">
                                                                                   <block type="var_change">
                                                                                     <field name="VAR" id="vpx">px</field>
-                                                                                    <value name="DELTA"><block type="val_number"><field name="NUM">5</field></block></value>
+                                                                                    <value name="AMOUNT"><block type="val_number"><field name="NUM">5</field></block></value>
                                                                                     <next>
                                                                                       <block type="pico_if">
                                                                                         <mutation elseif="0" else="0"></mutation>
@@ -166,7 +166,7 @@
                                                                                     <statement name="DO0">
                                                                                       <block type="var_change">
                                                                                         <field name="VAR" id="vpx">px</field>
-                                                                                        <value name="DELTA"><block type="val_number"><field name="NUM">-5</field></block></value>
+                                                                                        <value name="AMOUNT"><block type="val_number"><field name="NUM">-5</field></block></value>
                                                                                         <next>
                                                                                           <block type="pico_if">
                                                                                             <mutation elseif="0" else="0"></mutation>
@@ -190,7 +190,7 @@
                                                                                     <next>
                                                                                       <block type="var_change">
                                                                                         <field name="VAR" id="vey">ey</field>
-                                                                                        <value name="DELTA"><block type="val_var"><field name="VAR" id="vsp">espeed</field></block></value>
+                                                                                        <value name="AMOUNT"><block type="val_var"><field name="VAR" id="vsp">espeed</field></block></value>
                                                                                         <next>
                                                                                           <block type="pico_if">
                                                                                             <mutation elseif="0" else="0"></mutation>
@@ -304,7 +304,7 @@
                                                                                                     <statement name="DO0">
                                                                                                       <block type="var_change">
                                                                                                         <field name="VAR" id="vsc">score</field>
-                                                                                                        <value name="DELTA"><block type="val_number"><field name="NUM">15</field></block></value>
+                                                                                                        <value name="AMOUNT"><block type="val_number"><field name="NUM">15</field></block></value>
                                                                                                         <next>
                                                                                                           <block type="var_set">
                                                                                                             <field name="VAR" id="vcx">cx</field>

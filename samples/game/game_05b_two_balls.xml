@@ -36,19 +36,19 @@
                                 <next>
                                   <block type="var_change">
                                     <field name="VAR" id="v1x">b1x</field>
-                                    <value name="DELTA"><block type="val_number"><field name="NUM">4</field></block></value>
+                                    <value name="AMOUNT"><block type="val_number"><field name="NUM">4</field></block></value>
                                     <next>
                                       <block type="var_change">
                                         <field name="VAR" id="v1y">b1y</field>
-                                        <value name="DELTA"><block type="val_number"><field name="NUM">3</field></block></value>
+                                        <value name="AMOUNT"><block type="val_number"><field name="NUM">3</field></block></value>
                                         <next>
                                           <block type="var_change">
                                             <field name="VAR" id="v2x">b2x</field>
-                                            <value name="DELTA"><block type="val_number"><field name="NUM">3</field></block></value>
+                                            <value name="AMOUNT"><block type="val_number"><field name="NUM">3</field></block></value>
                                             <next>
                                               <block type="var_change">
                                                 <field name="VAR" id="v2y">b2y</field>
-                                                <value name="DELTA"><block type="val_number"><field name="NUM">2</field></block></value>
+                                                <value name="AMOUNT"><block type="val_number"><field name="NUM">2</field></block></value>
                                                 <next>
                                                   <block type="game_draw_circle">
                                                     <value name="X"><block type="val_var"><field name="VAR" id="v1x">b1x</field></block></value>

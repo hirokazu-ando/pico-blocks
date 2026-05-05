@@ -57,7 +57,7 @@
                                                 <statement name="DO0">
                                                   <block type="var_change">
                                                     <field name="VAR" id="vpx">px</field>
-                                                    <value name="DELTA"><block type="val_number"><field name="NUM">4</field></block></value>
+                                                    <value name="AMOUNT"><block type="val_number"><field name="NUM">4</field></block></value>
                                                   </block>
                                                 </statement>
                                                 <next>
@@ -67,13 +67,13 @@
                                                     <statement name="DO0">
                                                       <block type="var_change">
                                                         <field name="VAR" id="vpx">px</field>
-                                                        <value name="DELTA"><block type="val_number"><field name="NUM">-4</field></block></value>
+                                                        <value name="AMOUNT"><block type="val_number"><field name="NUM">-4</field></block></value>
                                                       </block>
                                                     </statement>
                                                     <next>
                                                       <block type="var_change">
                                                         <field name="VAR" id="vey">ey</field>
-                                                        <value name="DELTA"><block type="val_number"><field name="NUM">3</field></block></value>
+                                                        <value name="AMOUNT"><block type="val_number"><field name="NUM">3</field></block></value>
                                                         <next>
                                                           <block type="pico_if">
                                                             <mutation elseif="0" else="0"></mutation>
@@ -95,7 +95,7 @@
                                                                     <next>
                                                                       <block type="var_change">
                                                                         <field name="VAR" id="vs">score</field>
-                                                                        <value name="DELTA"><block type="val_number"><field name="NUM">1</field></block></value>
+                                                                        <value name="AMOUNT"><block type="val_number"><field name="NUM">1</field></block></value>
                                                                       </block>
                                                                     </next>
                                                                   </block>
@@ -184,7 +184,7 @@
                                                 <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ff3232</field></block></value>
                                                 <next>
                                                   <block type="game_draw_text">
-                                                    <value name="TEXT"><block type="val_str"><field name="TEXT">SPACEでリスタート</field></block></value>
+                                                    <value name="TEXT"><block type="val_str"><field name="TEXT">Rキーでリスタート</field></block></value>
                                                     <value name="X"><block type="val_number"><field name="NUM">200</field></block></value>
                                                     <value name="Y"><block type="val_number"><field name="NUM">220</field></block></value>
                                                     <value name="SIZE"><block type="val_number"><field name="NUM">26</field></block></value>
@@ -192,7 +192,7 @@
                                                     <next>
                                                       <block type="pico_if">
                                                         <mutation elseif="0" else="0"></mutation>
-                                                        <value name="IF0"><block type="game_key_pressed"><field name="KEY">K_SPACE</field></block></value>
+                                                        <value name="IF0"><block type="game_key_pressed"><field name="KEY">K_r</field></block></value>
                                                         <statement name="DO0">
                                                           <block type="var_set">
                                                             <field name="VAR" id="vpx">px</field>

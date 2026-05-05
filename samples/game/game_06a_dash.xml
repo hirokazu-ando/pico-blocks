@@ -40,7 +40,7 @@
                                 <statement name="DO0">
                                   <block type="var_change">
                                     <field name="VAR" id="vpx">px</field>
-                                    <value name="DELTA"><block type="val_var"><field name="VAR" id="vsp">speed</field></block></value>
+                                    <value name="AMOUNT"><block type="val_var"><field name="VAR" id="vsp">speed</field></block></value>
                                   </block>
                                 </statement>
                                 <next>
@@ -49,7 +49,7 @@
                                     <statement name="DO0">
                                       <block type="var_change">
                                         <field name="VAR" id="vpx">px</field>
-                                        <value name="DELTA">
+                                        <value name="AMOUNT">
                                           <block type="py_math_op">
                                             <field name="OP">-</field>
                                             <value name="LEFT"><block type="val_number"><field name="NUM">0</field></block></value>
@@ -64,7 +64,7 @@
                                         <statement name="DO0">
                                           <block type="var_change">
                                             <field name="VAR" id="vpy">py</field>
-                                            <value name="DELTA">
+                                            <value name="AMOUNT">
                                               <block type="py_math_op">
                                                 <field name="OP">-</field>
                                                 <value name="LEFT"><block type="val_number"><field name="NUM">0</field></block></value>
@@ -79,7 +79,7 @@
                                             <statement name="DO0">
                                               <block type="var_change">
                                                 <field name="VAR" id="vpy">py</field>
-                                                <value name="DELTA"><block type="val_var"><field name="VAR" id="vsp">speed</field></block></value>
+                                                <value name="AMOUNT"><block type="val_var"><field name="VAR" id="vsp">speed</field></block></value>
                                               </block>
                                             </statement>
                                             <next>
