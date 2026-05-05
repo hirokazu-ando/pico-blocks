@@ -239,69 +239,83 @@ document.addEventListener('DOMContentLoaded', function() {
     renderFileTabs();
   }
 
-  function makePycoFileObj(fname, mode) {
-    let writeBuffer = '';
-    let readContent = '';
-
-    if (mode === 'r') {
-      const tab = pyFiles.find(f => f.name === fname);
-      if (!tab) {
-        throw new Sk.builtin.IOError('ファイルが見つかりません: ' + fname);
-      }
-      readContent = tab.content;
-    }
-
-    const fileObj = new Sk.builtin.object();
-    fileObj.tp$getattr = function(pyName) {
-      const name = (pyName && typeof pyName.$jsstr === 'function') ? pyName.$jsstr()
-                 : (pyName && pyName.v !== undefined) ? pyName.v
-                 : String(pyName);
-      if (name === '__enter__') {
-        return new Sk.builtin.func(function() { return fileObj; });
-      }
-      if (name === '__exit__') {
-        return new Sk.builtin.func(function(_t, _v, _tb) {
-          if (mode === 'w') pycoFlushToTab(fname, writeBuffer, false);
-          if (mode === 'a') pycoFlushToTab(fname, writeBuffer, true);
-          return Sk.builtin.bool.false$;
-        });
-      }
-      if (name === 'write') {
-        return new Sk.builtin.func(function(data) {
-          writeBuffer += Sk.ffi.remapToJs(data);
-          return Sk.builtin.none.none$;
-        });
-      }
-      if (name === 'read') {
-        return new Sk.builtin.func(function() {
-          return Sk.ffi.remapToPy(readContent);
-        });
-      }
-      if (name === 'readlines') {
-        return new Sk.builtin.func(function() {
-          const lines = readContent.split('\n').map(l => Sk.ffi.remapToPy(l));
-          return new Sk.builtin.list(lines);
-        });
-      }
-      if (name === 'readline') {
-        return new Sk.builtin.func(function() {
-          const idx = readContent.indexOf('\n');
-          if (idx === -1) {
-            const line = readContent;
-            readContent = '';
-            return Sk.ffi.remapToPy(line);
+  let _PycoFileClass = null;
+  function _getPycoFileClass() {
+    if (_PycoFileClass) return _PycoFileClass;
+    _PycoFileClass = Sk.abstr.buildNativeClass('PycoFile', {
+      constructor: function PycoFile(fname, mode) {
+        this.fname = fname;
+        this.mode = mode || 'r';
+        this.writeBuffer = '';
+        this.readContent = '';
+        if (this.mode === 'r') {
+          const tab = pyFiles.find(f => f.name === fname);
+          if (!tab) {
+            throw new Sk.builtin.IOError('ファイルが見つかりません: ' + fname);
           }
-          const line = readContent.slice(0, idx + 1);
-          readContent = readContent.slice(idx + 1);
-          return Sk.ffi.remapToPy(line);
-        });
-      }
-      if (name === 'close') {
-        return new Sk.builtin.func(function() { return Sk.builtin.none.none$; });
-      }
-      return undefined;
-    };
-    return fileObj;
+          this.readContent = tab.content;
+        }
+      },
+      methods: {
+        __enter__: {
+          $meth: function() { return this; },
+          $flags: { NoArgs: true },
+        },
+        __exit__: {
+          $meth: function(_t, _v, _tb) {
+            if (this.mode === 'w') pycoFlushToTab(this.fname, this.writeBuffer, false);
+            if (this.mode === 'a') pycoFlushToTab(this.fname, this.writeBuffer, true);
+            return Sk.builtin.bool.false$;
+          },
+          $flags: { MinArgs: 3, MaxArgs: 3 },
+        },
+        write: {
+          $meth: function(data) {
+            this.writeBuffer += Sk.ffi.remapToJs(data);
+            return Sk.builtin.none.none$;
+          },
+          $flags: { OneArg: true },
+        },
+        read: {
+          $meth: function() {
+            return Sk.ffi.remapToPy(this.readContent);
+          },
+          $flags: { NoArgs: true },
+        },
+        readlines: {
+          $meth: function() {
+            const lines = this.readContent.split('\n').map(l => Sk.ffi.remapToPy(l));
+            return new Sk.builtin.list(lines);
+          },
+          $flags: { NoArgs: true },
+        },
+        readline: {
+          $meth: function() {
+            const idx = this.readContent.indexOf('\n');
+            let line;
+            if (idx === -1) {
+              line = this.readContent;
+              this.readContent = '';
+            } else {
+              line = this.readContent.slice(0, idx + 1);
+              this.readContent = this.readContent.slice(idx + 1);
+            }
+            return Sk.ffi.remapToPy(line);
+          },
+          $flags: { NoArgs: true },
+        },
+        close: {
+          $meth: function() { return Sk.builtin.none.none$; },
+          $flags: { NoArgs: true },
+        },
+      },
+    });
+    return _PycoFileClass;
+  }
+
+  function makePycoFileObj(fname, mode) {
+    const Klass = _getPycoFileClass();
+    return new Klass(fname, mode);
   }
 
   let Tutorial;   // 後で代入（generateCode から参照するため先に宣言）
