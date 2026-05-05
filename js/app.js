@@ -263,6 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         __exit__: {
           $meth: function(_t, _v, _tb) {
+            try { console.log('[PycoFile] __exit__', this.fname, 'mode=', this.mode, 'buf.len=', (this.writeBuffer || '').length, 'buf=', JSON.stringify(this.writeBuffer)); } catch(e) {}
             if (this.mode === 'w') pycoFlushToTab(this.fname, this.writeBuffer, false);
             if (this.mode === 'a') pycoFlushToTab(this.fname, this.writeBuffer, true);
             return Sk.builtin.bool.false$;
@@ -271,7 +272,9 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         write: {
           $meth: function(data) {
-            this.writeBuffer += Sk.ffi.remapToJs(data);
+            const s = Sk.ffi.remapToJs(data);
+            try { console.log('[PycoFile] write', this.fname, 'data=', JSON.stringify(s), 'thisHasBuffer=', typeof this.writeBuffer); } catch(e) {}
+            this.writeBuffer = (this.writeBuffer || '') + s;
             return Sk.builtin.none.none$;
           },
           $flags: { OneArg: true },
