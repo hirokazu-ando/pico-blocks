@@ -14,33 +14,78 @@
         <field name="VAR" id="var_b">b</field>
         <field name="PROMPT">bを入力（0を試してみよう）</field>
         <next>
-          <block type="py_custom_stmt" id="cs1">
-            <field name="CODE">if b != 0 and a % b == 0:</field>
-            <next>
-              <block type="py_custom_stmt" id="cs2">
-                <field name="CODE">  print(f"{a} は {b} の倍数です")</field>
-                <next>
-                  <block type="py_custom_stmt" id="cs3">
-                    <field name="CODE">elif b != 0:</field>
-                    <next>
-                      <block type="py_custom_stmt" id="cs4">
-                        <field name="CODE">  print(f"{a} ÷ {b} = {a / b:.2f}")</field>
-                        <next>
-                          <block type="py_custom_stmt" id="cs5">
-                            <field name="CODE">else:</field>
-                            <next>
-                              <block type="py_custom_stmt" id="cs6">
-                                <field name="CODE">  print("0では割れません")</field>
-                              </block>
-                            </next>
-                          </block>
-                        </next>
-                      </block>
-                    </next>
+          <block type="pico_if" id="bif">
+            <mutation elseif="1" else="1"></mutation>
+            <value name="IF0">
+              <block type="cond_and" id="band">
+                <value name="A">
+                  <block type="cond_compare" id="bc1">
+                    <field name="OP">!=</field>
+                    <value name="LEFT"><block type="val_var" id="vb1"><field name="VAR" id="var_b">b</field></block></value>
+                    <value name="RIGHT"><block type="val_number" id="n0a"><field name="NUM">0</field></block></value>
                   </block>
-                </next>
+                </value>
+                <value name="B">
+                  <block type="cond_compare" id="bc2">
+                    <field name="OP">==</field>
+                    <value name="LEFT">
+                      <block type="py_math_op" id="bm1">
+                        <field name="OP">%</field>
+                        <value name="LEFT"><block type="val_var" id="va1"><field name="VAR" id="var_a">a</field></block></value>
+                        <value name="RIGHT"><block type="val_var" id="vb2"><field name="VAR" id="var_b">b</field></block></value>
+                      </block>
+                    </value>
+                    <value name="RIGHT"><block type="val_number" id="n0b"><field name="NUM">0</field></block></value>
+                  </block>
+                </value>
               </block>
-            </next>
+            </value>
+            <statement name="DO0">
+              <block type="py_print" id="bp1">
+                <value name="VALUE">
+                  <block type="py_fstring2_expr" id="bfs1">
+                    <field name="PRE"></field>
+                    <field name="MID"> は </field>
+                    <field name="POST"> の倍数です</field>
+                    <value name="VAR1"><block type="val_var" id="va2"><field name="VAR" id="var_a">a</field></block></value>
+                    <value name="VAR2"><block type="val_var" id="vb3"><field name="VAR" id="var_b">b</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <value name="IF1">
+              <block type="cond_compare" id="bc3">
+                <field name="OP">!=</field>
+                <value name="LEFT"><block type="val_var" id="vb4"><field name="VAR" id="var_b">b</field></block></value>
+                <value name="RIGHT"><block type="val_number" id="n0c"><field name="NUM">0</field></block></value>
+              </block>
+            </value>
+            <statement name="DO1">
+              <block type="py_print" id="bp2">
+                <value name="VALUE">
+                  <block type="py_fstring3" id="bfs2">
+                    <field name="PRE"></field>
+                    <field name="MID1"> ÷ </field>
+                    <field name="MID2"> = </field>
+                    <field name="POST"></field>
+                    <value name="VAR1"><block type="val_var" id="va3"><field name="VAR" id="var_a">a</field></block></value>
+                    <value name="VAR2"><block type="val_var" id="vb5"><field name="VAR" id="var_b">b</field></block></value>
+                    <value name="VAR3">
+                      <block type="py_math_op" id="bm2">
+                        <field name="OP">/</field>
+                        <value name="LEFT"><block type="val_var" id="va4"><field name="VAR" id="var_a">a</field></block></value>
+                        <value name="RIGHT"><block type="val_var" id="vb6"><field name="VAR" id="var_b">b</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </statement>
+            <statement name="ELSE">
+              <block type="py_print" id="bp3">
+                <value name="VALUE"><block type="val_str" id="vs1"><field name="TEXT">0では割れません</field></block></value>
+              </block>
+            </statement>
           </block>
         </next>
       </block>

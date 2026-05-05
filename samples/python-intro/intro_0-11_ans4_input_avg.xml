@@ -18,31 +18,75 @@
             <field name="VAR" id="var_n">n</field>
             <field name="PROMPT">数を入力（0で終了）: </field>
             <next>
-              <block type="py_custom_stmt" id="cs1">
-                <field name="CODE">while n != 0:</field>
-                <next>
-                  <block type="py_custom_stmt" id="cs2">
-                    <field name="CODE">  total = total + n</field>
+              <block type="py_while" id="bw">
+                <value name="COND">
+                  <block type="cond_compare" id="bcw">
+                    <field name="OP">!=</field>
+                    <value name="LEFT"><block type="val_var" id="vn1"><field name="VAR" id="var_n">n</field></block></value>
+                    <value name="RIGHT"><block type="val_number" id="nz1"><field name="NUM">0</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO">
+                  <block type="var_change" id="bvc1">
+                    <field name="VAR" id="var_total">total</field>
+                    <value name="AMOUNT"><block type="val_var" id="vn2"><field name="VAR" id="var_n">n</field></block></value>
                     <next>
-                      <block type="py_custom_stmt" id="cs3">
-                        <field name="CODE">  count = count + 1</field>
+                      <block type="var_change" id="bvc2">
+                        <field name="VAR" id="var_count">count</field>
+                        <value name="AMOUNT"><block type="val_number" id="n1b"><field name="NUM">1</field></block></value>
                         <next>
-                          <block type="py_custom_stmt" id="cs4">
-                            <field name="CODE">  n = int(input("数を入力（0で終了）: "))</field>
+                          <block type="py_input" id="b3">
+                            <field name="TYPE">int</field>
+                            <field name="VAR" id="var_n">n</field>
+                            <field name="PROMPT">数を入力（0で終了）: </field>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <next>
+                  <block type="pico_if" id="bif">
+                    <mutation elseif="0" else="1"></mutation>
+                    <value name="IF0">
+                      <block type="cond_compare" id="bcc">
+                        <field name="OP">&gt;</field>
+                        <value name="LEFT"><block type="val_var" id="vc1"><field name="VAR" id="var_count">count</field></block></value>
+                        <value name="RIGHT"><block type="val_number" id="nz2"><field name="NUM">0</field></block></value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="py_print_multi" id="bpm1">
+                        <mutation items="2"></mutation>
+                        <value name="ITEM0"><block type="val_str" id="vs1"><field name="TEXT">合計:</field></block></value>
+                        <value name="ITEM1"><block type="val_var" id="vt1"><field name="VAR" id="var_total">total</field></block></value>
+                        <next>
+                          <block type="py_print_multi" id="bpm2">
+                            <mutation items="2"></mutation>
+                            <value name="ITEM0"><block type="val_str" id="vs2"><field name="TEXT">個数:</field></block></value>
+                            <value name="ITEM1"><block type="val_var" id="vc2"><field name="VAR" id="var_count">count</field></block></value>
                             <next>
-                              <block type="py_custom_stmt" id="cs5">
-                                <field name="CODE">if count &gt; 0:</field>
-                                <next>
-                                  <block type="py_custom_stmt" id="cs6">
-                                    <field name="CODE">  print("合計:", total, "  個数:", count, "  平均:", total / count)</field>
+                              <block type="py_print_multi" id="bpm3">
+                                <mutation items="2"></mutation>
+                                <value name="ITEM0"><block type="val_str" id="vs3"><field name="TEXT">平均:</field></block></value>
+                                <value name="ITEM1">
+                                  <block type="py_math_op" id="bm1">
+                                    <field name="OP">/</field>
+                                    <value name="LEFT"><block type="val_var" id="vt2"><field name="VAR" id="var_total">total</field></block></value>
+                                    <value name="RIGHT"><block type="val_var" id="vc3"><field name="VAR" id="var_count">count</field></block></value>
                                   </block>
-                                </next>
+                                </value>
                               </block>
                             </next>
                           </block>
                         </next>
                       </block>
-                    </next>
+                    </statement>
+                    <statement name="ELSE">
+                      <block type="py_print" id="bp4">
+                        <value name="VALUE"><block type="val_str" id="vs4"><field name="TEXT">データがありません</field></block></value>
+                      </block>
+                    </statement>
                   </block>
                 </next>
               </block>

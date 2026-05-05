@@ -9,11 +9,66 @@
     <field name="VAR" id="var_year">year</field>
     <field name="PROMPT">年号を入力してください</field>
     <next>
-      <block type="py_custom_stmt" id="cs1">
-        <field name="CODE">is_leap = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)</field>
+      <block type="var_set" id="b1">
+        <field name="VAR" id="var_leap">is_leap</field>
+        <value name="VALUE">
+          <block type="cond_or" id="bor">
+            <value name="A">
+              <block type="cond_and" id="band">
+                <value name="A">
+                  <block type="cond_compare" id="bc1">
+                    <field name="OP">==</field>
+                    <value name="LEFT">
+                      <block type="py_math_op" id="bm1">
+                        <field name="OP">%</field>
+                        <value name="LEFT"><block type="val_var" id="vy1"><field name="VAR" id="var_year">year</field></block></value>
+                        <value name="RIGHT"><block type="val_number" id="n4"><field name="NUM">4</field></block></value>
+                      </block>
+                    </value>
+                    <value name="RIGHT"><block type="val_number" id="n0a"><field name="NUM">0</field></block></value>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="cond_compare" id="bc2">
+                    <field name="OP">!=</field>
+                    <value name="LEFT">
+                      <block type="py_math_op" id="bm2">
+                        <field name="OP">%</field>
+                        <value name="LEFT"><block type="val_var" id="vy2"><field name="VAR" id="var_year">year</field></block></value>
+                        <value name="RIGHT"><block type="val_number" id="n100"><field name="NUM">100</field></block></value>
+                      </block>
+                    </value>
+                    <value name="RIGHT"><block type="val_number" id="n0b"><field name="NUM">0</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="B">
+              <block type="cond_compare" id="bc3">
+                <field name="OP">==</field>
+                <value name="LEFT">
+                  <block type="py_math_op" id="bm3">
+                    <field name="OP">%</field>
+                    <value name="LEFT"><block type="val_var" id="vy3"><field name="VAR" id="var_year">year</field></block></value>
+                    <value name="RIGHT"><block type="val_number" id="n400"><field name="NUM">400</field></block></value>
+                  </block>
+                </value>
+                <value name="RIGHT"><block type="val_number" id="n0c"><field name="NUM">0</field></block></value>
+              </block>
+            </value>
+          </block>
+        </value>
         <next>
-          <block type="py_custom_stmt" id="cs2">
-            <field name="CODE">print(f"{year}年は閏年？:", is_leap)</field>
+          <block type="py_print_multi" id="bpm">
+            <mutation items="2"></mutation>
+            <value name="ITEM0">
+              <block type="py_fstring" id="bfs">
+                <field name="PRE"></field>
+                <field name="POST">年は閏年？: </field>
+                <value name="VAR"><block type="val_var" id="vy4"><field name="VAR" id="var_year">year</field></block></value>
+              </block>
+            </value>
+            <value name="ITEM1"><block type="val_var" id="vil"><field name="VAR" id="var_leap">is_leap</field></block></value>
           </block>
         </next>
       </block>

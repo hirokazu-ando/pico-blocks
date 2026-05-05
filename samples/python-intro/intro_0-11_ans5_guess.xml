@@ -6,42 +6,59 @@
   </variables>
   <block type="var_set" id="b0" x="30" y="30">
     <field name="VAR" id="var_ans">answer</field>
-    <value name="VALUE"><block type="val_number" id="n1"><field name="NUM">7</field></block></value>
+    <value name="VALUE"><block type="val_number" id="n7"><field name="NUM">7</field></block></value>
     <next>
       <block type="var_set" id="b1">
         <field name="VAR" id="var_guess">guess</field>
-        <value name="VALUE"><block type="val_number" id="n2"><field name="NUM">0</field></block></value>
+        <value name="VALUE"><block type="val_number" id="n0"><field name="NUM">0</field></block></value>
         <next>
-          <block type="py_custom_stmt" id="cs1">
-            <field name="CODE">while guess != answer:</field>
-            <next>
-              <block type="py_custom_stmt" id="cs2">
-                <field name="CODE">  guess = int(input("1〜10の数字を予想: "))</field>
+          <block type="py_while" id="bw">
+            <value name="COND">
+              <block type="cond_compare" id="bcw">
+                <field name="OP">!=</field>
+                <value name="LEFT"><block type="val_var" id="vg1"><field name="VAR" id="var_guess">guess</field></block></value>
+                <value name="RIGHT"><block type="val_var" id="va1"><field name="VAR" id="var_ans">answer</field></block></value>
+              </block>
+            </value>
+            <statement name="DO">
+              <block type="py_input" id="b2">
+                <field name="TYPE">int</field>
+                <field name="VAR" id="var_guess">guess</field>
+                <field name="PROMPT">1〜10の数字を予想: </field>
                 <next>
-                  <block type="py_custom_stmt" id="cs3">
-                    <field name="CODE">  if guess &lt; answer:</field>
-                    <next>
-                      <block type="py_custom_stmt" id="cs4">
-                        <field name="CODE">    print("もっと大きい")</field>
-                        <next>
-                          <block type="py_custom_stmt" id="cs5">
-                            <field name="CODE">  elif guess &gt; answer:</field>
-                            <next>
-                              <block type="py_custom_stmt" id="cs6">
-                                <field name="CODE">    print("もっと小さい")</field>
-                                <next>
-                                  <block type="py_print" id="b2">
-                                    <value name="VALUE"><block type="val_str" id="vs1"><field name="TEXT">正解！</field></block></value>
-                                  </block>
-                                </next>
-                              </block>
-                            </next>
-                          </block>
-                        </next>
+                  <block type="pico_if" id="bif">
+                    <mutation elseif="1" else="0"></mutation>
+                    <value name="IF0">
+                      <block type="cond_compare" id="bc1">
+                        <field name="OP">&lt;</field>
+                        <value name="LEFT"><block type="val_var" id="vg2"><field name="VAR" id="var_guess">guess</field></block></value>
+                        <value name="RIGHT"><block type="val_var" id="va2"><field name="VAR" id="var_ans">answer</field></block></value>
                       </block>
-                    </next>
+                    </value>
+                    <statement name="DO0">
+                      <block type="py_print" id="bp1">
+                        <value name="VALUE"><block type="val_str" id="vs1"><field name="TEXT">もっと大きい</field></block></value>
+                      </block>
+                    </statement>
+                    <value name="IF1">
+                      <block type="cond_compare" id="bc2">
+                        <field name="OP">&gt;</field>
+                        <value name="LEFT"><block type="val_var" id="vg3"><field name="VAR" id="var_guess">guess</field></block></value>
+                        <value name="RIGHT"><block type="val_var" id="va3"><field name="VAR" id="var_ans">answer</field></block></value>
+                      </block>
+                    </value>
+                    <statement name="DO1">
+                      <block type="py_print" id="bp2">
+                        <value name="VALUE"><block type="val_str" id="vs2"><field name="TEXT">もっと小さい</field></block></value>
+                      </block>
+                    </statement>
                   </block>
                 </next>
+              </block>
+            </statement>
+            <next>
+              <block type="py_print" id="bp3">
+                <value name="VALUE"><block type="val_str" id="vs3"><field name="TEXT">正解！</field></block></value>
               </block>
             </next>
           </block>
