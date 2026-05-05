@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="var_a">a</variable>
+    <variable id="var_b">b</variable>
+  </variables>
   <block type="py_def_args2" id="b1" x="30" y="30">
     <field name="NAME">add</field>
-    <field name="PARAM1">a</field>
-    <field name="PARAM2">b</field>
+    <field name="PARAM1" id="var_a">a</field>
+    <field name="PARAM2" id="var_b">b</field>
     <statement name="BODY">
       <block type="py_return" id="b2">
-        <value name="VALUE"><block type="py_custom_expr" id="b3"><field name="CODE">a + b</field></block></value>
+        <value name="VALUE">
+          <block type="py_math_op" id="bmo">
+            <field name="OP">+</field>
+            <value name="LEFT"><block type="val_var" id="bva"><field name="VAR" id="var_a">a</field></block></value>
+            <value name="RIGHT"><block type="val_var" id="bvb"><field name="VAR" id="var_b">b</field></block></value>
+          </block>
+        </value>
       </block>
     </statement>
     <next>
       <block type="py_print" id="b4">
         <value name="VALUE">
-          <block type="py_call_val" id="b5">
+          <block type="py_call_val2" id="b5">
             <field name="NAME">add</field>
-            <value name="ARG"><block type="py_custom_expr" id="b6"><field name="CODE">3, 5</field></block></value>
+            <value name="ARG1"><block type="val_number" id="bn1"><field name="NUM">3</field></block></value>
+            <value name="ARG2"><block type="val_number" id="bn2"><field name="NUM">5</field></block></value>
           </block>
         </value>
       </block>
