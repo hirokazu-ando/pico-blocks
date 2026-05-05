@@ -61,7 +61,7 @@
       <block type="pico_for_from_to">
         <field name="VAR" id="vi">i</field>
         <value name="START"><block type="val_number"><field name="NUM">0</field></block></value>
-        <value name="STOP"><block type="val_number"><field name="NUM">9</field></block></value>
+        <value name="STOP"><block type="val_number"><field name="NUM">10</field></block></value>
         <value name="STEP"><block type="val_number"><field name="NUM">1</field></block></value>
         <statement name="DO">
           <block type="py_print">
