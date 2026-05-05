@@ -4,31 +4,44 @@
     <variable id="vq">queue</variable>
     <variable id="vc">customer</variable>
   </variables>
-  <block type="py_custom_stmt" id="b0" x="30" y="30">
+  <block type="py_custom_stmt" x="30" y="30">
     <field name="CODE">from collections import deque</field>
     <next>
-      <block type="var_set" id="b1">
+      <block type="var_set">
         <field name="VAR" id="vq">queue</field>
         <value name="VALUE">
-          <block type="py_custom_expr" id="b2">
-            <field name="CODE">deque(["田中", "鈴木", "山田", "伊藤", "佐藤"])</field>
+          <block type="py_deque_init">
+            <value name="VALUE">
+              <block type="py_list_literal">
+                <mutation items="5"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">田中</field></block></value>
+                <value name="ITEM1"><block type="val_str"><field name="TEXT">鈴木</field></block></value>
+                <value name="ITEM2"><block type="val_str"><field name="TEXT">山田</field></block></value>
+                <value name="ITEM3"><block type="val_str"><field name="TEXT">伊藤</field></block></value>
+                <value name="ITEM4"><block type="val_str"><field name="TEXT">佐藤</field></block></value>
+              </block>
+            </value>
           </block>
         </value>
         <next>
-          <block type="py_while" id="b3">
+          <block type="py_while">
             <value name="COND">
-              <block type="val_var" id="b4"><field name="VAR" id="vq">queue</field></block>
+              <block type="cond_compare">
+                <field name="OP">&gt;</field>
+                <value name="LEFT"><block type="py_list_len"><field name="LIST" id="vq">queue</field></block></value>
+                <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+              </block>
             </value>
             <statement name="DO">
-              <block type="var_set" id="b5">
+              <block type="var_set">
                 <field name="VAR" id="vc">customer</field>
                 <value name="VALUE">
-                  <block type="py_custom_expr" id="b6">
-                    <field name="CODE">queue.popleft()</field>
+                  <block type="py_deque_popleft">
+                    <field name="DEQUE" id="vq">queue</field>
                   </block>
                 </value>
                 <next>
-                  <block type="py_print" id="b7">
+                  <block type="py_print">
                     <value name="VALUE">
                       <block type="py_fstring2_expr">
                         <field name="PRE"></field>

@@ -1,54 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable id="var_s">s</variable>
-    <variable id="var_stack">stack</variable>
-    <variable id="var_result">result</variable>
-    <variable id="var_ch">ch</variable>
+    <variable id="vs">s</variable>
+    <variable id="vstack">stack</variable>
+    <variable id="vresult">result</variable>
+    <variable id="vch">ch</variable>
   </variables>
-  <block type="var_set" id="b1" x="30" y="30">
-    <field name="VAR" id="var_s">s</field>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vs">s</field>
     <value name="VALUE">
-      <block type="val_str" id="b2"><field name="TEXT">hello</field></block>
+      <block type="val_str"><field name="TEXT">hello</field></block>
     </value>
     <next>
-      <block type="var_set" id="b3">
-        <field name="VAR" id="var_stack">stack</field>
-        <value name="VALUE">
-          <block type="py_list_empty" id="b4"/>
-        </value>
+      <block type="var_set">
+        <field name="VAR" id="vstack">stack</field>
+        <value name="VALUE"><block type="py_list_empty"/></value>
         <next>
-          <block type="var_set" id="b5">
-            <field name="VAR" id="var_result">result</field>
+          <block type="var_set">
+            <field name="VAR" id="vresult">result</field>
             <value name="VALUE">
-              <block type="val_str" id="b6"><field name="TEXT"></field></block>
+              <block type="val_str"><field name="TEXT"></field></block>
             </value>
             <next>
-              <block type="py_for_list" id="b7">
-                <field name="VAR" id="var_ch">ch</field>
-                <field name="LIST" id="var_s">s</field>
+              <block type="py_for_list">
+                <field name="VAR" id="vch">ch</field>
+                <field name="LIST" id="vs">s</field>
                 <statement name="DO">
-                  <block type="py_list_append" id="b9">
-                    <field name="LIST" id="var_stack">stack</field>
+                  <block type="py_list_append">
+                    <field name="LIST" id="vstack">stack</field>
                     <value name="VALUE">
-                      <block type="val_var" id="b10"><field name="VAR" id="var_ch">ch</field></block>
+                      <block type="val_var"><field name="VAR" id="vch">ch</field></block>
                     </value>
                   </block>
                 </statement>
                 <next>
-                  <block type="py_while" id="b11">
+                  <block type="py_while">
                     <value name="COND">
-                      <block type="val_var" id="b12"><field name="VAR" id="var_stack">stack</field></block>
+                      <block type="cond_compare">
+                        <field name="OP">&gt;</field>
+                        <value name="LEFT"><block type="py_list_len"><field name="LIST" id="vstack">stack</field></block></value>
+                        <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+                      </block>
                     </value>
                     <statement name="DO">
-                      <block type="py_custom_stmt" id="b13">
-                        <field name="CODE">result += stack.pop()</field>
+                      <block type="var_set">
+                        <field name="VAR" id="vresult">result</field>
+                        <value name="VALUE">
+                          <block type="py_str_concat">
+                            <value name="A"><block type="val_var"><field name="VAR" id="vresult">result</field></block></value>
+                            <value name="B"><block type="py_list_pop_val"><field name="LIST" id="vstack">stack</field></block></value>
+                          </block>
+                        </value>
                       </block>
                     </statement>
                     <next>
-                      <block type="py_print" id="b14">
+                      <block type="py_print">
                         <value name="VALUE">
-                          <block type="val_var" id="b15"><field name="VAR" id="var_result">result</field></block>
+                          <block type="val_var"><field name="VAR" id="vresult">result</field></block>
                         </value>
                       </block>
                     </next>

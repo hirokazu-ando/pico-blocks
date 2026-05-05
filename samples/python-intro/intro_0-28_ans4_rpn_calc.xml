@@ -1,4 +1,190 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">def rpn_calc(tokens):</field><next><block type="py_custom_stmt"><field name="CODE">    stack = []</field><next><block type="py_custom_stmt"><field name="CODE">    for token in tokens:</field><next><block type="py_custom_stmt"><field name="CODE">        if token.lstrip("-").isdigit():</field><next><block type="py_custom_stmt"><field name="CODE">            stack.append(int(token))</field><next><block type="py_custom_stmt"><field name="CODE">        else:</field><next><block type="py_custom_stmt"><field name="CODE">            b, a = stack.pop(), stack.pop()</field><next><block type="py_custom_stmt"><field name="CODE">            if token == "+": stack.append(a + b)</field><next><block type="py_custom_stmt"><field name="CODE">            elif token == "-": stack.append(a - b)</field><next><block type="py_custom_stmt"><field name="CODE">            elif token == "*": stack.append(a * b)</field><next><block type="py_custom_stmt"><field name="CODE">            elif token == "/": stack.append(a // b)</field><next><block type="py_custom_stmt"><field name="CODE">    return stack[0]</field><next><block type="py_custom_stmt"><field name="CODE">print(rpn_calc(["3", "4", "+", "5", "*"]))</field><next><block type="py_custom_stmt"><field name="CODE">print(rpn_calc(["5", "1", "2", "+", "4", "*", "+"]))</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <variables>
+    <variable id="vt">tokens</variable>
+    <variable id="vstk">stack</variable>
+    <variable id="vtok">token</variable>
+    <variable id="va">a</variable>
+    <variable id="vb">b</variable>
+  </variables>
+  <block type="py_def" x="30" y="30">
+    <field name="NAME">rpn_calc</field>
+    <field name="PARAM" id="vt">tokens</field>
+    <statement name="BODY">
+      <block type="var_set">
+        <field name="VAR" id="vstk">stack</field>
+        <value name="VALUE"><block type="py_list_empty"/></value>
+        <next>
+          <block type="py_for_list">
+            <field name="VAR" id="vtok">token</field>
+            <field name="LIST" id="vt">tokens</field>
+            <statement name="DO">
+              <block type="pico_if">
+                <mutation elseif="3" else="1"/>
+                <value name="IF0">
+                  <block type="cond_compare">
+                    <field name="OP">==</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vtok">token</field></block></value>
+                    <value name="RIGHT"><block type="val_str"><field name="TEXT">+</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="var_set">
+                    <field name="VAR" id="vb">b</field>
+                    <value name="VALUE"><block type="py_list_pop_val"><field name="LIST" id="vstk">stack</field></block></value>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="va">a</field>
+                        <value name="VALUE"><block type="py_list_pop_val"><field name="LIST" id="vstk">stack</field></block></value>
+                        <next>
+                          <block type="py_list_append">
+                            <field name="LIST" id="vstk">stack</field>
+                            <value name="VALUE">
+                              <block type="py_math_op">
+                                <field name="OP">+</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="va">a</field></block></value>
+                                <value name="RIGHT"><block type="val_var"><field name="VAR" id="vb">b</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <value name="IF1">
+                  <block type="cond_compare">
+                    <field name="OP">==</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vtok">token</field></block></value>
+                    <value name="RIGHT"><block type="val_str"><field name="TEXT">-</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO1">
+                  <block type="var_set">
+                    <field name="VAR" id="vb">b</field>
+                    <value name="VALUE"><block type="py_list_pop_val"><field name="LIST" id="vstk">stack</field></block></value>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="va">a</field>
+                        <value name="VALUE"><block type="py_list_pop_val"><field name="LIST" id="vstk">stack</field></block></value>
+                        <next>
+                          <block type="py_list_append">
+                            <field name="LIST" id="vstk">stack</field>
+                            <value name="VALUE">
+                              <block type="py_math_op">
+                                <field name="OP">-</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="va">a</field></block></value>
+                                <value name="RIGHT"><block type="val_var"><field name="VAR" id="vb">b</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <value name="IF2">
+                  <block type="cond_compare">
+                    <field name="OP">==</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vtok">token</field></block></value>
+                    <value name="RIGHT"><block type="val_str"><field name="TEXT">*</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO2">
+                  <block type="var_set">
+                    <field name="VAR" id="vb">b</field>
+                    <value name="VALUE"><block type="py_list_pop_val"><field name="LIST" id="vstk">stack</field></block></value>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="va">a</field>
+                        <value name="VALUE"><block type="py_list_pop_val"><field name="LIST" id="vstk">stack</field></block></value>
+                        <next>
+                          <block type="py_list_append">
+                            <field name="LIST" id="vstk">stack</field>
+                            <value name="VALUE">
+                              <block type="py_math_op">
+                                <field name="OP">*</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="va">a</field></block></value>
+                                <value name="RIGHT"><block type="val_var"><field name="VAR" id="vb">b</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <value name="IF3">
+                  <block type="cond_compare">
+                    <field name="OP">==</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vtok">token</field></block></value>
+                    <value name="RIGHT"><block type="val_str"><field name="TEXT">/</field></block></value>
+                  </block>
+                </value>
+                <statement name="DO3">
+                  <block type="var_set">
+                    <field name="VAR" id="vb">b</field>
+                    <value name="VALUE"><block type="py_list_pop_val"><field name="LIST" id="vstk">stack</field></block></value>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="va">a</field>
+                        <value name="VALUE"><block type="py_list_pop_val"><field name="LIST" id="vstk">stack</field></block></value>
+                        <next>
+                          <block type="py_list_append">
+                            <field name="LIST" id="vstk">stack</field>
+                            <value name="VALUE">
+                              <block type="py_math_op">
+                                <field name="OP">//</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="va">a</field></block></value>
+                                <value name="RIGHT"><block type="val_var"><field name="VAR" id="vb">b</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <statement name="ELSE">
+                  <block type="py_list_append">
+                    <field name="LIST" id="vstk">stack</field>
+                    <value name="VALUE"><block type="val_var"><field name="VAR" id="vtok">token</field></block></value>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+            <next>
+              <block type="py_return">
+                <value name="VALUE">
+                  <block type="py_list_get">
+                    <field name="LIST" id="vstk">stack</field>
+                    <value name="INDEX"><block type="val_number"><field name="NUM">0</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="py_print">
+        <value name="VALUE">
+          <block type="py_call_val">
+            <field name="NAME">rpn_calc</field>
+            <value name="ARG">
+              <block type="py_list_literal">
+                <mutation items="5"/>
+                <value name="ITEM0"><block type="val_number"><field name="NUM">3</field></block></value>
+                <value name="ITEM1"><block type="val_number"><field name="NUM">4</field></block></value>
+                <value name="ITEM2"><block type="val_str"><field name="TEXT">+</field></block></value>
+                <value name="ITEM3"><block type="val_number"><field name="NUM">5</field></block></value>
+                <value name="ITEM4"><block type="val_str"><field name="TEXT">*</field></block></value>
+              </block>
+            </value>
+          </block>
+        </value>
+      </block>
+    </next>
+  </block>
 </xml>
