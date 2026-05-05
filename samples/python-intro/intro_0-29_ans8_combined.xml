@@ -1,4 +1,198 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">import bisect</field><next><block type="py_custom_stmt"><field name="CODE">from collections import deque</field><next><block type="py_custom_stmt"><field name="CODE">students = [("田中",85),("鈴木",92),("山田",78),("伊藤",88),("佐藤",71),("中村",95)]</field><next><block type="py_custom_stmt"><field name="CODE">queue = deque(students)</field><next><block type="py_custom_stmt"><field name="CODE">graded = []</field><next><block type="py_custom_stmt"><field name="CODE">while queue:</field><next><block type="py_custom_stmt"><field name="CODE">    name, score = queue.popleft()</field><next><block type="py_custom_stmt"><field name="CODE">    graded.append((name, score))</field><next><block type="py_custom_stmt"><field name="CODE">ranked = sorted(graded, key=lambda s: -s[1])</field><next><block type="py_custom_stmt"><field name="CODE">for rank, (name, score) in enumerate(ranked, start=1):</field><next><block type="py_custom_stmt"><field name="CODE">    print(f"{rank}位: {name} {score}点")</field><next><block type="py_custom_stmt"><field name="CODE">score_list = sorted(s for _, s in graded)</field><next><block type="py_custom_stmt"><field name="CODE">lo, hi = 80, 90</field><next><block type="py_custom_stmt"><field name="CODE">l = bisect.bisect_left(score_list, lo)</field><next><block type="py_custom_stmt"><field name="CODE">r = bisect.bisect_right(score_list, hi)</field><next><block type="py_custom_stmt"><field name="CODE">print(f"{lo}〜{hi}点: {r-l}人")</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <variables>
+    <variable id="vnm">names</variable>
+    <variable id="vsc">scores</variable>
+    <variable id="vnq">name_queue</variable>
+    <variable id="vn">name</variable>
+    <variable id="vt">target</variable>
+    <variable id="vi">i</variable>
+    <variable id="vss">sorted_scores</variable>
+    <variable id="vl">left</variable>
+    <variable id="vr">right</variable>
+  </variables>
+  <block type="py_custom_stmt" x="30" y="30">
+    <field name="CODE">from collections import deque</field>
+    <next>
+      <block type="py_import_module">
+        <field name="MODULE">bisect</field>
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="vnm">names</field>
+            <value name="VALUE">
+              <block type="py_list_literal"><mutation items="6"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">田中</field></block></value>
+                <value name="ITEM1"><block type="val_str"><field name="TEXT">鈴木</field></block></value>
+                <value name="ITEM2"><block type="val_str"><field name="TEXT">山田</field></block></value>
+                <value name="ITEM3"><block type="val_str"><field name="TEXT">伊藤</field></block></value>
+                <value name="ITEM4"><block type="val_str"><field name="TEXT">佐藤</field></block></value>
+                <value name="ITEM5"><block type="val_str"><field name="TEXT">中村</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="var_set">
+                <field name="VAR" id="vsc">scores</field>
+                <value name="VALUE">
+                  <block type="py_list_literal"><mutation items="6"/>
+                    <value name="ITEM0"><block type="val_number"><field name="NUM">85</field></block></value>
+                    <value name="ITEM1"><block type="val_number"><field name="NUM">92</field></block></value>
+                    <value name="ITEM2"><block type="val_number"><field name="NUM">78</field></block></value>
+                    <value name="ITEM3"><block type="val_number"><field name="NUM">88</field></block></value>
+                    <value name="ITEM4"><block type="val_number"><field name="NUM">71</field></block></value>
+                    <value name="ITEM5"><block type="val_number"><field name="NUM">95</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="var_set">
+                    <field name="VAR" id="vnq">name_queue</field>
+                    <value name="VALUE">
+                      <block type="py_deque_init">
+                        <value name="VALUE"><block type="val_var"><field name="VAR" id="vnm">names</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="py_while">
+                        <value name="COND">
+                          <block type="cond_compare">
+                            <field name="OP">&gt;</field>
+                            <value name="LEFT"><block type="py_list_len"><field name="LIST" id="vnq">name_queue</field></block></value>
+                            <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+                          </block>
+                        </value>
+                        <statement name="DO">
+                          <block type="var_set">
+                            <field name="VAR" id="vn">name</field>
+                            <value name="VALUE">
+                              <block type="py_deque_popleft">
+                                <field name="DEQUE" id="vnq">name_queue</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="py_print">
+                                <value name="VALUE">
+                                  <block type="py_fstring">
+                                    <field name="PRE">採点中: </field>
+                                    <field name="POST"></field>
+                                    <value name="VAR"><block type="val_var"><field name="VAR" id="vn">name</field></block></value>
+                                  </block>
+                                </value>
+                              </block>
+                            </next>
+                          </block>
+                        </statement>
+                        <next>
+                          <block type="var_set">
+                            <field name="VAR" id="vt">target</field>
+                            <value name="VALUE"><block type="val_str"><field name="TEXT">山田</field></block></value>
+                            <next>
+                              <block type="pico_for_from_to">
+                                <field name="VAR" id="vi">i</field>
+                                <value name="START"><block type="val_number"><field name="NUM">0</field></block></value>
+                                <value name="STOP">
+                                  <block type="py_math_op">
+                                    <field name="OP">-</field>
+                                    <value name="LEFT"><block type="py_list_len"><field name="LIST" id="vnm">names</field></block></value>
+                                    <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                                  </block>
+                                </value>
+                                <value name="STEP"><block type="val_number"><field name="NUM">1</field></block></value>
+                                <statement name="DO">
+                                  <block type="pico_if">
+                                    <value name="IF0">
+                                      <block type="cond_compare">
+                                        <field name="OP">==</field>
+                                        <value name="LEFT">
+                                          <block type="py_list_get">
+                                            <field name="LIST" id="vnm">names</field>
+                                            <value name="INDEX"><block type="val_var"><field name="VAR" id="vi">i</field></block></value>
+                                          </block>
+                                        </value>
+                                        <value name="RIGHT"><block type="val_var"><field name="VAR" id="vt">target</field></block></value>
+                                      </block>
+                                    </value>
+                                    <statement name="DO0">
+                                      <block type="py_print">
+                                        <value name="VALUE">
+                                          <block type="py_fstring2_expr">
+                                            <field name="PRE"></field>
+                                            <field name="MID">さんの点数: </field>
+                                            <field name="POST">点</field>
+                                            <value name="VAR1"><block type="val_var"><field name="VAR" id="vt">target</field></block></value>
+                                            <value name="VAR2">
+                                              <block type="py_list_get">
+                                                <field name="LIST" id="vsc">scores</field>
+                                                <value name="INDEX"><block type="val_var"><field name="VAR" id="vi">i</field></block></value>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </statement>
+                                  </block>
+                                </statement>
+                                <next>
+                                  <block type="var_set">
+                                    <field name="VAR" id="vss">sorted_scores</field>
+                                    <value name="VALUE">
+                                      <block type="py_sorted_call">
+                                        <field name="LIST" id="vsc">scores</field>
+                                        <field name="REVERSE">False</field>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="var_set">
+                                        <field name="VAR" id="vl">left</field>
+                                        <value name="VALUE">
+                                          <block type="py_bisect_left">
+                                            <field name="LIST" id="vss">sorted_scores</field>
+                                            <value name="VALUE"><block type="val_number"><field name="NUM">80</field></block></value>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="var_set">
+                                            <field name="VAR" id="vr">right</field>
+                                            <value name="VALUE">
+                                              <block type="py_bisect_right">
+                                                <field name="LIST" id="vss">sorted_scores</field>
+                                                <value name="VALUE"><block type="val_number"><field name="NUM">90</field></block></value>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="py_print">
+                                                <value name="VALUE">
+                                                  <block type="py_fstring">
+                                                    <field name="PRE">80〜90点の人数: </field>
+                                                    <field name="POST">人</field>
+                                                    <value name="VAR">
+                                                      <block type="py_math_op">
+                                                        <field name="OP">-</field>
+                                                        <value name="LEFT"><block type="val_var"><field name="VAR" id="vr">right</field></block></value>
+                                                        <value name="RIGHT"><block type="val_var"><field name="VAR" id="vl">left</field></block></value>
+                                                      </block>
+                                                    </value>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

@@ -1,4 +1,155 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">from collections import deque</field><next><block type="py_custom_stmt"><field name="CODE">def bfs_maze(maze, start, goal):</field><next><block type="py_custom_stmt"><field name="CODE">    rows, cols = len(maze), len(maze[0])</field><next><block type="py_custom_stmt"><field name="CODE">    queue = deque([(start, 0)])</field><next><block type="py_custom_stmt"><field name="CODE">    visited = {start}</field><next><block type="py_custom_stmt"><field name="CODE">    while queue:</field><next><block type="py_custom_stmt"><field name="CODE">        (r, c), steps = queue.popleft()</field><next><block type="py_custom_stmt"><field name="CODE">        if (r, c) == goal: return steps</field><next><block type="py_custom_stmt"><field name="CODE">        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:</field><next><block type="py_custom_stmt"><field name="CODE">            nr, nc = r + dr, c + dc</field><next><block type="py_custom_stmt"><field name="CODE">            if 0 &lt;= nr &lt; rows and 0 &lt;= nc &lt; cols:</field><next><block type="py_custom_stmt"><field name="CODE">                if maze[nr][nc] == 0 and (nr,nc) not in visited:</field><next><block type="py_custom_stmt"><field name="CODE">                    visited.add((nr,nc))</field><next><block type="py_custom_stmt"><field name="CODE">                    queue.append(((nr,nc), steps+1))</field><next><block type="py_custom_stmt"><field name="CODE">maze = [[0,0,1,0],[1,0,1,0],[1,0,0,0],[1,1,0,0]]</field><next><block type="py_custom_stmt"><field name="CODE">print(bfs_maze(maze, (0,0), (3,3)))   # 7</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <variables>
+    <variable id="vr">routes</variable>
+    <variable id="vq">queue</variable>
+    <variable id="vv">visited</variable>
+    <variable id="vs">station</variable>
+    <variable id="vne">neighbors</variable>
+    <variable id="vnx">nx</variable>
+  </variables>
+  <block type="py_custom_stmt" x="30" y="30">
+    <field name="CODE">from collections import deque</field>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vr">routes</field>
+        <value name="VALUE">
+          <block type="py_dict_literal">
+            <mutation items="5"/>
+            <field name="KEY0">新宿</field>
+            <value name="VAL0">
+              <block type="py_list_literal"><mutation items="2"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">渋谷</field></block></value>
+                <value name="ITEM1"><block type="val_str"><field name="TEXT">東京</field></block></value>
+              </block>
+            </value>
+            <field name="KEY1">渋谷</field>
+            <value name="VAL1">
+              <block type="py_list_literal"><mutation items="2"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">新宿</field></block></value>
+                <value name="ITEM1"><block type="val_str"><field name="TEXT">横浜</field></block></value>
+              </block>
+            </value>
+            <field name="KEY2">東京</field>
+            <value name="VAL2">
+              <block type="py_list_literal"><mutation items="3"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">新宿</field></block></value>
+                <value name="ITEM1"><block type="val_str"><field name="TEXT">上野</field></block></value>
+                <value name="ITEM2"><block type="val_str"><field name="TEXT">横浜</field></block></value>
+              </block>
+            </value>
+            <field name="KEY3">上野</field>
+            <value name="VAL3">
+              <block type="py_list_literal"><mutation items="1"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">東京</field></block></value>
+              </block>
+            </value>
+            <field name="KEY4">横浜</field>
+            <value name="VAL4">
+              <block type="py_list_literal"><mutation items="2"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">渋谷</field></block></value>
+                <value name="ITEM1"><block type="val_str"><field name="TEXT">東京</field></block></value>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="vq">queue</field>
+            <value name="VALUE">
+              <block type="py_deque_init">
+                <value name="VALUE">
+                  <block type="py_list_literal"><mutation items="1"/>
+                    <value name="ITEM0"><block type="val_str"><field name="TEXT">新宿</field></block></value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="var_set">
+                <field name="VAR" id="vv">visited</field>
+                <value name="VALUE">
+                  <block type="py_set_literal">
+                    <mutation items="1"/>
+                    <field name="COUNT">1</field>
+                    <value name="ITEM0"><block type="val_str"><field name="TEXT">新宿</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_while">
+                    <value name="COND">
+                      <block type="cond_compare">
+                        <field name="OP">&gt;</field>
+                        <value name="LEFT"><block type="py_list_len"><field name="LIST" id="vq">queue</field></block></value>
+                        <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+                      </block>
+                    </value>
+                    <statement name="DO">
+                      <block type="var_set">
+                        <field name="VAR" id="vs">station</field>
+                        <value name="VALUE">
+                          <block type="py_deque_popleft">
+                            <field name="DEQUE" id="vq">queue</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_print">
+                            <value name="VALUE"><block type="val_var"><field name="VAR" id="vs">station</field></block></value>
+                            <next>
+                              <block type="var_set">
+                                <field name="VAR" id="vne">neighbors</field>
+                                <value name="VALUE">
+                                  <block type="py_dict_get_default">
+                                    <field name="DICT" id="vr">routes</field>
+                                    <value name="KEY"><block type="val_var"><field name="VAR" id="vs">station</field></block></value>
+                                    <value name="DEFAULT"><block type="py_list_empty"/></value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="py_for_list">
+                                    <field name="VAR" id="vnx">nx</field>
+                                    <field name="LIST" id="vne">neighbors</field>
+                                    <statement name="DO">
+                                      <block type="pico_if">
+                                        <value name="IF0">
+                                          <block type="cond_not">
+                                            <value name="A">
+                                              <block type="py_list_contains">
+                                                <field name="LIST" id="vv">visited</field>
+                                                <value name="ITEM"><block type="val_var"><field name="VAR" id="vnx">nx</field></block></value>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                        <statement name="DO0">
+                                          <block type="py_set_add">
+                                            <field name="SET" id="vv">visited</field>
+                                            <value name="VALUE"><block type="val_var"><field name="VAR" id="vnx">nx</field></block></value>
+                                            <next>
+                                              <block type="py_deque_append">
+                                                <field name="DEQUE" id="vq">queue</field>
+                                                <value name="VALUE"><block type="val_var"><field name="VAR" id="vnx">nx</field></block></value>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </statement>
+                                      </block>
+                                    </statement>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </statement>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>
