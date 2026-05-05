@@ -1807,12 +1807,20 @@ const _LIST_MINUS = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
   '</svg>'
 );
 
+const _LIST_VERT = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">' +
+  '<circle cx="8" cy="8" r="7.5" fill="#5C6BC0"/>' +
+  '<text x="8" y="12" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="white">↕</text>' +
+  '</svg>'
+);
+
 Blockly.Blocks['py_list_literal'] = {
   itemCount_: 2,
+  vertical_: false,
   init: function() {
     this.setColour(P.lists);
     this.setOutput(true, null);
-    this.setTooltip('リストを作ります。＋で要素を追加、－で削除できます。');
+    this.setTooltip('リストを作ります。＋で要素を追加、－で削除、↕で縦/横の並びを切り替えられます。');
     this.setHelpUrl('');
     this.rebuildShape_();
   },
@@ -1820,9 +1828,8 @@ Blockly.Blocks['py_list_literal'] = {
     let i = 0;
     while (this.getInput('ITEM' + i)) { this.removeInput('ITEM' + i); i++; }
     if (this.getInput('BOTTOM')) this.removeInput('BOTTOM');
-    if (!this.getInput('TOP')) {
-      this.appendDummyInput('TOP').appendField('リスト [');
-    }
+    if (this.getInput('TOP')) this.removeInput('TOP');
+    this.appendDummyInput('TOP').appendField('リスト [');
     for (let j = 0; j < this.itemCount_; j++) {
       this.appendValueInput('ITEM' + j)
         .appendField(j === 0 ? '' : ',');
@@ -1830,17 +1837,20 @@ Blockly.Blocks['py_list_literal'] = {
     this.appendDummyInput('BOTTOM')
       .appendField(']')
       .appendField(new Blockly.FieldImage(_LIST_PLUS,  16, 16, '+', () => { this.itemCount_++; this.rebuildShape_(); }))
-      .appendField(new Blockly.FieldImage(_LIST_MINUS, 16, 16, '-', () => { if (this.itemCount_ > 0) { this.itemCount_--; this.rebuildShape_(); } }));
-    this.setInputsInline(true);
+      .appendField(new Blockly.FieldImage(_LIST_MINUS, 16, 16, '-', () => { if (this.itemCount_ > 0) { this.itemCount_--; this.rebuildShape_(); } }))
+      .appendField(new Blockly.FieldImage(_LIST_VERT,  16, 16, '↕', () => { this.vertical_ = !this.vertical_; this.rebuildShape_(); }));
+    this.setInputsInline(!this.vertical_);
   },
   mutationToDom: function() {
     const el = document.createElement('mutation');
     el.setAttribute('items', this.itemCount_);
+    if (this.vertical_) el.setAttribute('vertical', 'true');
     return el;
   },
   domToMutation: function(xmlElement) {
     const n = parseInt(xmlElement.getAttribute('items'), 10);
     if (!isNaN(n)) this.itemCount_ = n;
+    this.vertical_ = xmlElement.getAttribute('vertical') === 'true';
     this.rebuildShape_();
   }
 };

@@ -10,7 +10,7 @@
     <field name="VAR" id="var_nums">nums</field>
     <value name="VALUE">
       <block type="py_list_literal">
-        <mutation items="6"/>
+        <mutation items="6" vertical="true"/>
         <value name="ITEM0"><block type="val_number"><field name="NUM">1</field></block></value>
         <value name="ITEM1"><block type="val_number"><field name="NUM">-3</field></block></value>
         <value name="ITEM2"><block type="val_number"><field name="NUM">5</field></block></value>

@@ -9,7 +9,7 @@
     <field name="VAR" id="vst">students</field>
     <value name="VALUE">
       <block type="py_list_literal">
-        <mutation items="4"/>
+        <mutation items="4" vertical="true"/>
         <value name="ITEM0">
           <block type="py_dict_literal">
             <mutation items="3"/>
