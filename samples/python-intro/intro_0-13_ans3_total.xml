@@ -9,13 +9,14 @@
     <field name="VAR" id="var_prices">prices</field>
     <value name="VALUE">
       <block type="py_dict_literal" id="bdl">
+        <mutation items="3"></mutation>
         <field name="COUNT">3</field>
-        <value name="KEY0"><block type="val_str" id="k1"><field name="TEXT">apple</field></block></value>
-        <value name="VAL0"><block type="val_number" id="v1"><field name="NUM">120</field></block></value>
-        <value name="KEY1"><block type="val_str" id="k2"><field name="TEXT">orange</field></block></value>
-        <value name="VAL1"><block type="val_number" id="v2"><field name="NUM">100</field></block></value>
-        <value name="KEY2"><block type="val_str" id="k3"><field name="TEXT">grape</field></block></value>
-        <value name="VAL2"><block type="val_number" id="v3"><field name="NUM">180</field></block></value>
+        <field name="KEY0">apple</field>
+        <value name="PAIR0"><block type="val_number" id="v1"><field name="NUM">120</field></block></value>
+        <field name="KEY1">orange</field>
+        <value name="PAIR1"><block type="val_number" id="v2"><field name="NUM">100</field></block></value>
+        <field name="KEY2">grape</field>
+        <value name="PAIR2"><block type="val_number" id="v3"><field name="NUM">180</field></block></value>
       </block>
     </value>
     <next>
@@ -27,8 +28,14 @@
             <field name="VAR" id="var_name">name</field>
             <field name="LIST" id="var_prices">prices</field>
             <statement name="DO">
-              <block type="py_custom_stmt" id="cs1">
-                <field name="CODE">total = total + prices[name]</field>
+              <block type="var_change" id="bvc">
+                <field name="VAR" id="var_total">total</field>
+                <value name="AMOUNT">
+                  <block type="py_dict_get" id="bdg">
+                    <field name="DICT" id="var_prices">prices</field>
+                    <value name="KEY"><block type="val_var" id="bvn"><field name="VAR" id="var_name">name</field></block></value>
+                  </block>
+                </value>
               </block>
             </statement>
             <next>

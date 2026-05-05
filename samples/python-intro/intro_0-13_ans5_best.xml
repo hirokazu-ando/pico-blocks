@@ -10,13 +10,14 @@
     <field name="VAR" id="var_scores">scores</field>
     <value name="VALUE">
       <block type="py_dict_literal" id="bdl">
+        <mutation items="3"></mutation>
         <field name="COUNT">3</field>
-        <value name="KEY0"><block type="val_str" id="k1"><field name="TEXT">math</field></block></value>
-        <value name="VAL0"><block type="val_number" id="v1"><field name="NUM">80</field></block></value>
-        <value name="KEY1"><block type="val_str" id="k2"><field name="TEXT">science</field></block></value>
-        <value name="VAL1"><block type="val_number" id="v2"><field name="NUM">90</field></block></value>
-        <value name="KEY2"><block type="val_str" id="k3"><field name="TEXT">english</field></block></value>
-        <value name="VAL2"><block type="val_number" id="v3"><field name="NUM">75</field></block></value>
+        <field name="KEY0">math</field>
+        <value name="PAIR0"><block type="val_number" id="v1"><field name="NUM">80</field></block></value>
+        <field name="KEY1">science</field>
+        <value name="PAIR1"><block type="val_number" id="v2"><field name="NUM">90</field></block></value>
+        <field name="KEY2">english</field>
+        <value name="PAIR2"><block type="val_number" id="v3"><field name="NUM">75</field></block></value>
       </block>
     </value>
     <next>
@@ -33,8 +34,7 @@
                 <field name="LIST" id="var_scores">scores</field>
                 <statement name="DO">
                   <block type="pico_if" id="bif">
-                    <field name="elseifCount_">0</field>
-                    <field name="elseCount_">0</field>
+                    <mutation elseif="0" else="0"></mutation>
                     <value name="IF0">
                       <block type="cond_compare" id="bcc">
                         <field name="OP">&gt;</field>
@@ -67,13 +67,10 @@
                   </block>
                 </statement>
                 <next>
-                  <block type="py_print" id="b6">
-                    <value name="VALUE"><block type="val_var" id="bvbn"><field name="VAR" id="var_best_name">best_name</field></block></value>
-                    <next>
-                      <block type="py_print" id="b7">
-                        <value name="VALUE"><block type="val_var" id="bvbsc"><field name="VAR" id="var_best_score">best_score</field></block></value>
-                      </block>
-                    </next>
+                  <block type="py_print_multi" id="bpm">
+                    <mutation items="2"></mutation>
+                    <value name="ITEM0"><block type="val_var" id="bvbn"><field name="VAR" id="var_best_name">best_name</field></block></value>
+                    <value name="ITEM1"><block type="val_var" id="bvbsc"><field name="VAR" id="var_best_score">best_score</field></block></value>
                   </block>
                 </next>
               </block>

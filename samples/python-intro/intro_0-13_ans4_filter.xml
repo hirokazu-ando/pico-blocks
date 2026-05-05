@@ -8,13 +8,14 @@
     <field name="VAR" id="var_parts">parts</field>
     <value name="VALUE">
       <block type="py_dict_literal" id="bdl">
+        <mutation items="3"></mutation>
         <field name="COUNT">3</field>
-        <value name="KEY0"><block type="val_str" id="k1"><field name="TEXT">LED</field></block></value>
-        <value name="VAL0"><block type="val_number" id="v1"><field name="NUM">10</field></block></value>
-        <value name="KEY1"><block type="val_str" id="k2"><field name="TEXT">motor</field></block></value>
-        <value name="VAL1"><block type="val_number" id="v2"><field name="NUM">1</field></block></value>
-        <value name="KEY2"><block type="val_str" id="k3"><field name="TEXT">sensor</field></block></value>
-        <value name="VAL2"><block type="val_number" id="v3"><field name="NUM">2</field></block></value>
+        <field name="KEY0">LED</field>
+        <value name="PAIR0"><block type="val_number" id="v1"><field name="NUM">10</field></block></value>
+        <field name="KEY1">motor</field>
+        <value name="PAIR1"><block type="val_number" id="v2"><field name="NUM">1</field></block></value>
+        <field name="KEY2">sensor</field>
+        <value name="PAIR2"><block type="val_number" id="v3"><field name="NUM">2</field></block></value>
       </block>
     </value>
     <next>
@@ -23,8 +24,7 @@
         <field name="LIST" id="var_parts">parts</field>
         <statement name="DO">
           <block type="pico_if" id="bif">
-            <field name="elseifCount_">0</field>
-            <field name="elseCount_">0</field>
+            <mutation elseif="0" else="0"></mutation>
             <value name="IF0">
               <block type="cond_compare" id="bcc">
                 <field name="OP">&lt;</field>
