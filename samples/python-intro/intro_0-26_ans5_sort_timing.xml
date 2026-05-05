@@ -1,4 +1,284 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="py_custom_stmt"><field name="CODE">import time, random</field><next><block type="py_custom_stmt"><field name="CODE">def bubble_sort(data):</field><next><block type="py_custom_stmt"><field name="CODE">    data = data[:]</field><next><block type="py_custom_stmt"><field name="CODE">    n = len(data)</field><next><block type="py_custom_stmt"><field name="CODE">    for i in range(n - 1):</field><next><block type="py_custom_stmt"><field name="CODE">        for j in range(n - i - 1):</field><next><block type="py_custom_stmt"><field name="CODE">            if data[j] &gt; data[j + 1]:</field><next><block type="py_custom_stmt"><field name="CODE">                data[j], data[j + 1] = data[j + 1], data[j]</field><next><block type="py_custom_stmt"><field name="CODE">def insertion_sort(data):</field><next><block type="py_custom_stmt"><field name="CODE">    data = data[:]</field><next><block type="py_custom_stmt"><field name="CODE">    n = len(data)</field><next><block type="py_custom_stmt"><field name="CODE">    for i in range(1, n):</field><next><block type="py_custom_stmt"><field name="CODE">        key, j = data[i], i - 1</field><next><block type="py_custom_stmt"><field name="CODE">        while j &gt;= 0 and data[j] &gt; key:</field><next><block type="py_custom_stmt"><field name="CODE">            data[j + 1] = data[j]; j -= 1</field><next><block type="py_custom_stmt"><field name="CODE">        data[j + 1] = key</field><next><block type="py_custom_stmt"><field name="CODE">data = [random.randint(1, 10000) for _ in range(2000)]</field><next><block type="py_custom_stmt"><field name="CODE">t = time.time(); bubble_sort(data)</field><next><block type="py_custom_stmt"><field name="CODE">print(f"バブル: {time.time()-t:.3f}秒")</field><next><block type="py_custom_stmt"><field name="CODE">t = time.time(); insertion_sort(data)</field><next><block type="py_custom_stmt"><field name="CODE">print(f"挿入: {time.time()-t:.3f}秒")</field></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block></next></block>
+  <variables>
+    <variable id="vd">data</variable>
+    <variable id="vn">n</variable>
+    <variable id="vi">i</variable>
+    <variable id="vj">j</variable>
+    <variable id="vk">key</variable>
+    <variable id="vt">tmp</variable>
+  </variables>
+  <block type="py_def" x="30" y="30">
+    <field name="NAME">bubble_sort</field>
+    <field name="PARAM" id="vd">data</field>
+    <statement name="BODY">
+      <block type="var_set">
+        <field name="VAR" id="vn">n</field>
+        <value name="VALUE"><block type="py_list_len"><field name="LIST" id="vd">data</field></block></value>
+        <next>
+          <block type="pico_for_from_to">
+            <field name="VAR" id="vi">i</field>
+            <value name="START"><block type="val_number"><field name="NUM">0</field></block></value>
+            <value name="STOP">
+              <block type="py_math_op">
+                <field name="OP">-</field>
+                <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
+              </block>
+            </value>
+            <value name="STEP"><block type="val_number"><field name="NUM">1</field></block></value>
+            <statement name="DO">
+              <block type="pico_for_from_to">
+                <field name="VAR" id="vj">j</field>
+                <value name="START"><block type="val_number"><field name="NUM">0</field></block></value>
+                <value name="STOP">
+                  <block type="py_math_op">
+                    <field name="OP">-</field>
+                    <value name="LEFT">
+                      <block type="py_math_op">
+                        <field name="OP">-</field>
+                        <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                        <value name="RIGHT"><block type="val_var"><field name="VAR" id="vi">i</field></block></value>
+                      </block>
+                    </value>
+                    <value name="RIGHT"><block type="val_number"><field name="NUM">2</field></block></value>
+                  </block>
+                </value>
+                <value name="STEP"><block type="val_number"><field name="NUM">1</field></block></value>
+                <statement name="DO">
+                  <block type="pico_if">
+                    <mutation elseif="0" else="0"/>
+                    <value name="IF0">
+                      <block type="cond_compare">
+                        <field name="OP">&gt;</field>
+                        <value name="LEFT">
+                          <block type="py_list_get">
+                            <field name="LIST" id="vd">data</field>
+                            <value name="INDEX"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+                          </block>
+                        </value>
+                        <value name="RIGHT">
+                          <block type="py_list_get">
+                            <field name="LIST" id="vd">data</field>
+                            <value name="INDEX">
+                              <block type="py_math_op">
+                                <field name="OP">+</field>
+                                <value name="LEFT"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+                                <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <statement name="DO0">
+                      <block type="var_set">
+                        <field name="VAR" id="vt">tmp</field>
+                        <value name="VALUE">
+                          <block type="py_list_get">
+                            <field name="LIST" id="vd">data</field>
+                            <value name="INDEX"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_list_set">
+                            <field name="LIST" id="vd">data</field>
+                            <value name="INDEX"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+                            <value name="VALUE">
+                              <block type="py_list_get">
+                                <field name="LIST" id="vd">data</field>
+                                <value name="INDEX">
+                                  <block type="py_math_op">
+                                    <field name="OP">+</field>
+                                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+                                    <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="py_list_set">
+                                <field name="LIST" id="vd">data</field>
+                                <value name="INDEX">
+                                  <block type="py_math_op">
+                                    <field name="OP">+</field>
+                                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+                                    <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                                  </block>
+                                </value>
+                                <value name="VALUE"><block type="val_var"><field name="VAR" id="vt">tmp</field></block></value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </statement>
+                  </block>
+                </statement>
+              </block>
+            </statement>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <next>
+      <block type="py_def">
+        <field name="NAME">insertion_sort</field>
+        <field name="PARAM" id="vd">data</field>
+        <statement name="BODY">
+          <block type="var_set">
+            <field name="VAR" id="vn">n</field>
+            <value name="VALUE"><block type="py_list_len"><field name="LIST" id="vd">data</field></block></value>
+            <next>
+              <block type="pico_for_from_to">
+                <field name="VAR" id="vi">i</field>
+                <value name="START"><block type="val_number"><field name="NUM">1</field></block></value>
+                <value name="STOP">
+                  <block type="py_math_op">
+                    <field name="OP">-</field>
+                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vn">n</field></block></value>
+                    <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                  </block>
+                </value>
+                <value name="STEP"><block type="val_number"><field name="NUM">1</field></block></value>
+                <statement name="DO">
+                  <block type="var_set">
+                    <field name="VAR" id="vk">key</field>
+                    <value name="VALUE">
+                      <block type="py_list_get">
+                        <field name="LIST" id="vd">data</field>
+                        <value name="INDEX"><block type="val_var"><field name="VAR" id="vi">i</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="vj">j</field>
+                        <value name="VALUE">
+                          <block type="py_math_op">
+                            <field name="OP">-</field>
+                            <value name="LEFT"><block type="val_var"><field name="VAR" id="vi">i</field></block></value>
+                            <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_while">
+                            <value name="COND">
+                              <block type="cond_and">
+                                <value name="A">
+                                  <block type="cond_compare">
+                                    <field name="OP">&gt;=</field>
+                                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+                                    <value name="RIGHT"><block type="val_number"><field name="NUM">0</field></block></value>
+                                  </block>
+                                </value>
+                                <value name="B">
+                                  <block type="cond_compare">
+                                    <field name="OP">&gt;</field>
+                                    <value name="LEFT">
+                                      <block type="py_list_get">
+                                        <field name="LIST" id="vd">data</field>
+                                        <value name="INDEX"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+                                      </block>
+                                    </value>
+                                    <value name="RIGHT"><block type="val_var"><field name="VAR" id="vk">key</field></block></value>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <statement name="DO">
+                              <block type="py_list_set">
+                                <field name="LIST" id="vd">data</field>
+                                <value name="INDEX">
+                                  <block type="py_math_op">
+                                    <field name="OP">+</field>
+                                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+                                    <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                                  </block>
+                                </value>
+                                <value name="VALUE">
+                                  <block type="py_list_get">
+                                    <field name="LIST" id="vd">data</field>
+                                    <value name="INDEX"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="var_set">
+                                    <field name="VAR" id="vj">j</field>
+                                    <value name="VALUE">
+                                      <block type="py_math_op">
+                                        <field name="OP">-</field>
+                                        <value name="LEFT"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+                                        <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </next>
+                              </block>
+                            </statement>
+                            <next>
+                              <block type="py_list_set">
+                                <field name="LIST" id="vd">data</field>
+                                <value name="INDEX">
+                                  <block type="py_math_op">
+                                    <field name="OP">+</field>
+                                    <value name="LEFT"><block type="val_var"><field name="VAR" id="vj">j</field></block></value>
+                                    <value name="RIGHT"><block type="val_number"><field name="NUM">1</field></block></value>
+                                  </block>
+                                </value>
+                                <value name="VALUE"><block type="val_var"><field name="VAR" id="vk">key</field></block></value>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <next>
+          <block type="py_custom_stmt">
+            <field name="CODE">import time, random</field>
+            <next>
+              <block type="py_custom_stmt">
+                <field name="CODE">data = [random.randint(1, 10000) for _ in range(2000)]</field>
+                <next>
+                  <block type="py_custom_stmt">
+                    <field name="CODE">t = time.time(); bubble_sort(data[:])</field>
+                    <next>
+                      <block type="py_custom_stmt">
+                        <field name="CODE">print(f"バブル: {time.time()-t:.3f}秒")</field>
+                        <next>
+                          <block type="py_custom_stmt">
+                            <field name="CODE">t = time.time(); insertion_sort(data[:])</field>
+                            <next>
+                              <block type="py_custom_stmt">
+                                <field name="CODE">print(f"挿入: {time.time()-t:.3f}秒")</field>
+                                <next>
+                                  <block type="py_custom_stmt">
+                                    <field name="CODE">t = time.time(); sorted(data)</field>
+                                    <next>
+                                      <block type="py_custom_stmt">
+                                        <field name="CODE">print(f"Python sorted: {time.time()-t:.6f}秒")</field>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>

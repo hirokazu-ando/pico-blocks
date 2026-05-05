@@ -2,6 +2,79 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="vst">students</variable>
+    <variable id="vss">sorted_students</variable>
   </variables>
-  <block type="var_set"><field name="VAR" id="vst">students</field><value name="VALUE"><block type="py_custom_expr"><field name="CODE">[("田中", 85), ("鈴木", 85), ("山田", 90), ("伊藤", 85)]</field></block></value><next><block type="py_custom_stmt"><field name="CODE">sorted_students = sorted(students, key=lambda s: s[1])</field><next><block type="py_custom_stmt"><field name="CODE">print(sorted_students)</field></block></next></block></next></block>
+  <block type="var_set" x="30" y="30">
+    <field name="VAR" id="vst">students</field>
+    <value name="VALUE"><block type="py_list_empty"/></value>
+    <next>
+      <block type="py_list_append">
+        <field name="LIST" id="vst">students</field>
+        <value name="VALUE">
+          <block type="py_tuple_literal">
+            <mutation items="2"/>
+            <field name="COUNT">2</field>
+            <value name="ITEM0"><block type="val_str"><field name="TEXT">田中</field></block></value>
+            <value name="ITEM1"><block type="val_number"><field name="NUM">85</field></block></value>
+          </block>
+        </value>
+        <next>
+          <block type="py_list_append">
+            <field name="LIST" id="vst">students</field>
+            <value name="VALUE">
+              <block type="py_tuple_literal">
+                <mutation items="2"/>
+                <field name="COUNT">2</field>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">鈴木</field></block></value>
+                <value name="ITEM1"><block type="val_number"><field name="NUM">85</field></block></value>
+              </block>
+            </value>
+            <next>
+              <block type="py_list_append">
+                <field name="LIST" id="vst">students</field>
+                <value name="VALUE">
+                  <block type="py_tuple_literal">
+                    <mutation items="2"/>
+                    <field name="COUNT">2</field>
+                    <value name="ITEM0"><block type="val_str"><field name="TEXT">山田</field></block></value>
+                    <value name="ITEM1"><block type="val_number"><field name="NUM">90</field></block></value>
+                  </block>
+                </value>
+                <next>
+                  <block type="py_list_append">
+                    <field name="LIST" id="vst">students</field>
+                    <value name="VALUE">
+                      <block type="py_tuple_literal">
+                        <mutation items="2"/>
+                        <field name="COUNT">2</field>
+                        <value name="ITEM0"><block type="val_str"><field name="TEXT">伊藤</field></block></value>
+                        <value name="ITEM1"><block type="val_number"><field name="NUM">85</field></block></value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="var_set">
+                        <field name="VAR" id="vss">sorted_students</field>
+                        <value name="VALUE">
+                          <block type="py_sorted_tuple_idx">
+                            <field name="LIST" id="vst">students</field>
+                            <field name="IDX">1</field>
+                            <field name="REV">False</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="py_print">
+                            <value name="VALUE"><block type="val_var"><field name="VAR" id="vss">sorted_students</field></block></value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
 </xml>
