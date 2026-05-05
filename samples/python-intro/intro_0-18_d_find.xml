@@ -47,7 +47,8 @@
                           <block type="py_print">
                             <value name="VALUE"><block type="val_var"><field name="VAR" id="vpos3">pos3</field></block></value>
                             <next>
-                              <block type="controls_if">
+                              <block type="pico_if">
+                                <mutation elseif="0" else="0"></mutation>
                                 <value name="IF0">
                                   <block type="cond_compare">
                                     <field name="OP">!=</field>
