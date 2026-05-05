@@ -16,7 +16,7 @@
         <statement name="DO">
           <block type="var_change" id="bc">
             <field name="VAR" id="var_total">total</field>
-            <value name="DELTA"><block type="val_var" id="bvi"><field name="VAR" id="var_i">i</field></block></value>
+            <value name="AMOUNT"><block type="val_var" id="bvi"><field name="VAR" id="var_i">i</field></block></value>
           </block>
         </statement>
         <next>
