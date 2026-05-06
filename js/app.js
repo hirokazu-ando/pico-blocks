@@ -3315,6 +3315,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.PycoCv && window.PycoCv.source && x.includes('pyco_cv')) {
       return window.PycoCv.source;
     }
+    // 統計モジュール（Skulptは標準statisticsを持たないのでshimを供給）
+    if (window.PycoStats && window.PycoStats.source && x.includes('statistics')) {
+      return window.PycoStats.source;
+    }
     // Skulpt 組み込みにフォールバック
     if (Sk.builtinFiles === undefined || Sk.builtinFiles['files'][x] === undefined) {
       throw "File not found: '" + x + "'";

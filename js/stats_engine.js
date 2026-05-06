@@ -31,8 +31,7 @@
   function toPy(js) { return Sk.ffi.remapToPy(js); }
 
   function statsError(msg) {
-    var E = mod.StatisticsError || Sk.builtin.ValueError;
-    return new E(msg);
+    return new Sk.builtin.ValueError(msg);
   }
 
   function meanArr(a) {
@@ -118,13 +117,8 @@
     return s / (a.length - 1);
   }
 
-  // StatisticsError class (subclass of ValueError)
-  mod.StatisticsError = Sk.misceval.buildClass(
-    mod,
-    function(gbl, loc) {},
-    'StatisticsError',
-    [Sk.builtin.ValueError]
-  );
+  // StatisticsError は ValueError をエイリアスとして公開
+  mod.StatisticsError = Sk.builtin.ValueError;
 
   mod.mean = new Sk.builtin.func(function(data) {
     var a = toJsList(data);
