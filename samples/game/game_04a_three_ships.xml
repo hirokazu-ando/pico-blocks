@@ -10,7 +10,11 @@
     <next>
       <block type="var_set">
         <field name="VAR" id="vship">SHIP</field>
-        <value name="VALUE"><block type="val_str"><field name="TEXT">assets/game-icons/player_ship.svg</field></block></value>
+        <value name="VALUE">
+          <block type="game_image_preset">
+            <field name="IMG">assets/game-icons/player_ship.svg</field>
+          </block>
+        </value>
         <next>
           <block type="game_loop">
             <statement name="DO">
