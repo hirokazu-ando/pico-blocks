@@ -234,7 +234,7 @@
           categoryPercentage: 1.0
         }]
       };
-      options.scales.x.offset = false;
+      options.scales.x.offset = true;
 
     } else if (type === 'scatter') {
       chartType = 'scatter';
