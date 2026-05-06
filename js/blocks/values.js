@@ -23,23 +23,19 @@ Blockly.Blocks['val_number'] = {
   }
 };
 
-// Blockly標準の colour_picker を使わず、最小限のカラーピッカーブロックを自前定義する
-// （blockly.min.js のみ読み込んでいるため、標準ブロック定義が存在しない）
+// @blockly/field-colour プラグイン由来の field_colour（FieldColour）を使うカラーピッカー。
+// プラグインが Blockly.fieldRegistry.register('field_colour', FieldColour) をロード時に実行するので、
+// このブロック init は plugin スクリプト読み込み後に呼ばれる前提（index.html のスクリプト順）。
 Blockly.Blocks['colour_picker'] = {
   init: function() {
-    const isHex = function(v) {
-      if (v == null) return null;
-      const s = String(v).trim();
-      return /^#[0-9a-fA-F]{6}$/.test(s) ? s : null;
-    };
-    this.appendDummyInput()
-      .appendField(new Blockly.FieldTextInput('#ff0000', function(v) {
-        // 不正値は無視して前の値を維持（null返し）
-        return isHex(v);
-      }), 'COLOUR');
+    const FieldColourCtor = (typeof FieldColour !== 'undefined') ? FieldColour : Blockly.FieldColour;
+    const colourField = FieldColourCtor
+      ? new FieldColourCtor('#ff0000')
+      : new Blockly.FieldTextInput('#ff0000');
+    this.appendDummyInput().appendField(colourField, 'COLOUR');
     this.setOutput(true, null);
     this.setColour(P.literals);
-    this.setTooltip('色を指定します（"#rrggbb" 形式）');
+    this.setTooltip('色を指定します（クリックでパレットから選択）');
   }
 };
 
