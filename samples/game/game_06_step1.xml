@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vpx">px</variable>
+    <variable id="vpy">py</variable>
+  </variables>
+  <block type="game_init" x="20" y="20">
+    <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
+    <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
+    <value name="TITLE"><block type="val_str"><field name="TEXT">Move</field></block></value>
+    <next>
+      <block type="var_set">
+        <field name="VAR" id="vpx">px</field>
+        <value name="VALUE"><block type="val_number"><field name="NUM">300</field></block></value>
+        <next>
+          <block type="var_set">
+            <field name="VAR" id="vpy">py</field>
+            <value name="VALUE"><block type="val_number"><field name="NUM">320</field></block></value>
+            <next>
+              <block type="game_loop">
+                <statement name="DO">
+                  <block type="game_events">
+                    <next>
+                      <block type="game_fill">
+                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#000000</field></block></value>
+                        <next>
+                          <block type="pico_if">
+                            <value name="IF0"><block type="game_key_pressed"><field name="KEY">K_RIGHT</field></block></value>
+                            <statement name="DO0">
+                              <block type="var_change">
+                                <field name="VAR" id="vpx">px</field>
+                                <value name="AMOUNT"><block type="val_number"><field name="NUM">4</field></block></value>
+                              </block>
+                            </statement>
+                            <next>
+                              <block type="pico_if">
+                                <value name="IF0"><block type="game_key_pressed"><field name="KEY">K_LEFT</field></block></value>
+                                <statement name="DO0">
+                                  <block type="var_change">
+                                    <field name="VAR" id="vpx">px</field>
+                                    <value name="AMOUNT"><block type="val_number"><field name="NUM">-4</field></block></value>
+                                  </block>
+                                </statement>
+                                <next>
+                                  <block type="game_draw_image">
+                                    <field name="FLIP">NONE</field>
+                                    <value name="URL">
+                                      <block type="game_image_preset">
+                                        <field name="IMG">assets/game-icons/player_ship.svg</field>
+                                      </block>
+                                    </value>
+                                    <value name="X"><block type="val_var"><field name="VAR" id="vpx">px</field></block></value>
+                                    <value name="Y"><block type="val_var"><field name="VAR" id="vpy">py</field></block></value>
+                                    <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
+                                    <value name="H"><block type="val_number"><field name="NUM">48</field></block></value>
+                                    <value name="ROT"><block type="val_number"><field name="NUM">0</field></block></value>
+                                    <next>
+                                      <block type="game_flip">
+                                        <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </statement>
+                <next>
+                  <block type="game_quit"></block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
