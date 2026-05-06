@@ -3357,10 +3357,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // matplotlib プロットエリアをクリア（前回の描画を消す）
     const plotArea = document.getElementById('pyco-plot-area');
-    if (plotArea) {
-      plotArea.innerHTML = '';
-      plotArea.style.display = 'none';
-    }
+    if (plotArea) plotArea.innerHTML = '';
+    const plotRow = document.getElementById('pyco-plot-row');
+    if (plotRow) plotRow.style.display = 'none';
     const plotHandle = document.getElementById('plot-resize-handle');
     if (plotHandle) plotHandle.style.display = 'none';
     // 画像処理表示エリアをクリア
@@ -3421,6 +3420,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.PycoChart && typeof window.PycoChart.installIntoSkulpt === 'function') {
       try { window.PycoChart.installIntoSkulpt(Sk); } catch (e) { console.warn('matplotlib install failed', e); }
     }
+    // statistics モジュール登録
+    if (window.PycoStats && typeof window.PycoStats.installIntoSkulpt === 'function') {
+      try { window.PycoStats.installIntoSkulpt(Sk); } catch (e) { console.warn('statistics install failed', e); }
+    }
 
     Sk.misceval.asyncToPromise(function() {
       return Sk.importMainWithBody('<stdin>', false, code, true);
@@ -3434,7 +3437,8 @@ document.addEventListener('DOMContentLoaded', function() {
       appendShellText('>>> 完了\n', false, 'py-prompt');
       // matplotlib でグラフが描かれた場合は表示
       if (plotArea && plotArea.querySelector('canvas, svg, img')) {
-        plotArea.style.display = 'block';
+        const plotRow = document.getElementById('pyco-plot-row');
+        if (plotRow) plotRow.style.display = 'flex';
       }
     }).catch(function(err) {
       if (_pyStopRequested) {
@@ -3903,6 +3907,47 @@ document.addEventListener('DOMContentLoaded', function() {
     handle.addEventListener('touchstart', e => { e.preventDefault(); startDrag(e.touches[0].clientY); }, { passive: false });
     document.addEventListener('mousemove', e => onMove(e.clientY));
     document.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); onMove(e.touches[0].clientY); } }, { passive: false });
+    document.addEventListener('mouseup', () => { document.body.style.cursor = ''; endDrag(); });
+    document.addEventListener('touchend', endDrag);
+  })();
+
+  // 左右リサイズ（グラフエリアの横幅）
+  (function() {
+    const wHandle  = document.getElementById('plot-width-handle');
+    const plotArea = document.getElementById('pyco-plot-area');
+    const plotRow  = document.getElementById('pyco-plot-row');
+    if (!wHandle || !plotArea || !plotRow) return;
+
+    let dragging = false, startX = 0, startW = 0;
+
+    function startDrag(clientX) {
+      dragging = true;
+      startX   = clientX;
+      startW   = plotArea.getBoundingClientRect().width;
+      wHandle.classList.add('dragging');
+      document.body.style.userSelect = 'none';
+    }
+    function onMove(clientX) {
+      if (!dragging) return;
+      const rowW = plotRow.getBoundingClientRect().width;
+      const newW = Math.min(rowW - 6, Math.max(150, startW + (clientX - startX)));
+      plotArea.style.flex = `0 0 ${newW}px`;
+      if (window.Chart) {
+        const chart = Chart.getChart(plotArea.querySelector('canvas'));
+        if (chart) chart.resize();
+      }
+    }
+    function endDrag() {
+      if (!dragging) return;
+      dragging = false;
+      wHandle.classList.remove('dragging');
+      document.body.style.userSelect = '';
+    }
+
+    wHandle.addEventListener('mousedown', e => { document.body.style.cursor = 'col-resize'; startDrag(e.clientX); });
+    wHandle.addEventListener('touchstart', e => { e.preventDefault(); startDrag(e.touches[0].clientX); }, { passive: false });
+    document.addEventListener('mousemove', e => onMove(e.clientX));
+    document.addEventListener('touchmove', e => { if (dragging) { e.preventDefault(); onMove(e.touches[0].clientX); } }, { passive: false });
     document.addEventListener('mouseup', () => { document.body.style.cursor = ''; endDrag(); });
     document.addEventListener('touchend', endDrag);
   })();

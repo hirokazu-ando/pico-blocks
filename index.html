@@ -109,7 +109,10 @@
         <pre id="monitor-output"></pre>
         <!-- Part 2: matplotlib プロット表示エリア -->
         <div id="plot-resize-handle" class="plot-resize-handle" style="display:none;"></div>
-        <div id="pyco-plot-area" style="display:none; background:#fff; overflow:hidden; padding:4px;"></div>
+        <div id="pyco-plot-row" style="display:none;">
+          <div id="pyco-plot-area" style="background:#fff; overflow:hidden; padding:4px;"></div>
+          <div id="plot-width-handle" class="plot-width-handle"></div>
+        </div>
         <!-- Part 5: 画像処理 表示エリア -->
         <div id="cv-display-area" style="display:none; background:#f8fafc; border-top:1px solid #e2e8f0; padding:8px; text-align:center; overflow:auto;"></div>
       </div>
@@ -1235,8 +1238,9 @@
   <script src="js/blocks/ml.js?v=20260503b"></script>
   <script src="js/image_engine.js?v=20260503b"></script>
   <script src="js/blocks/image_blocks.js?v=20260503b"></script>
-  <script src="js/chart_engine.js?v=20260504a"></script>
-  <script src="js/app.js?v=20260503a"></script>
+  <script src="js/chart_engine.js?v=20260506a"></script>
+  <script src="js/stats_engine.js?v=20260506a"></script>
+  <script src="js/app.js?v=20260506b"></script>
 
   <!-- エラー解説パネル（body末尾・fixed配置） -->
   <div id="error-hint">

@@ -20,14 +20,37 @@
           </block>
         </value>
         <next>
-          <block type="py_custom_stmt" id="b3">
-            <field name="CODE">print("平均:", statistics.mean(temp))</field>
+          <block type="py_print_multi" id="p1">
+            <mutation items="2"/>
+            <value name="ITEM0"><block type="val_str"><field name="TEXT">平均:</field></block></value>
+            <value name="ITEM1">
+              <block type="py_stats_mean">
+                <value name="DATA"><block type="val_var"><field name="VAR" id="var_temp">temp</field></block></value>
+              </block>
+            </value>
             <next>
-              <block type="py_custom_stmt" id="b4">
-                <field name="CODE">print("中央値:", statistics.median(temp))</field>
+              <block type="py_print_multi" id="p2">
+                <mutation items="2"/>
+                <value name="ITEM0"><block type="val_str"><field name="TEXT">中央値:</field></block></value>
+                <value name="ITEM1">
+                  <block type="py_stats_median">
+                    <value name="DATA"><block type="val_var"><field name="VAR" id="var_temp">temp</field></block></value>
+                  </block>
+                </value>
                 <next>
-                  <block type="py_custom_stmt" id="b5">
-                    <field name="CODE">print("標準偏差:", round(statistics.stdev(temp), 2))</field>
+                  <block type="py_print_multi" id="p3">
+                    <mutation items="2"/>
+                    <value name="ITEM0"><block type="val_str"><field name="TEXT">標準偏差:</field></block></value>
+                    <value name="ITEM1">
+                      <block type="py_round">
+                        <value name="VALUE">
+                          <block type="py_stats_stdev">
+                            <value name="DATA"><block type="val_var"><field name="VAR" id="var_temp">temp</field></block></value>
+                          </block>
+                        </value>
+                        <value name="DIGITS"><block type="val_number"><field name="NUM">2</field></block></value>
+                      </block>
+                    </value>
                   </block>
                 </next>
               </block>
