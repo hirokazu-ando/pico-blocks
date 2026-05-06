@@ -733,8 +733,29 @@ h1 {
   background: var(--accent-cyan);
 }
 
-#pyco-plot-area {
+#pyco-plot-row {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
   flex-shrink: 0;
+}
+
+#pyco-plot-area {
+  flex: 1 1 auto;
+  min-width: 150px;
+}
+
+.plot-width-handle {
+  width: 6px;
+  flex: 0 0 6px;
+  cursor: col-resize;
+  background: var(--border-dim);
+  transition: background 0.2s;
+}
+
+.plot-width-handle:hover,
+.plot-width-handle.dragging {
+  background: var(--accent-cyan);
 }
 
 .game-resize-handle {

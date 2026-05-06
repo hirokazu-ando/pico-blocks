@@ -158,12 +158,22 @@
 
     // 前回のグラフを破棄
     area.innerHTML = '';
-    area.style.display = 'block';
+
+    // 行ラッパーを表示（横幅ハンドルを含む）
+    var plotRow = document.getElementById('pyco-plot-row');
+    if (plotRow) {
+      plotRow.style.display = 'flex';
+      plotRow.style.flexDirection = 'row';
+      plotRow.style.alignItems = 'stretch';
+      plotRow.style.width = '100%';
+    }
+    if (!area.style.flex) area.style.flex = '1 1 0';
+    area.style.minWidth = '0';
 
     // 初回表示時に高さを設定
     if (!area.style.height) area.style.height = '300px';
 
-    // リサイズハンドルを表示
+    // 縦リサイズハンドルを表示
     var handle = document.getElementById('plot-resize-handle');
     if (handle) handle.style.display = 'block';
 
