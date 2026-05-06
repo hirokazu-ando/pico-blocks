@@ -585,10 +585,8 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_deque_popleft': return `deque「${getVarName(block, 'DEQUE')}」の先頭を取り出す（popleft）`;
       case 'py_deque_append':  return `deque「${getVarName(block, 'DEQUE')}」の末尾に追加（append）`;
       case 'py_list_pop_val':  return `リスト「${getVarName(block, 'LIST')}」の末尾を取り出した値（pop）`;
-      case 'game_color': {
-        const cnames = {'#EF4444':'赤','#F97316':'橙','#FACC15':'黄','#84CC16':'黄緑','#22C55E':'緑','#38BDF8':'水色','#3B82F6':'青','#A855F7':'紫','#EC4899':'ピンク','#F8FAFC':'白','#64748B':'灰','#1E293B':'黒','#FFD700':'金','#0F172A':'暗い青'};
-        return '色: ' + (cnames[block.getFieldValue('COLOR')] || block.getFieldValue('COLOR'));
-      }
+      case 'game_color':
+        return '色: ' + (block.getFieldValue('COLOR') || '');
       case 'game_image_preset': {
         const snames = {
           'assets/game-icons/player_ship.svg': 'プレイヤー',

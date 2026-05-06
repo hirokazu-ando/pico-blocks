@@ -334,36 +334,27 @@
     }
   };
 
-  // ===== \u8272\u30d7\u30ea\u30bb\u30c3\u30c8 =====
-  var GAME_COLORS = [
-    ['\u8d64', '#EF4444'],
-    ['\u6a59', '#F97316'],
-    ['\u9ec4', '#FACC15'],
-    ['\u9ec4\u7dd1', '#84CC16'],
-    ['\u7dd1', '#22C55E'],
-    ['\u6c34\u8272', '#38BDF8'],
-    ['\u9752', '#3B82F6'],
-    ['\u7d2b', '#A855F7'],
-    ['\u30d4\u30f3\u30af', '#EC4899'],
-    ['\u767d', '#F8FAFC'],
-    ['\u7070', '#64748B'],
-    ['\u9ed2', '#1E293B'],
-    ['\u91d1', '#FFD700'],
-    ['\u6697\u3044\u9752', '#0F172A'],
-  ];
-
+  // \u8272\u309216\u9032\u6570\uff08#RRGGBB\uff09\u3067\u76f4\u63a5\u5165\u529b\u3059\u308b\u30d6\u30ed\u30c3\u30af\u3002
+  // \u30d1\u30ec\u30c3\u30c8\u304b\u3089\u9078\u3073\u305f\u3044\u3068\u304d\u306f colour_picker\uff08@blockly/field-colour\uff09\u3092\u4f7f\u3046\u3002
   Blockly.Blocks['game_color'] = {
     init: function() {
-      var dd = new Blockly.FieldDropdown(GAME_COLORS, function(v) {
-        var b = this.sourceBlock_;
-        if (b) b.setColour(v);
-      });
+      const isHex = function(v) {
+        if (v == null) return null;
+        const s = String(v).trim();
+        return /^#[0-9a-fA-F]{6}$/.test(s) ? s : null;
+      };
+      const self = this;
+      const validator = function(v) {
+        const ok = isHex(v);
+        if (ok) { try { self.setColour(ok); } catch (e) {} }
+        return ok;
+      };
       this.appendDummyInput()
         .appendField('\u8272')
-        .appendField(dd, 'COLOR');
+        .appendField(new Blockly.FieldTextInput('#3B82F6', validator), 'COLOR');
       this.setOutput(true, 'Colour');
-      this.setColour(GAME_COLORS[0][1]);
-      this.setTooltip('\u30b2\u30fc\u30e0\u3067\u3088\u304f\u4f7f\u3046\u8272\u3092\u65e5\u672c\u8a9e\u540d\u3067\u9078\u3079\u307e\u3059\u3002\u30ab\u30b9\u30bf\u30e0\u8272\u306f colour_picker \u30d6\u30ed\u30c3\u30af\u3092\u4f7f\u3063\u3066\u304f\u3060\u3055\u3044\u3002');
+      this.setColour('#3B82F6');
+      this.setTooltip('\u8272\u3092 16\u9032\u6570 (#RRGGBB) \u3067\u76f4\u63a5\u5165\u529b\u3057\u307e\u3059\u3002\u30d1\u30ec\u30c3\u30c8\u304b\u3089\u9078\u3073\u305f\u3044\u5834\u5408\u306f colour_picker \u3092\u4f7f\u3063\u3066\u304f\u3060\u3055\u3044\u3002');
       this.setHelpUrl('');
     }
   };
