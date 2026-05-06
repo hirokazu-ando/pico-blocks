@@ -3319,6 +3319,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.PycoStats && window.PycoStats.source && x.includes('statistics')) {
       return window.PycoStats.source;
     }
+    // CSVモジュール（Skulpt標準は NotImplementedError を投げるのでshimを優先）
+    if (window.PycoCsv && window.PycoCsv.source && x.includes('csv')) {
+      return window.PycoCsv.source;
+    }
     // Skulpt 組み込みにフォールバック
     if (Sk.builtinFiles === undefined || Sk.builtinFiles['files'][x] === undefined) {
       throw "File not found: '" + x + "'";
@@ -3427,6 +3431,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // statistics モジュール登録
     if (window.PycoStats && typeof window.PycoStats.installIntoSkulpt === 'function') {
       try { window.PycoStats.installIntoSkulpt(Sk); } catch (e) { console.warn('statistics install failed', e); }
+    }
+    // csv モジュール登録
+    if (window.PycoCsv && typeof window.PycoCsv.installIntoSkulpt === 'function') {
+      try { window.PycoCsv.installIntoSkulpt(Sk); } catch (e) { console.warn('csv install failed', e); }
     }
 
     Sk.misceval.asyncToPromise(function() {
