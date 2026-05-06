@@ -765,6 +765,46 @@ Blockly.Blocks['py_round'] = {
   }
 };
 
+Blockly.Blocks['py_int'] = {
+  init: function() {
+    this.appendDummyInput().appendField('整数化');
+    this.appendValueInput('VALUE').setCheck(null);
+    this.setInputsInline(true);
+    this.setOutput(true, 'Number');
+    this.setColour(P.math);
+    this.setTooltip('値を整数に変換します（int）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_min2'] = {
+  init: function() {
+    this.appendDummyInput().appendField('小さい方');
+    this.appendValueInput('A').setCheck(null);
+    this.appendDummyInput().appendField('と');
+    this.appendValueInput('B').setCheck(null);
+    this.setInputsInline(true);
+    this.setOutput(true, 'Number');
+    this.setColour(P.math);
+    this.setTooltip('2つの値のうち小さい方を返します（min）');
+    this.setHelpUrl('');
+  }
+};
+
+Blockly.Blocks['py_max2'] = {
+  init: function() {
+    this.appendDummyInput().appendField('大きい方');
+    this.appendValueInput('A').setCheck(null);
+    this.appendDummyInput().appendField('と');
+    this.appendValueInput('B').setCheck(null);
+    this.setInputsInline(true);
+    this.setOutput(true, 'Number');
+    this.setColour(P.math);
+    this.setTooltip('2つの値のうち大きい方を返します（max）');
+    this.setHelpUrl('');
+  }
+};
+
 // =====================================================
 // f文字列ブロック
 // =====================================================

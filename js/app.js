@@ -339,6 +339,34 @@ document.addEventListener('DOMContentLoaded', function() {
     if (childText) return code + childText;
     return appendLocal(code, passLine);
   }
+  /** 式の外側を包む冗長な () を1段だけ剥がす（if/while などのトップで使う） */
+  function stripOuterParens(s) {
+    if (typeof s !== 'string') return s;
+    const t = s.trim();
+    if (t.length < 2 || t[0] !== '(' || t[t.length - 1] !== ')') return s;
+    let depth = 0;
+    for (let i = 0; i < t.length; i++) {
+      const c = t[i];
+      if (c === '(') depth++;
+      else if (c === ')') {
+        depth--;
+        if (depth === 0 && i !== t.length - 1) return s;
+      }
+    }
+    return t.slice(1, -1).trim();
+  }
+  /** トップレベル（括弧外）に指定キーワードが現れるか。 ' and ' / ' or ' の検出に使う */
+  function hasTopLevelKeyword(s, kw) {
+    if (typeof s !== 'string') return false;
+    let depth = 0;
+    for (let i = 0; i < s.length; i++) {
+      const c = s[i];
+      if (c === '(' || c === '[') depth++;
+      else if (c === ')' || c === ']') depth--;
+      else if (depth === 0 && s.slice(i, i + kw.length) === kw) return true;
+    }
+    return false;
+  }
 
   /**
    * 式用（VALUE）入力だけ追跡する。statement 入力（DO など）は別行なのでここでは辿らない。
@@ -746,7 +774,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const left  = valueToCode(block, 'LEFT', '0');
         const right = valueToCode(block, 'RIGHT', '0');
         const op    = block.getFieldValue('OP');
-        return `(${left} ${op} ${right})`;
+        // (0 - x) を単項マイナス -x に短縮（Python の慣用表現）
+        if (op === '-' && String(left).trim() === '0') {
+          return `-${right}`;
+        }
+        // 子の py_math_op の op を見て、Python 演算子優先度に従い必要時のみ括弧を付ける
+        const prec = (o) => (o === '*' || o === '/' || o === '//' || o === '%') ? 2
+                          : (o === '+' || o === '-') ? 1
+                          : 0;
+        const leftBlk  = block.getInputTargetBlock ? block.getInputTargetBlock('LEFT')  : null;
+        const rightBlk = block.getInputTargetBlock ? block.getInputTargetBlock('RIGHT') : null;
+        const leftOp  = (leftBlk  && leftBlk.type  === 'py_math_op') ? leftBlk.getFieldValue('OP')  : null;
+        const rightOp = (rightBlk && rightBlk.type === 'py_math_op') ? rightBlk.getFieldValue('OP') : null;
+        const myPrec    = prec(op);
+        const leftPrec  = leftOp  ? prec(leftOp)  : 99;
+        const rightPrec = rightOp ? prec(rightOp) : 99;
+        const associative = (op === '+' || op === '*');
+        const lw = (leftPrec < myPrec) ? `(${left})` : left;
+        const rw = (rightPrec < myPrec || (rightPrec === myPrec && !associative)) ? `(${right})` : right;
+        return `${lw} ${op} ${rw}`;
       }
       case 'py_str_concat': {
         const a = valueToCode(block, 'A', '""');
@@ -757,21 +803,30 @@ document.addEventListener('DOMContentLoaded', function() {
         const left  = valueToCode(block, 'LEFT', '0');
         const right = valueToCode(block, 'RIGHT', '0');
         const op    = block.getFieldValue('OP');
-        return `(${left} ${op} ${right})`;
+        // 比較は優先度が高く、論理演算子の中でも括弧不要
+        return `${left} ${op} ${right}`;
       }
       case 'cond_and': {
         const a = valueToCode(block, 'A', 'True');
         const b = valueToCode(block, 'B', 'True');
-        return `(${a} and ${b})`;
+        const cmpRe = /^(.+?) (==|!=|<=|>=|<|>) (.+)$/;
+        const ma = cmpRe.exec(a);
+        const mb = cmpRe.exec(b);
+        if (ma && mb && ma[3] === mb[1]) {
+          return `${ma[1]} ${ma[2]} ${ma[3]} ${mb[2]} ${mb[3]}`;
+        }
+        const aw = hasTopLevelKeyword(a, ' or ') ? `(${a})` : a;
+        const bw = hasTopLevelKeyword(b, ' or ') ? `(${b})` : b;
+        return `${aw} and ${bw}`;
       }
       case 'cond_or': {
         const a = valueToCode(block, 'A', 'False');
         const b = valueToCode(block, 'B', 'False');
-        return `(${a} or ${b})`;
+        return `${a} or ${b}`;
       }
       case 'cond_not': {
         const a = valueToCode(block, 'A', 'True');
-        return `(not ${a})`;
+        return `not ${a}`;
       }
       case 'pico_digital_read_val': {
         const pin = block.getFieldValue('PIN');
@@ -944,7 +999,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_range': {
         const rStart = block.getFieldValue('START') || 0;
         const rStop  = block.getFieldValue('STOP')  || 10;
-        return `range(${rStart}, ${rStop})`;
+        return String(rStart) === '0' ? `range(${rStop})` : `range(${rStart}, ${rStop})`;
       }
       case 'py_str_upper': {
         return `${getVarName(block, 'VAR')}.upper()`;
@@ -1109,13 +1164,27 @@ document.addEventListener('DOMContentLoaded', function() {
         return `${type}(${val})`;
       }
       case 'py_abs': {
-        const val = valueToCode(block, 'VALUE', '0');
+        const val = stripOuterParens(valueToCode(block, 'VALUE', '0'));
         return `abs(${val})`;
       }
       case 'py_round': {
         const val    = valueToCode(block, 'VALUE', '0');
         const digits = valueToCode(block, 'DIGITS', '2');
         return `round(${val}, ${digits})`;
+      }
+      case 'py_int': {
+        const val = stripOuterParens(valueToCode(block, 'VALUE', '0'));
+        return `int(${val})`;
+      }
+      case 'py_min2': {
+        const a = stripOuterParens(valueToCode(block, 'A', '0'));
+        const b = stripOuterParens(valueToCode(block, 'B', '0'));
+        return `min(${a}, ${b})`;
+      }
+      case 'py_max2': {
+        const a = stripOuterParens(valueToCode(block, 'A', '0'));
+        const b = stripOuterParens(valueToCode(block, 'B', '0'));
+        return `max(${a}, ${b})`;
       }
       case 'py_call_val': {
         const name = block.getFieldValue('NAME');
@@ -1258,7 +1327,9 @@ document.addEventListener('DOMContentLoaded', function() {
         break;
       }
       case 'game_loop': {
-        code = appendLocal(code, indent + `running = True\n`);
+        if (!_emitCtx.runningPreset) {
+          code = appendLocal(code, indent + `running = True\n`);
+        }
         code = appendLocal(code, indent + `while running:\n`);
         const inner = statementToCode(block, 'DO', indent + '    ');
         code = appendChildBody(code, inner, indent + '    pass\n');
@@ -1334,8 +1405,11 @@ document.addEventListener('DOMContentLoaded', function() {
         code = appendLocal(code, indent + `_img = pygame.image.load(${url})\n`);
         code = appendLocal(code, indent + `_rw = ${w}; _rh = ${h}\n`);
         code = appendLocal(code, indent + `_img = pygame.transform.scale(_img, (_rw, _rh)) if _rw > 0 and _rh > 0 else _img\n`);
-        code = appendLocal(code, indent + `_rot_deg = ${rot}\n`);
-        code = appendLocal(code, indent + `_img = pygame.transform.rotate(_img, _rot_deg) if _rot_deg != 0 else _img\n`);
+        // 回転行は ROT が 0 リテラル以外の場合のみ出す（記事のシンプル例と整合）
+        if (rot !== '0') {
+          code = appendLocal(code, indent + `_rot_deg = ${rot}\n`);
+          code = appendLocal(code, indent + `_img = pygame.transform.rotate(_img, _rot_deg) if _rot_deg != 0 else _img\n`);
+        }
         if (flip === 'X') {
           code = appendLocal(code, indent + `_img = pygame.transform.flip(_img, True, False)\n`);
         } else if (flip === 'Y') {
@@ -1535,14 +1609,14 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'pico_if': {
         const lnIf0 = _emitCtx.line;
         registerExprBlocksAtLineFromInput(block, 'IF0', lnIf0);
-        const cond0 = valueToCode(block, 'IF0', 'True');
+        const cond0 = stripOuterParens(valueToCode(block, 'IF0', 'True'));
         code = appendLocal(code, indent + `if ${cond0}:\n`);
         const do0   = statementToCode(block, 'DO0', indent + '    ');
         code = appendChildBody(code, do0, indent + '    pass\n');
         for (let i = 1; block.getInput('IF' + i); i++) {
           const lnElif = _emitCtx.line;
           registerExprBlocksAtLineFromInput(block, 'IF' + i, lnElif);
-          const condI = valueToCode(block, 'IF' + i, 'True');
+          const condI = stripOuterParens(valueToCode(block, 'IF' + i, 'True'));
           code = appendLocal(code, indent + `elif ${condI}:\n`);
           const doI   = statementToCode(block, 'DO' + i, indent + '    ');
           code = appendChildBody(code, doI, indent + '    pass\n');
@@ -1558,8 +1632,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const v   = getVarName(block, 'VAR');
         const lnSet = _emitCtx.line;
         registerExprBlocksAtLineFromInput(block, 'VALUE', lnSet);
-        const val = valueToCode(block, 'VALUE', '0');
+        const val = stripOuterParens(valueToCode(block, 'VALUE', '0'));
         code = appendLocal(code, indent + `${v} = ${val}\n`);
+        break;
+      }
+      case 'var_set2': {
+        const v1 = getVarName(block, 'VAR1');
+        const v2 = getVarName(block, 'VAR2');
+        const lnSet = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'VALUE1', lnSet);
+        registerExprBlocksAtLineFromInput(block, 'VALUE2', lnSet);
+        const val1 = stripOuterParens(valueToCode(block, 'VALUE1', '0'));
+        const val2 = stripOuterParens(valueToCode(block, 'VALUE2', '0'));
+        code = appendLocal(code, indent + `${v1}, ${v2} = ${val1}, ${val2}\n`);
         break;
       }
       case 'var_change': {
@@ -1567,7 +1652,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const lnChg = _emitCtx.line;
         registerExprBlocksAtLineFromInput(block, 'AMOUNT', lnChg);
         const amt = valueToCode(block, 'AMOUNT', '1');
-        code = appendLocal(code, indent + `${v} += ${amt}\n`);
+        // 負の量は -= に整える（Python 慣用句）
+        let line;
+        const trimmed = String(amt).trim();
+        const mNum     = trimmed.match(/^-(\d+(?:\.\d+)?)$/);
+        const mUnary   = trimmed.match(/^-([A-Za-z_][\w.\[\]]*)$/);
+        const mZeroMin = trimmed.match(/^\(\s*0\s*-\s*(.+?)\s*\)$/);
+        if (mNum) {
+          line = `${v} -= ${mNum[1]}`;
+        } else if (mUnary) {
+          line = `${v} -= ${mUnary[1]}`;
+        } else if (mZeroMin) {
+          line = `${v} -= ${mZeroMin[1]}`;
+        } else {
+          line = `${v} += ${stripOuterParens(amt)}`;
+        }
+        code = appendLocal(code, indent + line + '\n');
         break;
       }
       case 'pico_digital_read': {
@@ -1671,7 +1771,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const start  = valueToCode(block, 'START', '0');
         const stop   = valueToCode(block, 'STOP', '10');
         const step   = valueToCode(block, 'STEP', '1');
-        code = appendLocal(code, indent + `for ${v} in range(${start}, ${stop}, ${step}):\n`);
+        // デフォルト値は省略して短い range 形式を選ぶ
+        let rangeArgs;
+        if (step === '1' && start === '0') rangeArgs = `${stop}`;
+        else if (step === '1') rangeArgs = `${start}, ${stop}`;
+        else rangeArgs = `${start}, ${stop}, ${step}`;
+        code = appendLocal(code, indent + `for ${v} in range(${rangeArgs}):\n`);
         const doCode = statementToCode(block, 'DO', indent + '    ');
         code = appendChildBody(code, doCode, indent + '    pass\n');
         break;
@@ -1731,7 +1836,7 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'py_while': {
         const lnWhile = _emitCtx.line;
         registerExprBlocksAtLineFromInput(block, 'COND', lnWhile);
-        const cond  = valueToCode(block, 'COND', 'True');
+        const cond  = stripOuterParens(valueToCode(block, 'COND', 'True'));
         code = appendLocal(code, indent + `while ${cond}:\n`);
         const inner = statementToCode(block, 'DO', indent + '    ');
         code = appendChildBody(code, inner, indent + '    pass\n');
@@ -1848,6 +1953,21 @@ document.addEventListener('DOMContentLoaded', function() {
         registerExprBlocksAtLineFromInput(block, 'VALUE', lnIdx);
         const idx = valueToCode(block, 'INDEX', '0');
         const val = valueToCode(block, 'VALUE', 'None');
+        // VALUE が `listName[idx] op rhs` なら listName[idx] op= rhs に簡略化
+        const valBlk = block.getInputTargetBlock('VALUE');
+        if (valBlk && valBlk.type === 'py_math_op') {
+          const op = valBlk.getFieldValue('OP') || '+';
+          const leftBlk = valBlk.getInputTargetBlock('LEFT');
+          if (leftBlk && leftBlk.type === 'py_list_get') {
+            const leftLst = getVarName(leftBlk, 'LIST');
+            const leftIdx = valueToCode(leftBlk, 'INDEX', '0');
+            if (leftLst === listName && leftIdx === idx && ['+', '-', '*', '/', '//', '%'].includes(op)) {
+              const rhs = valueToCode(valBlk, 'RIGHT', '0');
+              code = appendLocal(code, indent + `${listName}[${idx}] ${op}= ${rhs}\n`);
+              break;
+            }
+          }
+        }
         code = appendLocal(code, indent + `${listName}[${idx}] = ${val}\n`);
         break;
       }
@@ -2411,6 +2531,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     blockLineMap.clear();
     _emitCtx.line = isMain ? (header.match(/\n/g) || []).length : 0;
+    _emitCtx.runningPreset = allBlocks.some(function(b) {
+      if (b.type !== 'var_set') return false;
+      const vname = (b.getField && b.getField('VAR')) ? b.getField('VAR').getText() : '';
+      if (vname !== 'running') return false;
+      const valBlk = b.getInputTargetBlock && b.getInputTargetBlock('VALUE');
+      if (!valBlk || valBlk.type !== 'val_bool') return false;
+      return (valBlk.getFieldValue && valBlk.getFieldValue('BOOL')) === 'True';
+    });
     let code = '';
     const topBlocks = workspace.getTopBlocks(true);
     for (const block of topBlocks) {
