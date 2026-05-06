@@ -11,22 +11,18 @@
     <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
     <value name="TITLE"><block type="val_str"><field name="TEXT">Fast Ball</field></block></value>
     <next>
-      <block type="var_set">
-        <field name="VAR" id="vbx">ball_x</field>
-        <value name="VALUE"><block type="val_number"><field name="NUM">320</field></block></value>
+      <block type="var_set2">
+        <field name="VAR1" id="vbx">ball_x</field>
+        <field name="VAR2" id="vby">ball_y</field>
+        <value name="VALUE1"><block type="val_number"><field name="NUM">320</field></block></value>
+        <value name="VALUE2"><block type="val_number"><field name="NUM">50</field></block></value>
         <next>
-          <block type="var_set">
-            <field name="VAR" id="vby">ball_y</field>
-            <value name="VALUE"><block type="val_number"><field name="NUM">50</field></block></value>
+          <block type="var_set2">
+            <field name="VAR1" id="vvx">vx</field>
+            <field name="VAR2" id="vvy">vy</field>
+            <value name="VALUE1"><block type="val_number"><field name="NUM">6</field></block></value>
+            <value name="VALUE2"><block type="val_number"><field name="NUM">4</field></block></value>
             <next>
-              <block type="var_set">
-                <field name="VAR" id="vvx">vx</field>
-                <value name="VALUE"><block type="val_number"><field name="NUM">6</field></block></value>
-                <next>
-                  <block type="var_set">
-                    <field name="VAR" id="vvy">vy</field>
-                    <value name="VALUE"><block type="val_number"><field name="NUM">4</field></block></value>
-                    <next>
                       <block type="game_loop">
                         <statement name="DO">
                           <block type="game_events">
@@ -140,8 +136,4 @@
               </block>
             </next>
           </block>
-        </next>
-      </block>
-    </next>
-  </block>
 </xml>

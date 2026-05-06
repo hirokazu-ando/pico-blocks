@@ -21,25 +21,23 @@
     <variable id="bb_px">px</variable>
     <variable id="bb_sc">sc</variable>
     <variable id="bb_run">running</variable>
+    <variable id="bb_brect">ball_rect</variable>
+    <variable id="bb_prect">paddle_rect</variable>
   </variables>
 
   <!-- 初期化 -->
-  <block type="var_set" x="20" y="20">
-    <field name="VAR" id="bb_bx">bx</field>
-    <value name="VALUE"><block type="val_number"><field name="NUM">240</field></block></value>
+  <block type="var_set2" x="20" y="20">
+    <field name="VAR1" id="bb_bx">bx</field>
+    <field name="VAR2" id="bb_by">by</field>
+    <value name="VALUE1"><block type="val_number"><field name="NUM">240</field></block></value>
+    <value name="VALUE2"><block type="val_number"><field name="NUM">100</field></block></value>
     <next>
-      <block type="var_set">
-        <field name="VAR" id="bb_by">by</field>
-        <value name="VALUE"><block type="val_number"><field name="NUM">100</field></block></value>
+      <block type="var_set2">
+        <field name="VAR1" id="bb_dx">dx</field>
+        <field name="VAR2" id="bb_dy">dy</field>
+        <value name="VALUE1"><block type="val_number"><field name="NUM">4</field></block></value>
+        <value name="VALUE2"><block type="val_number"><field name="NUM">3</field></block></value>
         <next>
-          <block type="var_set">
-            <field name="VAR" id="bb_dx">dx</field>
-            <value name="VALUE"><block type="val_number"><field name="NUM">4</field></block></value>
-            <next>
-              <block type="var_set">
-                <field name="VAR" id="bb_dy">dy</field>
-                <value name="VALUE"><block type="val_number"><field name="NUM">3</field></block></value>
-                <next>
                   <block type="var_set">
                     <field name="VAR" id="bb_px">px</field>
                     <value name="VALUE"><block type="val_number"><field name="NUM">200</field></block></value>
@@ -48,6 +46,10 @@
                         <field name="VAR" id="bb_sc">sc</field>
                         <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
                         <next>
+                          <block type="var_set">
+                            <field name="VAR" id="bb_run">running</field>
+                            <value name="VALUE"><block type="val_bool"><field name="BOOL">True</field></block></value>
+                            <next>
 
                           <!-- ゲーム初期化 -->
                           <block type="game_init">
@@ -72,9 +74,9 @@
                                             <field name="VAR" id="bb_px">px</field>
                                             <value name="VALUE">
                                               <block type="py_math_op">
-                                                <field name="OP">+</field>
+                                                <field name="OP">-</field>
                                                 <value name="LEFT"><block type="game_mouse_x"></block></value>
-                                                <value name="RIGHT"><block type="val_number"><field name="NUM">-40</field></block></value>
+                                                <value name="RIGHT"><block type="val_number"><field name="NUM">40</field></block></value>
                                               </block>
                                             </value>
                                             <next>
@@ -126,8 +128,8 @@
                                                                 <field name="VAR" id="bb_dx">dx</field>
                                                                 <value name="VALUE">
                                                                   <block type="py_math_op">
-                                                                    <field name="OP">*</field>
-                                                                    <value name="LEFT"><block type="val_number"><field name="NUM">-1</field></block></value>
+                                                                    <field name="OP">-</field>
+                                                                    <value name="LEFT"><block type="val_number"><field name="NUM">0</field></block></value>
                                                                     <value name="RIGHT">
                                                                       <block type="py_abs">
                                                                         <value name="VALUE"><block type="val_var"><field name="VAR" id="bb_dx">dx</field></block></value>
@@ -160,33 +162,33 @@
                                                                 </statement>
                                                                 <next>
 
-                                                                  <!-- パドル当たり判定 -->
-                                                                  <block type="pico_if">
-                                                                    <value name="IF0">
-                                                                      <block type="game_collide">
-                                                                        <!-- ボールRect: (bx-10, by-10, 20, 20) -->
-                                                                        <value name="A">
-                                                                          <block type="game_rect">
-                                                                            <value name="X">
-                                                                              <block type="py_math_op">
-                                                                                <field name="OP">-</field>
-                                                                                <value name="LEFT"><block type="val_var"><field name="VAR" id="bb_bx">bx</field></block></value>
-                                                                                <value name="RIGHT"><block type="val_number"><field name="NUM">10</field></block></value>
-                                                                              </block>
-                                                                            </value>
-                                                                            <value name="Y">
-                                                                              <block type="py_math_op">
-                                                                                <field name="OP">-</field>
-                                                                                <value name="LEFT"><block type="val_var"><field name="VAR" id="bb_by">by</field></block></value>
-                                                                                <value name="RIGHT"><block type="val_number"><field name="NUM">10</field></block></value>
-                                                                              </block>
-                                                                            </value>
-                                                                            <value name="W"><block type="val_number"><field name="NUM">20</field></block></value>
-                                                                            <value name="H"><block type="val_number"><field name="NUM">20</field></block></value>
+                                                                  <!-- ball_rect = pygame.Rect(...) -->
+                                                                  <block type="var_set">
+                                                                    <field name="VAR" id="bb_brect">ball_rect</field>
+                                                                    <value name="VALUE">
+                                                                      <block type="game_rect">
+                                                                        <value name="X">
+                                                                          <block type="py_math_op">
+                                                                            <field name="OP">-</field>
+                                                                            <value name="LEFT"><block type="val_var"><field name="VAR" id="bb_bx">bx</field></block></value>
+                                                                            <value name="RIGHT"><block type="val_number"><field name="NUM">10</field></block></value>
                                                                           </block>
                                                                         </value>
-                                                                        <!-- パドルRect: (px, 292, 80, 10) -->
-                                                                        <value name="B">
+                                                                        <value name="Y">
+                                                                          <block type="py_math_op">
+                                                                            <field name="OP">-</field>
+                                                                            <value name="LEFT"><block type="val_var"><field name="VAR" id="bb_by">by</field></block></value>
+                                                                            <value name="RIGHT"><block type="val_number"><field name="NUM">10</field></block></value>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="W"><block type="val_number"><field name="NUM">20</field></block></value>
+                                                                        <value name="H"><block type="val_number"><field name="NUM">20</field></block></value>
+                                                                      </block>
+                                                                    </value>
+                                                                    <next>
+                                                                      <block type="var_set">
+                                                                        <field name="VAR" id="bb_prect">paddle_rect</field>
+                                                                        <value name="VALUE">
                                                                           <block type="game_rect">
                                                                             <value name="X"><block type="val_var"><field name="VAR" id="bb_px">px</field></block></value>
                                                                             <value name="Y"><block type="val_number"><field name="NUM">292</field></block></value>
@@ -194,6 +196,13 @@
                                                                             <value name="H"><block type="val_number"><field name="NUM">10</field></block></value>
                                                                           </block>
                                                                         </value>
+                                                                        <next>
+                                                                  <!-- パドル当たり判定 -->
+                                                                  <block type="pico_if">
+                                                                    <value name="IF0">
+                                                                      <block type="game_collide">
+                                                                        <value name="A"><block type="val_var"><field name="VAR" id="bb_brect">ball_rect</field></block></value>
+                                                                        <value name="B"><block type="val_var"><field name="VAR" id="bb_prect">paddle_rect</field></block></value>
                                                                       </block>
                                                                     </value>
                                                                     <statement name="DO0">
@@ -202,8 +211,8 @@
                                                                         <field name="VAR" id="bb_dy">dy</field>
                                                                         <value name="VALUE">
                                                                           <block type="py_math_op">
-                                                                            <field name="OP">*</field>
-                                                                            <value name="LEFT"><block type="val_number"><field name="NUM">-1</field></block></value>
+                                                                            <field name="OP">-</field>
+                                                                            <value name="LEFT"><block type="val_number"><field name="NUM">0</field></block></value>
                                                                             <value name="RIGHT">
                                                                               <block type="py_abs">
                                                                                 <value name="VALUE"><block type="val_var"><field name="VAR" id="bb_dy">dy</field></block></value>
@@ -299,6 +308,10 @@
                                       </block>
                                     </next>
                                   </block>
+                                                                        </next>
+                                                                      </block>
+                                                                    </next>
+                                                                  </block>
 
                                 </statement>
                                 <next>
@@ -317,6 +330,4 @@
           </block>
         </next>
       </block>
-    </next>
-  </block>
 </xml>

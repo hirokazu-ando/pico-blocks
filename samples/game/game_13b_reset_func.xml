@@ -7,32 +7,31 @@
     <variable id="vst">state</variable>
     <variable id="vs">score</variable>
   </variables>
-  <block type="game_init" x="20" y="20">
+  <block type="game_import_random" x="20" y="20">
+        <next><block type="game_init">
     <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
     <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
-    <value name="TITLE"><block type="val_str"><field name="TEXT">Restart</field></block></value>
+    <value name="TITLE"><block type="val_str"><field name="TEXT">Reset Game</field></block></value>
     <next>
-      <block type="game_import_random">
-        <next>
           <block type="var_set">
             <field name="VAR" id="vpx">px</field>
             <value name="VALUE"><block type="val_number"><field name="NUM">300</field></block></value>
             <next>
               <block type="var_set">
-                <field name="VAR" id="vex">ex</field>
-                <value name="VALUE"><block type="game_random_int"><field name="LO">0</field><field name="HI">576</field></block></value>
+                <field name="VAR" id="vey">ey</field>
+                <value name="VALUE"><block type="val_number"><field name="NUM">-48</field></block></value>
                 <next>
                   <block type="var_set">
-                    <field name="VAR" id="vey">ey</field>
-                    <value name="VALUE"><block type="val_number"><field name="NUM">-48</field></block></value>
+                    <field name="VAR" id="vex">ex</field>
+                    <value name="VALUE"><block type="game_random_int"><field name="LO">0</field><field name="HI">576</field></block></value>
                     <next>
                       <block type="var_set">
-                        <field name="VAR" id="vst">state</field>
-                        <value name="VALUE"><block type="val_str"><field name="TEXT">play</field></block></value>
+                        <field name="VAR" id="vs">score</field>
+                        <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
                         <next>
                           <block type="var_set">
-                            <field name="VAR" id="vs">score</field>
-                            <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+                            <field name="VAR" id="vst">state</field>
+                            <value name="VALUE"><block type="val_str"><field name="TEXT">play</field></block></value>
                             <next>
                               <block type="game_loop">
                                 <statement name="DO">
@@ -42,7 +41,7 @@
                                         <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#0a0a2e</field></block></value>
                                         <next>
                                           <block type="pico_if">
-                                            <mutation elseif="0" else="1"></mutation>
+                                            <mutation elseif="0" else="1" />
                                             <value name="IF0">
                                               <block type="cond_compare">
                                                 <field name="OP">==</field>
@@ -52,7 +51,7 @@
                                             </value>
                                             <statement name="DO0">
                                               <block type="pico_if">
-                                                <mutation elseif="0" else="0"></mutation>
+                                                <mutation elseif="0" else="0" />
                                                 <value name="IF0"><block type="game_key_pressed"><field name="KEY">K_RIGHT</field></block></value>
                                                 <statement name="DO0">
                                                   <block type="var_change">
@@ -62,7 +61,7 @@
                                                 </statement>
                                                 <next>
                                                   <block type="pico_if">
-                                                    <mutation elseif="0" else="0"></mutation>
+                                                    <mutation elseif="0" else="0" />
                                                     <value name="IF0"><block type="game_key_pressed"><field name="KEY">K_LEFT</field></block></value>
                                                     <statement name="DO0">
                                                       <block type="var_change">
@@ -76,7 +75,7 @@
                                                         <value name="AMOUNT"><block type="val_number"><field name="NUM">3</field></block></value>
                                                         <next>
                                                           <block type="pico_if">
-                                                            <mutation elseif="0" else="0"></mutation>
+                                                            <mutation elseif="0" else="0" />
                                                             <value name="IF0">
                                                               <block type="cond_compare">
                                                                 <field name="OP">&gt;</field>
@@ -104,7 +103,7 @@
                                                             </statement>
                                                             <next>
                                                               <block type="pico_if">
-                                                                <mutation elseif="0" else="0"></mutation>
+                                                                <mutation elseif="0" else="0" />
                                                                 <value name="IF0">
                                                                   <block type="cond_and">
                                                                     <value name="A">
@@ -155,13 +154,13 @@
                                                                     <value name="X"><block type="val_var"><field name="VAR" id="vpx">px</field></block></value>
                                                                     <value name="Y"><block type="val_number"><field name="NUM">330</field></block></value>
                                                                     <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
-                                                                    <next>
+                                                                    <value name="H"><block type="val_number"><field name="NUM">48</field></block></value><next>
                                                                       <block type="game_draw_image">
                                                                         <value name="URL"><block type="game_image_preset"><field name="IMG">assets/game-icons/enemy_bug.svg</field></block></value>
                                                                         <value name="X"><block type="val_var"><field name="VAR" id="vex">ex</field></block></value>
                                                                         <value name="Y"><block type="val_var"><field name="VAR" id="vey">ey</field></block></value>
                                                                         <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
-                                                                      </block>
+                                                                      <value name="H"><block type="val_number"><field name="NUM">48</field></block></value></block>
                                                                     </next>
                                                                   </block>
                                                                 </next>
@@ -178,8 +177,8 @@
                                             <statement name="ELSE">
                                               <block type="game_draw_text">
                                                 <value name="TEXT"><block type="val_str"><field name="TEXT">GAME OVER</field></block></value>
-                                                <value name="X"><block type="val_number"><field name="NUM">220</field></block></value>
-                                                <value name="Y"><block type="val_number"><field name="NUM">140</field></block></value>
+                                                <value name="X"><block type="val_number"><field name="NUM">215</field></block></value>
+                                                <value name="Y"><block type="val_number"><field name="NUM">160</field></block></value>
                                                 <value name="SIZE"><block type="val_number"><field name="NUM">40</field></block></value>
                                                 <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ff3232</field></block></value>
                                                 <next>
@@ -191,7 +190,7 @@
                                                     <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ffffff</field></block></value>
                                                     <next>
                                                       <block type="pico_if">
-                                                        <mutation elseif="0" else="0"></mutation>
+                                                        <mutation elseif="0" else="0" />
                                                         <value name="IF0"><block type="game_key_pressed"><field name="KEY">K_SPACE</field></block></value>
                                                         <statement name="DO0">
                                                           <block type="var_set">
@@ -241,7 +240,7 @@
                                   </block>
                                 </statement>
                                 <next>
-                                  <block type="game_quit"></block>
+                                  <block type="game_quit" />
                                 </next>
                               </block>
                             </next>
@@ -256,6 +255,5 @@
           </block>
         </next>
       </block>
-    </next>
-  </block>
-</xml>
+</next></block>
+    </xml>

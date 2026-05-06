@@ -3,14 +3,20 @@
   <variables>
     <variable id="vs">score</variable>
   </variables>
-  <block type="game_init" x="20" y="20">
-    <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
-    <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
-    <value name="TITLE"><block type="val_str"><field name="TEXT">Score</field></block></value>
+  <block type="var_set" x="20" y="20">
+    <field name="VAR" id="vs">score</field>
+    <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
     <next>
-      <block type="var_set">
-        <field name="VAR" id="vs">score</field>
-        <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+      <block type="game_init">
+        <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
+        <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
+        <value name="TITLE">
+          <block type="py_fstring">
+            <field name="PRE">Score: </field>
+            <field name="POST"></field>
+            <value name="VAR"><block type="val_var"><field name="VAR" id="vs">score</field></block></value>
+          </block>
+        </value>
         <next>
           <block type="game_loop">
             <statement name="DO">

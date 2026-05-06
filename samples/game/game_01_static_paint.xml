@@ -1,88 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <block type="game_init" id="init1" x="20" y="20">
-    <value name="W">
-      <block type="val_number" id="w1">
-        <field name="NUM">480</field>
-      </block>
-    </value>
-    <value name="H">
-      <block type="val_number" id="h1">
-        <field name="NUM">320</field>
-      </block>
-    </value>
-    <value name="TITLE">
-      <block type="val_str" id="t1">
-        <field name="TEXT">Sample 01 Static paint</field>
-      </block>
-    </value>
+    <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
+    <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
+    <value name="TITLE"><block type="val_str"><field name="TEXT">My Game</field></block></value>
     <next>
-      <block type="game_loop" id="loop1">
+      <block type="game_loop">
         <statement name="DO">
-          <block type="game_events" id="ev1">
+          <block type="game_events">
             <next>
-              <block type="game_fill" id="fill1">
-                <value name="COLOR">
-                  <block type="colour_picker" id="c1">
-                    <field name="COLOUR">#1a237e</field>
-                  </block>
-                </value>
+              <block type="game_fill">
+                <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#1e50c8</field></block></value>
                 <next>
-                  <block type="game_draw_rect" id="rect1">
-                    <value name="X">
-                      <block type="val_number" id="rx"><field name="NUM">160</field></block>
-                    </value>
-                    <value name="Y">
-                      <block type="val_number" id="ry"><field name="NUM">110</field></block>
-                    </value>
-                    <value name="W">
-                      <block type="val_number" id="rw"><field name="NUM">160</field></block>
-                    </value>
-                    <value name="H">
-                      <block type="val_number" id="rh"><field name="NUM">100</field></block>
-                    </value>
-                    <value name="COLOR">
-                      <block type="colour_picker" id="c2"><field name="COLOUR">#ffab00</field></block>
-                    </value>
-                    <next>
-                      <block type="game_draw_circle" id="circ1">
-                        <value name="X">
-                          <block type="val_number" id="cx"><field name="NUM">240</field></block>
-                        </value>
-                        <value name="Y">
-                          <block type="val_number" id="cy"><field name="NUM">160</field></block>
-                        </value>
-                        <value name="R">
-                          <block type="val_number" id="cr"><field name="NUM">40</field></block>
-                        </value>
-                        <value name="COLOR">
-                          <block type="colour_picker" id="c3"><field name="COLOUR">#00e676</field></block>
-                        </value>
-                        <next>
-                          <block type="game_draw_line" id="ln1">
-                            <value name="X1"><block type="val_number"><field name="NUM">0</field></block></value>
-                            <value name="Y1"><block type="val_number"><field name="NUM">0</field></block></value>
-                            <value name="X2"><block type="val_number"><field name="NUM">480</field></block></value>
-                            <value name="Y2"><block type="val_number"><field name="NUM">320</field></block></value>
-                            <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ffffff</field></block></value>
-                            <next>
-                              <block type="game_draw_text" id="txt1">
-                                <value name="TEXT"><block type="val_str"><field name="TEXT">STATIC DEMO</field></block></value>
-                                <value name="X"><block type="val_number"><field name="NUM">130</field></block></value>
-                                <value name="Y"><block type="val_number"><field name="NUM">30</field></block></value>
-                                <value name="SIZE"><block type="val_number"><field name="NUM">28</field></block></value>
-                                <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ffffff</field></block></value>
-                                <next>
-                                  <block type="game_flip" id="flip1">
-                                    <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
-                                  </block>
-                                </next>
-                              </block>
-                            </next>
-                          </block>
-                        </next>
-                      </block>
-                    </next>
+                  <block type="game_flip">
+                    <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
                   </block>
                 </next>
               </block>
@@ -90,7 +21,7 @@
           </block>
         </statement>
         <next>
-          <block type="game_quit" id="quit1"></block>
+          <block type="game_quit"></block>
         </next>
       </block>
     </next>

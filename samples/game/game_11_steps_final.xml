@@ -8,13 +8,12 @@
     <variable id="vpr">player_rect</variable>
     <variable id="ver">enemy_rect</variable>
   </variables>
-  <block type="game_init" x="20" y="20">
+  <block type="game_import_random" x="20" y="20">
+        <next><block type="game_init">
     <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
     <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
     <value name="TITLE"><block type="val_str"><field name="TEXT">Collide</field></block></value>
     <next>
-      <block type="game_import_random">
-        <next>
           <block type="var_set">
             <field name="VAR" id="vpx">px</field>
             <value name="VALUE"><block type="val_number"><field name="NUM">300</field></block></value>
@@ -62,7 +61,7 @@
                                             </value>
                                             <next>
                                               <block type="pico_if">
-                                                <mutation elseif="0" else="1"></mutation>
+                                                <mutation elseif="0" else="1" />
                                                 <value name="IF0">
                                                   <block type="game_collide">
                                                     <value name="A"><block type="val_var"><field name="VAR" id="vpr">player_rect</field></block></value>
@@ -81,7 +80,7 @@
                                                 </statement>
                                                 <next>
                                                   <block type="pico_if">
-                                                    <mutation elseif="0" else="0"></mutation>
+                                                    <mutation elseif="0" else="0" />
                                                     <value name="IF0">
                                                       <block type="cond_compare">
                                                         <field name="OP">&gt;</field>
@@ -107,13 +106,13 @@
                                                         <value name="X"><block type="val_var"><field name="VAR" id="vpx">px</field></block></value>
                                                         <value name="Y"><block type="val_var"><field name="VAR" id="vpy">py</field></block></value>
                                                         <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
-                                                        <next>
+                                                        <value name="H"><block type="val_number"><field name="NUM">48</field></block></value><next>
                                                           <block type="game_draw_image">
                                                             <value name="URL"><block type="game_image_preset"><field name="IMG">assets/game-icons/enemy_bug.svg</field></block></value>
                                                             <value name="X"><block type="val_var"><field name="VAR" id="vex">ex</field></block></value>
                                                             <value name="Y"><block type="val_var"><field name="VAR" id="vey">ey</field></block></value>
                                                             <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
-                                                            <next>
+                                                            <value name="H"><block type="val_number"><field name="NUM">48</field></block></value><next>
                                                               <block type="game_flip">
                                                                 <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
                                                               </block>
@@ -135,7 +134,7 @@
                               </block>
                             </statement>
                             <next>
-                              <block type="game_quit"></block>
+                              <block type="game_quit" />
                             </next>
                           </block>
                         </next>
@@ -148,6 +147,5 @@
           </block>
         </next>
       </block>
-    </next>
-  </block>
-</xml>
+</next></block>
+    </xml>

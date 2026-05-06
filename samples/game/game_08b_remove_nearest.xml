@@ -3,6 +3,8 @@
   <variables>
     <variable id="vm">marks</variable>
     <variable id="vit">m</variable>
+    <variable id="vmx">mx</variable>
+    <variable id="vmy">my</variable>
   </variables>
   <block type="game_init" x="20" y="20">
     <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
@@ -23,15 +25,23 @@
                       <block type="pico_if">
                         <value name="IF0"><block type="game_mouse_pressed"><field name="BTN">0</field></block></value>
                         <statement name="DO0">
-                          <block type="py_list_append">
-                            <field name="LIST" id="vm">marks</field>
-                            <value name="VALUE">
-                              <block type="py_list_literal">
-                                <mutation items="2"></mutation>
-                                <value name="ITEM0"><block type="game_mouse_x"></block></value>
-                                <value name="ITEM1"><block type="game_mouse_y"></block></value>
-                              </block>
-                            </value>
+                          <block type="var_set2">
+                            <field name="VAR1" id="vmx">mx</field>
+                            <field name="VAR2" id="vmy">my</field>
+                            <value name="VALUE1"><block type="game_mouse_x"></block></value>
+                            <value name="VALUE2"><block type="game_mouse_y"></block></value>
+                            <next>
+                                  <block type="py_list_append">
+                                    <field name="LIST" id="vm">marks</field>
+                                    <value name="VALUE">
+                                      <block type="py_list_literal">
+                                        <mutation items="2"></mutation>
+                                        <value name="ITEM0"><block type="val_var"><field name="VAR" id="vmx">mx</field></block></value>
+                                        <value name="ITEM1"><block type="val_var"><field name="VAR" id="vmy">my</field></block></value>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </next>
                           </block>
                         </statement>
                         <next>

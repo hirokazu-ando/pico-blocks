@@ -2,63 +2,80 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="vst">stars</variable>
-    <variable id="vi">i</variable>
-    <variable id="vx">x</variable>
-    <variable id="vy">y</variable>
+    <variable id="vu">_</variable>
     <variable id="vstar">star</variable>
   </variables>
-  <block type="game_init" x="20" y="20">
-    <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
-    <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
-    <value name="TITLE"><block type="val_str"><field name="TEXT">Stars</field></block></value>
+  <block type="game_import_random" x="20" y="20">
     <next>
-      <block type="game_import_random">
+      <block type="game_init">
+        <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
+        <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
+        <value name="TITLE"><block type="val_str"><field name="TEXT">Stars</field></block></value>
         <next>
           <block type="var_set">
             <field name="VAR" id="vst">stars</field>
-            <value name="VALUE"><block type="py_list_empty"/></value>
-            <next>
-              <block type="pico_for_from_to">
-                <field name="VAR" id="vi">i</field>
-                <value name="START"><block type="val_number"><field name="NUM">0</field></block></value>
-                <value name="STOP"><block type="val_number"><field name="NUM">50</field></block></value>
-                <value name="STEP"><block type="val_number"><field name="NUM">1</field></block></value>
-                <statement name="DO">
-                  <block type="var_set">
-                    <field name="VAR" id="vx">x</field>
-                    <value name="VALUE">
+            <value name="VALUE">
+              <block type="py_list_comp">
+                <field name="VAR" id="vu">_</field>
+                <value name="EXPR">
+                  <block type="py_list_literal">
+                    <mutation items="2" />
+                    <value name="ITEM0">
                       <block type="py_random_int">
                         <value name="FROM"><block type="val_number"><field name="NUM">0</field></block></value>
                         <value name="TO"><block type="val_number"><field name="NUM">640</field></block></value>
                       </block>
                     </value>
+                    <value name="ITEM1">
+                      <block type="py_random_int">
+                        <value name="FROM"><block type="val_number"><field name="NUM">0</field></block></value>
+                        <value name="TO"><block type="val_number"><field name="NUM">400</field></block></value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <value name="LIST">
+                  <block type="py_range">
+                    <field name="START">0</field>
+                    <field name="STOP">50</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="game_loop">
+                <statement name="DO">
+                  <block type="game_events">
                     <next>
-                      <block type="var_set">
-                        <field name="VAR" id="vy">y</field>
-                        <value name="VALUE">
-                          <block type="py_random_int">
-                            <value name="FROM"><block type="val_number"><field name="NUM">0</field></block></value>
-                            <value name="TO"><block type="val_number"><field name="NUM">400</field></block></value>
-                          </block>
-                        </value>
+                      <block type="game_fill">
+                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#000020</field></block></value>
                         <next>
-                          <block type="py_list_append">
+                          <block type="py_for_list">
+                            <field name="VAR" id="vstar">star</field>
                             <field name="LIST" id="vst">stars</field>
-                            <value name="VALUE">
-                              <block type="py_list_literal">
-                                <mutation items="2"/>
-                                <value name="ITEM0">
-                                  <block type="val_var">
-                                    <field name="VAR" id="vx">x</field>
+                            <statement name="DO">
+                              <block type="game_draw_circle">
+                                <value name="X">
+                                  <block type="py_list_get">
+                                    <field name="LIST" id="vstar">star</field>
+                                    <value name="INDEX"><block type="val_number"><field name="NUM">0</field></block></value>
                                   </block>
                                 </value>
-                                <value name="ITEM1">
-                                  <block type="val_var">
-                                    <field name="VAR" id="vy">y</field>
+                                <value name="Y">
+                                  <block type="py_list_get">
+                                    <field name="LIST" id="vstar">star</field>
+                                    <value name="INDEX"><block type="val_number"><field name="NUM">1</field></block></value>
                                   </block>
                                 </value>
+                                <value name="R"><block type="val_number"><field name="NUM">2</field></block></value>
+                                <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ffffc8</field></block></value>
                               </block>
-                            </value>
+                            </statement>
+                            <next>
+                              <block type="game_flip">
+                                <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
+                              </block>
+                            </next>
                           </block>
                         </next>
                       </block>
@@ -66,49 +83,7 @@
                   </block>
                 </statement>
                 <next>
-                  <block type="game_loop">
-                    <statement name="DO">
-                      <block type="game_events">
-                        <next>
-                          <block type="game_fill">
-                            <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#000020</field></block></value>
-                            <next>
-                              <block type="py_for_list">
-                                <field name="VAR" id="vstar">star</field>
-                                <field name="LIST" id="vst">stars</field>
-                                <statement name="DO">
-                                  <block type="game_draw_circle">
-                                    <value name="X">
-                                      <block type="py_list_get">
-                                        <field name="LIST" id="vstar">star</field>
-                                        <value name="INDEX"><block type="val_number"><field name="NUM">0</field></block></value>
-                                      </block>
-                                    </value>
-                                    <value name="Y">
-                                      <block type="py_list_get">
-                                        <field name="LIST" id="vstar">star</field>
-                                        <value name="INDEX"><block type="val_number"><field name="NUM">1</field></block></value>
-                                      </block>
-                                    </value>
-                                    <value name="R"><block type="val_number"><field name="NUM">2</field></block></value>
-                                    <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ffffc8</field></block></value>
-                                  </block>
-                                </statement>
-                                <next>
-                                  <block type="game_flip">
-                                    <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
-                                  </block>
-                                </next>
-                              </block>
-                            </next>
-                          </block>
-                        </next>
-                      </block>
-                    </statement>
-                    <next>
-                      <block type="game_quit"></block>
-                    </next>
-                  </block>
+                  <block type="game_quit" />
                 </next>
               </block>
             </next>

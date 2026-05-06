@@ -7,13 +7,12 @@
     <variable id="ve2x">e2x</variable>
     <variable id="ve2y">e2y</variable>
   </variables>
-  <block type="game_init" x="20" y="20">
+  <block type="game_import_random" x="20" y="20">
+        <next><block type="game_init">
     <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
     <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
     <value name="TITLE"><block type="val_str"><field name="TEXT">Two Enemies</field></block></value>
     <next>
-      <block type="game_import_random">
-        <next>
           <block type="var_set">
             <field name="VAR" id="vpx">px</field>
             <value name="VALUE"><block type="val_number"><field name="NUM">300</field></block></value>
@@ -96,19 +95,19 @@
                                                             <value name="X"><block type="val_var"><field name="VAR" id="vpx">px</field></block></value>
                                                             <value name="Y"><block type="val_number"><field name="NUM">340</field></block></value>
                                                             <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
-                                                            <next>
+                                                            <value name="H"><block type="val_number"><field name="NUM">48</field></block></value><next>
                                                               <block type="game_draw_image">
                                                                 <value name="URL"><block type="game_image_preset"><field name="IMG">assets/game-icons/enemy_bug.svg</field></block></value>
                                                                 <value name="X"><block type="val_var"><field name="VAR" id="ve1x">e1x</field></block></value>
                                                                 <value name="Y"><block type="val_var"><field name="VAR" id="ve1y">e1y</field></block></value>
                                                                 <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
-                                                                <next>
+                                                                <value name="H"><block type="val_number"><field name="NUM">48</field></block></value><next>
                                                                   <block type="game_draw_image">
                                                                     <value name="URL"><block type="game_image_preset"><field name="IMG">assets/game-icons/enemy_bug.svg</field></block></value>
                                                                     <value name="X"><block type="val_var"><field name="VAR" id="ve2x">e2x</field></block></value>
                                                                     <value name="Y"><block type="val_var"><field name="VAR" id="ve2y">e2y</field></block></value>
                                                                     <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
-                                                                    <next>
+                                                                    <value name="H"><block type="val_number"><field name="NUM">48</field></block></value><next>
                                                                       <block type="game_flip">
                                                                         <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
                                                                       </block>
@@ -132,7 +131,7 @@
                                   </block>
                                 </statement>
                                 <next>
-                                  <block type="game_quit"></block>
+                                  <block type="game_quit" />
                                 </next>
                               </block>
                             </next>
@@ -147,6 +146,5 @@
           </block>
         </next>
       </block>
-    </next>
-  </block>
-</xml>
+</next></block>
+    </xml>

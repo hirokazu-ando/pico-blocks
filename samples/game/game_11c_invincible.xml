@@ -7,13 +7,12 @@
     <variable id="viv">inv_until</variable>
     <variable id="vnow">now</variable>
   </variables>
-  <block type="game_init" x="20" y="20">
+  <block type="game_import_random" x="20" y="20">
+        <next><block type="game_init">
     <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
     <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
     <value name="TITLE"><block type="val_str"><field name="TEXT">Invincible</field></block></value>
     <next>
-      <block type="game_import_random">
-        <next>
           <block type="var_set">
             <field name="VAR" id="vpx">px</field>
             <value name="VALUE"><block type="val_number"><field name="NUM">300</field></block></value>
@@ -38,7 +37,7 @@
                                     <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#0a0a2e</field></block></value>
                                     <next>
                                       <block type="pico_if">
-                                        <mutation elseif="0" else="0"></mutation>
+                                        <mutation elseif="0" else="0" />
                                         <value name="IF0"><block type="game_key_pressed"><field name="KEY">K_RIGHT</field></block></value>
                                         <statement name="DO0">
                                           <block type="var_change">
@@ -48,7 +47,7 @@
                                         </statement>
                                         <next>
                                           <block type="pico_if">
-                                            <mutation elseif="0" else="0"></mutation>
+                                            <mutation elseif="0" else="0" />
                                             <value name="IF0"><block type="game_key_pressed"><field name="KEY">K_LEFT</field></block></value>
                                             <statement name="DO0">
                                               <block type="var_change">
@@ -63,10 +62,10 @@
                                                 <next>
                                                   <block type="var_set">
                                                     <field name="VAR" id="vnow">now</field>
-                                                    <value name="VALUE"><block type="game_get_ticks"></block></value>
+                                                    <value name="VALUE"><block type="game_get_ticks" /></value>
                                                     <next>
                                                       <block type="pico_if">
-                                                        <mutation elseif="0" else="0"></mutation>
+                                                        <mutation elseif="0" else="0" />
                                                         <value name="IF0">
                                                           <block type="cond_and">
                                                             <value name="A">
@@ -141,44 +140,22 @@
                                                           </block>
                                                         </statement>
                                                         <next>
-                                                          <block type="pico_if">
-                                                            <mutation elseif="0" else="0"></mutation>
-                                                            <value name="IF0">
-                                                              <block type="cond_compare">
-                                                                <field name="OP">&gt;</field>
-                                                                <value name="LEFT"><block type="val_var"><field name="VAR" id="vey">ey</field></block></value>
-                                                                <value name="RIGHT"><block type="val_number"><field name="NUM">400</field></block></value>
-                                                              </block>
-                                                            </value>
-                                                            <statement name="DO0">
-                                                              <block type="var_set">
-                                                                <field name="VAR" id="vey">ey</field>
-                                                                <value name="VALUE"><block type="val_number"><field name="NUM">-48</field></block></value>
-                                                                <next>
-                                                                  <block type="var_set">
-                                                                    <field name="VAR" id="vex">ex</field>
-                                                                    <value name="VALUE"><block type="game_random_int"><field name="LO">0</field><field name="HI">576</field></block></value>
-                                                                  </block>
-                                                                </next>
-                                                              </block>
-                                                            </statement>
+                                                          <block type="game_draw_image">
+                                                            <value name="URL"><block type="game_image_preset"><field name="IMG">assets/game-icons/player_ship.svg</field></block></value>
+                                                            <value name="X"><block type="val_var"><field name="VAR" id="vpx">px</field></block></value>
+                                                            <value name="Y"><block type="val_number"><field name="NUM">330</field></block></value>
+                                                            <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
+                                                            <value name="H"><block type="val_number"><field name="NUM">48</field></block></value>
                                                             <next>
                                                               <block type="game_draw_image">
-                                                                <value name="URL"><block type="game_image_preset"><field name="IMG">assets/game-icons/player_ship.svg</field></block></value>
-                                                                <value name="X"><block type="val_var"><field name="VAR" id="vpx">px</field></block></value>
-                                                                <value name="Y"><block type="val_number"><field name="NUM">330</field></block></value>
+                                                                <value name="URL"><block type="game_image_preset"><field name="IMG">assets/game-icons/enemy_bug.svg</field></block></value>
+                                                                <value name="X"><block type="val_var"><field name="VAR" id="vex">ex</field></block></value>
+                                                                <value name="Y"><block type="val_var"><field name="VAR" id="vey">ey</field></block></value>
                                                                 <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
+                                                                <value name="H"><block type="val_number"><field name="NUM">48</field></block></value>
                                                                 <next>
-                                                                  <block type="game_draw_image">
-                                                                    <value name="URL"><block type="game_image_preset"><field name="IMG">assets/game-icons/enemy_bug.svg</field></block></value>
-                                                                    <value name="X"><block type="val_var"><field name="VAR" id="vex">ex</field></block></value>
-                                                                    <value name="Y"><block type="val_var"><field name="VAR" id="vey">ey</field></block></value>
-                                                                    <value name="W"><block type="val_number"><field name="NUM">48</field></block></value>
-                                                                    <next>
-                                                                      <block type="game_flip">
-                                                                        <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
-                                                                      </block>
-                                                                    </next>
+                                                                  <block type="game_flip">
+                                                                    <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
                                                                   </block>
                                                                 </next>
                                                               </block>
@@ -200,7 +177,7 @@
                               </block>
                             </statement>
                             <next>
-                              <block type="game_quit"></block>
+                              <block type="game_quit" />
                             </next>
                           </block>
                         </next>
@@ -213,6 +190,5 @@
           </block>
         </next>
       </block>
-    </next>
-  </block>
-</xml>
+</next></block>
+    </xml>

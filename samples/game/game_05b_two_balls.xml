@@ -11,22 +11,18 @@
     <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
     <value name="TITLE"><block type="val_str"><field name="TEXT">Two Balls</field></block></value>
     <next>
-      <block type="var_set">
-        <field name="VAR" id="v1x">b1x</field>
-        <value name="VALUE"><block type="val_number"><field name="NUM">320</field></block></value>
+      <block type="var_set2">
+        <field name="VAR1" id="v1x">b1x</field>
+        <field name="VAR2" id="v1y">b1y</field>
+        <value name="VALUE1"><block type="val_number"><field name="NUM">320</field></block></value>
+        <value name="VALUE2"><block type="val_number"><field name="NUM">50</field></block></value>
         <next>
-          <block type="var_set">
-            <field name="VAR" id="v1y">b1y</field>
-            <value name="VALUE"><block type="val_number"><field name="NUM">50</field></block></value>
+          <block type="var_set2">
+            <field name="VAR1" id="v2x">b2x</field>
+            <field name="VAR2" id="v2y">b2y</field>
+            <value name="VALUE1"><block type="val_number"><field name="NUM">100</field></block></value>
+            <value name="VALUE2"><block type="val_number"><field name="NUM">200</field></block></value>
             <next>
-              <block type="var_set">
-                <field name="VAR" id="v2x">b2x</field>
-                <value name="VALUE"><block type="val_number"><field name="NUM">100</field></block></value>
-                <next>
-                  <block type="var_set">
-                    <field name="VAR" id="v2y">b2y</field>
-                    <value name="VALUE"><block type="val_number"><field name="NUM">200</field></block></value>
-                    <next>
                       <block type="game_loop">
                         <statement name="DO">
                           <block type="game_events">
@@ -88,12 +84,8 @@
                       </block>
                     </next>
                   </block>
-                </next>
-              </block>
             </next>
           </block>
         </next>
       </block>
-    </next>
-  </block>
 </xml>
