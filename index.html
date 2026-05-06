@@ -1096,6 +1096,9 @@
         <value name="Y2"><shadow type="val_number"><field name="NUM">100</field></shadow></value>
         <value name="COLOR"><shadow type="colour_picker"><field name="COLOUR">#ffffff</field></shadow></value>
       </block>
+      <block type="game_font_set" gap="8">
+        <value name="SIZE"><shadow type="val_number"><field name="NUM">28</field></shadow></value>
+      </block>
       <block type="game_draw_text" gap="8">
         <value name="TEXT"><shadow type="val_str"><field name="TEXT">Hello</field></shadow></value>
         <value name="X"><shadow type="val_number"><field name="NUM">10</field></shadow></value>
@@ -1103,7 +1106,22 @@
         <value name="SIZE"><shadow type="val_number"><field name="NUM">24</field></shadow></value>
         <value name="COLOR"><shadow type="colour_picker"><field name="COLOUR">#ffffff</field></shadow></value>
       </block>
+      <block type="game_text_render" gap="8">
+        <value name="TEXT"><shadow type="val_str"><field name="TEXT">Hello</field></shadow></value>
+        <value name="COLOR"><shadow type="colour_picker"><field name="COLOUR">#ffffff</field></shadow></value>
+      </block>
+      <block type="game_blit_surface" gap="8">
+        <value name="X"><shadow type="val_number"><field name="NUM">10</field></shadow></value>
+        <value name="Y"><shadow type="val_number"><field name="NUM">10</field></shadow></value>
+      </block>
       <block type="game_image_preset" gap="8"></block>
+      <block type="game_image_blit" gap="8">
+        <value name="URL"><shadow type="game_image_preset"></shadow></value>
+        <value name="X"><shadow type="val_number"><field name="NUM">100</field></shadow></value>
+        <value name="Y"><shadow type="val_number"><field name="NUM">100</field></shadow></value>
+        <value name="W"><shadow type="val_number"><field name="NUM">32</field></shadow></value>
+        <value name="H"><shadow type="val_number"><field name="NUM">32</field></shadow></value>
+      </block>
       <block type="game_draw_image" gap="8">
         <field name="FLIP">NONE</field>
         <value name="URL"><shadow type="game_image_preset"></shadow></value>
@@ -1124,10 +1142,13 @@
     </category>
     <category name="入力" colour="#00897B">
       <block type="game_key_pressed" gap="8"></block>
+      <block type="game_keys_capture" gap="8"></block>
+      <block type="game_keys_held" gap="8"></block>
       <sep gap="20"></sep>
       <block type="game_mouse_x" gap="8"></block>
       <block type="game_mouse_y" gap="8"></block>
       <block type="game_mouse_pressed" gap="8"></block>
+      <block type="game_mouse_capture" gap="8"></block>
     </category>
     <category name="当たり判定" colour="#EC407A">
       <block type="game_rect" gap="8">
@@ -1142,6 +1163,64 @@
       <block type="game_rect_union" gap="8"></block>
       <sep gap="20"></sep>
       <block type="game_rect_attr" gap="8"></block>
+    </category>
+    <category name="タイマー" colour="#EC407A">
+      <block type="game_timer_set" gap="8">
+        <value name="SEC"><shadow type="val_number"><field name="NUM">3</field></shadow></value>
+      </block>
+      <block type="game_timer_done" gap="8"></block>
+    </category>
+    <category name="カメラ" colour="#EC407A">
+      <block type="game_camera_set" gap="8">
+        <value name="OX"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+        <value name="OY"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+      </block>
+      <block type="game_world_to_screen_x" gap="8">
+        <value name="X"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+      </block>
+      <block type="game_world_to_screen_y" gap="8">
+        <value name="Y"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+      </block>
+    </category>
+    <category name="タイルマップ" colour="#EC407A">
+      <block type="game_tilemap_create" gap="8">
+        <value name="W"><shadow type="val_number"><field name="NUM">20</field></shadow></value>
+        <value name="H"><shadow type="val_number"><field name="NUM">12</field></shadow></value>
+        <value name="FILL"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+      </block>
+      <block type="game_tilemap_get" gap="8">
+        <value name="Y"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+        <value name="X"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+      </block>
+      <block type="game_tilemap_set" gap="8">
+        <value name="Y"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+        <value name="X"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+        <value name="VALUE"><shadow type="val_number"><field name="NUM">1</field></shadow></value>
+      </block>
+      <block type="game_tilemap_draw" gap="8">
+        <value name="TILE"><shadow type="val_number"><field name="NUM">32</field></shadow></value>
+      </block>
+      <sep gap="20"></sep>
+      <block type="game_grid_rotate90" gap="8"></block>
+    </category>
+    <category name="物理" colour="#EC407A">
+      <block type="game_gravity_apply" gap="8">
+        <value name="GROUND"><shadow type="val_number"><field name="NUM">400</field></shadow></value>
+      </block>
+    </category>
+    <category name="サウンド" colour="#EC407A">
+      <block type="game_sound_load" gap="8">
+        <value name="URL"><shadow type="game_sound_preset"></shadow></value>
+      </block>
+      <block type="game_sound_play" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="game_music_load_play" gap="8">
+        <value name="URL"><shadow type="game_music_preset"></shadow></value>
+      </block>
+      <block type="game_music_stop" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="game_sound_preset" gap="8"></block>
+      <block type="game_music_preset" gap="8"></block>
     </category>
     <category name="変数" colour="#558B2F">
       <block type="var_set" gap="8">
@@ -1199,6 +1278,13 @@
       <sep gap="20"></sep>
       <block type="py_break" gap="8"></block>
       <block type="py_continue" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_range" gap="8">
+        <value name="N">
+          <shadow type="val_number"><field name="NUM">10</field></shadow>
+        </value>
+      </block>
+      <block type="py_for_dict_items_sorted" gap="8"></block>
     </category>
     <category name="リスト" colour="#689F38">
       <block type="py_list_empty" gap="8"></block>
@@ -1213,6 +1299,38 @@
         <value name="VALUE"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
       </block>
       <block type="py_list_len" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_list_literal" gap="8"><mutation items="3"/></block>
+      <block type="py_list_range" gap="8">
+        <field name="N">10</field>
+      </block>
+      <block type="py_list_get_negative" gap="8"></block>
+      <block type="py_list_slice" gap="8">
+        <value name="START"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+        <value name="STOP"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+      </block>
+      <block type="py_list_contains" gap="8"></block>
+      <block type="py_list_pop" gap="8">
+        <value name="INDEX">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="py_list_pop_val" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_list_comp" gap="8">
+        <value name="EXPR"><shadow type="val_var"></shadow></value>
+        <value name="LIST"><shadow type="py_list_empty"></shadow></value>
+      </block>
+      <block type="py_list_comp_if" gap="8">
+        <value name="EXPR"><shadow type="val_var"></shadow></value>
+        <value name="LIST"><shadow type="py_list_empty"></shadow></value>
+      </block>
+      <block type="py_bisect_left" gap="8">
+        <value name="VALUE"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+      </block>
+      <block type="py_bisect_right" gap="8">
+        <value name="VALUE"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
+      </block>
     </category>
     <category name="計算" colour="#FB8C00">
       <block type="py_math_op" gap="8">
@@ -1259,6 +1377,11 @@
       <sep gap="20"></sep>
       <block type="game_color" gap="8"></block>
       <block type="colour_picker" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_fstring2" gap="8"></block>
+      <block type="py_fstring3" gap="8"></block>
+      <block type="py_fstring_fmt" gap="8"></block>
+      <block type="py_ternary" gap="8"></block>
     </category>
     <category name="関数" colour="#FF7043">
       <block type="py_def_noarg" gap="8"></block>
@@ -1269,6 +1392,9 @@
       <sep gap="20"></sep>
       <block type="py_call_stmt" gap="8"></block>
       <block type="py_call_val" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_call_val2" gap="8"></block>
+      <block type="py_call_val3" gap="8"></block>
     </category>
     <category name="辞書" colour="#6D4C41">
       <block type="py_dict_literal" gap="8">
@@ -1294,6 +1420,17 @@
         <value name="KEY"><shadow type="val_str"><field name="TEXT">キー</field></shadow></value>
       </block>
       <block type="py_dict_keys" gap="8"></block>
+      <sep gap="20"></sep>
+      <block type="py_dict_val_literal" gap="8"></block>
+      <block type="py_dict_get_default" gap="8">
+        <value name="KEY">
+          <shadow type="val_str"><field name="TEXT">キー</field></shadow>
+        </value>
+        <value name="DEFAULT">
+          <shadow type="val_number"><field name="NUM">0</field></shadow>
+        </value>
+      </block>
+      <block type="py_dict_comp" gap="8"></block>
     </category>
     <category name="カスタム" colour="#455A64">
       <block type="py_custom_stmt" gap="8">
@@ -1320,7 +1457,7 @@
   <script src="js/blocks/data_analysis.js"></script>
   <script src="js/blocks/custom_python.js?v=20260429b"></script>
   <script src="js/game_engine.js?v=20260429a"></script>
-  <script src="js/blocks/game.js?v=20260503b"></script>
+  <script src="js/blocks/game.js?v=20260507a"></script>
   <script src="js/ml_engine.js?v=20260503b"></script>
   <script src="js/blocks/ml.js?v=20260503b"></script>
   <script src="js/image_engine.js?v=20260503b"></script>
@@ -1328,7 +1465,7 @@
   <script src="js/chart_engine.js?v=20260506g"></script>
   <script src="js/stats_engine.js?v=20260506b"></script>
   <script src="js/csv_engine.js?v=20260506a"></script>
-  <script src="js/app.js?v=20260506d"></script>
+  <script src="js/app.js?v=20260507a"></script>
 
   <!-- エラー解説パネル（body末尾・fixed配置） -->
   <div id="error-hint">

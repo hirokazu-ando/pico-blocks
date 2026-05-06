@@ -19,8 +19,16 @@
                     <value name="H"><block type="val_number"><field name="NUM">80</field></block></value>
                     <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ff0000</field></block></value>
                     <next>
-                      <block type="game_flip">
-                        <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
+                      <block type="game_draw_circle">
+                        <value name="X"><block type="val_number"><field name="NUM">320</field></block></value>
+                        <value name="Y"><block type="val_number"><field name="NUM">200</field></block></value>
+                        <value name="R"><block type="val_number"><field name="NUM">40</field></block></value>
+                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#0000ff</field></block></value>
+                        <next>
+                          <block type="game_flip">
+                            <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
+                          </block>
+                        </next>
                       </block>
                     </next>
                   </block>

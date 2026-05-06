@@ -1,53 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
+    <variable id="vfn">font</variable>
     <variable id="vsc">score</variable>
+    <variable id="vts">text_surf</variable>
   </variables>
   <block type="game_init" x="20" y="20">
     <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
     <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
-    <value name="TITLE"><block type="val_str"><field name="TEXT">Score</field></block></value>
+    <value name="TITLE"><block type="val_str"><field name="TEXT">線と文字</field></block></value>
     <next>
-      <block type="var_set">
-        <field name="VAR" id="vsc">score</field>
-        <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+      <block type="game_font_set">
+        <field name="VAR" id="vfn">font</field>
+        <value name="SIZE"><block type="val_number"><field name="NUM">28</field></block></value>
         <next>
-          <block type="game_loop">
-            <statement name="DO">
-              <block type="game_events">
-                <next>
-                  <block type="game_fill">
-                    <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#000000</field></block></value>
+          <block type="var_set">
+            <field name="VAR" id="vsc">score</field>
+            <value name="VALUE"><block type="val_number"><field name="NUM">0</field></block></value>
+            <next>
+              <block type="game_loop">
+                <statement name="DO">
+                  <block type="game_events">
                     <next>
-                      <block type="game_draw_text">
-                        <value name="TEXT">
-                          <block type="py_fstring">
-                            <field name="PRE">Score: </field>
-                            <field name="POST"></field>
-                            <value name="VAR">
-                              <block type="val_var">
-                                <field name="VAR" id="vsc">score</field>
+                      <block type="game_fill">
+                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#000000</field></block></value>
+                        <next>
+                          <block type="game_text_render">
+                            <field name="VAR" id="vts">text_surf</field>
+                            <value name="FONT"><block type="val_var"><field name="VAR" id="vfn">font</field></block></value>
+                            <value name="TEXT">
+                              <block type="py_fstring">
+                                <field name="PRE">Score: </field>
+                                <field name="POST"></field>
+                                <value name="VAR"><block type="val_var"><field name="VAR" id="vsc">score</field></block></value>
                               </block>
                             </value>
-                          </block>
-                        </value>
-                        <value name="X"><block type="val_number"><field name="NUM">10</field></block></value>
-                        <value name="Y"><block type="val_number"><field name="NUM">10</field></block></value>
-                        <value name="SIZE"><block type="val_number"><field name="NUM">28</field></block></value>
-                        <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ffffff</field></block></value>
-                        <next>
-                          <block type="game_flip">
-                            <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
+                            <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#ffffff</field></block></value>
+                            <next>
+                              <block type="game_blit_surface">
+                                <value name="SURF"><block type="val_var"><field name="VAR" id="vts">text_surf</field></block></value>
+                                <value name="X"><block type="val_number"><field name="NUM">10</field></block></value>
+                                <value name="Y"><block type="val_number"><field name="NUM">10</field></block></value>
+                                <next>
+                                  <block type="game_draw_line">
+                                    <value name="X1"><block type="val_number"><field name="NUM">0</field></block></value>
+                                    <value name="Y1"><block type="val_number"><field name="NUM">350</field></block></value>
+                                    <value name="X2"><block type="val_number"><field name="NUM">640</field></block></value>
+                                    <value name="Y2"><block type="val_number"><field name="NUM">350</field></block></value>
+                                    <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#808080</field></block></value>
+                                    <value name="THICK"><block type="val_number"><field name="NUM">2</field></block></value>
+                                    <next>
+                                      <block type="game_flip">
+                                        <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
                           </block>
                         </next>
                       </block>
                     </next>
                   </block>
+                </statement>
+                <next>
+                  <block type="game_quit"></block>
                 </next>
               </block>
-            </statement>
-            <next>
-              <block type="game_quit"></block>
             </next>
           </block>
         </next>

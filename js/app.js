@@ -606,6 +606,8 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         return '内蔵画像: ' + (snames[block.getFieldValue('IMG')] || block.getFieldValue('IMG'));
       }
+      case 'game_sound_preset': return '内蔵効果音: ' + (block.getFieldValue('SE') || '');
+      case 'game_music_preset': return '内蔵 BGM: ' + (block.getFieldValue('BGM') || '');
       case 'game_draw_image': return '画像を描画する（サイズ・回転・反転対応）';
       case 'game_rect_collidepoint': return 'Rect と点が重なるか（collidepoint）';
       case 'game_rect_union': return '二つの Rect を包む最小矩形（union）';
@@ -616,6 +618,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const btns = { '0': '左', '1': '中', '2': '右' };
         return `マウス${btns[block.getFieldValue('BTN')] || '左'}ボタン押下判定`;
       }
+      case 'game_keys_capture':  return `キー押下状態を「${getVarName(block, 'VAR')}」に取得`;
+      case 'game_keys_held': {
+        const v = getVarName(block, 'VAR');
+        return `${v}[${block.getFieldValue('KEY') || 'K_RIGHT'}] が押されている`;
+      }
+      case 'game_mouse_capture': return `マウス座標を「${getVarName(block, 'MX')}, ${getVarName(block, 'MY')}」に取得`;
+      case 'game_font_set':      return `フォント「${getVarName(block, 'VAR')}」を作る`;
+      case 'game_text_render':   return `文字サーフェス「${getVarName(block, 'VAR')}」を作る`;
+      case 'game_blit_surface':  return 'サーフェスを画面へ描画';
+      case 'game_image_blit':    return '画像を画面へ貼る（直接 blit）';
       case 'game_rect_attr': {
         const attrs = { x: 'x座標', y: 'y座標', width: '幅', height: '高さ', centerx: '中心x', centery: '中心y' };
         return `Rectの${attrs[block.getFieldValue('ATTR')] || '属性'}`;
@@ -656,6 +668,21 @@ document.addEventListener('DOMContentLoaded', function() {
       // Part 4 game
       case 'game_import_random': return 'random モジュールを読み込む';
       case 'game_random_int':    return `ランダム整数（${block.getFieldValue('LO')}〜${block.getFieldValue('HI')}）`;
+      case 'game_timer_set':     return `タイマー変数「${getVarName(block, 'VAR')}」を SEC 秒後にセット`;
+      case 'game_timer_done':    return `タイマー変数「${getVarName(block, 'VAR')}」の期限が来た`;
+      case 'game_camera_set':    return 'カメラ位置（cam_x, cam_y）を更新';
+      case 'game_world_to_screen_x': return 'ワールドX → 画面X（worldX − cam_x）';
+      case 'game_world_to_screen_y': return 'ワールドY → 画面Y（worldY − cam_y）';
+      case 'game_tilemap_create':    return 'タイルマップを作る（W×H, 初期値 FILL）';
+      case 'game_tilemap_get':       return 'マップ[行Y][列X] を取り出す';
+      case 'game_tilemap_set':       return 'マップ[行Y][列X] = VALUE';
+      case 'game_tilemap_draw':      return 'タイルマップを描画する（cam_x, cam_y を引いて）';
+      case 'game_gravity_apply':     return `重力で「${getVarName(block, 'Y')}」を更新（速度「${getVarName(block, 'VY')}」）`;
+      case 'game_grid_rotate90':     return '2 次元配列を 90 度回転';
+      case 'game_sound_load':        return '効果音を読み込む（Sound オブジェクト）';
+      case 'game_sound_play':        return '効果音を鳴らす';
+      case 'game_music_load_play':   return `BGM を再生${block.getFieldValue('LOOP') === 'TRUE' ? '（ループ）' : ''}`;
+      case 'game_music_stop':        return 'BGM を止める';
       // Part 5/6 ml
       case 'ml_data_2d':    return `特徴量データ ${block.getFieldValue('DATA').slice(0, 20)}...`;
       case 'ml_label_list': return `ラベルデータ ${block.getFieldValue('DATA').slice(0, 20)}...`;
@@ -1219,6 +1246,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const key = block.getFieldValue('KEY') || 'K_RIGHT';
         return `pygame.key.get_pressed()[pygame.${key}]`;
       }
+      case 'game_keys_held': {
+        const v = getVarName(block, 'VAR');
+        const key = block.getFieldValue('KEY') || 'K_RIGHT';
+        return `${v}[pygame.${key}]`;
+      }
       case 'game_rect': {
         const x = valueToCode(block, 'X', '0');
         const y = valueToCode(block, 'Y', '0');
@@ -1246,6 +1278,10 @@ document.addEventListener('DOMContentLoaded', function() {
         return JSON.stringify(block.getFieldValue('COLOR'));
       case 'game_image_preset':
         return JSON.stringify(block.getFieldValue('IMG'));
+      case 'game_sound_preset':
+        return JSON.stringify(block.getFieldValue('SE'));
+      case 'game_music_preset':
+        return JSON.stringify(block.getFieldValue('BGM'));
       case 'game_get_ticks':
         return 'pygame.time.get_ticks()';
       case 'game_mouse_x':
@@ -1285,6 +1321,38 @@ document.addEventListener('DOMContentLoaded', function() {
         const lo = block.getFieldValue('LO') || '0';
         const hi = block.getFieldValue('HI') || '576';
         return `random.randint(${lo}, ${hi})`;
+      }
+      case 'game_timer_done': {
+        const tdVar = getVarName(block, 'VAR');
+        return `pygame.time.get_ticks() >= ${tdVar}`;
+      }
+      case 'game_world_to_screen_x': {
+        const wx = valueToCode(block, 'X', '0');
+        return `${wx} - cam_x`;
+      }
+      case 'game_world_to_screen_y': {
+        const wy = valueToCode(block, 'Y', '0');
+        return `${wy} - cam_y`;
+      }
+      case 'game_tilemap_create': {
+        const tw = valueToCode(block, 'W', '10');
+        const th = valueToCode(block, 'H', '10');
+        const tf = valueToCode(block, 'FILL', '0');
+        return `[[${tf}] * ${tw} for _ in range(${th})]`;
+      }
+      case 'game_tilemap_get': {
+        const tg = valueToCode(block, 'MAP', 'tilemap');
+        const ty = valueToCode(block, 'Y', '0');
+        const tx = valueToCode(block, 'X', '0');
+        return `${tg}[${ty}][${tx}]`;
+      }
+      case 'game_grid_rotate90': {
+        const gg = valueToCode(block, 'GRID', 'grid');
+        return `[list(_row) for _row in zip(*${gg}[::-1])]`;
+      }
+      case 'game_sound_load': {
+        const url = valueToCode(block, 'URL', '"assets/audio/se/se_jump.wav"');
+        return `pygame.mixer.Sound(${url})`;
       }
       case 'ml_data_2d': {
         return block.getFieldValue('DATA') || '[]';
@@ -1369,25 +1437,92 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'game_draw_line': {
         const ln = _emitCtx.line;
-        ['X1', 'Y1', 'X2', 'Y2', 'COLOR'].forEach(function(n) { registerExprBlocksAtLineFromInput(block, n, ln); });
+        ['X1', 'Y1', 'X2', 'Y2', 'COLOR', 'THICK'].forEach(function(n) { registerExprBlocksAtLineFromInput(block, n, ln); });
         const x1 = valueToCode(block, 'X1', '0');
         const y1 = valueToCode(block, 'Y1', '0');
         const x2 = valueToCode(block, 'X2', '0');
         const y2 = valueToCode(block, 'Y2', '0');
         const c  = valueToCode(block, 'COLOR', '"#ffffff"');
-        code = appendLocal(code, indent + `pygame.draw.line(screen, ${c}, (${x1}, ${y1}), (${x2}, ${y2}))\n`);
+        const thickBlk = block.getInputTargetBlock && block.getInputTargetBlock('THICK');
+        if (thickBlk) {
+          const th = valueToCode(block, 'THICK', '1');
+          code = appendLocal(code, indent + `pygame.draw.line(screen, ${c}, (${x1}, ${y1}), (${x2}, ${y2}), ${th})\n`);
+        } else {
+          code = appendLocal(code, indent + `pygame.draw.line(screen, ${c}, (${x1}, ${y1}), (${x2}, ${y2}))\n`);
+        }
         break;
       }
       case 'game_draw_text': {
         const ln = _emitCtx.line;
-        ['TEXT', 'X', 'Y', 'SIZE', 'COLOR'].forEach(function(n) { registerExprBlocksAtLineFromInput(block, n, ln); });
+        ['TEXT', 'X', 'Y', 'SIZE', 'COLOR', 'FONT'].forEach(function(n) { registerExprBlocksAtLineFromInput(block, n, ln); });
         const t = valueToCode(block, 'TEXT', '"Hello"');
         const x = valueToCode(block, 'X', '0');
         const y = valueToCode(block, 'Y', '0');
-        const s = valueToCode(block, 'SIZE', '24');
         const c = valueToCode(block, 'COLOR', '"#ffffff"');
-        code = appendLocal(code, indent + `_f = pygame.font.SysFont(None, ${s})\n`);
-        code = appendLocal(code, indent + `screen.blit(_f.render(${t}, True, ${c}), (${x}, ${y}))\n`);
+        const fontBlk = block.getInputTargetBlock && block.getInputTargetBlock('FONT');
+        if (fontBlk) {
+          const f = valueToCode(block, 'FONT', 'pygame.font.SysFont(None, 24)');
+          code = appendLocal(code, indent + `screen.blit(${f}.render(${t}, True, ${c}), (${x}, ${y}))\n`);
+        } else {
+          const s = valueToCode(block, 'SIZE', '24');
+          code = appendLocal(code, indent + `_f = pygame.font.SysFont(None, ${s})\n`);
+          code = appendLocal(code, indent + `screen.blit(_f.render(${t}, True, ${c}), (${x}, ${y}))\n`);
+        }
+        break;
+      }
+      case 'game_keys_capture': {
+        const v = getVarName(block, 'VAR');
+        code = appendLocal(code, indent + `${v} = pygame.key.get_pressed()\n`);
+        break;
+      }
+      case 'game_mouse_capture': {
+        const mx = getVarName(block, 'MX');
+        const my = getVarName(block, 'MY');
+        code = appendLocal(code, indent + `${mx}, ${my} = pygame.mouse.get_pos()\n`);
+        break;
+      }
+      case 'game_font_set': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'SIZE', ln);
+        const v = getVarName(block, 'VAR');
+        const s = valueToCode(block, 'SIZE', '24');
+        code = appendLocal(code, indent + `${v} = pygame.font.SysFont(None, ${s})\n`);
+        break;
+      }
+      case 'game_text_render': {
+        const ln = _emitCtx.line;
+        ['FONT', 'TEXT', 'COLOR'].forEach(n => registerExprBlocksAtLineFromInput(block, n, ln));
+        const v = getVarName(block, 'VAR');
+        const f = valueToCode(block, 'FONT', 'pygame.font.SysFont(None, 24)');
+        const t = valueToCode(block, 'TEXT', '"Hello"');
+        const c = valueToCode(block, 'COLOR', '"#ffffff"');
+        code = appendLocal(code, indent + `${v} = ${f}.render(${t}, True, ${c})\n`);
+        break;
+      }
+      case 'game_blit_surface': {
+        const ln = _emitCtx.line;
+        ['SURF', 'X', 'Y'].forEach(n => registerExprBlocksAtLineFromInput(block, n, ln));
+        const s = valueToCode(block, 'SURF', 'None');
+        const x = valueToCode(block, 'X', '0');
+        const y = valueToCode(block, 'Y', '0');
+        code = appendLocal(code, indent + `screen.blit(${s}, (${x}, ${y}))\n`);
+        break;
+      }
+      case 'game_image_blit': {
+        const ln = _emitCtx.line;
+        ['URL', 'X', 'Y', 'W', 'H'].forEach(n => registerExprBlocksAtLineFromInput(block, n, ln));
+        const url = valueToCode(block, 'URL', '"assets/game-icons/player_ship.svg"');
+        const x = valueToCode(block, 'X', '0');
+        const y = valueToCode(block, 'Y', '0');
+        const wBlk = block.getInputTargetBlock && block.getInputTargetBlock('W');
+        const hBlk = block.getInputTargetBlock && block.getInputTargetBlock('H');
+        if (wBlk && hBlk) {
+          const w = valueToCode(block, 'W', '32');
+          const h = valueToCode(block, 'H', '32');
+          code = appendLocal(code, indent + `screen.blit(pygame.image.load(${url}), (${x}, ${y}, ${w}, ${h}))\n`);
+        } else {
+          code = appendLocal(code, indent + `screen.blit(pygame.image.load(${url}), (${x}, ${y}))\n`);
+        }
         break;
       }
       case 'game_draw_image': {
@@ -1432,6 +1567,80 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       case 'game_import_random': {
         code = appendLocal(code, indent + `import random\n`);
+        break;
+      }
+      case 'game_timer_set': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'SEC', ln);
+        const tsVar = getVarName(block, 'VAR');
+        const tsSec = valueToCode(block, 'SEC', '3');
+        code = appendLocal(code, indent + `${tsVar} = pygame.time.get_ticks() + ${tsSec} * 1000\n`);
+        break;
+      }
+      case 'game_camera_set': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'OX', ln);
+        registerExprBlocksAtLineFromInput(block, 'OY', ln);
+        const ox = valueToCode(block, 'OX', '0');
+        const oy = valueToCode(block, 'OY', '0');
+        code = appendLocal(code, indent + `cam_x = ${ox}\n`);
+        code = appendLocal(code, indent + `cam_y = ${oy}\n`);
+        break;
+      }
+      case 'game_tilemap_set': {
+        const ln = _emitCtx.line;
+        ['MAP', 'Y', 'X', 'VALUE'].forEach(n => registerExprBlocksAtLineFromInput(block, n, ln));
+        const tsm = valueToCode(block, 'MAP', 'tilemap');
+        const tsy = valueToCode(block, 'Y', '0');
+        const tsx = valueToCode(block, 'X', '0');
+        const tsv = valueToCode(block, 'VALUE', '0');
+        code = appendLocal(code, indent + `${tsm}[${tsy}][${tsx}] = ${tsv}\n`);
+        break;
+      }
+      case 'game_tilemap_draw': {
+        const ln = _emitCtx.line;
+        ['MAP', 'TILE', 'IMAGES'].forEach(n => registerExprBlocksAtLineFromInput(block, n, ln));
+        const tdm = valueToCode(block, 'MAP', 'tilemap');
+        const tds = valueToCode(block, 'TILE', '32');
+        const tdi = valueToCode(block, 'IMAGES', '{}');
+        code = appendLocal(code, indent + `for _ty in range(len(${tdm})):\n`);
+        code = appendLocal(code, indent + `    for _tx in range(len(${tdm}[_ty])):\n`);
+        code = appendLocal(code, indent + `        _tid = ${tdm}[_ty][_tx]\n`);
+        code = appendLocal(code, indent + `        if _tid in ${tdi}:\n`);
+        code = appendLocal(code, indent + `            screen.blit(${tdi}[_tid], (_tx * ${tds} - cam_x, _ty * ${tds} - cam_y))\n`);
+        break;
+      }
+      case 'game_gravity_apply': {
+        const ln = _emitCtx.line;
+        ['GROUND'].forEach(n => registerExprBlocksAtLineFromInput(block, n, ln));
+        const gvY  = getVarName(block, 'Y');
+        const gvVY = getVarName(block, 'VY');
+        const gvG  = valueToCode(block, 'GROUND', '400');
+        code = appendLocal(code, indent + `${gvVY} += 0.5\n`);
+        code = appendLocal(code, indent + `${gvY} += ${gvVY}\n`);
+        code = appendLocal(code, indent + `if ${gvY} >= ${gvG}:\n`);
+        code = appendLocal(code, indent + `    ${gvY} = ${gvG}\n`);
+        code = appendLocal(code, indent + `    ${gvVY} = 0\n`);
+        break;
+      }
+      case 'game_sound_play': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'SOUND', ln);
+        const sp = valueToCode(block, 'SOUND', 'snd');
+        code = appendLocal(code, indent + `${sp}.play()\n`);
+        break;
+      }
+      case 'game_music_load_play': {
+        const ln = _emitCtx.line;
+        registerExprBlocksAtLineFromInput(block, 'URL', ln);
+        const mu = valueToCode(block, 'URL', '"assets/audio/bgm/bgm_action.wav"');
+        const ml = block.getFieldValue('LOOP') === 'TRUE' ? '-1' : '0';
+        code = appendLocal(code, indent + `pygame.mixer.music.load(${mu})\n`);
+        code = appendLocal(code, indent + `pygame.mixer.music.play(${ml})\n`);
+        break;
+      }
+      case 'game_music_stop': {
+        code = appendLocal(code, indent + `pygame.mixer.music.stop()\n`);
         break;
       }
 

@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="vyel">yellow</variable>
+  </variables>
   <block type="game_init" x="20" y="20">
     <value name="W"><block type="val_number"><field name="NUM">640</field></block></value>
     <value name="H"><block type="val_number"><field name="NUM">400</field></block></value>
     <value name="TITLE"><block type="val_str"><field name="TEXT">図形を描く</field></block></value>
     <next>
+      <block type="var_set">
+        <field name="VAR" id="vyel">yellow</field>
+        <value name="VALUE"><block type="colour_picker"><field name="COLOUR">#ffc800</field></block></value>
+        <next>
       <block type="game_loop">
         <statement name="DO">
           <block type="game_events">
@@ -25,8 +32,17 @@
                         <value name="R"><block type="val_number"><field name="NUM">40</field></block></value>
                         <value name="COLOR"><block type="colour_picker"><field name="COLOUR">#0000ff</field></block></value>
                         <next>
-                          <block type="game_flip">
-                            <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
+                          <block type="game_draw_rect">
+                            <value name="X"><block type="val_number"><field name="NUM">450</field></block></value>
+                            <value name="Y"><block type="val_number"><field name="NUM">100</field></block></value>
+                            <value name="W"><block type="val_number"><field name="NUM">60</field></block></value>
+                            <value name="H"><block type="val_number"><field name="NUM">60</field></block></value>
+                            <value name="COLOR"><block type="val_var"><field name="VAR" id="vyel">yellow</field></block></value>
+                            <next>
+                              <block type="game_flip">
+                                <value name="FPS"><block type="val_number"><field name="NUM">60</field></block></value>
+                              </block>
+                            </next>
                           </block>
                         </next>
                       </block>
@@ -39,6 +55,8 @@
         </statement>
         <next>
           <block type="game_quit"></block>
+        </next>
+      </block>
         </next>
       </block>
     </next>
