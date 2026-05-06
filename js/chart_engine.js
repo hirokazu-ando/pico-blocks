@@ -62,13 +62,19 @@
     return Sk.builtin.none.none$;
   });
 
-  mod.hist = new Sk.builtin.func(function(data_py, bins_py) {
+  // bins= キーワード引数に対応するため co_varnames / $defaults を明示する
+  // （Sk.builtin.func は JS パラメータ名 bins_py のままだと bins= に束縛できない）
+  var _hist = function(data_py, bins_py) {
     var data = toJs(data_py);
-    var bins = (bins_py !== undefined && bins_py !== null) ? toJs(bins_py) : 10;
+    var bins = (bins_py !== undefined && bins_py !== null && bins_py !== Sk.builtin.none.none$)
+      ? toJs(bins_py) : 10;
     _datasets.push({ type: 'hist', data: data, bins: bins });
     if (!_chartType) _chartType = 'hist';
     return Sk.builtin.none.none$;
-  });
+  };
+  _hist.co_varnames = ['data', 'bins'];
+  _hist.$defaults   = [new Sk.builtin.int_(10)];
+  mod.hist = new Sk.builtin.func(_hist);
 
   mod.title = new Sk.builtin.func(function(t_py) {
     _title = toJs(t_py);
