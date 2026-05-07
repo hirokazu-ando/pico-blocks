@@ -24,9 +24,10 @@ window.PycoPalette = {
   gameInput: '#26A69A',      // 入力: keys/mouse 系
   gamePhysics: '#FB8C00',    // 判定・物理: collide/rect_collidepoint/union/gravity
   gameTime: '#7E57C2',       // 時間: get_ticks/timer_set/timer_done
-  gameWorld: '#6D4C41',      // 世界・地図: camera/world_to_screen/tilemap/grid_rotate
+  gameCamera: '#5C6BC0',     // カメラ: camera_set/world_to_screen
+  gameWorld: '#6D4C41',      // 地図: tilemap/grid_rotate
   gameAudio: '#26C6DA',      // 音: sound/music 系
-  gameAsset: '#9CCC65',      // 値・プリセット: rect/rect_attr/image_preset
+  gameAsset: '#9CCC65',      // 値・プリセット (現在未使用)
   functions: '#FF7043',
   classes:     '#7B1FA2',
   exceptions:  '#D32F2F',

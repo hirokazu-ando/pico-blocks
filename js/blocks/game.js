@@ -272,7 +272,7 @@
       this.appendValueInput('H').setCheck(null).appendField(T.height);
       this.appendDummyInput().appendField(')');
       this.setOutput(true, null);
-      this.setColour(P.gameAsset || '#9CCC65');
+      this.setColour(P.gamePhysics || '#FB8C00');
       this.setTooltip('pygame.Rect(x, y, w, h) \u3092\u4f5c\u6210\u3057\u307e\u3059\u3002');
       this.setHelpUrl('');
       this.setInputsInline(true);
@@ -598,7 +598,7 @@
         .appendField('\u5185\u8535\u753b\u50cf')
         .appendField(new Blockly.FieldDropdown(GAME_SPRITES), 'IMG');
       this.setOutput(true, 'String');
-      this.setColour(P.gameAsset || '#9CCC65');
+      this.setColour(P.gameDraw || '#0288D1');
       this.setTooltip('\u3042\u3089\u304b\u3058\u3081\u7528\u610f\u3055\u308c\u305f\u30b2\u30fc\u30e0\u7528\u753b\u50cf\u3092\u9078\u3073\u307e\u3059\u3002game_draw_image \u306e URL \u306b\u5dee\u3057\u8fbc\u3093\u3067\u4f7f\u3044\u307e\u3059\u3002');
       this.setHelpUrl('');
     }
@@ -620,7 +620,7 @@
         ]), 'ATTR');
       this.setOutput(true, 'Number');
       this.setInputsInline(true);
-      this.setColour(P.gameAsset || '#9CCC65');
+      this.setColour(P.gamePhysics || '#FB8C00');
       this.setTooltip('Rect \u30aa\u30d6\u30b8\u30a7\u30af\u30c8\u306e\u5c5e\u6027\uff08x/y/\u5e45/\u9ad8\u3055/\u4e2d\u5fc3\uff09\u3092\u53d6\u5f97\u3057\u307e\u3059\u3002');
       this.setHelpUrl('');
     }
@@ -699,7 +699,7 @@
       this.appendValueInput('OY').setCheck(null).appendField('cam_y');
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
-      this.setColour(P.gameWorld || '#6D4C41');
+      this.setColour(P.gameCamera || '#5C6BC0');
       this.setInputsInline(true);
       this.setTooltip('\u30ab\u30e1\u30e9\u306e\u30aa\u30d5\u30bb\u30c3\u30c8 (cam_x, cam_y) \u3092\u66f4\u65b0\u3057\u307e\u3059\u3002');
       this.setHelpUrl('');
@@ -712,7 +712,7 @@
       this.appendValueInput('X').setCheck(null).appendField('\u753b\u9762X\u5ea7\u6a19\uff08worldX:');
       this.appendDummyInput().appendField('\u2212 cam_x \uff09');
       this.setOutput(true, 'Number');
-      this.setColour(P.gameWorld || '#6D4C41');
+      this.setColour(P.gameCamera || '#5C6BC0');
       this.setInputsInline(true);
       this.setTooltip('\u30ef\u30fc\u30eb\u30c9X\u5ea7\u6a19\u3092\u753b\u9762X\u5ea7\u6a19\u306b\u5909\u63db\u3057\u307e\u3059\uff08cam_x \u3092\u5f15\u304d\u307e\u3059\uff09\u3002');
       this.setHelpUrl('');
@@ -725,7 +725,7 @@
       this.appendValueInput('Y').setCheck(null).appendField('\u753b\u9762Y\u5ea7\u6a19\uff08worldY:');
       this.appendDummyInput().appendField('\u2212 cam_y \uff09');
       this.setOutput(true, 'Number');
-      this.setColour(P.gameWorld || '#6D4C41');
+      this.setColour(P.gameCamera || '#5C6BC0');
       this.setInputsInline(true);
       this.setTooltip('\u30ef\u30fc\u30eb\u30c9Y\u5ea7\u6a19\u3092\u753b\u9762Y\u5ea7\u6a19\u306b\u5909\u63db\u3057\u307e\u3059\uff08cam_y \u3092\u5f15\u304d\u307e\u3059\uff09\u3002');
       this.setHelpUrl('');
