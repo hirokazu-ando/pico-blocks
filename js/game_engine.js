@@ -239,6 +239,8 @@
   var time = makePyNamespace();
 
   var _mainSurface = null;
+  var _imageCache = {};
+  var _fontCache = {};
 
   function ensureGameArea() {
     var area = document.getElementById('game-canvas-area');
@@ -400,25 +402,37 @@
     return f;
   }
 
+  function getCachedFont(size) {
+    var key = String(size || 24);
+    if (!_fontCache[key]) {
+      _fontCache[key] = makeFont(size);
+    }
+    return _fontCache[key];
+  }
   font.SysFont = new Sk.builtin.func(function(name_py, size_py) {
     var size = Sk.ffi.remapToJs(size_py);
-    return makeFont(size);
+    return getCachedFont(size);
   });
   font.Font = new Sk.builtin.func(function(name_py, size_py) {
     var size = Sk.ffi.remapToJs(size_py);
-    return makeFont(size);
+    return getCachedFont(size);
   });
 
   image.load = new Sk.builtin.func(function(url_py) {
     var url = Sk.ffi.remapToJs(url_py);
+    var base = (typeof document !== 'undefined' && document.baseURI) ? document.baseURI : (typeof window !== 'undefined' ? window.location.href : '');
+    var resolved;
+    try {
+      resolved = base ? new URL(String(url), base).href : String(url);
+    } catch (e) {
+      resolved = String(url);
+    }
+    // 毎フレーム呼び出されても素早く返せるよう URL キーで Surface をキャッシュする。
+    // キャッシュなしだと毎回 new Image() → onload → canvas 再構築が走り、画面が点滅する。
+    if (_imageCache[resolved]) {
+      return _imageCache[resolved];
+    }
     return new Sk.misceval.promiseToSuspension(new Promise(function(resolve, reject) {
-      var base = (typeof document !== 'undefined' && document.baseURI) ? document.baseURI : (typeof window !== 'undefined' ? window.location.href : '');
-      var resolved;
-      try {
-        resolved = base ? new URL(String(url), base).href : String(url);
-      } catch (e) {
-        resolved = String(url);
-      }
       var img = new Image();
       // http(s) の別ドメイン画像を Canvas に描くため CORS が必要な場合のみ付与する。
       // 相対パス・file:// では付与すると読み込み失敗することがある（同一オリジンは不要）。
@@ -430,7 +444,9 @@
         cnv.width = img.width; cnv.height = img.height;
         var ctx = cnv.getContext('2d');
         ctx.drawImage(img, 0, 0);
-        resolve(makeSurface(cnv));
+        var surf = makeSurface(cnv);
+        _imageCache[resolved] = surf;
+        resolve(surf);
       };
       img.onerror = function() { reject(new Error('pygame.image.load failed: ' + url)); };
       img.src = resolved;
@@ -516,6 +532,153 @@
     return Sk.ffi.remapToPy(Math.round(performance.now() - _gameStartTime));
   });
 
+  // ===== mixer (Web Audio API でブラウザ実音再生) =====
+  var mixer = makePyNamespace();
+  var music = makePyNamespace();
+  mixer.music = music;
+
+  var _audioCtx = null;
+  function _ensureAudioCtx() {
+    if (!_audioCtx) {
+      try {
+        var Ctor = window.AudioContext || window.webkitAudioContext;
+        if (Ctor) _audioCtx = new Ctor();
+      } catch (e) {
+        _audioCtx = null;
+      }
+    }
+    if (_audioCtx && _audioCtx.state === 'suspended') {
+      try { _audioCtx.resume(); } catch (e) {}
+    }
+    return _audioCtx;
+  }
+
+  function _resolveAudioUrl(url) {
+    var base = (typeof document !== 'undefined' && document.baseURI) ? document.baseURI : (typeof window !== 'undefined' ? window.location.href : '');
+    try {
+      return base ? new URL(String(url), base).href : String(url);
+    } catch (e) {
+      return String(url);
+    }
+  }
+
+  function _fetchAndDecode(url) {
+    var ctx = _ensureAudioCtx();
+    if (!ctx) return Promise.resolve(null);
+    return fetch(_resolveAudioUrl(url))
+      .then(function(res) {
+        if (!res.ok) return null;
+        return res.arrayBuffer();
+      })
+      .then(function(buf) {
+        if (!buf) return null;
+        return new Promise(function(resolve) {
+          ctx.decodeAudioData(buf, function(decoded) { resolve(decoded); }, function() { resolve(null); });
+        });
+      })
+      .catch(function() { return null; });
+  }
+
+  function makeSound(buffer) {
+    var snd = makePyNamespace();
+    snd._buffer = buffer;
+    snd.play = new Sk.builtin.func(function() {
+      var ctx = _ensureAudioCtx();
+      if (ctx && snd._buffer) {
+        try {
+          var src = ctx.createBufferSource();
+          src.buffer = snd._buffer;
+          src.connect(ctx.destination);
+          src.start(0);
+        } catch (e) {}
+      }
+      return Sk.builtin.none.none$;
+    });
+    snd.stop = new Sk.builtin.func(function() {
+      return Sk.builtin.none.none$;
+    });
+    snd.set_volume = new Sk.builtin.func(function() {
+      return Sk.builtin.none.none$;
+    });
+    return snd;
+  }
+
+  mixer.Sound = new Sk.builtin.func(function(url_py) {
+    var url = Sk.ffi.remapToJs(url_py);
+    return new Sk.misceval.promiseToSuspension(
+      _fetchAndDecode(url).then(function(buf) { return makeSound(buf); })
+    );
+  });
+
+  mixer.init = new Sk.builtin.func(function() {
+    _ensureAudioCtx();
+    return Sk.builtin.none.none$;
+  });
+
+  mixer.quit = new Sk.builtin.func(function() {
+    return Sk.builtin.none.none$;
+  });
+
+  var _musicState = { buffer: null, source: null };
+
+  function _stopMusicSource() {
+    if (_musicState.source) {
+      try { _musicState.source.stop(); } catch (e) {}
+      try { _musicState.source.disconnect(); } catch (e) {}
+      _musicState.source = null;
+    }
+  }
+
+  music.load = new Sk.builtin.func(function(url_py) {
+    var url = Sk.ffi.remapToJs(url_py);
+    return new Sk.misceval.promiseToSuspension(
+      _fetchAndDecode(url).then(function(buf) {
+        _stopMusicSource();
+        _musicState.buffer = buf;
+        return Sk.builtin.none.none$;
+      })
+    );
+  });
+
+  music.play = new Sk.builtin.func(function(loops_py) {
+    var ctx = _ensureAudioCtx();
+    var loops = (loops_py && loops_py !== Sk.builtin.none.none$) ? Sk.ffi.remapToJs(loops_py) : 0;
+    if (ctx && _musicState.buffer) {
+      try {
+        _stopMusicSource();
+        var src = ctx.createBufferSource();
+        src.buffer = _musicState.buffer;
+        src.loop = (loops === -1);
+        src.connect(ctx.destination);
+        src.start(0);
+        _musicState.source = src;
+      } catch (e) {}
+    }
+    return Sk.builtin.none.none$;
+  });
+
+  music.stop = new Sk.builtin.func(function() {
+    _stopMusicSource();
+    return Sk.builtin.none.none$;
+  });
+
+  music.pause = new Sk.builtin.func(function() {
+    _stopMusicSource();
+    return Sk.builtin.none.none$;
+  });
+
+  music.unpause = new Sk.builtin.func(function() {
+    return Sk.builtin.none.none$;
+  });
+
+  music.set_volume = new Sk.builtin.func(function() {
+    return Sk.builtin.none.none$;
+  });
+
+  music.get_busy = new Sk.builtin.func(function() {
+    return Sk.ffi.remapToPy(_musicState.source !== null);
+  });
+
   function init() {
     ensureListeners();
     window.__pygameRunning = true;
@@ -581,6 +744,7 @@
   mod.image = image;
   mod.transform = transform;
   mod.time = time;
+  mod.mixer = mixer;
 
   mod.Rect = new Sk.builtin.func(function(x, y, w, h) { return Rect(x, y, w, h); });
 

@@ -19,7 +19,14 @@ window.PycoPalette = {
   loops: '#F9A825',
   lists: '#689F38',
   dict: '#6D4C41',
-  game: '#EC407A',
+  game: '#EC407A',           // 基本制御: init/loop/events/flip/fill/quit
+  gameDraw: '#0288D1',       // 描画: draw_rect/circle/line/text/image, font_set, blit
+  gameInput: '#26A69A',      // 入力: keys/mouse 系
+  gamePhysics: '#FB8C00',    // 判定・物理: collide/rect_collidepoint/union/gravity
+  gameTime: '#7E57C2',       // 時間: get_ticks/timer_set/timer_done
+  gameWorld: '#6D4C41',      // 世界・地図: camera/world_to_screen/tilemap/grid_rotate
+  gameAudio: '#26C6DA',      // 音: sound/music 系
+  gameAsset: '#9CCC65',      // 値・プリセット: rect/rect_attr/image_preset
   functions: '#FF7043',
   classes:     '#7B1FA2',
   exceptions:  '#D32F2F',
