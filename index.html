@@ -1076,6 +1076,13 @@
         <value name="COLOR"><shadow type="colour_picker"><field name="COLOUR">#202020</field></shadow></value>
       </block>
       <sep gap="20"></sep>
+      <block type="game_flip" gap="8">
+        <value name="FPS"><shadow type="val_number"><field name="NUM">30</field></shadow></value>
+      </block>
+      <sep gap="20"></sep>
+      <block type="game_quit" gap="8"></block>
+    </category>
+    <category name="描画" colour="#0288D1">
       <block type="game_draw_rect" gap="8">
         <value name="X"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
         <value name="Y"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
@@ -1096,6 +1103,7 @@
         <value name="Y2"><shadow type="val_number"><field name="NUM">100</field></shadow></value>
         <value name="COLOR"><shadow type="colour_picker"><field name="COLOUR">#ffffff</field></shadow></value>
       </block>
+      <sep gap="20"></sep>
       <block type="game_font_set" gap="8">
         <value name="SIZE"><shadow type="val_number"><field name="NUM">28</field></shadow></value>
       </block>
@@ -1114,6 +1122,7 @@
         <value name="X"><shadow type="val_number"><field name="NUM">10</field></shadow></value>
         <value name="Y"><shadow type="val_number"><field name="NUM">10</field></shadow></value>
       </block>
+      <sep gap="20"></sep>
       <block type="game_image_preset" gap="8"></block>
       <block type="game_image_blit" gap="8">
         <value name="URL"><shadow type="game_image_preset"></shadow></value>
@@ -1131,14 +1140,6 @@
         <value name="H"><shadow type="val_number"><field name="NUM">-1</field></shadow></value>
         <value name="ROT"><shadow type="val_number"><field name="NUM">0</field></shadow></value>
       </block>
-      <sep gap="20"></sep>
-      <block type="game_flip" gap="8">
-        <value name="FPS"><shadow type="val_number"><field name="NUM">30</field></shadow></value>
-      </block>
-      <sep gap="20"></sep>
-      <block type="game_get_ticks" gap="8"></block>
-      <sep gap="20"></sep>
-      <block type="game_quit" gap="8"></block>
     </category>
     <category name="入力" colour="#26A69A">
       <block type="game_key_pressed" gap="8"></block>
@@ -1165,6 +1166,8 @@
       <block type="game_rect_attr" gap="8"></block>
     </category>
     <category name="タイマー" colour="#7E57C2">
+      <block type="game_get_ticks" gap="8"></block>
+      <sep gap="20"></sep>
       <block type="game_timer_set" gap="8">
         <value name="SEC"><shadow type="val_number"><field name="NUM">3</field></shadow></value>
       </block>
@@ -1442,7 +1445,7 @@
     </category>
   </xml>
 
-  <script src="js/block_palette.js?v=20260507d"></script>
+  <script src="js/block_palette.js?v=20260507e"></script>
   <script src="js/tutorials.js"></script>
   <script src="js/serial.js"></script>
   <script src="js/blocks/gpio.js"></script>
@@ -1456,8 +1459,8 @@
   <script src="js/blocks/python_intro.js"></script>
   <script src="js/blocks/data_analysis.js"></script>
   <script src="js/blocks/custom_python.js?v=20260429b"></script>
-  <script src="js/game_engine.js?v=20260507d"></script>
-  <script src="js/blocks/game.js?v=20260507d"></script>
+  <script src="js/game_engine.js?v=20260507e"></script>
+  <script src="js/blocks/game.js?v=20260507e"></script>
   <script src="js/ml_engine.js?v=20260503b"></script>
   <script src="js/blocks/ml.js?v=20260503b"></script>
   <script src="js/image_engine.js?v=20260503b"></script>
